@@ -12,20 +12,20 @@ namespace Escher
     public class PageFormat
     {
         public readonly string FormatName;
-        private readonly TitleStyle TitleStyle;
-        private readonly string TitleFont;
-        private readonly int PageWidth;
-        private readonly int PageHeight;
-        private readonly int MarginLeft;
-        private readonly int MarginRight;
-        private readonly int MarginTop;
-        private readonly int MarginBottom;
-        private readonly int FreeLeft;
-        private readonly int FreeRight;
-        private readonly int FreeTop;
-        private readonly int FreeBottom;
-        private readonly bool PrePrintedBorder;
-        private readonly bool PrePrintedTitle;
+        public readonly TitleStyle TitleStyle;
+        public readonly string TitleFont;
+        public readonly int PageWidth;
+        public readonly int PageHeight;
+        public readonly int MarginLeft;
+        public readonly int MarginRight;
+        public readonly int MarginTop;
+        public readonly int MarginBottom;
+        public readonly int FreeLeft;
+        public readonly int FreeRight;
+        public readonly int FreeTop;
+        public readonly int FreeBottom;
+        public readonly bool PrePrintedBorder;
+        public readonly bool PrePrintedTitle;
 
         public PageFormat(string FormatName, TitleStyle TitleStyle, string TitleFont, int PageWidth, int PageHeight, int MarginLeft, int MarginRight, int MarginTop, int MarginBottom, int FreeLeft, int FreeRight, int FreeTop, int FreeBottom, bool PrePrintedBorder, bool PrePrintedTitle)
         {
@@ -45,17 +45,20 @@ namespace Escher
             this.PrePrintedBorder = PrePrintedBorder;
             this.PrePrintedTitle = PrePrintedTitle;
         }
+    }
 
-        private static List<PageFormat> _PageFormats = new List<PageFormat>();
+    public class PageFormats
+    {
+        private static List<PageFormat> pageFormats = new List<PageFormat>();
 
-        public static void LoadPageFormats(string PageFormatsFile)
+        public static void Load(string PageFormatsFile)
         {
             if (!File.Exists(PageFormatsFile))
             {
                 App.SetException((string.Format("Page formats file '{0}' does not exist.", PageFormatsFile)));
             }
 
-            List<PageFormat> pageFormats = new List<PageFormat>();
+            pageFormats = new List<PageFormat>();
 
             using (var streamReader = new StreamReader(PageFormatsFile))
             using (var csvReader = new CsvReader(streamReader, CultureInfo.InvariantCulture))
@@ -72,7 +75,7 @@ namespace Escher
                         App.SetException((string.Format("Unknown title style '{0}'.", csvReader.GetField("Title.Style"))));
                     }
 
-                    _PageFormats.Add(new PageFormat(
+                    pageFormats.Add(new PageFormat(
                         csvReader.GetField("Format"),
                         titleStyle,
                         csvReader.GetField("Title.Font"),
@@ -93,9 +96,16 @@ namespace Escher
             }
         }
 
-        public static List<PageFormat> GetPageFormats()
+        public static List<PageFormat> Get()
         {
-            return _PageFormats;
+            return pageFormats;
+        }
+
+        public static PageFormat Get(string formatName)
+        {
+            PageFormat pageFormat = pageFormats.FirstOrDefault(format => format.FormatName == formatName);
+
+            return pageFormat;
         }
     }
 }

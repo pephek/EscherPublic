@@ -91,6 +91,7 @@
     </Compile>
     <Compile Include="Entities\DesignEntry.cs" />
     <Compile Include="Entities\PageFormat.cs" />
+    <Compile Include="Entities\PageSetup.cs" />
     <Compile Include="Entities\Sheet.cs" />
     <Compile Include="Entities\SheetBlock.cs" />
     <Compile Include="Enums\Alignment.cs" />
@@ -112,6 +113,12 @@
     <Compile Include="Main.Designer.cs">
       <DependentUpon>Main.cs</DependentUpon>
     </Compile>
+    <Compile Include="Preview.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Preview.Designer.cs">
+      <DependentUpon>Preview.cs</DependentUpon>
+    </Compile>
     <Compile Include="Print.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -130,6 +137,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Main.resx">
       <DependentUpon>Main.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Preview.resx">
+      <DependentUpon>Preview.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Print.resx">
       <DependentUpon>Print.cs</DependentUpon>

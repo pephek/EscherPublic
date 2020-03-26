@@ -38,9 +38,9 @@
             this.label1Version.AutoSize = true;
             this.label1Version.Location = new System.Drawing.Point(20, 24);
             this.label1Version.Name = "label1Version";
-            this.label1Version.Size = new System.Drawing.Size(312, 17);
+            this.label1Version.Size = new System.Drawing.Size(309, 17);
             this.label1Version.TabIndex = 2;
-            this.label1Version.Text = "Escher 1.0 · Copyright © 2005-2020 by Pep Hek";
+            this.label1Version.Text = "Escher V1 · Copyright © 2005-2020 by Pep Hek";
             // 
             // buttonClose
             // 

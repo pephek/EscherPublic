@@ -46,5 +46,10 @@ namespace Escher
         {
             return catalogs[(int)catalog];
         }
+
+        public static Catalog Convert(string catalog)
+        {
+            return (Catalog)Array.IndexOf(catalogs, catalog);
+        }
     }
 }

@@ -55,8 +55,6 @@ namespace Escher
 
             refreshPageFormatsToolStripMenuItem_Click(null, null);
 
-            var pageFormats = PageFormat.GetPageFormats();
-
             SetMenus(enabled: false);
 
             designsToolStripMenuItem.Visible = false;
@@ -66,6 +64,10 @@ namespace Escher
             webBrowser.Navigating += WebBrowser_Navigating;
             webBrowser.IsWebBrowserContextMenuEnabled = false;
             webBrowser.AllowWebBrowserDrop = false;
+
+            PageSetup.Load();
+
+            LoadDesign("_ Nederland");
         }
 
         private void refreshDesignsToolStripMenuItem_Click(object sender, EventArgs eventArgs)
@@ -119,7 +121,7 @@ namespace Escher
 
         private void refreshPageFormatsToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            PageFormat.LoadPageFormats(App.GetSetting("PageFormats"));
+            PageFormats.Load(App.GetSetting("PageFormats"));
         }
 
         private void findStampNumberToolStripMenuItem_Click(object sender, EventArgs e)
@@ -311,15 +313,15 @@ namespace Escher
             {
                 e.Cancel = true;
 
-                using (Print print = new Print())
+                Print print = new Print();
+                print.PrintMode = PrintMode.ToScreen;
+                DialogResult result = print.ShowDialog();
+
+                if (result == DialogResult.OK)
                 {
-                    print.PrintMode = PrintMode.ToScreen;
-                    DialogResult result = print.ShowDialog();
-
-                    if (result == DialogResult.OK)
-                    {
-
-                    }
+                    Preview preview = new Preview();
+                    preview.FormBorderStyle = FormBorderStyle.None;
+                    preview.Show();
                 }
             }
             else if (e.Url.AbsolutePath.StartsWith("stamp("))

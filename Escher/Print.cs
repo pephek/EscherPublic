@@ -37,21 +37,24 @@ namespace Escher
 
             groupBoxAlbumOptions.Enabled = (PrintMode == PrintMode.ToDocument);
 
+            PageSetup pageSetup = PageSetup.Get();
+
+
             // Format
 
-            comboBoxFormat.Items.AddRange(PageFormat.GetPageFormats().Select(format => format.FormatName).ToArray());
-            comboBoxFormat.Text = App.GetSetting("Print.Format", "A4");
-            checkBoxIncludeMarginForPunchHoles.Checked = App.GetSetting("Print.IncludeMarginForPunchHoles", false);
+            comboBoxFormat.Items.AddRange(PageFormats.Get().Select(format => format.FormatName).ToArray());
+            comboBoxFormat.Text = pageSetup.PageFormat.FormatName;
+            checkBoxIncludeMarginForPunchHoles.Checked = pageSetup.IncludeMarginForPunchHoles;
 
             // Stamps Options
 
-            checkBoxIncludeImage.Checked = App.GetSetting("Print.IncludeImage", true);
-            checkBoxIncludeNumber.Checked = App.GetSetting("Print.IncludeNumber", true);
-            checkBoxIncludeValue.Checked = App.GetSetting("Print.IncludeValue", true);
+            checkBoxIncludeImage.Checked = pageSetup.IncludeImage;
+            checkBoxIncludeNumber.Checked = pageSetup.IncludeNumber;
+            checkBoxIncludeValue.Checked = pageSetup.IncludeValue;
 
             // Frame Options
 
-            switch (App.GetSetting("Print.FrameStyle", FrameStyle.Thick))
+            switch (pageSetup.FrameStyle)
             {
                 case FrameStyle.ThinSolid:
                     radioButtonThinSolid.Checked = true;
@@ -66,7 +69,7 @@ namespace Escher
 
             // Color Options
 
-            switch (App.GetSetting("Print.ColorStyle", ColorStyle.Color))
+            switch (pageSetup.ColorStyle)
             {
                 case ColorStyle.Greyscale:
                     radioButtonGreyscale.Checked = true;
@@ -78,7 +81,7 @@ namespace Escher
 
             // Font Options
 
-            switch (App.GetSetting("Print.FontSize", FontSize.Small))
+            switch (pageSetup.FontSize)
             {
                 case FontSize.Small:
                     radioButtonSmall.Checked = true;
@@ -93,20 +96,20 @@ namespace Escher
 
             // Page Options
 
-            checkBoxIncludeBorder.Checked = App.GetSetting("Print.IncludeBorder", true);
-            checkBoxIncludeTitle.Checked = App.GetSetting("Print.IncludeTitle", true);
+            checkBoxIncludeBorder.Checked = pageSetup.IncludeBorder;
+            checkBoxIncludeTitle.Checked = pageSetup.IncludeTitle;
 
             // Catalog Options
 
             comboBoxCatalog.Items.AddRange(Catalogs.Get());
-            comboBoxCatalog.Text = App.GetSetting("Print.Catalog", Catalogs.Get()[0]);
-            checkBoxAppendCatalog.Checked = App.GetSetting("Print.AppendCatalog", false);
+            comboBoxCatalog.Text = Catalogs.Convert(pageSetup.Catalog);
+            checkBoxAppendCatalog.Checked = pageSetup.AppendCatalog;
 
             // Album Options
 
-            checkBoxIncludeSamplePagesOnly.Checked = App.GetSetting("Print.IncludeSamplePagesOnly", false);
-            checkBoxIncludeHtmlScans.Checked = App.GetSetting("Print.IncludeHtmlScans", false);
-            checkBoxIncludePdfBookmarks.Checked = App.GetSetting("Print.IncludePdfBookmarks", true);
+            checkBoxIncludeSamplePagesOnly.Checked = pageSetup.IncludeSamplePagesOnly;
+            checkBoxIncludeHtmlScans.Checked = pageSetup.IncludeHtmlScans;
+            checkBoxIncludePdfBookmarks.Checked = pageSetup.IncludePdfBookmarks;
         }
 
         private void buttonOk_Click(object sender, EventArgs e)
