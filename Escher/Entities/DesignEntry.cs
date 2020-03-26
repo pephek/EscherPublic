@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Escher
 {
-    public class CatalogEntry
+    public class DesignEntry
     {
         public Class Class;
         public string Text;
@@ -62,13 +62,13 @@ namespace Escher
         public string Perfs;
         public bool Sample;
 
-        public CatalogEntry(Class Class, int Page)
+        public DesignEntry(Class Class, int Page)
         {
             this.Class = Class;
             this.Page = Page;
         }
 
-        public CatalogEntry(int Page)
+        public DesignEntry(int Page)
         {
             this.Page = Page;
         }

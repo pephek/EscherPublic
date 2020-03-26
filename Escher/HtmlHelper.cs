@@ -9,17 +9,17 @@ namespace Escher
 {
     public class HtmlHelper
     {
-        private static string GetTableOfContents(List<CatalogEntry> catalog, int i)
+        private static string GetTableOfContents(List<DesignEntry> design, int i)
         {
             StringBuilder html = new StringBuilder();
 
-            string country = catalog[i].Text;
+            string country = design[i].Text;
 
             i++;
 
-            while (i < catalog.Count() && catalog[i].Class != Class.Country)
+            while (i < design.Count() && design[i].Class != Class.Country)
             {
-                CatalogEntry entry = catalog[i];
+                DesignEntry entry = design[i];
 
                 if (entry.Class == Class.Part)
                 {
@@ -60,7 +60,7 @@ namespace Escher
             }
         }
 
-        private static string GetStamp(CatalogEntry entry)
+        private static string GetStamp(DesignEntry entry)
         {
             if (entry.Number == "0" || entry.Number == "!")
             {
@@ -86,7 +86,7 @@ namespace Escher
             }
         }
 
-        public static string GetDesignInHtml(List<CatalogEntry> catalog)
+        public static string GetDesignInHtml(List<DesignEntry> design)
         {
             StringBuilder html = new StringBuilder();
 
@@ -95,9 +95,9 @@ namespace Escher
             string country = "";
             string part = "";
 
-            for (int i = 0; i < catalog.Count(); i++)
+            for (int i = 0; i < design.Count(); i++)
             {
-                CatalogEntry entry = catalog[i];
+                DesignEntry entry = design[i];
 
                 switch (entry.Class)
                 {
@@ -116,7 +116,7 @@ namespace Escher
                     case Class.Country:
                         country = entry.Text;
                         html.Append(GetHeading("1", entry.Text));
-                        html.Append(GetTableOfContents(catalog, i));
+                        html.Append(GetTableOfContents(design, i));
                         break;
 
                     case Class.Part:
@@ -150,7 +150,7 @@ namespace Escher
                             {
                                 html.Append(GetStampDescription(entry.Text));
                             }
-                            entry = catalog[++i];
+                            entry = design[++i];
                         }
                         html.Append("</table><br>");
                         break;

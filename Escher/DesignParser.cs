@@ -6,14 +6,14 @@ using System.Threading.Tasks;
 
 namespace Escher
 {
-    public class CatalogParser
+    public class DesignParser
     {
         private Action<int> progress;
         private int previousProgress = 0;
 
-        public List<CatalogEntry> Parse(string design, Action<int> setProgress, out string error)
+        public List<DesignEntry> Parse(string designText, Action<int> setProgress, out string error)
         {
-            List<CatalogEntry> catalog = new List<CatalogEntry>();
+            List<DesignEntry> design = new List<DesignEntry>();
 
             error = "";
 
@@ -23,12 +23,12 @@ namespace Escher
 
             try
             {
-                string[] lines = design.Split('\n');
+                string[] lines = designText.Split('\n');
 
                 int i = 0;
                 int p = 0;
 
-                CatalogEntry lastEntry = null;
+                DesignEntry lastEntry = null;
 
                 bool end = false;
 
@@ -36,7 +36,7 @@ namespace Escher
                 {
                     line = lines[i];
 
-                    CatalogEntry entry = Parse(catalog, line, p, i);
+                    DesignEntry entry = Parse(design, line, p, i);
 
                     if (entry != null)
                     {
@@ -46,8 +46,8 @@ namespace Escher
                             {
                                 if (lastEntry.Class != Class.Stamp && lastEntry.Class != Class.Variety && lastEntry.Class != Class.Description && lastEntry.Class != Class.LineFeed)
                                 {
-                                    catalog.Add(new CatalogEntry(Class.Images, p));
-                                    catalog.Add(new CatalogEntry(Class.ListBegin, p));
+                                    design.Add(new DesignEntry(Class.Images, p));
+                                    design.Add(new DesignEntry(Class.ListBegin, p));
                                 }
                             }
 
@@ -55,12 +55,12 @@ namespace Escher
                             {
                                 if (entry.Class != Class.Stamp && entry.Class != Class.Variety && entry.Class != Class.Description && entry.Class != Class.LineFeed)
                                 {
-                                    catalog.Add(new CatalogEntry(Class.ListEnd, p));
+                                    design.Add(new DesignEntry(Class.ListEnd, p));
                                 }
                             }
                         }
 
-                        catalog.Add(entry);
+                        design.Add(entry);
 
                         lastEntry = entry;
 
@@ -76,7 +76,7 @@ namespace Escher
 
                 if (!end)
                 {
-                    catalog.Add(Parse(catalog, "End", 0, 0));
+                    design.Add(Parse(design, "End", 0, 0));
                 }
             }
             catch (Exception e)
@@ -84,12 +84,12 @@ namespace Escher
                 error = e.Message;
             }
 
-            return catalog;
+            return design;
         }
 
-        private CatalogEntry Parse(List<CatalogEntry> catalog, string line, int pageNumber, int lineNumber)
+        private DesignEntry Parse(List<DesignEntry> design, string line, int pageNumber, int lineNumber)
         {
-            CatalogEntry entry = new CatalogEntry(pageNumber);
+            DesignEntry entry = new DesignEntry(pageNumber);
 
             line = line.Replace("\t", "").Trim();
 
@@ -119,7 +119,7 @@ namespace Escher
                         entry.Class = Class.LineFeed;
                         break;
                     default:
-                        Parse(catalog, entry, splitted[i], lineNumber);
+                        Parse(design, entry, splitted[i], lineNumber);
                         break;
                 }
             }
@@ -127,7 +127,7 @@ namespace Escher
             return entry;
         }
 
-        private void Parse(List<CatalogEntry> catalog, CatalogEntry entry, string keyValuePair, int line)
+        private void Parse(List<DesignEntry> design, DesignEntry entry, string keyValuePair, int line)
         {
             string key;
             string val;
@@ -187,9 +187,9 @@ namespace Escher
                 case "variety": // Eg. Variety:=19A
                     entry.Class = Class.Variety;
                     entry.Number = val;
-                    if (catalog[catalog.Count() - 1].Class == Class.Description)
+                    if (design[design.Count() - 1].Class == Class.Description)
                     {
-                        entry.Alignment = catalog[catalog.Count() - 1].Alignment;
+                        entry.Alignment = design[design.Count() - 1].Alignment;
                     }
                     break;
 
@@ -987,13 +987,13 @@ namespace Escher
                             break;
 
                         default:
-                            var design = catalog.LastOrDefault(x => x.Class == Class.Design && x.Text == val);
-                            if (design == null)
+                            var designEntry = design.LastOrDefault(x => x.Class == Class.Design && x.Text == val);
+                            if (designEntry == null)
                             {
                                 throw new Exception(string.Format("Cannot find the design '{0}'", val));
                             }
-                            entry.Width = design.Width;
-                            entry.Height = design.Height;
+                            entry.Width = designEntry.Width;
+                            entry.Height = designEntry.Height;
                             break;
                     }
 

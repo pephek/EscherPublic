@@ -18,7 +18,7 @@ namespace Escher
     {
         private Editor editor = new Editor();
 
-        List<CatalogEntry> catalog;
+        List<DesignEntry> design;
 
         public Main()
         {
@@ -130,7 +130,7 @@ namespace Escher
 
             if (input != "")
             {
-                CatalogEntry entry = catalog.FirstOrDefault(x => x.Class == Class.Variety && x.Number.ToLower() == input.ToLower());
+                DesignEntry entry = design.FirstOrDefault(x => x.Class == Class.Variety && x.Number.ToLower() == input.ToLower());
 
                 if (entry == null)
                 {
@@ -138,7 +138,7 @@ namespace Escher
                 }
                 else
                 {
-                    entry = catalog.FirstOrDefault(x => x.Class == Class.PageFeed && x.Page == entry.Page);
+                    entry = design.FirstOrDefault(x => x.Class == Class.PageFeed && x.Page == entry.Page);
 
                     if (entry == null)
                     {
@@ -182,7 +182,7 @@ namespace Escher
                 }
                 else
                 {
-                    CatalogEntry entry = catalog.FirstOrDefault(x => x.Class == Class.PageFeed && x.Page == page);
+                    DesignEntry entry = design.FirstOrDefault(x => x.Class == Class.PageFeed && x.Page == page);
 
                     if (entry == null)
                     {
@@ -218,7 +218,7 @@ namespace Escher
 
             if (input != "")
             {
-                CatalogEntry entry = catalog.FirstOrDefault(x => x.Class == Class.PageFeed && x.PageNumber.ToLower() == input.ToLower());
+                DesignEntry entry = design.FirstOrDefault(x => x.Class == Class.PageFeed && x.PageNumber.ToLower() == input.ToLower());
 
                 if (entry == null)
                 {
@@ -270,15 +270,15 @@ namespace Escher
             findAlbumNumberToolStripMenuItem.Enabled = enabled;
         }
 
-        private void LoadDesign(string design)
+        private void LoadDesign(string designFile)
         {
             string error;
 
             SetMenus(enabled: false);
 
-            design = App.GetSetting("DesignsFolder") + "\\" + design + ".cdb";
+            designFile = App.GetSetting("DesignsFolder") + "\\" + designFile + ".cdb";
 
-            this.editor.SetDesign(design);
+            this.editor.SetDesign(designFile);
 
             SyntaxValidator syntaxValidator = new SyntaxValidator();
 
@@ -288,9 +288,9 @@ namespace Escher
             }
             else
             {
-                CatalogParser catalogueParser = new CatalogParser();
+                DesignParser designParser = new DesignParser();
 
-                catalog = catalogueParser.Parse(this.editor.GetDesign(), SetProgress, out error);
+                design = designParser.Parse(this.editor.GetDesign(), SetProgress, out error);
 
                 if (!string.IsNullOrEmpty(error))
                 {
@@ -298,7 +298,7 @@ namespace Escher
                 }
                 else
                 {
-                    webBrowser.DocumentText = HtmlHelper.GetDesignInHtml(catalog);
+                    webBrowser.DocumentText = HtmlHelper.GetDesignInHtml(design);
 
                     SetMenus(enabled: true);
                 }
