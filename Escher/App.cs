@@ -115,6 +115,7 @@ namespace Escher
             config.AppSettings.Settings.Add(setting, value);
 
             config.Save(ConfigurationSaveMode.Modified);
+            ConfigurationManager.RefreshSection("appSettings");
         }
 
         public static void SetSetting(string setting, bool value)

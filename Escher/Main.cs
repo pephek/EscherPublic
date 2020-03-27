@@ -18,7 +18,7 @@ namespace Escher
     {
         private Editor editor = new Editor();
 
-        List<DesignEntry> design;
+        Design design;
 
         public Main()
         {
@@ -132,7 +132,7 @@ namespace Escher
 
             if (input != "")
             {
-                DesignEntry entry = design.FirstOrDefault(x => x.Class == Class.Variety && x.Number.ToLower() == input.ToLower());
+                DesignEntry entry = design.FindStampNumber(input);
 
                 if (entry == null)
                 {
@@ -140,7 +140,7 @@ namespace Escher
                 }
                 else
                 {
-                    entry = design.FirstOrDefault(x => x.Class == Class.PageFeed && x.Page == entry.Page);
+                    entry = design.FindPageNumber(entry.Page);
 
                     if (entry == null)
                     {
@@ -184,7 +184,7 @@ namespace Escher
                 }
                 else
                 {
-                    DesignEntry entry = design.FirstOrDefault(x => x.Class == Class.PageFeed && x.Page == page);
+                    DesignEntry entry = design.FindPageNumber(page);
 
                     if (entry == null)
                     {
@@ -220,7 +220,7 @@ namespace Escher
 
             if (input != "")
             {
-                DesignEntry entry = design.FirstOrDefault(x => x.Class == Class.PageFeed && x.PageNumber.ToLower() == input.ToLower());
+                DesignEntry entry = design.FindAlbumNumber(input);
 
                 if (entry == null)
                 {
@@ -249,7 +249,7 @@ namespace Escher
 
         private void exitToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            if (MessageBox.Show(string.Format("Are you sure you want to exit from the {0} application?", App.GetName()), "Exit " + App.GetName(), MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
+            if (MessageBox.Show(string.Format("Are you sure you want to exit from the {0} application?", App.GetName()), App.GetName() + " · Exit", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
             {
                 System.Environment.Exit(1);
             }
@@ -282,9 +282,9 @@ namespace Escher
 
             this.editor.SetDesign(designFile);
 
-            SyntaxValidator syntaxValidator = new SyntaxValidator();
+            DesignValidator designValidator = new DesignValidator();
 
-            if (!syntaxValidator.Parse(this.editor.GetDesign(), SetProgress, out error))
+            if (!designValidator.Parse(this.editor.GetDesign(), SetProgress, out error))
             {
                 MessageBox.Show(string.Format("Invalid design: {0}", error), App.GetName(), MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
             }
@@ -309,20 +309,20 @@ namespace Escher
 
         private void WebBrowser_Navigating(object sender, WebBrowserNavigatingEventArgs e)
         {
-            if (e.Url.AbsolutePath.StartsWith("page("))
+            if (e.Url.AbsolutePath.StartsWith("page(") && e.Url.AbsolutePath.EndsWith(""))
             {
                 e.Cancel = true;
 
-                Print print = new Print();
-                print.PrintMode = PrintMode.ToScreen;
-                DialogResult result = print.ShowDialog();
+                PageSetup.Load();
 
-                if (result == DialogResult.OK)
-                {
-                    Preview preview = new Preview();
-                    preview.FormBorderStyle = FormBorderStyle.None;
-                    preview.Show();
-                }
+                int pageNumber = Int32.Parse(e.Url.AbsolutePath.Replace("page(", "").Replace(")", ""));
+
+                Page page = PageHelper.Get(design, pageNumber);
+
+                Preview preview = new Preview();
+                preview.SetPage(page);
+                preview.FormBorderStyle = FormBorderStyle.None;
+                preview.Show();
             }
             else if (e.Url.AbsolutePath.StartsWith("stamp("))
             {

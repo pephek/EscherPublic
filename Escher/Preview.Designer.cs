@@ -31,6 +31,8 @@
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Preview));
             this.labelFormCaption = new System.Windows.Forms.Label();
             this.label1 = new System.Windows.Forms.Label();
+            this.pictureBox1 = new System.Windows.Forms.PictureBox();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.SuspendLayout();
             // 
             // labelFormCaption
@@ -50,10 +52,18 @@
             this.label1.ForeColor = System.Drawing.Color.Gray;
             this.label1.Location = new System.Drawing.Point(53, 126);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(126, 126);
+            this.label1.Size = new System.Drawing.Size(126, 154);
             this.label1.TabIndex = 1;
-            this.label1.Text = "c = ± color\r\nn = ± number\r\nv = ± value\r\nf = ± frame\r\nt = ± title\r\ns = ± font\r\n\r\n-" +
-    " = previous page\r\n+ = next page";
+            this.label1.Text = "c = ± color\r\nn = ± number\r\nv = ± value\r\nf = ± frame\r\nt = ± title\r\ns = ± font\r\n\r\np" +
+    " = page setup\r\n\r\n- = previous page\r\n+ = next page";
+            // 
+            // pictureBox1
+            // 
+            this.pictureBox1.Location = new System.Drawing.Point(288, 187);
+            this.pictureBox1.Name = "pictureBox1";
+            this.pictureBox1.Size = new System.Drawing.Size(83, 92);
+            this.pictureBox1.TabIndex = 2;
+            this.pictureBox1.TabStop = false;
             // 
             // Preview
             // 
@@ -62,14 +72,17 @@
             this.BackColor = System.Drawing.Color.White;
             this.ClientSize = new System.Drawing.Size(600, 366);
             this.ControlBox = false;
+            this.Controls.Add(this.pictureBox1);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.labelFormCaption);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
-            this.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.Margin = new System.Windows.Forms.Padding(2);
             this.Name = "Preview";
             this.Text = "Escher · Preview";
+            this.Load += new System.EventHandler(this.Preview_Load);
             this.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.Preview_KeyPress);
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -79,5 +92,6 @@
 
         private System.Windows.Forms.Label labelFormCaption;
         private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.PictureBox pictureBox1;
     }
 }

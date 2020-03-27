@@ -12,7 +12,7 @@ namespace Escher
 {
     public partial class Print : Form
     {
-        public PrintMode PrintMode;
+        public PrintMode printMode;
 
         public Print()
         {
@@ -31,14 +31,13 @@ namespace Escher
 
         private void Print_Load()
         {
-            this.Text = App.GetName() + " · Print " + (PrintMode == PrintMode.ToScreen ? "Preview" : "Document");
+            this.Text = App.GetName() + " · Print " + (printMode == PrintMode.ToScreen ? "Preview" : "Document");
 
-            buttonOk.Text = (PrintMode == PrintMode.ToScreen ? "Preview" : "Print");
+            buttonOk.Text = (printMode == PrintMode.ToScreen ? "Preview" : "Print");
 
-            groupBoxAlbumOptions.Enabled = (PrintMode == PrintMode.ToDocument);
+            groupBoxAlbumOptions.Enabled = (printMode == PrintMode.ToDocument);
 
             PageSetup pageSetup = PageSetup.Get();
-
 
             // Format
 
@@ -152,6 +151,10 @@ namespace Escher
             App.SetSetting("Print.IncludeSamplePagesOnly", checkBoxIncludeSamplePagesOnly.Checked);
             App.SetSetting("Print.IncludeHtmlScans", checkBoxIncludeHtmlScans.Checked);
             App.SetSetting("Print.IncludePdfBookmarks", checkBoxIncludePdfBookmarks.Checked);
+
+            // Reload
+
+            PageSetup.Load();
 
             // Result
 

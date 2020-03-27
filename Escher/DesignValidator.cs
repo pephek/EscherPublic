@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Escher
 {
-    public class SyntaxValidator
+    public class DesignValidator
     {
         private const char cEndOfFile = '\0';
         private const char cSemiColon = ':';

@@ -9,7 +9,7 @@ namespace Escher
 {
     public class HtmlHelper
     {
-        private static string GetTableOfContents(List<DesignEntry> design, int i)
+        private static string GetTableOfContents(Design design, int i)
         {
             StringBuilder html = new StringBuilder();
 
@@ -86,7 +86,7 @@ namespace Escher
             }
         }
 
-        public static string GetDesignInHtml(List<DesignEntry> design)
+        public static string GetDesignInHtml(Design design)
         {
             StringBuilder html = new StringBuilder();
 

@@ -11,9 +11,9 @@ namespace Escher
         private Action<int> progress;
         private int previousProgress = 0;
 
-        public List<DesignEntry> Parse(string designText, Action<int> setProgress, out string error)
+        public Design Parse(string designText, Action<int> setProgress, out string error)
         {
-            List<DesignEntry> design = new List<DesignEntry>();
+            Design design = new Design();
 
             error = "";
 
@@ -87,7 +87,7 @@ namespace Escher
             return design;
         }
 
-        private DesignEntry Parse(List<DesignEntry> design, string line, int pageNumber, int lineNumber)
+        private DesignEntry Parse(Design design, string line, int pageNumber, int lineNumber)
         {
             DesignEntry entry = new DesignEntry(pageNumber);
 
@@ -127,7 +127,7 @@ namespace Escher
             return entry;
         }
 
-        private void Parse(List<DesignEntry> design, DesignEntry entry, string keyValuePair, int line)
+        private void Parse(Design design, DesignEntry entry, string keyValuePair, int line)
         {
             string key;
             string val;
