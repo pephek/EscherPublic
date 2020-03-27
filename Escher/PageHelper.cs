@@ -12,6 +12,7 @@ namespace Escher
         {
             string subType = "";
             string subTypeToPass = "";
+            string description = "";
 
             Page page = new Page();
 
@@ -70,8 +71,15 @@ namespace Escher
 
                         break;
 
-                    case Class.Varieties:
+                    case Class.Type:
+                        subType = entry.Text;
+                        break;
 
+                    case Class.Description:
+                        description = entry.Text;
+                        break;
+
+                    case Class.Varieties:
                     case Class.LineFeed:
 
                         if (subType != page.MainType)
@@ -83,15 +91,53 @@ namespace Escher
                             subTypeToPass = "";
                         }
 
-                        page.AddVarieties(entry.Text, entry.Comment, subTypeToPass, entry.OffsetHorizontal, entry.OffsetVertical, entry.Combine, entry.Alignment, entry.FontOfType, entry.FontOfDescription, entry.Width);
+                        page.AddVarieties(
+                            entry.Text,
+                            entry.Comment,
+                            subTypeToPass,
+                            entry.OffsetHorizontal,
+                            entry.OffsetVertical,
+                            entry.Combine,
+                            entry.Alignment,
+                            entry.FontOfType,
+                            entry.FontOfDescription,
+                            entry.Width
+                        );
 
                         subType = "";
+
+                        break;
+
+                    case Class.Variety:
+
+                        page.AddVariety(
+                            Variety.GetNumber(entry),
+                            Variety.GetValueAndColor(entry),
+                            description,
+                            entry.FrameColor,
+                            entry.Width,
+                            entry.Height,
+                            entry.ExtraWidth,
+                            entry.ExtraHeight,
+                            entry.OffsetHorizontal,
+                            entry.OffsetVertical,
+                            entry.Skip,
+                            entry.Appearance,
+                            string.IsNullOrEmpty(entry.Picture) ? entry.Number : entry.Picture,
+                            entry.Overprint,
+                            entry.Shape,
+                            entry.Alignment,
+                            entry.Sheet
+                        );
+
+                        description = "";
 
                         break;
                 }
 
                 i++;
             }
+
             return page;
         }
     }

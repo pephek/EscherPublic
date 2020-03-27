@@ -34,44 +34,130 @@ namespace Escher
         public double FrameWidth;
 
         public Variety(
-            string Number,
-            string Description,
-            FrameColor FrameColor,
-            double Width,
-            double Height,
-            double ExtraWidth,
-            double ExtraHeight,
-            double Horizontal,
-            double Vertical,
-            string Title,
-            Shape Shape,
-            bool Skip,
-            string Part,
-            Appearance Appearance,
-            string Picture,
-            string Overprint,
-            Alignment Alignment,
-            string Sheet
+            string number,
+            string description,
+            FrameColor frameColor,
+            double width,
+            double height,
+            double extraWidth,
+            double extraHeight,
+            double horizontal,
+            double vertical,
+            string title,
+            Shape shape,
+            bool skip,
+            string part,
+            Appearance appearance,
+            string picture,
+            string overprint,
+            Alignment alignment,
+            string sheet
         )
         {
-            this.Number = Number;
-            this.Description = Description;
-            this.FrameColor = FrameColor;
-            this.Width = Width;
-            this.Height = Height;
-            this.ExtraWidth = ExtraWidth;
-            this.ExtraHeight = ExtraHeight;
-            this.Horizontal = Horizontal;
-            this.Vertical = Vertical;
-            this.Title = Title;
-            this.Shape = Shape;
-            this.Skip = Skip;
-            this.Part = Part;
-            this.Appearance = Appearance;
-            this.Picture = Picture;
-            this.Overprint = Overprint;
-            this.Alignment = Alignment;
-            this.Sheet = Sheet;
+            Number = number;
+            Description = description;
+            FrameColor = frameColor;
+            Width = width;
+            Height = height;
+            ExtraWidth = extraWidth;
+            ExtraHeight = extraHeight;
+            Horizontal = horizontal;
+            Vertical = vertical;
+            Title = title;
+            Shape = shape;
+            Skip = skip;
+            Part = part;
+            Appearance = appearance;
+            Picture = picture;
+            Overprint = overprint;
+            Alignment = alignment;
+            Sheet = sheet;
+        }
+
+        public static string GetNumber(DesignEntry entry)
+        {
+            string number = "";
+
+            PageSetup pageSetup = PageSetup.Get();
+
+            if (pageSetup.Catalog == Catalog.None)
+            {
+                number = entry.Number;
+            }
+            else
+            {
+                switch (pageSetup.Catalog)
+                {
+                    case Catalog.Scott:
+                        number = entry.Sc;
+                        break;
+                    case Catalog.Michel:
+                        number = entry.Mi;
+                        break;
+                    case Catalog.Yvert:
+                        number = entry.Yv;
+                        break;
+                    case Catalog.Gibbons:
+                        number = entry.Sg;
+                        break;
+                    case Catalog.Chan:
+                        number = entry.Ch;
+                        break;
+                    case Catalog.Afinsa:
+                        number = entry.Af;
+                        break;
+                    case Catalog.Maury:
+                        number = entry.Ma;
+                        break;
+                    case Catalog.Newfoundland:
+                        number = entry.Nc;
+                        break;
+                    case Catalog.Afa:
+                        number = entry.Afa;
+                        break;
+                    case Catalog.Facit:
+                        number = entry.Fac;
+                        break;
+                }
+
+                if (pageSetup.AppendCatalog && number != "")
+                {
+                    number = entry.Number + " </b>(" + number + ")";
+                }
+            }
+
+            return number;
+        }
+
+        public static string GetValueAndColor(DesignEntry entry)
+        {
+            string valueAndColor;
+
+            string value = entry.Value ?? "";
+            string color = entry.Color ?? "";
+
+            if (entry.Separate)
+            {
+                valueAndColor = (value != "" ? value : "!") + "%" + (color != "" ? color : "!");
+            }
+            else if (value != "" && color == "")
+            {
+                valueAndColor = value;
+            }
+            else if (color != "" && value == "")
+            {
+                valueAndColor = color;
+            }
+            else if (value != "" && color != "")
+            {
+                valueAndColor = value + " · " + color;
+            }
+            else
+            {
+                valueAndColor = "!";
+            }
+
+            return valueAndColor;
         }
     }
 }

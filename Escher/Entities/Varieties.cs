@@ -22,30 +22,30 @@ namespace Escher
         public List<Variety> Rows;
 
         public Varieties(
-            string SubType,
-            string PublicDescription,
-            string PrivateDescription,
-            bool Combine,
-            double Horizontal,
-            double Vertical,
-            Alignment Alignment,
-            bool FontOfType,
-            bool FontOfDescription,
-            double Margin
+            string subType,
+            string publicDescription,
+            string privateDescription,
+            bool combine,
+            double horizontal,
+            double vertical,
+            Alignment alignment,
+            bool fontOfType,
+            bool fontOfDescription,
+            double margin
         )
         {
-            this.SubType = SubType;
-            this.PublicDescription = PublicDescription;
-            this.PrivateDescription = PrivateDescription;
-            this.Combine = Combine;
-            this.Horizontal = Horizontal;
-            this.Vertical = Vertical;
-            this.Alignment = Alignment;
-            this.FontOfType = FontOfType;
-            this.FontOfDescription = FontOfDescription;
-            this.Margin = Margin;
+            SubType = subType;
+            PublicDescription = publicDescription;
+            PrivateDescription = privateDescription;
+            Combine = combine;
+            Horizontal = horizontal;
+            Vertical = vertical;
+            Alignment = alignment;
+            FontOfType = fontOfType;
+            FontOfDescription = fontOfDescription;
+            Margin = margin;
 
-            this.Rows = new List<Variety>();
+            Rows = new List<Variety>();
         }
     }
 }
