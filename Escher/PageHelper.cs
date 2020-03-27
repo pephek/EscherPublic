@@ -20,7 +20,7 @@ namespace Escher
             // a) NEDERLAND
             // b) BADEN
             // c) REPUBLIK MALUKU SELATAN
-            DesignEntry country = design.LastOrDefault(entry => entry.Class == Class.Country && entry.Page <= pageNumber);
+            DesignEntry country = design.LastOrDefault(entry => entry.Class == Class.Country && entry.PageNumber <= pageNumber);
 
             page.Country = country.Text;
             page.Copyright = country.Copyright;
@@ -29,7 +29,7 @@ namespace Escher
             // a) 1867-1869. Koning Willem III.
             // b) ALTDEUTSCHLAND
             // c) 1950. U.P.U.
-            DesignEntry series = design.LastOrDefault(entry => entry.Class == Class.Series && entry.Page <= pageNumber);
+            DesignEntry series = design.LastOrDefault(entry => entry.Class == Class.Series && entry.PageNumber <= pageNumber);
 
             page.Series = series.Text;
 
@@ -37,7 +37,7 @@ namespace Escher
             // a) Type I.
             // b) Portomarken
             // c) Regular.
-            DesignEntry mainType = design.FirstOrDefault(entry => entry.Class == Class.Type && entry.Page == pageNumber);
+            DesignEntry mainType = design.FirstOrDefault(entry => entry.Class == Class.Type && entry.PageNumber == pageNumber);
 
             if (mainType != null)
             {
@@ -48,15 +48,15 @@ namespace Escher
             // a) Frankeerzegels
             // b) Briefmarken
             // c) Cinderellas
-            DesignEntry part = design.LastOrDefault(entry => entry.Class == Class.Part && entry.Page <= pageNumber);
+            DesignEntry part = design.LastOrDefault(entry => entry.Class == Class.Part && entry.PageNumber <= pageNumber);
 
             page.Folder = part.Text;
 
             // Look up the first entry having this page number
-            int first = design.FindIndex(entry => entry.Page == pageNumber);
+            int first = design.FindIndex(entry => entry.PageNumber == pageNumber);
 
             int i = first;
-            while (design[i].Page == design[first].Page)
+            while (design[i].PageNumber == design[first].PageNumber)
             {
                 DesignEntry entry = design[i];
 
@@ -66,7 +66,7 @@ namespace Escher
 
                         page.OffsetVertical = entry.OffsetVertical;
                         page.Spacing = entry.Width;
-                        page.PageNumber = entry.PageNumber;
+                        page.ALbumNumber = entry.AlbumNumber;
                         page.IsSample = entry.Sample;
 
                         break;

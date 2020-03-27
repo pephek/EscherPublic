@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -13,14 +14,14 @@ namespace Escher
         public string Value;
         public string Number;
         public string Color;
-        public FrameColor FrameColor;
-        public double Width;
-        public double Height;
-        public double ExtraWidth;
-        public double ExtraHeight;
-        public double OffsetHorizontal;
-        public double OffsetVertical;
-        public int Page;
+        public Color FrameColor;
+        public float Width;
+        public float Height;
+        public float ExtraWidth;
+        public float ExtraHeight;
+        public float OffsetHorizontal;
+        public float OffsetVertical;
+        public int PageNumber;
         public bool Skip;
         public bool Separate;
         public bool Combine;
@@ -50,7 +51,7 @@ namespace Escher
         public string Html;
         public string Catalogue;
         public string Copyright;
-        public string PageNumber;
+        public string AlbumNumber;
         public bool Special;
         public string Pdf;
         public string Settings;
@@ -65,12 +66,12 @@ namespace Escher
         public DesignEntry(Class Class, int Page)
         {
             this.Class = Class;
-            this.Page = Page;
+            this.PageNumber = Page;
         }
 
         public DesignEntry(int Page)
         {
-            this.Page = Page;
+            this.PageNumber = Page;
         }
 
         public void SetClass(Class Class, string Text)

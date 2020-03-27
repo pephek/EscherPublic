@@ -102,7 +102,7 @@ namespace Escher
                 switch (entry.Class)
                 {
                     case Class.PageFeed:
-                        html.Append(string.Format("<center><h1 id=\"page({0},{1})\"><a href=\"page({2})\">{3} ({4})</a></h1></center>", entry.Page, entry.PageNumber, entry.Page, entry.PageNumber, entry.Page));
+                        html.Append(string.Format("<center><h1 id=\"page({0},{1})\"><a href=\"page({2})\">{3} ({4})</a></h1></center>", entry.PageNumber, entry.AlbumNumber, entry.PageNumber, entry.AlbumNumber, entry.PageNumber));
                         if (!entry.Combine)
                         {
                             html.Append(string.Format("<center>{0} ({1})</center>", entry.Html, entry.Comment));

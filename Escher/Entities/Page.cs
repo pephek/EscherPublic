@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -15,7 +16,7 @@ namespace Escher
         public string Folder;
         public double OffsetVertical;
         public double Spacing;
-        public string PageNumber;
+        public string ALbumNumber;
         public bool IsSample;
 
         public List<Varieties> Varieties = new List<Varieties>();
@@ -32,7 +33,7 @@ namespace Escher
             Varieties.Add(varieties);
         }
 
-        public void AddVariety(string number, string description, string title, FrameColor frameColor, double width, double height, double extraWidth, double extraHeight, double horizontal, double vertical, bool skip, Appearance appearance, string picture, string overprint, Shape shape, Alignment alignment, string sheet)
+        public void AddVariety(string number, string description, string title, Color frameColor, double width, double height, double extraWidth, double extraHeight, double horizontal, double vertical, bool skip, Appearance appearance, string picture, string overprint, Shape shape, Alignment alignment, string sheet)
         {
             Variety variety = new Variety(number, description, frameColor, width, height, extraWidth, extraHeight, horizontal, vertical, title, shape, skip, "", appearance, picture, overprint, alignment, sheet);
 

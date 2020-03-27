@@ -140,7 +140,7 @@ namespace Escher
                 }
                 else
                 {
-                    entry = design.FindPageNumber(entry.Page);
+                    entry = design.FindPageNumber(entry.PageNumber);
 
                     if (entry == null)
                     {
@@ -148,7 +148,7 @@ namespace Escher
                     }
                     else
                     {
-                        HtmlElement element = webBrowser.Document.GetElementById(string.Format("page({0},{1})", entry.Page, entry.PageNumber));
+                        HtmlElement element = webBrowser.Document.GetElementById(string.Format("page({0},{1})", entry.PageNumber, entry.AlbumNumber));
 
                         if (element == null)
                         {
@@ -192,7 +192,7 @@ namespace Escher
                     }
                     else
                     {
-                        HtmlElement element = webBrowser.Document.GetElementById(string.Format("page({0},{1})", entry.Page, entry.PageNumber));
+                        HtmlElement element = webBrowser.Document.GetElementById(string.Format("page({0},{1})", entry.PageNumber, entry.AlbumNumber));
 
                         if (element == null)
                         {
@@ -228,7 +228,7 @@ namespace Escher
                 }
                 else
                 {
-                    HtmlElement element = webBrowser.Document.GetElementById(string.Format("page({0},{1})", entry.Page, entry.PageNumber));
+                    HtmlElement element = webBrowser.Document.GetElementById(string.Format("page({0},{1})", entry.PageNumber, entry.AlbumNumber));
 
                     if (element == null)
                     {
@@ -320,8 +320,7 @@ namespace Escher
                 Page page = PageHelper.Get(design, pageNumber);
 
                 Preview preview = new Preview();
-                preview.SetPage(page);
-                preview.FormBorderStyle = FormBorderStyle.None;
+                preview.ShowPage(page, mode: PrintMode.ToScreen, number: pageNumber, scale: 1, designing: true);
                 preview.Show();
             }
             else if (e.Url.AbsolutePath.StartsWith("stamp("))

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -10,7 +11,7 @@ namespace Escher
     {
         public readonly string Number;
         public readonly string Description;
-        public readonly FrameColor FrameColor;
+        public readonly Color FrameColor;
         public readonly double Width;
         public readonly double Height;
         public readonly double ExtraWidth;
@@ -36,7 +37,7 @@ namespace Escher
         public Variety(
             string number,
             string description,
-            FrameColor frameColor,
+            Color frameColor,
             double width,
             double height,
             double extraWidth,

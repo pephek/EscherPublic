@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -64,7 +65,7 @@ namespace Escher
 
                         lastEntry = entry;
 
-                        p = entry.Page;
+                        p = entry.PageNumber;
 
                         end = (entry.Class == Class.None);
                     }
@@ -108,12 +109,12 @@ namespace Escher
                 {
                     case "end":
                         entry.Class = Class.None;
-                        entry.Page = -1;
+                        entry.PageNumber = -1;
                         break;
                     case "pagefeed":
                         entry.Class = Class.PageFeed;
-                        entry.Page++;
-                        entry.Text = entry.Page.ToString();
+                        entry.PageNumber++;
+                        entry.Text = entry.PageNumber.ToString();
                         break;
                     case "linefeed":
                         entry.Class = Class.LineFeed;
@@ -222,11 +223,11 @@ namespace Escher
                     break;
 
                 case "horizontal":
-                    entry.OffsetHorizontal = Convert.ToDouble(val);
+                    entry.OffsetHorizontal = Convert.ToSingle(val);
                     break;
 
                 case "vertical":
-                    entry.OffsetVertical = Convert.ToDouble(val);
+                    entry.OffsetVertical = Convert.ToSingle(val);
                     break;
 
                 case "skip":
@@ -268,10 +269,10 @@ namespace Escher
                     {
                         case "":
                         case "black":
-                            entry.FrameColor = FrameColor.Black;
+                            entry.FrameColor = Color.Black;
                             break;
                         case "white":
-                            entry.FrameColor = FrameColor.White;
+                            entry.FrameColor = Color.White;
                             break;
                         default:
                             throw new Exception(string.Format("Unknown frame color '{0}'", val));
@@ -506,7 +507,7 @@ namespace Escher
                     break;
 
                 case "pagenumber":
-                    entry.PageNumber = val;
+                    entry.AlbumNumber = val;
                     break;
 
                 case "pdf":
@@ -649,12 +650,12 @@ namespace Escher
                         case "carnetpaire":
                         case "pairecarnet":
                             entry.Appearance = Appearance.PaireCarnet;
-                            entry.Height = 2 * (entry.Height - 4 + 0.3 * (entry.Height - 4)) + 4;
+                            entry.Height = 2 * (entry.Height - 4 + 0.3F * (entry.Height - 4)) + 4;
                             break;
                         case "bandepublicitaire":
                         case "publicitairebande":
                             entry.Appearance = Appearance.BandePublicitaire;
-                            entry.Height = (entry.Height - 4) + 0.4 * (entry.Height - 4) + 4;
+                            entry.Height = (entry.Height - 4) + 0.4F * (entry.Height - 4) + 4;
                             break;
                         case "imperfright":
                             entry.Appearance = Appearance.ImperfRight;
@@ -977,7 +978,7 @@ namespace Escher
                             break;
                         case "v2":
                         case "x2":
-                            entry.Width = 88.5;
+                            entry.Width = 88.5F;
                             entry.Height = 116; // 115.5;
                             break;
 
@@ -1007,20 +1008,20 @@ namespace Escher
             }
         }
 
-        private double GetSize(double size, string value)
+        private float GetSize(float size, string value)
         {
             switch (value.Substring(0, 1))
             {
                 case "+":
-                    return (size - 4) + Convert.ToDouble(value.Substring(1)) + 4;
+                    return (size - 4) + Convert.ToSingle(value.Substring(1)) + 4;
                 case "-":
-                    return (size - 4) - Convert.ToDouble(value.Substring(1)) + 4;
+                    return (size - 4) - Convert.ToSingle(value.Substring(1)) + 4;
                 case "*":
-                    return (size - 4) * Convert.ToDouble(value.Substring(1)) + 4;
+                    return (size - 4) * Convert.ToSingle(value.Substring(1)) + 4;
                 case "/":
-                    return (size - 4) / Convert.ToDouble(value.Substring(1)) + 4;
+                    return (size - 4) / Convert.ToSingle(value.Substring(1)) + 4;
                 default:
-                    return Convert.ToDouble(value);
+                    return Convert.ToSingle(value);
             }
         }
 

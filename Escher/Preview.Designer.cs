@@ -29,60 +29,49 @@
         private void InitializeComponent()
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Preview));
-            this.labelFormCaption = new System.Windows.Forms.Label();
-            this.label1 = new System.Windows.Forms.Label();
-            this.pictureBox1 = new System.Windows.Forms.PictureBox();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
+            this.labelCaption = new System.Windows.Forms.Label();
+            this.labelLegend = new System.Windows.Forms.Label();
             this.SuspendLayout();
             // 
-            // labelFormCaption
+            // labelCaption
             // 
-            this.labelFormCaption.AutoSize = true;
-            this.labelFormCaption.Location = new System.Drawing.Point(56, 7);
-            this.labelFormCaption.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
-            this.labelFormCaption.Name = "labelFormCaption";
-            this.labelFormCaption.Size = new System.Drawing.Size(87, 13);
-            this.labelFormCaption.TabIndex = 0;
-            this.labelFormCaption.Text = "Escher · Preview";
+            this.labelCaption.AutoSize = true;
+            this.labelCaption.Location = new System.Drawing.Point(75, 9);
+            this.labelCaption.Name = "labelCaption";
+            this.labelCaption.Size = new System.Drawing.Size(113, 17);
+            this.labelCaption.TabIndex = 0;
+            this.labelCaption.Text = "Escher · Preview";
             // 
-            // label1
+            // labelLegend
             // 
-            this.label1.AutoSize = true;
-            this.label1.Font = new System.Drawing.Font("Courier New", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label1.ForeColor = System.Drawing.Color.Gray;
-            this.label1.Location = new System.Drawing.Point(53, 126);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(126, 154);
-            this.label1.TabIndex = 1;
-            this.label1.Text = "c = ± color\r\nn = ± number\r\nv = ± value\r\nf = ± frame\r\nt = ± title\r\ns = ± font\r\n\r\np" +
-    " = page setup\r\n\r\n- = previous page\r\n+ = next page";
-            // 
-            // pictureBox1
-            // 
-            this.pictureBox1.Location = new System.Drawing.Point(288, 187);
-            this.pictureBox1.Name = "pictureBox1";
-            this.pictureBox1.Size = new System.Drawing.Size(83, 92);
-            this.pictureBox1.TabIndex = 2;
-            this.pictureBox1.TabStop = false;
+            this.labelLegend.AutoSize = true;
+            this.labelLegend.Font = new System.Drawing.Font("Courier New", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.labelLegend.ForeColor = System.Drawing.Color.Gray;
+            this.labelLegend.Location = new System.Drawing.Point(75, 139);
+            this.labelLegend.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.labelLegend.Name = "labelLegend";
+            this.labelLegend.Size = new System.Drawing.Size(104, 187);
+            this.labelLegend.TabIndex = 1;
+            this.labelLegend.Text = "c = ± color\r\nn = ± number\r\nv = ± value\r\nf = ± frame\r\nt = ± title\r\ns = ± font\r\n\r\np" +
+    " = setup\r\n\r\n- = previous\r\n+ = next";
             // 
             // Preview
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.White;
-            this.ClientSize = new System.Drawing.Size(600, 366);
+            this.ClientSize = new System.Drawing.Size(800, 450);
             this.ControlBox = false;
-            this.Controls.Add(this.pictureBox1);
-            this.Controls.Add(this.label1);
-            this.Controls.Add(this.labelFormCaption);
+            this.Controls.Add(this.labelLegend);
+            this.Controls.Add(this.labelCaption);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
-            this.Margin = new System.Windows.Forms.Padding(2);
+            this.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.Name = "Preview";
             this.Text = "Escher · Preview";
             this.Load += new System.EventHandler(this.Preview_Load);
+            this.Paint += new System.Windows.Forms.PaintEventHandler(this.Preview_Paint);
             this.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.Preview_KeyPress);
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -90,8 +79,7 @@
 
         #endregion
 
-        private System.Windows.Forms.Label labelFormCaption;
-        private System.Windows.Forms.Label label1;
-        private System.Windows.Forms.PictureBox pictureBox1;
+        private System.Windows.Forms.Label labelCaption;
+        private System.Windows.Forms.Label labelLegend;
     }
 }

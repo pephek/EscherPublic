@@ -89,6 +89,8 @@
     <Compile Include="Editor.Designer.cs">
       <DependentUpon>Editor.cs</DependentUpon>
     </Compile>
+    <Compile Include="Entities\Artifact.cs" />
+    <Compile Include="Entities\Artifacts.cs" />
     <Compile Include="Entities\Design.cs" />
     <Compile Include="Entities\DesignEntry.cs" />
     <Compile Include="Entities\Page.cs" />
@@ -100,11 +102,11 @@
     <Compile Include="Entities\Variety.cs" />
     <Compile Include="Enums\Alignment.cs" />
     <Compile Include="Enums\Appearance.cs" />
+    <Compile Include="Enums\ArtifactType.cs" />
     <Compile Include="Enums\Catalog.cs" />
     <Compile Include="Enums\Class.cs" />
     <Compile Include="Enums\ColorStyle.cs" />
     <Compile Include="Enums\FontSize.cs" />
-    <Compile Include="Enums\FrameColor.cs" />
     <Compile Include="Enums\FrameStyle.cs" />
     <Compile Include="Enums\PrintMode.cs" />
     <Compile Include="Enums\Shape.cs" />

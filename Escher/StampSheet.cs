@@ -9,7 +9,7 @@ namespace Escher
 {
     public class StampSheet
     {
-        private const double cFrameMargin = 2;
+        private const float cFrameMargin = 2;
 
         private static Dictionary<SheetNumber, Sheet> sheets;
 
@@ -124,7 +124,7 @@ namespace Escher
 
         }
 
-        public static void GetSize(string sheetNumber, out double width, out double height)
+        public static void GetSize(string sheetNumber, out float width, out float height)
         {
             SheetNumber sheet;
             int block;

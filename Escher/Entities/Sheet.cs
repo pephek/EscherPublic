@@ -11,14 +11,14 @@ namespace Escher
     {
         public int HorizontalCount;
         public int VerticalCount;
-        public double StampWidth;
-        public double StampHeight;
-        public double SheetWidth;
-        public double SheetHeight;
-        public double MarginLeft;
-        public double MarginRight;
-        public double MarginTop;
-        public double MarginBottom;
+        public float StampWidth;
+        public float StampHeight;
+        public float SheetWidth;
+        public float SheetHeight;
+        public float MarginLeft;
+        public float MarginRight;
+        public float MarginTop;
+        public float MarginBottom;
         public SheetBlock[] Blocks;
         public bool Gutter;
 

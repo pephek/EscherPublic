@@ -10,7 +10,7 @@ namespace Escher
     {
     }
 
-    public static class DesignExtensionMethohds
+    public static class DesignExtensionMethods
     {
         public static DesignEntry FindStampNumber(this Design design, string stampNumber)
         {
@@ -19,12 +19,12 @@ namespace Escher
 
         public static DesignEntry FindPageNumber(this Design design, int pageNumber)
         {
-            return design.FirstOrDefault(entry => entry.Class == Class.PageFeed && entry.Page == pageNumber);
+            return design.FirstOrDefault(entry => entry.Class == Class.PageFeed && entry.PageNumber == pageNumber);
         }
 
         public static DesignEntry FindAlbumNumber(this Design design, string albumNumber)
         {
-            return design.FirstOrDefault(entry => entry.Class == Class.PageFeed && entry.PageNumber.ToLower() == albumNumber.ToLower());
+            return design.FirstOrDefault(entry => entry.Class == Class.PageFeed && entry.AlbumNumber.ToLower() == albumNumber.ToLower());
         }
     }
 }
