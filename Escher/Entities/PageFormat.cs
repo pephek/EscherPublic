@@ -1,6 +1,8 @@
 ﻿using CsvHelper;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
+using System.Drawing;
 using System.Globalization;
 using System.IO;
 using System.Linq;
@@ -27,6 +29,9 @@ namespace Escher
         public readonly bool PrePrintedBorder;
         public readonly bool PrePrintedTitle;
 
+        public readonly RectangleF Border;
+        public readonly RectangleF Free;
+
         public PageFormat(string FormatName, TitleStyle TitleStyle, string TitleFont, int PageWidth, int PageHeight, int MarginLeft, int MarginRight, int MarginTop, int MarginBottom, int FreeLeft, int FreeRight, int FreeTop, int FreeBottom, bool PrePrintedBorder, bool PrePrintedTitle)
         {
             this.FormatName = FormatName;
@@ -44,6 +49,21 @@ namespace Escher
             this.FreeBottom = FreeBottom;
             this.PrePrintedBorder = PrePrintedBorder;
             this.PrePrintedTitle = PrePrintedTitle;
+
+            this.Border = new RectangleF(
+                this.MarginLeft,
+                this.MarginTop,
+                this.PageWidth - (this.MarginLeft + this.MarginRight),
+                this.PageHeight - (this.MarginTop + this.MarginBottom)
+            );
+            this.Free = new RectangleF(
+                this.MarginLeft + this.FreeLeft,
+                this.MarginTop + this.FreeTop,
+                this.PageWidth - (this.MarginLeft + this.FreeLeft + this.MarginRight + this.FreeRight),
+                this.PageHeight - (this.MarginTop + this.FreeTop + this.MarginBottom + this.FreeBottom)
+            );
+
+            Debug.Assert((this.Free.Width < this.Border.Width) || (this.Free.Height < this.Border.Height));
         }
     }
 

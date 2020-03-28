@@ -17,7 +17,6 @@ namespace Escher
         private int number;
         private float scaleX;
         private float scaleY;
-        private bool designing;
         private Artifacts artifacts;
 
         public Preview()
@@ -27,10 +26,6 @@ namespace Escher
 
         private void Preview_Load(object sender, EventArgs e)
         {
-            labelCaption.Left = 3;
-            labelCaption.Top = 3;
-            labelLegend.Left = labelCaption.Left;
-            labelLegend.Top = labelCaption.Top + labelCaption.Height + 3;
         }
 
         private void Preview_KeyPress(object sender, KeyPressEventArgs e)
@@ -53,7 +48,7 @@ namespace Escher
 
         private void Preview_Paint(object sender, PaintEventArgs e)
         {
-            PaintPage(this.artifacts, this.mode, this.scaleX, this.scaleY, this.designing);
+            PaintPage(this.artifacts, this.scaleX, this.scaleY, this.mode);
         }
 
         private void ShowPageSetup()
@@ -66,11 +61,11 @@ namespace Escher
             {
                 PageSetup.Load();
 
-                PreparePage(page, mode, number, designing);
+                PreparePage(page, mode, number);
             }
         }
 
-        public void PaintPage(Artifacts artifacts, PrintMode mode, float scaleX, float scaleY, bool designing)
+        public void PaintPage(Artifacts artifacts, float scaleX, float scaleY, PrintMode mode)
         {
             if (artifacts.Count() == 0)
             {
@@ -79,22 +74,23 @@ namespace Escher
 
             using (Graphics g = this.CreateGraphics())
             {
-                PreviewOrPrintPage(g, artifacts, scaleX, scaleY);
+                PaintPage(g, artifacts, scaleX, scaleY, mode);
             }
         }
 
-        public void PreviewOrPrintPage(Graphics g, Artifacts artifacts, float scaleX, float scaleY)
+        public void PaintPage(Graphics g, Artifacts artifacts, float scaleX, float scaleY, PrintMode mode)
         {
             float currentX = 0;
             float currentY = 0;
 
-            foreach (Artifact artifact in artifacts)
+            foreach (Artifact artefact in artifacts.Get())
             {
-                artifact.X *= scaleX;
-                artifact.Y *= scaleY;
-                artifact.Width *= scaleX;
-                artifact.Height *= scaleY;
-                artifact.FontSize *= scaleX;
+                if (mode == PrintMode.ToDocument && artefact.screenOnly)
+                {
+                    continue;
+                }
+
+                Artifact artifact = artefact.GetScaledCopy(scaleX, scaleY);
 
                 switch (artifact.Type)
                 {
@@ -108,37 +104,34 @@ namespace Escher
                         currentX += artifact.Width;
                         currentY += artifact.Height;
                         break;
+
+                    case ArtifactType.Text:
+                        g.DrawString(artifact.Text, artifact.Font, artifact.TextColor, artifact.X, artifact.Y);
+                        break;
                 }
             }
         }
 
-        public void PreparePage(Page page, PrintMode mode, int number, bool designing)
+        public void PreparePage(Page page, PrintMode mode, int number)
         {
             this.page = page;
             this.mode = mode;
             this.number = number;
-            this.designing = designing;
 
             PageSetup setup = PageSetup.Get();
+            PageFormat format = setup.PageFormat;
 
             Pen red = new Pen(Color.Red);
             Pen gray = new Pen(Color.Gray);
             Pen black = new Pen(Color.Black);
             Pen white = new Pen(Color.White);
 
-            this.FormBorderStyle = FormBorderStyle.None;
+            SolidBrush redText = new SolidBrush(Color.Red);
+            SolidBrush grayText = new SolidBrush(Color.Gray);
+            SolidBrush blackText = new SolidBrush(Color.Black);
+            SolidBrush whiteText = new SolidBrush(Color.White);
 
-            //using (Graphics g = this.CreateGraphics())
-            //{
-            //    var x = g.PageScale;
-            //    var y = g.PageUnit;
-            //    //g.PageUnit = GraphicsUnit.Millimeter;
-            //    g.PageUnit = GraphicsUnit.Pixel;
-            //    int w = Screen.FromControl(this).WorkingArea.Width;
-            //    int h = Screen.FromControl(this).WorkingArea.Height;
-            //    var mmW = (w * 25.4) / g.DpiX;
-            //    var mmH = (h * 25.4) / g.DpiY;
-            //}
+            this.FormBorderStyle = FormBorderStyle.None;
 
             int screenW = Screen.FromControl(this).WorkingArea.Width;
             int screenH = Screen.FromControl(this).WorkingArea.Height;
@@ -154,17 +147,41 @@ namespace Escher
                 this.Height = setup.PageFormat.PageHeight * screenW / setup.PageFormat.PageWidth;
             }
 
-            this.scaleX = (float)this.Width / setup.PageFormat.PageWidth;
-            this.scaleY = (float)this.Height / setup.PageFormat.PageHeight;
-
             this.Left = 0;
             this.Top = 0;
 
-            artifacts = new Artifacts();
+            this.scaleX = (float)this.Width / setup.PageFormat.PageWidth;
+            this.scaleY = (float)this.Height / setup.PageFormat.PageHeight;
 
-            //artifacts.AddRectangle(0, 0, this.Width - 1, this.Height - 1, red);
-            artifacts.AddRectangle(0, 0, (this.Width - 1) / scaleX, (this.Height - 1) / scaleY, red);
-            artifacts.AddRectangle(10, 0, (int)(setup.PageFormat.PageWidth / 2), (int)(setup.PageFormat.PageHeight / 2), black);
+            using (Graphics g = this.CreateGraphics())
+            {
+                g.PageUnit = GraphicsUnit.Millimeter;
+
+                artifacts = new Artifacts(g, this.scaleX, this.scaleX);
+
+                // Form border
+                artifacts.AddRectangle(0, 0, (this.Width - 1) / scaleX, (this.Height - 1) / scaleY, gray, screenOnly: true);
+
+                // Form caption
+                artifacts.AddText(1, 1, "Escher · Preview", blackText, "Microsoft Sans Serif", 8, screenOnly: true);
+
+                // Legenda
+                artifacts.AddText(1, artifacts.Last().Bottom(2), "c = ± color", grayText, "Courier New", 8, screenOnly: true);
+                artifacts.AddText(1, artifacts.Last().Bottom(), "n = ± number", grayText, "Courier New", 8, screenOnly: true);
+                artifacts.AddText(1, artifacts.Last().Bottom(), "v = ± value", grayText, "Courier New", 8, screenOnly: true);
+                artifacts.AddText(1, artifacts.Last().Bottom(), "f = ± frame", grayText, "Courier New", 8, screenOnly: true);
+                artifacts.AddText(1, artifacts.Last().Bottom(), "t = ± title", grayText, "Courier New", 8, screenOnly: true);
+                artifacts.AddText(1, artifacts.Last().Bottom(), "s = ± font", grayText, "Courier New", 8, screenOnly: true);
+                artifacts.AddText(1, artifacts.Last().Bottom(2), "p = setup", grayText, "Courier New", 8, screenOnly: true);
+                artifacts.AddText(1, artifacts.Last().Bottom(2), "- = previous", grayText, "Courier New", 8, screenOnly: true);
+                artifacts.AddText(1, artifacts.Last().Bottom(), "+ = next", grayText, "Courier New", 8, screenOnly: true);
+
+                // Page border
+                artifacts.AddRectangle(format.Border.Left, format.Border.Top, format.Border.Width, format.Border.Height, gray, screenOnly: true);
+
+                // Free space
+                artifacts.AddRectangle(format.Free.Left, format.Free.Top, format.Free.Width, format.Free.Height, red, screenOnly: true);
+            }
         }
     }
 }

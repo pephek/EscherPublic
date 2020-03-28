@@ -7,19 +7,49 @@ using System.Drawing;
 
 namespace Escher
 {
-    public class Artifacts : List<Artifact>
+    public class Artifacts
     {
-        public static Artifact CreateCursor(float x, float y)
+        private List<Artifact> artifacts;
+
+        private Graphics graphics;
+        private float scaleX;
+        private float scaleY;
+
+        public Artifacts(Graphics graphics, float scaleX, float scaleY)
+        {
+            this.graphics = graphics;
+            this.scaleX = scaleX;
+            this.scaleY = scaleY;
+
+            this.artifacts = new List<Artifact>();
+        }
+
+        public List<Artifact> Get()
+        {
+            return artifacts;
+        }
+
+        public int Count()
+        {
+            return artifacts.Count();
+        }
+
+        public Artifact Last()
+        {
+            return artifacts[artifacts.Count() - 1];
+        }
+
+        private void AddCursor(float x, float y)
         {
             Artifact artifact = new Artifact(ArtifactType.Cursor);
 
             artifact.X = x;
             artifact.Y = y;
 
-            return artifact;
+            artifacts.Add(artifact);
         }
 
-        public static Artifact CreateMove(float width, float height, Pen foreColor, FrameStyle frameStyle = FrameStyle.ThinSolid, Appearance appearance = Appearance.Singular)
+        public void AddMove(float width, float height, Pen foreColor, FrameStyle frameStyle = FrameStyle.ThinSolid, Appearance appearance = Appearance.Singular, bool screenOnly = false)
         {
             ArtifactType type;
 
@@ -42,37 +72,44 @@ namespace Escher
             artifact.Height = height;
             artifact.ForeColor = foreColor;
             artifact.Appearance = appearance;
+            artifact.screenOnly = screenOnly;
 
-            return artifact;
+            artifacts.Add(artifact);
         }
 
-        public static List<Artifact> CreateRectangle(float x, float y, float width, float height, Pen foreColor, FrameStyle frameStyle = FrameStyle.ThinSolid, Appearance appearance = Appearance.Singular)
+        public void AddRectangle(float x, float y, float width, float height, Pen foreColor, FrameStyle frameStyle = FrameStyle.ThinSolid, Appearance appearance = Appearance.Singular, bool screenOnly = false)
         {
-            List<Artifact> artifacts = new List<Artifact>();
-
-            artifacts.Add(CreateCursor(x, y));
+            AddCursor(x, y);
 
             if (frameStyle == FrameStyle.ThinSolid || frameStyle == FrameStyle.ThinDotted)
             {
-                artifacts.Add(CreateMove(width, 0, foreColor, frameStyle));
-                artifacts.Add(CreateMove(0, height, foreColor, frameStyle));
-                artifacts.Add(CreateMove(-width, 0, foreColor, frameStyle));
-                artifacts.Add(CreateMove(0, -height, foreColor, frameStyle));
+                AddMove(width, 0, foreColor, frameStyle, appearance, screenOnly);
+                AddMove(0, height, foreColor, frameStyle, appearance, screenOnly);
+                AddMove(-width, 0, foreColor, frameStyle, appearance, screenOnly);
+                AddMove(0, -height, foreColor, frameStyle, appearance, screenOnly);
             }
-            else // frmeStyle == FrameStyle.ThickFrame
+            else // frameStyle == FrameStyle.ThickFrame
             {
-                artifacts.Add(CreateMove(width, height, foreColor, frameStyle, appearance));
+                AddMove(width, height, foreColor, frameStyle, appearance, screenOnly);
             }
-
-            return artifacts;
         }
-    }
 
-    public static class ArtifactsExtensionMethods
-    {
-        public static void AddRectangle(this Artifacts artifacts, float x, float y, float width, float height, Pen foreColor, FrameStyle frameStyle = FrameStyle.ThinSolid, Appearance appearance = Appearance.Singular)
+        public void AddText(float x, float y, string text, SolidBrush textColor, string fontName, float fontSize, bool fontBold = false, bool fontItalic = false, bool screenOnly = false)
         {
-            artifacts.AddRange(Artifacts.CreateRectangle(x, y, width, height, foreColor, frameStyle, appearance));
+            Artifact artifact = new Artifact(ArtifactType.Text);
+            
+            artifact.X = x;
+            artifact.Y = y;
+            artifact.Text = text;
+            artifact.TextColor = textColor;
+            artifact.Font = new Font(fontName, fontSize, (fontBold ? FontStyle.Bold: 0) | (fontItalic ? FontStyle.Italic : 0));
+            artifact.screenOnly = screenOnly;
+
+            SizeF size = graphics.MeasureString(artifact.Text, artifact.Font);
+            artifact.Width = size.Width;
+            artifact.Height = size.Height;
+
+            artifacts.Add(artifact);
         }
     }
 }

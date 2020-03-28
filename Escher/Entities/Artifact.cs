@@ -16,19 +16,46 @@ namespace Escher
         public float Width;
         public float Height;
         public Pen ForeColor;
-        public Color BackColor;
+        public SolidBrush TextColor;
         public string Text;
         public string Filename;
         public PictureBox Picture;
-        public string FontName;
-        public float FontSize;
-        public bool FontBold;
-        public bool FontItalic;
+        public Font Font;
         public Appearance Appearance;
+        public bool screenOnly;
 
         public Artifact(ArtifactType type)
         {
             Type = type;
+        }
+
+        public float Right()
+        {
+            return X + Width;
+        }
+
+        public float Bottom(float margin = 0)
+        {
+            return Y + Height + margin;
+        }
+
+        public Artifact GetScaledCopy(float scaleX, float scaleY)
+        {
+            if (scaleX == 1 && scaleY == 1)
+            {
+                return this;
+            }
+            else
+            {
+                Artifact artifact = (Artifact)this.MemberwiseClone();
+
+                artifact.X *= scaleX;
+                artifact.Y *= scaleY;
+                artifact.Width *= scaleX;
+                artifact.Height *= scaleY;
+
+                return artifact;
+            }
         }
     }
 }
