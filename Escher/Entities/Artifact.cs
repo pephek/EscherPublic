@@ -15,7 +15,7 @@ namespace Escher
         public float Y;
         public float Width;
         public float Height;
-        public Pen ForeColor;
+        public Color ForeColor;
         public SolidBrush TextColor;
         public string Text;
         public string Filename;
@@ -39,9 +39,9 @@ namespace Escher
             return Y + Height + margin;
         }
 
-        public Artifact GetScaledCopy(float scaleX, float scaleY)
+        public Artifact GetScaledCopy(float scale)
         {
-            if (scaleX == 1 && scaleY == 1)
+            if (scale == 1)
             {
                 return this;
             }
@@ -49,10 +49,10 @@ namespace Escher
             {
                 Artifact artifact = (Artifact)this.MemberwiseClone();
 
-                artifact.X *= scaleX;
-                artifact.Y *= scaleY;
-                artifact.Width *= scaleX;
-                artifact.Height *= scaleY;
+                artifact.X *= scale;
+                artifact.Y *= scale;
+                artifact.Width *= scale;
+                artifact.Height *= scale;
 
                 return artifact;
             }

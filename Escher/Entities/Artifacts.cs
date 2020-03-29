@@ -12,14 +12,12 @@ namespace Escher
         private List<Artifact> artifacts;
 
         private Graphics graphics;
-        private float scaleX;
-        private float scaleY;
+        private float scale;
 
-        public Artifacts(Graphics graphics, float scaleX, float scaleY)
+        public Artifacts(Graphics graphics, float scale)
         {
             this.graphics = graphics;
-            this.scaleX = scaleX;
-            this.scaleY = scaleY;
+            this.scale = scale;
 
             this.artifacts = new List<Artifact>();
         }
@@ -49,7 +47,7 @@ namespace Escher
             artifacts.Add(artifact);
         }
 
-        public void AddMove(float width, float height, Pen foreColor, FrameStyle frameStyle = FrameStyle.ThinSolid, Appearance appearance = Appearance.Singular, bool screenOnly = false)
+        public void AddMove(float width, float height, Color foreColor, FrameStyle frameStyle = FrameStyle.ThinSolid, Appearance appearance = Appearance.Singular, bool screenOnly = false)
         {
             ArtifactType type;
 
@@ -77,7 +75,7 @@ namespace Escher
             artifacts.Add(artifact);
         }
 
-        public void AddRectangle(float x, float y, float width, float height, Pen foreColor, FrameStyle frameStyle = FrameStyle.ThinSolid, Appearance appearance = Appearance.Singular, bool screenOnly = false)
+        public void AddRectangle(float x, float y, float width, float height, Color foreColor, FrameStyle frameStyle = FrameStyle.ThinSolid, Appearance appearance = Appearance.Singular, bool screenOnly = false)
         {
             AddCursor(x, y);
 
@@ -91,6 +89,34 @@ namespace Escher
             else // frameStyle == FrameStyle.ThickFrame
             {
                 AddMove(width, height, foreColor, frameStyle, appearance, screenOnly);
+            }
+        }
+
+        public void AddHorizontalLine(float x, float y, float width, Color foreColor, FrameStyle frameStyle = FrameStyle.ThinSolid, Appearance appearance = Appearance.Singular, bool screenOnly = false)
+        {
+            AddCursor(x, y);
+
+            if (frameStyle == FrameStyle.ThinSolid || frameStyle == FrameStyle.ThinDotted)
+            {
+                AddMove(width, 0, foreColor, frameStyle, appearance, screenOnly);
+            }
+            else // frameStyle == FrameStyle.ThickFrame
+            {
+                throw new Exception(string.Format("Cannot add a line with style '{0}'", frameStyle));
+            }
+        }
+
+        public void AddVerticalLine(float x, float y, float height, Color foreColor, FrameStyle frameStyle = FrameStyle.ThinSolid, Appearance appearance = Appearance.Singular, bool screenOnly = false)
+        {
+            AddCursor(x, y);
+
+            if (frameStyle == FrameStyle.ThinSolid || frameStyle == FrameStyle.ThinDotted)
+            {
+                AddMove(0, height, foreColor, frameStyle, appearance, screenOnly);
+            }
+            else // frameStyle == FrameStyle.ThickFrame
+            {
+                throw new Exception(string.Format("Cannot add a line with style '{0}'", frameStyle));
             }
         }
 

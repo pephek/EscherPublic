@@ -16,28 +16,28 @@ namespace Escher
         public readonly string FormatName;
         public readonly TitleStyle TitleStyle;
         public readonly string TitleFont;
-        public readonly int PageWidth;
-        public readonly int PageHeight;
-        public readonly int MarginLeft;
-        public readonly int MarginRight;
-        public readonly int MarginTop;
-        public readonly int MarginBottom;
-        public readonly int FreeLeft;
-        public readonly int FreeRight;
-        public readonly int FreeTop;
-        public readonly int FreeBottom;
+        public readonly float PageWidth;
+        public readonly float PageHeight;
+        public readonly float MarginLeft;
+        public readonly float MarginRight;
+        public readonly float MarginTop;
+        public readonly float MarginBottom;
+        public readonly float FreeLeft;
+        public readonly float FreeRight;
+        public readonly float FreeTop;
+        public readonly float FreeBottom;
         public readonly bool PrePrintedBorder;
         public readonly bool PrePrintedTitle;
 
         public readonly RectangleF Border;
         public readonly RectangleF Free;
 
-        public PageFormat(string FormatName, TitleStyle TitleStyle, string TitleFont, int PageWidth, int PageHeight, int MarginLeft, int MarginRight, int MarginTop, int MarginBottom, int FreeLeft, int FreeRight, int FreeTop, int FreeBottom, bool PrePrintedBorder, bool PrePrintedTitle)
+        public PageFormat(string FormatName, TitleStyle TitleStyle, string TitleFont, float PageWidth, float PageHeight, float MarginLeft, float MarginRight, float MarginTop, float MarginBottom, float FreeLeft, float FreeRight, float FreeTop, float FreeBottom, bool PrePrintedBorder, bool PrePrintedTitle)
         {
             this.FormatName = FormatName;
             this.TitleStyle = TitleStyle;
             this.TitleFont = TitleFont;
-            this.PageWidth = PageWidth;
+            this.PageWidth = (float)PageWidth;
             this.PageHeight = PageHeight;
             this.MarginLeft = MarginLeft;
             this.MarginRight = MarginRight;
