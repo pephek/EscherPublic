@@ -4,6 +4,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Drawing;
+using System.Windows.Forms;
+using System.Drawing.Drawing2D;
 
 namespace Escher
 {
@@ -92,13 +94,13 @@ namespace Escher
             }
         }
 
-        public void AddHorizontalLine(float x, float y, float width, Color foreColor, FrameStyle frameStyle = FrameStyle.ThinSolid, Appearance appearance = Appearance.Singular, bool screenOnly = false)
+        public void AddHorizontalLine(float x, float y, float width, Color? foreColor = null, FrameStyle frameStyle = FrameStyle.ThinSolid, Appearance appearance = Appearance.Singular, bool screenOnly = false)
         {
             AddCursor(x, y);
 
             if (frameStyle == FrameStyle.ThinSolid || frameStyle == FrameStyle.ThinDotted)
             {
-                AddMove(width, 0, foreColor, frameStyle, appearance, screenOnly);
+                AddMove(width, 0, foreColor == null ? Color.Black : (Color)foreColor, frameStyle, appearance, screenOnly);
             }
             else // frameStyle == FrameStyle.ThickFrame
             {
@@ -106,13 +108,13 @@ namespace Escher
             }
         }
 
-        public void AddVerticalLine(float x, float y, float height, Color foreColor, FrameStyle frameStyle = FrameStyle.ThinSolid, Appearance appearance = Appearance.Singular, bool screenOnly = false)
+        public void AddVerticalLine(float x, float y, float height, Color? foreColor = null, FrameStyle frameStyle = FrameStyle.ThinSolid, Appearance appearance = Appearance.Singular, bool screenOnly = false)
         {
             AddCursor(x, y);
 
             if (frameStyle == FrameStyle.ThinSolid || frameStyle == FrameStyle.ThinDotted)
             {
-                AddMove(0, height, foreColor, frameStyle, appearance, screenOnly);
+                AddMove(0, height, foreColor == null ? Color.Black : (Color)foreColor, frameStyle, appearance, screenOnly);
             }
             else // frameStyle == FrameStyle.ThickFrame
             {
@@ -120,22 +122,55 @@ namespace Escher
             }
         }
 
-        public void AddText(float x, float y, string text, SolidBrush textColor, string fontName, float fontSize, bool fontBold = false, bool fontItalic = false, bool screenOnly = false)
+        public void AddText(float x, float y, float width, string text, string fontName, float fontSize, bool fontBold = false, bool fontItalic = false, Color? foreColor = null, Alignment alignment = Alignment.Left, bool screenOnly = false)
         {
             Artifact artifact = new Artifact(ArtifactType.Text);
-            
+
             artifact.X = x;
             artifact.Y = y;
             artifact.Text = text;
-            artifact.TextColor = textColor;
+            artifact.TextColor = foreColor == null ? new SolidBrush(Color.Black) : new SolidBrush((Color)foreColor);
             artifact.Font = new Font(fontName, fontSize, (fontBold ? FontStyle.Bold: 0) | (fontItalic ? FontStyle.Italic : 0));
             artifact.screenOnly = screenOnly;
 
-            SizeF size = graphics.MeasureString(artifact.Text, artifact.Font);
-            artifact.Width = size.Width;
-            artifact.Height = size.Height;
+            GraphicsUnit pageUnit = graphics.PageUnit;
 
+            graphics.PageUnit = GraphicsUnit.Display;
+
+            GetTextDimension(graphics, artifact.Text, artifact.Font, out RectangleF bounds);
+
+            artifact.Width = bounds.Width / this.scale;
+            artifact.Height = bounds.Height / this.scale;
+
+            artifact.X -= bounds.Left / this.scale;
+
+            graphics.PageUnit = pageUnit;
+
+            switch (alignment)
+            {
+                case Alignment.Left:
+                    break;
+                case Alignment.Centered:
+                    artifact.X += (width - artifact.Width) / 2;
+                    break;
+                case Alignment.Right:
+                    artifact.X += width - artifact.Width;
+                    break;
+
+            }
             artifacts.Add(artifact);
+        }
+
+        private void GetTextDimension(Graphics graphics, string text, Font font, out RectangleF rectangle)
+        {
+            CharacterRange[] ranges = new CharacterRange[] { new CharacterRange(0, text.Length) };
+            StringFormat stringFormat = new StringFormat();
+            stringFormat.SetMeasurableCharacterRanges(ranges);
+            RectangleF displayRectangleF = new RectangleF(0, 0, 4096, 4096);
+            Region[] regions = graphics.MeasureCharacterRanges(text, font, displayRectangleF, stringFormat);
+            RectangleF bounds = regions[0].GetBounds(graphics);
+
+            rectangle = new RectangleF(bounds.X, bounds.Y, bounds.Width, bounds.Height);
         }
     }
 }

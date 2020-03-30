@@ -11,12 +11,13 @@ namespace Escher
     {
         public string Country;
         public string Copyright;
+        public string Title;
         public string Series;
         public string MainType;
         public string Folder;
         public double OffsetVertical;
         public double Spacing;
-        public string ALbumNumber;
+        public string AlbumNumber;
         public bool IsSample;
 
         public List<Varieties> Varieties = new List<Varieties>();

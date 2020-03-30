@@ -8,6 +8,14 @@ using System.Windows.Forms;
 
 namespace Escher
 {
+    public static class StringExtensions
+    {
+        public static string[] Split(this string s, string separator)
+        {
+            return s.Split(new[] { separator }, StringSplitOptions.None);
+        }
+    }
+
     public class App
     {
         public static string GetName()

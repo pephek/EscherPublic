@@ -24,6 +24,7 @@ namespace Escher
 
             page.Country = country.Text;
             page.Copyright = country.Copyright;
+            page.Title = country.Value;
 
             // Look up the sub title
             // a) 1867-1869. Koning Willem III.
@@ -66,7 +67,7 @@ namespace Escher
 
                         page.OffsetVertical = entry.OffsetVertical;
                         page.Spacing = entry.Width;
-                        page.ALbumNumber = entry.AlbumNumber;
+                        page.AlbumNumber = entry.AlbumNumber;
                         page.IsSample = entry.Sample;
 
                         break;
