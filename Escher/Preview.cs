@@ -74,9 +74,6 @@ namespace Escher
             using (Graphics g = this.CreateGraphics())
             {
                 PaintPage(g, artifacts, scale, mode);
-                //DrawStringWithCharacterBounds(g, "!%Nederland", new Font("Darleston", 50), new Rectangle(500, 500, 500, 500));
-                //HighlightACharacterRange1(g);
-                //HighlightACharacterRange2(g);
             }
         }
 
@@ -129,138 +126,6 @@ namespace Escher
             }
         }
 
-        private void DrawStringWithCharacterBounds(Graphics gr, string text, Font font, Rectangle rect)
-        {
-            using (StringFormat string_format = new StringFormat())
-            {
-                //string_format.Alignment = StringAlignment.Center;
-                //string_format.LineAlignment = StringAlignment.Center;
-
-                // Draw the string.
-                //gr.DrawString(text, font, Brushes.Blue, 10, 50);
-                gr.DrawRectangle(new Pen(Color.Green), rect);
-                gr.DrawString(text, font, Brushes.Blue, rect, string_format);
-
-                // Make a CharacterRange for the string's characters.
-                List<CharacterRange> range_list = new List<CharacterRange>();
-                for (int i = 0; i < text.Length; i++)
-                {
-                    range_list.Add(new CharacterRange(i, 1));
-                }
-                string_format.SetMeasurableCharacterRanges(range_list.ToArray());
-
-                // Measure the string's character ranges.
-                Region[] regions = gr.MeasureCharacterRanges(text, font, rect, string_format);
-
-                // Draw the character bounds.
-                for (int i = 0; i < text.Length; i++)
-                {
-                    Rectangle char_rect = Rectangle.Round(regions[i].GetBounds(gr));
-                    gr.DrawRectangle(Pens.Red, char_rect);
-                }
-            }
-        }
-
-        private void HighlightACharacterRange1(Graphics g)
-        {
-
-            // Declare the string to draw.
-            string message = "!%Nederland";
-
-            // Declare the word to highlight.
-            string searchWord = "This is the string to highlight a word in."; //"string";
-
-            // Create a CharacterRange array with the searchWord 
-            // location and length.
-            //CharacterRange[] ranges = new CharacterRange[]{new CharacterRange (message.IndexOf(searchWord), searchWord.Length)};
-            CharacterRange[] ranges = new CharacterRange[] { new CharacterRange(0, message.Length) };
-
-            // Construct a StringFormat object.
-            StringFormat stringFormat = new StringFormat();
-
-            // Set the ranges on the StringFormat object.
-            stringFormat.SetMeasurableCharacterRanges(ranges);
-
-            // Declare the font to write the message in.
-            //Font largeFont = new Font("Courier New", 50F);//, GraphicsUnit.Pixel);
-            Font font = new Font("Darleston", 50F);//, GraphicsUnit.Pixel);
-
-            // Construct a new Rectangle.
-            Rectangle displayRectangle = new Rectangle(100, 200, 500, 100);
-
-            // Convert the Rectangle to a RectangleF.
-            RectangleF displayRectangleF = (RectangleF)displayRectangle;
-
-            // Get the Region to highlight by calling the 
-            // MeasureCharacterRanges method.
-            Region[] charRegion = g.MeasureCharacterRanges(message, font, displayRectangleF, stringFormat);
-
-            // Draw the message string on the form.
-            g.DrawString(message, font, Brushes.Blue, displayRectangleF);
-
-            // Fill in the region using a semi-transparent color.
-            g.FillRegion(new SolidBrush(Color.FromArgb(50, Color.Fuchsia)), charRegion[0]);
-
-            RectangleF r = charRegion[0].GetBounds(g);
-            g.DrawRectangle(new Pen(Color.Green), r.Left, r.Top, r.Width, r.Height);
-
-            SizeF size = g.MeasureString(message, font, 2000, StringFormat.GenericTypographic);
-
-            g.DrawRectangle(new Pen(Color.Red), 100, 200, size.Width, size.Height);
-
-            font.Dispose();
-        }
-
-        private void HighlightACharacterRange2(Graphics g)
-        {
-
-            // Declare the string to draw.
-            string message = "Escher · Preview";
-
-            // Declare the word to highlight.
-            string searchWord = "This is the string to highlight a word in."; //"string";
-
-            // Create a CharacterRange array with the searchWord 
-            // location and length.
-            //CharacterRange[] ranges = new CharacterRange[]{new CharacterRange (message.IndexOf(searchWord), searchWord.Length)};
-            CharacterRange[] ranges = new CharacterRange[] { new CharacterRange(0, message.Length) };
-
-            // Construct a StringFormat object.
-            StringFormat stringFormat = new StringFormat();
-
-            // Set the ranges on the StringFormat object.
-            stringFormat.SetMeasurableCharacterRanges(ranges);
-
-            // Declare the font to write the message in.
-            //Font largeFont = new Font("Courier New", 50F);//, GraphicsUnit.Pixel);
-            Font font = new Font("Microsoft Sans Serif", 8F);//, GraphicsUnit.Pixel);
-
-            // Construct a new Rectangle.
-            Rectangle displayRectangle = new Rectangle(100, 400, 500, 100);
-
-            // Convert the Rectangle to a RectangleF.
-            RectangleF displayRectangleF = (RectangleF)displayRectangle;
-
-            // Get the Region to highlight by calling the 
-            // MeasureCharacterRanges method.
-            Region[] charRegion = g.MeasureCharacterRanges(message, font, displayRectangleF, stringFormat);
-
-            // Draw the message string on the form.
-            g.DrawString(message, font, Brushes.Blue, displayRectangleF);
-
-            // Fill in the region using a semi-transparent color.
-            g.FillRegion(new SolidBrush(Color.FromArgb(50, Color.Fuchsia)), charRegion[0]);
-
-            RectangleF r = charRegion[0].GetBounds(g);
-            g.DrawRectangle(new Pen(Color.Green), r.Left, r.Top, r.Width, r.Height);
-
-            SizeF size = g.MeasureString(message, font, 2000, StringFormat.GenericTypographic);
-
-            g.DrawRectangle(new Pen(Color.Red), 100, 200, size.Width, size.Height);
-
-            font.Dispose();
-        }
-
         public void PreparePage(Page page, PrintMode mode, int number)
         {
             this.page = page;
@@ -301,6 +166,8 @@ namespace Escher
             float scaleY = (float)this.Height / setup.PageFormat.PageHeight;
             this.scale = (scaleX + scaleY) / 2;
 
+            float y = format.Free.Top;
+
             using (Graphics g = this.CreateGraphics())
             {
                 g.PageUnit = GraphicsUnit.Millimeter;
@@ -319,8 +186,8 @@ namespace Escher
                 artifacts.AddText(1, artifacts.Last().Bottom(), 0, "t = ± title", "Courier New", 8, foreColor: Color.Gray, screenOnly: true);
                 artifacts.AddText(1, artifacts.Last().Bottom(), 0, "s = ± font", "Courier New", 8, foreColor: Color.Gray, screenOnly: true);
                 artifacts.AddText(1, artifacts.Last().Bottom(2), 0, "p = page setup", "Courier New", 8, foreColor: Color.Gray, screenOnly: true);
-                artifacts.AddText(1, artifacts.Last().Bottom(2), 0, "- = previous", "Courier New", 8, foreColor: Color.Gray, screenOnly: true);
-                artifacts.AddText(1, artifacts.Last().Bottom(), 0, "+ = next", "Courier New", 8, foreColor: Color.Gray, screenOnly: true);
+                artifacts.AddText(1, artifacts.Last().Bottom(2), 0, char.ConvertFromUtf32(0x2191) + " = next", "Courier New", 8, foreColor: Color.Gray, screenOnly: true);
+                artifacts.AddText(1, artifacts.Last().Bottom(), 0, char.ConvertFromUtf32(0x2193) + " = previous", "Courier New", 8, foreColor: Color.Gray, screenOnly: true);
 
                 // Form border
                 artifacts.AddRectangle(0, 0, (this.Width - 1) / scale, (this.Height - 1) / scale, Color.Gray, screenOnly: true);
@@ -370,12 +237,152 @@ namespace Escher
                     }
                     else
                     {
-
+                        artifacts.AddText(format.Free.Left, format.Free.Top, format.Free.Width, page.Title, "Darleston", 50, alignment: Alignment.Centered);
                     }
                 }
                 else
                 {
+                    switch (format.TitleStyle)
+                    {
+                        case TitleStyle.Davo:
+                            if (setup.IncludeTitle)
+                            {
+                                y += artifacts.AddText(format.Free.Left, y, format.Free.Width, page.Country, format.TitleFont, 18, fontBold: true, foreColor: Color.Black, alignment: Alignment.Centered);
+                            }
+                            else
+                            {
+                                y += artifacts.AddText(format.Free.Left, y, format.Free.Width, page.Country, format.TitleFont, 18, fontBold: true, foreColor: Color.Gray, alignment: Alignment.Centered, screenOnly: true);
+                            }
+                            break;
+                        case TitleStyle.Importa:
+                            if (setup.IncludeTitle)
+                            {
+                                if (!string.IsNullOrEmpty(page.Title))
+                                {
+                                    artifacts.AddText(format.Border.Left, format.Border.Top - artifacts.GetTextHeight("Darleston", 20) - 1F, format.Border.Width, page.Title.Split("<br>")[0].Replace("!%", "").Replace("%", ""), "Darleston", 20, alignment: Alignment.Right);
+                                }
+                                else
+                                {
+                                    artifacts.AddText(format.Border.Left, format.Border.Top - artifacts.GetTextHeight(format.TitleFont, 8) - 2.5F, format.Border.Width, page.Country, format.TitleFont, 8, alignment: Alignment.Right);
+                                }
+                            }
+                            else
+                            {
+                                artifacts.AddText(format.Border.Left, format.Border.Top - artifacts.GetTextHeight(format.TitleFont, 8) - 2.5F, format.Border.Width, page.Country, format.TitleFont, 8, foreColor: Color.Gray, alignment: Alignment.Right, screenOnly: true);
+                            }
+                            break;
+                    }
 
+                }
+
+                bool printPage = (mode == PrintMode.ToScreen) || (mode == PrintMode.ToDocument && !setup.IncludeSamplePagesOnly) || (mode == PrintMode.ToDocument && setup.IncludeSamplePagesOnly && page.IsSample);
+
+                if (!printPage)
+                {
+                    artifacts.AddText(format.Free.Left, y, format.Free.Width, "DIT ALBUMBLAD IS NIET OPGENOMEN IN HET VOORBEELD DOCUMENT!%%THIS ALBUM PAGE IS NOT INCLUDED IN THE SAMPLES DOCUMENT!", format.TitleFont, 12, fontBold: true, foreColor: Color.Red, alignment: Alignment.Centered);
+                }
+                else
+                {
+                    // Eg. 1867-1869. Koning Willem III.
+                    y += artifacts.AddText(format.Free.Left, y, format.Free.Width, string.IsNullOrEmpty(page.Series) ? "·" : page.Series, format.TitleFont, 7, foreColor: string.IsNullOrEmpty(page.Series) ? Color.White : Color.Black, alignment: Alignment.Centered);
+
+                    // Eg. Type I.
+                    y += artifacts.AddText(format.Free.Left, y, format.Free.Width, string.IsNullOrEmpty(page.MainType) ? "" : page.MainType, format.TitleFont, 7, alignment: Alignment.Centered);
+
+                    float pageMargin = page.Margin;
+                    float yCombine;
+
+                    for (int v = 0; v < page.Varieties.Count(); v++)
+                    {
+                        Varieties varieties = page.Varieties[v];
+
+                        // When spacing is not set at the varieties level then take over the page wide spacing
+                        if (varieties.Margin == 0)
+                        {
+                            varieties.Margin = page.Margin;
+                        }
+
+                        // When varieties are combined then remember this y position
+                        yCombine = y;
+
+                        if (!string.IsNullOrEmpty(varieties.SubType))
+                        {
+                            y += artifacts.AddText(format.Free.Left, y + artifacts.GetTextHeight(format.TitleFont, 9), format.Free.Width, varieties.SubType, format.TitleFont, 7, alignment: Alignment.Centered);
+
+                            yCombine = y;
+                        }
+
+                        int n = varieties.Rows.Count() - 1;
+                        int a = 0;
+                        int b = 0;
+
+                        while (page.RowWidth(v, n, format.Free.Width, out a) > format.Free.Width && varieties.Rows[n].Count() > 1)
+                        {
+                            throw new Exception("TODO");
+                        }
+
+                        // Eg.A - Kamtanding 12¾ : 11¾.
+                        float fontSize = varieties.FontOfDescription ? 5 : 7;
+
+                        string text = varieties.PublicDescription;
+                        Alignment alignment = varieties.Alignment;
+
+                        if (setup.IncludeNumber && !string.IsNullOrEmpty(varieties.PrivateDescription))
+                        {
+                            text = varieties.PrivateDescription;
+                            alignment = Alignment.Centered;
+                        }
+
+                        float textWidth = artifacts.GetTextWidth(text, format.TitleFont, fontSize);
+                        float rowWidth = page.RowWidth(v, 0);
+                        float rowLeft = page.RowLeft(v, 0, format.Free.Left, format.Free.Width);
+
+                        if (textWidth <= rowWidth)
+                        {
+                            y += artifacts.AddText(rowLeft + varieties.Horizontal, y + varieties.Vertical, rowWidth, text, format.TitleFont, fontSize, alignment: alignment);
+                        }
+                        else
+                        {
+                            y += artifacts.AddText(rowLeft + varieties.Horizontal - textWidth, y + varieties.Vertical, rowWidth + 2 * textWidth, text, format.TitleFont, fontSize, alignment: alignment);
+                        }
+
+                        for (int r = 0; r < varieties.Rows.Count(); r++)
+                        {
+                            List<Variety> row = varieties.Rows[r];
+
+                            for (int s = 0; s < row.Count(); s++)
+                            {
+                                Variety variety = row[s];
+
+                                variety.FrameLeft = page.FrameLeft(v, r, s, format.Free.Left, format.Free.Width);
+                                variety.FrameOffset = page.FrameOffset(v, r, s);
+                                variety.FrameWidth = page.FrameWidth(v, r, s);
+                            }
+
+                            bool hasDescriptions = false;
+
+                            for (int s = 0; s < row.Count(); s++)
+                            {
+                                Variety variety = row[s];
+
+                                if (!string.IsNullOrEmpty(variety.Title))
+                                {
+                                    y -= 1; // As soon as we found a description then move the y-position 1 millimeter up
+
+                                    // Eg. Zonder punt in linker onderhoek.
+                                    y += artifacts.AddText(variety.FrameLeft, y + variety.Vertical, variety.FrameWidth, variety.Title, format.TitleFont, 5, alignment: variety.Alignment);
+
+                                    // There is at least one stamp with a description
+                                    hasDescriptions = true;
+                                }
+                            }
+
+                            if (hasDescriptions) // Now move the y-position 1 millimeter down
+                            {
+                                y += 1;
+                            }
+                        }
+                    }
                 }
             }
         }

@@ -122,46 +122,93 @@ namespace Escher
             }
         }
 
-        public void AddText(float x, float y, float width, string text, string fontName, float fontSize, bool fontBold = false, bool fontItalic = false, Color? foreColor = null, Alignment alignment = Alignment.Left, bool screenOnly = false)
+        public float AddText(float x, float y, float width, string text, string fontName, float fontSize, bool fontBold = false, bool fontItalic = false, Color? foreColor = null, Alignment alignment = Alignment.Left, bool screenOnly = false)
         {
-            Artifact artifact = new Artifact(ArtifactType.Text);
+            Font font = new Font(fontName, fontSize, (fontBold ? FontStyle.Bold : 0) | (fontItalic ? FontStyle.Italic : 0));
 
-            artifact.X = x;
-            artifact.Y = y;
-            artifact.Text = text;
-            artifact.TextColor = foreColor == null ? new SolidBrush(Color.Black) : new SolidBrush((Color)foreColor);
-            artifact.Font = new Font(fontName, fontSize, (fontBold ? FontStyle.Bold: 0) | (fontItalic ? FontStyle.Italic : 0));
-            artifact.screenOnly = screenOnly;
+            text = text.Trim();
 
-            GraphicsUnit pageUnit = graphics.PageUnit;
-
-            graphics.PageUnit = GraphicsUnit.Display;
-
-            GetTextDimension(graphics, artifact.Text, artifact.Font, out RectangleF bounds);
-
-            artifact.Width = bounds.Width / this.scale;
-            artifact.Height = bounds.Height / this.scale;
-
-            artifact.X -= bounds.Left / this.scale;
-
-            graphics.PageUnit = pageUnit;
-
-            switch (alignment)
+            if (text == "~")
             {
-                case Alignment.Left:
-                    break;
-                case Alignment.Centered:
-                    artifact.X += (width - artifact.Width) / 2;
-                    break;
-                case Alignment.Right:
-                    artifact.X += width - artifact.Width;
-                    break;
-
+                text = "";
             }
-            artifacts.Add(artifact);
+            else if (text == "!")
+            {
+                text = " ";
+            }
+
+            if (text == "")
+            {
+                return 0; // GetTextDimension(graphics, "", font).Height;
+            }
+
+            int linefeed = text.IndexOf('%');
+
+            if (linefeed >= 0)
+            {
+                string[] texts = new string[] { text.Substring(0, linefeed), text.Substring(linefeed + 1)};
+
+                float height = AddText(x, y, width, texts[0], fontName, fontSize, fontBold, fontBold, foreColor, alignment, screenOnly);
+
+                return AddText(x, y + height, width, texts[1], fontName, fontSize, fontBold, fontBold, foreColor, alignment, screenOnly);
+            }
+            else if (width != 0 && GetTextDimension(graphics, text, font).Width > width)
+            {
+                text = text.Replace("  ", " ");
+
+                for (int i = text.Length - 1; i >= 0; i--)
+                {
+                    if (text[i] == ' ' && GetTextDimension(graphics, text.Substring(0, i), font).Width <= width)
+                    {
+                        return AddText(x, y, width, text.Substring(0, i) + "%" + text.Substring(i + 1), fontName, fontSize, fontBold, fontBold, foreColor, alignment, screenOnly);
+                    }
+                }
+
+                return AddText(x, y, 4096, text, fontName, fontSize, fontBold, fontBold, foreColor, alignment, screenOnly);
+            }
+            else
+            {
+                Artifact artifact = new Artifact(ArtifactType.Text);
+
+                artifact.X = x;
+                artifact.Y = y;
+                artifact.Text = text;
+                artifact.TextColor = foreColor == null ? new SolidBrush(Color.Black) : new SolidBrush((Color)foreColor);
+                artifact.Font = font;
+                artifact.screenOnly = screenOnly;
+
+                GraphicsUnit pageUnit = graphics.PageUnit;
+
+                graphics.PageUnit = GraphicsUnit.Display;
+
+                RectangleF dimension = GetTextDimension(graphics, artifact.Text, artifact.Font);
+
+                artifact.Width = dimension.Width / this.scale;
+                artifact.Height = dimension.Height / this.scale;
+
+                artifact.X -= dimension.Left / this.scale;
+
+                graphics.PageUnit = pageUnit;
+
+                switch (alignment)
+                {
+                    case Alignment.Left:
+                        break;
+                    case Alignment.Centered:
+                        artifact.X += (width - artifact.Width) / 2;
+                        break;
+                    case Alignment.Right:
+                        artifact.X += width - artifact.Width;
+                        break;
+
+                }
+                artifacts.Add(artifact);
+
+                return artifact.Height;
+            }
         }
 
-        private void GetTextDimension(Graphics graphics, string text, Font font, out RectangleF rectangle)
+        private RectangleF GetTextDimension(Graphics graphics, string text, Font font)
         {
             CharacterRange[] ranges = new CharacterRange[] { new CharacterRange(0, text.Length) };
             StringFormat stringFormat = new StringFormat();
@@ -170,7 +217,28 @@ namespace Escher
             Region[] regions = graphics.MeasureCharacterRanges(text, font, displayRectangleF, stringFormat);
             RectangleF bounds = regions[0].GetBounds(graphics);
 
-            rectangle = new RectangleF(bounds.X, bounds.Y, bounds.Width, bounds.Height);
+            return new RectangleF(bounds.X, bounds.Y, bounds.Width, bounds.Height);
+        }
+
+        public float GetTextWidth(string text, string fontName, float fontSize, bool fontBold = false, bool fontItalic = false)
+        {
+            if (string.IsNullOrEmpty(text))
+            {
+                return 0;
+            }
+            else
+            {
+                Font font = new Font(fontName, fontSize, (fontBold ? FontStyle.Bold : 0) | (fontItalic ? FontStyle.Italic : 0));
+
+                return GetTextDimension(this.graphics, text, font).Width;
+            }
+        }
+
+        public float GetTextHeight(string fontName, float fontSize, bool fontBold = false, bool fontItalic = false)
+        {
+            Font font = new Font(fontName, fontSize, (fontBold ? FontStyle.Bold : 0) | (fontItalic ? FontStyle.Italic : 0));
+
+            return GetTextDimension(this.graphics, "X", font).Height;
         }
     }
 }

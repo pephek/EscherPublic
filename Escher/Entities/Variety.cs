@@ -12,12 +12,12 @@ namespace Escher
         public readonly string Number;
         public readonly string Description;
         public readonly Color FrameColor;
-        public readonly double Width;
-        public readonly double Height;
-        public readonly double ExtraWidth;
-        public readonly double ExtraHeight;
-        public readonly double Horizontal;
-        public readonly double Vertical;
+        public readonly float Width;
+        public readonly float Height;
+        public readonly float ExtraWidth;
+        public readonly float ExtraHeight;
+        public readonly float Horizontal;
+        public readonly float Vertical;
         public readonly string Title;
         public readonly Shape Shape;
         public readonly bool Skip;
@@ -30,20 +30,20 @@ namespace Escher
 
         // Not static data, but computed in target's scale mode while drawing the album page
 
-        public double FrameLeft;
-        public double FrameOffset;
-        public double FrameWidth;
+        public float FrameLeft;
+        public float FrameOffset;
+        public float FrameWidth;
 
         public Variety(
             string number,
             string description,
             Color frameColor,
-            double width,
-            double height,
-            double extraWidth,
-            double extraHeight,
-            double horizontal,
-            double vertical,
+            float width,
+            float height,
+            float extraWidth,
+            float extraHeight,
+            float horizontal,
+            float vertical,
             string title,
             Shape shape,
             bool skip,

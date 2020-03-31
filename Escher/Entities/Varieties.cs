@@ -12,26 +12,26 @@ namespace Escher
         public readonly string PublicDescription;
         public readonly string PrivateDescription;
         public readonly bool Combine;
-        public readonly double Horizontal;
-        public readonly double Vertical;
+        public readonly float Horizontal;
+        public readonly float Vertical;
         public readonly Alignment Alignment;
         public readonly bool FontOfType;
         public readonly bool FontOfDescription;
-        public readonly double Margin;
+        public float Margin;
 
-        public List<Variety> Rows;
+        public List<List<Variety>> Rows;
 
         public Varieties(
             string subType,
             string publicDescription,
             string privateDescription,
             bool combine,
-            double horizontal,
-            double vertical,
+            float horizontal,
+            float vertical,
             Alignment alignment,
             bool fontOfType,
             bool fontOfDescription,
-            double margin
+            float margin
         )
         {
             SubType = subType;
@@ -45,7 +45,7 @@ namespace Escher
             FontOfDescription = fontOfDescription;
             Margin = margin;
 
-            Rows = new List<Variety>();
+            Rows = new List<List<Variety>>();
         }
     }
 }
