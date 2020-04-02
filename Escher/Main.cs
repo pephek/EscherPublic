@@ -8,6 +8,7 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using Microsoft.VisualBasic;
@@ -320,7 +321,7 @@ namespace Escher
                 Page page = PageHelper.Get(design, pageNumber);
 
                 Preview preview = new Preview();
-                preview.SetPage(page, pageNumber: pageNumber, printMode: PrintMode.ToScreen, paintMode: PaintMode.MatchScreen);
+                preview.SetPreview(page, pageNumber: pageNumber, printMode: PrintMode.ToScreen, screenMode: ScreenMode.MatchScreen);
                 preview.Show();
             }
             else if (e.Url.AbsolutePath.StartsWith("stamp("))

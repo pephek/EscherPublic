@@ -16,23 +16,33 @@ namespace Escher
     {
         private Page page;
         private PrintMode printMode;
-        private PaintMode paintMode;
+        private ScreenMode screenMode;
         private int pageNumber;
         private float pageScale;
         private float transformScale;
         private Artifacts artifacts;
+        private float dpiX;
+        private float dpiY;
 
         public Preview()
         {
             InitializeComponent();
         }
 
-        public void SetPage(Page page, int pageNumber, PrintMode printMode, PaintMode paintMode)
+        public void SetPreview(Page page, int pageNumber, PrintMode printMode, ScreenMode screenMode)
         {
             this.page = page;
             this.pageNumber = pageNumber;
             this.printMode = printMode;
-            this.paintMode = paintMode;
+            this.screenMode = screenMode;
+
+            using (Graphics graphics = this.CreateGraphics())
+            {
+                this.dpiX = graphics.DpiX;
+                this.dpiY = graphics.DpiY;
+            }
+
+            ResizePreview(PageSetup.Get().PageFormat, this.printMode, this.screenMode, out this.pageScale, out this.transformScale);
         }
 
         private void Preview_Load(object sender, EventArgs e)
@@ -43,7 +53,7 @@ namespace Escher
 
         private void Preview_Paint(object sender, PaintEventArgs e)
         {
-            RefreshPage();
+            RefreshPreview(resizePreview: false);
         }
 
         private void Preview_KeyPress(object sender, KeyPressEventArgs e)
@@ -60,8 +70,8 @@ namespace Escher
                             ShowPageSetup();
                             break;
                         case "+":
-                            this.paintMode = (this.paintMode == PaintMode.MatchPaper ? PaintMode.MatchScreen : PaintMode.MatchPaper);
-                            RefreshPage();
+                            this.screenMode = (this.screenMode == ScreenMode.MatchPaper ? ScreenMode.MatchScreen : ScreenMode.MatchPaper);
+                            RefreshPreview(resizePreview: true);
                             break;
                     }
                     break;
@@ -70,6 +80,8 @@ namespace Escher
 
         private void ShowPageSetup()
         {
+            string paper = PageSetup.Get().PageFormat.FormatName;
+
             Print print = new Print();
             print.printMode = PrintMode.ToScreen;
             DialogResult result = print.ShowDialog();
@@ -78,12 +90,17 @@ namespace Escher
             {
                 PageSetup.Load();
 
-                RefreshPage();
+                RefreshPreview(resizePreview: paper != PageSetup.Get().PageFormat.FormatName);
             }
         }
 
-        private void RefreshPage()
+        private void RefreshPreview(bool resizePreview)
         {
+            if (resizePreview)
+            {
+                ResizePreview(PageSetup.Get().PageFormat, this.printMode, this.screenMode, out this.pageScale, out this.transformScale);
+            }
+
             using (Graphics g = this.CreateGraphics())
             {
                 g.Clear(Color.White);
@@ -92,7 +109,7 @@ namespace Escher
 
                 g.PageUnit = GraphicsUnit.Millimeter;
 
-                Compute(g, this.page, this.pageNumber, this.printMode, this.paintMode);
+                Compute(g, this.page, this.pageNumber, this.printMode, this.screenMode);
 
                 g.PageUnit = pageUnit;
 
@@ -124,11 +141,9 @@ namespace Escher
 
             //string text = "Nederland";// s Nieuw Guinea";
 
-            //g.ScaleTransform(1f, 1f);
-            //g.DrawString(text, font, brush, 0, 10);
-
-            //g.ScaleTransform(1.5f, 1.5f);
-            //g.DrawString(text, font, brush, 0, 20);
+            //g.DrawString(text, font, brush, (int)(5 * pageScale), 10);
+            //g.DrawLine(new Pen(Color.Red), new Point((int)(5*pageScale), (int)(25 * pageScale)), new Point((int)(205 * pageScale), (int)(25 * pageScale)));
+            //g.DrawLine(new Pen(Color.Green), new Point((int)(5 * pageScale / transformScale), (int)(100 * pageScale / transformScale)), new Point((int)(205 * pageScale / transformScale), (int)(100 * pageScale/transformScale)));
 
             //return;
 
@@ -189,58 +204,64 @@ namespace Escher
             }
         }
 
-        public void SetFormSize(Graphics graphics, PageFormat pageFormat, PrintMode printMode, PaintMode paintMode, out float pageScale, out float transformScale)
+        public void ResizePreview(PageFormat pageFormat, PrintMode printMode, ScreenMode screenMode, out float pageScale, out float transformScale)
         {
             if (printMode == PrintMode.ToDocument)
             {
-                paintMode = PaintMode.MatchPaper;
+                screenMode = ScreenMode.MatchPaper;
             }
 
             int screenWidthInPixels = Screen.FromControl(this).WorkingArea.Width;
             int screenHeightInPixels = Screen.FromControl(this).WorkingArea.Height;
 
-            int pageWidthInPixels = (int)((pageFormat.PageWidth / 25.4) * graphics.DpiX);
-            int pageHeightInPixels = (int)((pageFormat.PageHeight / 25.4) * graphics.DpiY);
+            int pageWidthInPixels = (int)((pageFormat.PageWidth / 25.4) * this.dpiX);
+            int pageHeightInPixels = (int)((pageFormat.PageHeight / 25.4) * this.dpiY);
+
+            int width = 0;
+            int height = 0;
 
             transformScale = 1;
 
-            switch (paintMode)
+            switch (screenMode)
             {
-                case PaintMode.MatchPaper:
+                case ScreenMode.MatchPaper:
 
-                    this.Width = pageWidthInPixels;
-                    this.Height = pageHeightInPixels;
+                    width = pageWidthInPixels;
+                    height = pageHeightInPixels;
 
                     break;
 
-                case PaintMode.MatchScreen:
+                case ScreenMode.MatchScreen:
 
                     if (pageFormat.PageHeight > pageFormat.PageWidth)
                     {
-                        this.Height = screenHeightInPixels;
-                        this.Width = (int)(pageFormat.PageWidth * screenHeightInPixels / pageFormat.PageHeight);
+                        width = (int)(pageFormat.PageWidth * screenHeightInPixels / pageFormat.PageHeight);
+                        height = screenHeightInPixels;
                     }
                     else
                     {
-                        this.Width = screenWidthInPixels;
-                        this.Height = (int)(pageFormat.PageHeight * screenWidthInPixels / pageFormat.PageWidth);
+                        width = screenWidthInPixels;
+                        height = (int)(pageFormat.PageHeight * screenWidthInPixels / pageFormat.PageWidth);
                     }
 
-                    float transformScaleX = (float)this.Width / pageWidthInPixels;
-                    float transformScaleY = (float)this.Height / pageHeightInPixels;
+                    float transformScaleX = (float)width / pageWidthInPixels;
+                    float transformScaleY = (float)height / pageHeightInPixels;
 
                     transformScale = (transformScaleX + transformScaleY) / 2;
 
                     break;
             }
 
-            float pageScaleX = (float)this.Width / pageFormat.PageWidth;
-            float pageScaleY = (float)this.Height / pageFormat.PageHeight;
+            float pageScaleX = (float)width / pageFormat.PageWidth;
+            float pageScaleY = (float)height / pageFormat.PageHeight;
 
-            pageScale = (pageScaleX + pageScaleY) / 2;
+            pageScale = (pageScaleX + pageScaleY) / 2 / transformScale;
+
+            this.Width = width;
+            this.Height = height;
         }
 
-        private void Compute(Graphics g, Page page, int pageNumber, PrintMode printMode, PaintMode paintMode)
+        private void Compute(Graphics g, Page page, int pageNumber, PrintMode printMode, ScreenMode screenMode)
         {
             PageSetup setup = PageSetup.Get();
 
@@ -253,7 +274,9 @@ namespace Escher
                 format = new PageFormat(format.FormatName, format.TitleStyle, format.TitleFont, format.PageWidth, format.PageHeight, format.MarginLeft + additionalMarginLeft, format.MarginRight, format.MarginTop, format.MarginBottom, format.FreeLeft, format.FreeRight, format.FreeTop, format.FreeBottom, format.PrePrintedBorder, format.PrePrintedTitle);
             }
 
-            SetFormSize(g, setup.PageFormat, printMode, paintMode, out this.pageScale, out this.transformScale);
+            //ResizeForm(setup.PageFormat, printMode, screenMode, out this.pageScale, out this.transformScale);
+
+            //this.transformScale = 1;
 
             float y = format.Free.Top;
 
@@ -263,7 +286,7 @@ namespace Escher
             artifacts.AddText(1, 1, 0, "Escher · Preview", "Microsoft Sans Serif", 8, foreColor: Color.Gray, screenOnly: true);
 
             // Legenda
-            artifacts.AddText(1, artifacts.Last().Bottom(2), 0, "c = ± color", "Courier New", 8, foreColor: Color.Gray, screenOnly: true);
+            artifacts.AddText(1, artifacts.Last().Bottom(2), 0, "c = ± color", "Microsoft Sans Serif", 8, foreColor: Color.Gray, screenOnly: true);
             artifacts.AddText(1, artifacts.Last().Bottom(), 0, "n = ± number", "Courier New", 8, foreColor: Color.Gray, screenOnly: true);
             artifacts.AddText(1, artifacts.Last().Bottom(), 0, "v = ± value", "Courier New", 8, foreColor: Color.Gray, screenOnly: true);
             artifacts.AddText(1, artifacts.Last().Bottom(), 0, "f = ± frame", "Courier New", 8, foreColor: Color.Gray, screenOnly: true);

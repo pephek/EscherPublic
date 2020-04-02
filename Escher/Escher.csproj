@@ -47,6 +47,9 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
+  <PropertyGroup>
+    <StartupObject />
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="CsvHelper, Version=15.0.0.0, Culture=neutral, PublicKeyToken=8c4959082be5c823, processorArchitecture=MSIL">
       <HintPath>..\packages\CsvHelper.15.0.2\lib\net47\CsvHelper.dll</HintPath>
@@ -109,7 +112,7 @@
     <Compile Include="Enums\FontSize.cs" />
     <Compile Include="Enums\FrameColor.cs" />
     <Compile Include="Enums\FrameStyle.cs" />
-    <Compile Include="Enums\PaintMode.cs" />
+    <Compile Include="Enums\ScreenMode.cs" />
     <Compile Include="Enums\PrintMode.cs" />
     <Compile Include="Enums\Shape.cs" />
     <Compile Include="Enums\SheetNumber.cs" />

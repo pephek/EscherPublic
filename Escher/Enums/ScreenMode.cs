@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Escher
 {
-    public enum PaintMode
+    public enum ScreenMode
     {
         MatchPaper,
         MatchScreen
