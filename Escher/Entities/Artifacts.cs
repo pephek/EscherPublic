@@ -305,9 +305,20 @@ namespace Escher
 
         private RectangleF GetTextDimension(Graphics graphics, string text, Font font)
         {
+            // http://csharphelper.com/blog/2015/02/measure-character-positions-when-drawing-long-strings-in-c/
+
             CharacterRange[] ranges = new CharacterRange[] { new CharacterRange(0, text.Length) };
+
+            //StringFormat stringFormat = new StringFormat(StringFormat.GenericTypographic);
+            //stringFormat.SetMeasurableCharacterRanges(ranges);
+
             StringFormat stringFormat = new StringFormat();
+            stringFormat.Alignment = StringAlignment.Near;
+            stringFormat.LineAlignment = StringAlignment.Near;
+            stringFormat.Trimming = StringTrimming.None;
+            stringFormat.FormatFlags = StringFormatFlags.MeasureTrailingSpaces;
             stringFormat.SetMeasurableCharacterRanges(ranges);
+
             RectangleF displayRectangleF = new RectangleF(0, 0, 4096, 4096);
             Region[] regions = graphics.MeasureCharacterRanges(text, font, displayRectangleF, stringFormat);
             RectangleF bounds = regions[0].GetBounds(graphics);

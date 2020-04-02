@@ -109,16 +109,43 @@ namespace Escher
 
                 g.PageUnit = GraphicsUnit.Millimeter;
 
-                Compute(g, this.page, this.pageNumber, this.printMode, this.screenMode);
+                AssemblePreview(g, this.page, this.pageNumber, this.printMode, this.screenMode);
 
                 g.PageUnit = pageUnit;
 
-                Print(g, this.artifacts, this.pageScale, this.transformScale, this.printMode);
+                PrintPreview(g, this.artifacts, this.pageScale, this.transformScale, this.printMode);
             }
 
         }
 
-        private void Print(Graphics g, Artifacts artifacts, float pageScale, float transformScale, PrintMode printMode)
+        private void PrintTest(Graphics g)
+        {
+            //Font font = new Font("Darleston", 20);
+            //SolidBrush brush = new SolidBrush(Color.Black);
+
+            //string text = "Nederland";// s Nieuw Guinea";
+
+            //g.DrawString(text, font, brush, (int)(5 * pageScale), 10);
+            //g.DrawLine(new Pen(Color.Red), new Point((int)(5*pageScale), (int)(25 * pageScale)), new Point((int)(205 * pageScale), (int)(25 * pageScale)));
+            //g.DrawLine(new Pen(Color.Green), new Point((int)(5 * pageScale / transformScale), (int)(100 * pageScale / transformScale)), new Point((int)(205 * pageScale / transformScale), (int)(100 * pageScale/transformScale)));
+
+            SolidBrush brush = new SolidBrush(Color.Black);
+
+            Font font;
+
+            string text = "donker- tot lichtblauw";
+
+            font = new Font("Times New Roman", 5);
+            g.DrawString(text, font, brush, 5, 10);
+
+            font = new Font("Times New Roman", 6);
+            g.DrawString(text, font, brush, 5, 20);
+
+            font = new Font("Times New Roman", 7);
+            g.DrawString(text, font, brush, 5, 30);
+        }
+
+        private void PrintPreview(Graphics g, Artifacts artifacts, float pageScale, float transformScale, PrintMode printMode)
         {
             Pen pen;
 
@@ -131,20 +158,12 @@ namespace Escher
             g.SmoothingMode = SmoothingMode.AntiAlias;
 
             // Determines smoothness for text
-            g.TextRenderingHint = TextRenderingHint.AntiAliasGridFit;
+            g.TextRenderingHint = TextRenderingHint.AntiAlias;
 
             // Determines smoothness for images that are scaled
             g.InterpolationMode = InterpolationMode.High;
 
-            //Font font = new Font("Darleston", 20);
-            //SolidBrush brush = new SolidBrush(Color.Black);
-
-            //string text = "Nederland";// s Nieuw Guinea";
-
-            //g.DrawString(text, font, brush, (int)(5 * pageScale), 10);
-            //g.DrawLine(new Pen(Color.Red), new Point((int)(5*pageScale), (int)(25 * pageScale)), new Point((int)(205 * pageScale), (int)(25 * pageScale)));
-            //g.DrawLine(new Pen(Color.Green), new Point((int)(5 * pageScale / transformScale), (int)(100 * pageScale / transformScale)), new Point((int)(205 * pageScale / transformScale), (int)(100 * pageScale/transformScale)));
-
+            //PrintTest(g);
             //return;
 
             float currentX = 0;
@@ -261,8 +280,11 @@ namespace Escher
             this.Height = height;
         }
 
-        private void Compute(Graphics g, Page page, int pageNumber, PrintMode printMode, ScreenMode screenMode)
+        private void AssemblePreview(Graphics g, Page page, int pageNumber, PrintMode printMode, ScreenMode screenMode)
         {
+            // Determines smoothness for text
+            g.TextRenderingHint = TextRenderingHint.AntiAlias;
+
             PageSetup setup = PageSetup.Get();
 
             PageFormat format = setup.PageFormat;
@@ -274,27 +296,30 @@ namespace Escher
                 format = new PageFormat(format.FormatName, format.TitleStyle, format.TitleFont, format.PageWidth, format.PageHeight, format.MarginLeft + additionalMarginLeft, format.MarginRight, format.MarginTop, format.MarginBottom, format.FreeLeft, format.FreeRight, format.FreeTop, format.FreeBottom, format.PrePrintedBorder, format.PrePrintedTitle);
             }
 
-            //ResizeForm(setup.PageFormat, printMode, screenMode, out this.pageScale, out this.transformScale);
-
-            //this.transformScale = 1;
-
             float y = format.Free.Top;
 
             artifacts = new Artifacts(g, this.pageScale);
+
+            artifacts.AddText(1, 50, 0, "donker- tot lichtblauw", "Times New Roman", 5, foreColor: Color.Black, screenOnly: true);
+            artifacts.AddText(1, 60, 0, "donker- tot lichtblauw", "Times New Roman", 6, foreColor: Color.Black, screenOnly: true);
+            artifacts.AddText(1, 70, 0, "donker- tot lichtblauw", "Times New Roman", 7, foreColor: Color.Black, screenOnly: true);
+            artifacts.AddText(1, 80, 0, "donker- tot lichtblauw", "Arial", 5, foreColor: Color.Black, screenOnly: true);
+            artifacts.AddText(1, 90, 0, "donker- tot lichtblauw", "Arial", 6, foreColor: Color.Black, screenOnly: true);
+            artifacts.AddText(1, 100, 0, "donker- tot lichtblauw", "Arial", 7, foreColor: Color.Black, screenOnly: true);
 
             // Form caption
             artifacts.AddText(1, 1, 0, "Escher · Preview", "Microsoft Sans Serif", 8, foreColor: Color.Gray, screenOnly: true);
 
             // Legenda
             artifacts.AddText(1, artifacts.Last().Bottom(2), 0, "c = ± color", "Microsoft Sans Serif", 8, foreColor: Color.Gray, screenOnly: true);
-            artifacts.AddText(1, artifacts.Last().Bottom(), 0, "n = ± number", "Courier New", 8, foreColor: Color.Gray, screenOnly: true);
-            artifacts.AddText(1, artifacts.Last().Bottom(), 0, "v = ± value", "Courier New", 8, foreColor: Color.Gray, screenOnly: true);
-            artifacts.AddText(1, artifacts.Last().Bottom(), 0, "f = ± frame", "Courier New", 8, foreColor: Color.Gray, screenOnly: true);
-            artifacts.AddText(1, artifacts.Last().Bottom(), 0, "t = ± title", "Courier New", 8, foreColor: Color.Gray, screenOnly: true);
-            artifacts.AddText(1, artifacts.Last().Bottom(), 0, "s = ± font", "Courier New", 8, foreColor: Color.Gray, screenOnly: true);
-            artifacts.AddText(1, artifacts.Last().Bottom(2), 0, "p = page setup", "Courier New", 8, foreColor: Color.Gray, screenOnly: true);
-            artifacts.AddText(1, artifacts.Last().Bottom(2), 0, char.ConvertFromUtf32(0x2191) + " = next", "Courier New", 8, foreColor: Color.Gray, screenOnly: true);
-            artifacts.AddText(1, artifacts.Last().Bottom(), 0, char.ConvertFromUtf32(0x2193) + " = previous", "Courier New", 8, foreColor: Color.Gray, screenOnly: true);
+            artifacts.AddText(1, artifacts.Last().Bottom(), 0, "n = ± number", "Microsoft Sans Serif", 8, foreColor: Color.Gray, screenOnly: true);
+            artifacts.AddText(1, artifacts.Last().Bottom(), 0, "v = ± value", "Microsoft Sans Serif", 8, foreColor: Color.Gray, screenOnly: true);
+            artifacts.AddText(1, artifacts.Last().Bottom(), 0, "f = ± frame", "Microsoft Sans Serif", 8, foreColor: Color.Gray, screenOnly: true);
+            artifacts.AddText(1, artifacts.Last().Bottom(), 0, "t = ± title", "Microsoft Sans Serif", 8, foreColor: Color.Gray, screenOnly: true);
+            artifacts.AddText(1, artifacts.Last().Bottom(), 0, "s = ± font", "Microsoft Sans Serif", 8, foreColor: Color.Gray, screenOnly: true);
+            artifacts.AddText(1, artifacts.Last().Bottom(2), 0, "p = page setup", "Microsoft Sans Serif", 8, foreColor: Color.Gray, screenOnly: true);
+            artifacts.AddText(1, artifacts.Last().Bottom(2), 0, char.ConvertFromUtf32(0x2191) + " = next", "Microsoft Sans Serif", 8, foreColor: Color.Gray, screenOnly: true);
+            artifacts.AddText(1, artifacts.Last().Bottom(), 0, char.ConvertFromUtf32(0x2193) + " = previous", "Microsoft Sans Serif", 8, foreColor: Color.Gray, screenOnly: true);
 
             // Form border
             artifacts.AddRectangle(0, 0, (this.Width - 1) / pageScale, (this.Height - 1) / pageScale, Color.Gray, screenOnly: true);
