@@ -217,7 +217,7 @@ namespace Escher
             }
         }
 
-        public float AddText(float x, float y, float width, string text, string fontName, float fontSize, bool fontBold = false, bool fontItalic = false, Color? foreColor = null, Alignment alignment = Alignment.Left, bool screenOnly = false)
+        public RectangleF AddText(float x, float y, float width, string text, string fontName, float fontSize, bool fontBold = false, bool fontItalic = false, Color? foreColor = null, Alignment alignment = Alignment.Left, bool screenOnly = false)
         {
             Font font = new Font(fontName, fontSize, (fontBold ? FontStyle.Bold : 0) | (fontItalic ? FontStyle.Italic : 0));
 
@@ -234,7 +234,7 @@ namespace Escher
 
             if (text == "")
             {
-                return 0; // GetTextDimension(graphics, "", font).Height;
+                return new RectangleF(); // GetTextDimension(graphics, "", font).Height;
             }
 
             int linefeed = text.IndexOf('%');
@@ -243,9 +243,9 @@ namespace Escher
             {
                 string[] texts = new string[] { text.Substring(0, linefeed), text.Substring(linefeed + 1)};
 
-                float height = AddText(x, y, width, texts[0], fontName, fontSize, fontBold, fontBold, foreColor, alignment, screenOnly);
+                float height = AddText(x, y, width, texts[0], fontName, fontSize, fontBold, fontItalic, foreColor, alignment, screenOnly).Height;
 
-                return AddText(x, y + height, width, texts[1], fontName, fontSize, fontBold, fontBold, foreColor, alignment, screenOnly);
+                return AddText(x, y + height, width, texts[1], fontName, fontSize, fontBold, fontItalic, foreColor, alignment, screenOnly);
             }
             else if (width != 0 && GetTextDimension(graphics, text, font).Width > width)
             {
@@ -255,11 +255,63 @@ namespace Escher
                 {
                     if (text[i] == ' ' && GetTextDimension(graphics, text.Substring(0, i), font).Width <= width)
                     {
-                        return AddText(x, y, width, text.Substring(0, i) + "%" + text.Substring(i + 1), fontName, fontSize, fontBold, fontBold, foreColor, alignment, screenOnly);
+                        return AddText(x, y, width, text.Substring(0, i) + "%" + text.Substring(i + 1), fontName, fontSize, fontBold, fontItalic, foreColor, alignment, screenOnly);
                     }
                 }
 
-                return AddText(x, y, 4096, text, fontName, fontSize, fontBold, fontBold, foreColor, alignment, screenOnly);
+                return AddText(x, y, 4096, text, fontName, fontSize, fontBold, fontItalic, foreColor, alignment, screenOnly);
+            }
+            //else if (text.Contains("<b>"))
+            //{
+            //    string[] texts = text.Split("<b>");
+
+            //    x += AddText(x, y, width, texts[0], fontName, fontSize, false, fontItalic, foreColor, alignment, screenOnly).Width;
+
+            //    return AddText(x, y, width, texts[1], fontName, fontSize, true, fontItalic, foreColor, alignment, screenOnly);
+            //}
+            //else if (text.Contains("</b>"))
+            //{
+            //    string[] texts = text.Split("</b>");
+
+            //    x += AddText(x, y, width, texts[0], fontName, fontSize, true, fontItalic, foreColor, alignment, screenOnly).Width;
+
+            //    return AddText(x, y, width, texts[1], fontName, fontSize, false, fontItalic, foreColor, alignment, screenOnly);
+            //}
+            else if (text.Contains("<b>"))
+            {
+                string[] texts = text.Split("<b>", joinAgainExceptFirstOne: true);
+
+                x += AddText(x, y, width, texts[0], fontName, fontSize, false, fontItalic, foreColor, alignment, screenOnly).Width;
+
+                texts = texts[1].Split("</b>", joinAgainExceptFirstOne: true);
+
+                x += AddText(x, y, width, texts[0], fontName, fontSize, true, fontItalic, foreColor, alignment, screenOnly).Width;
+
+                return AddText(x, y, width, texts[1], fontName, fontSize, false, fontItalic, foreColor, alignment, screenOnly);
+            }
+            else if (text.Contains("<i>"))
+            {
+                string[] texts = text.Split("<i>", joinAgainExceptFirstOne: true);
+
+                x += AddText(x, y, width, texts[0], fontName, fontSize, fontBold, false, foreColor, alignment, screenOnly).Width;
+
+                texts = texts[1].Split("</i>", joinAgainExceptFirstOne: true);
+
+                x += AddText(x, y, width, texts[0], fontName, fontSize, fontBold, true, foreColor, alignment, screenOnly).Width;
+
+                return AddText(x, y, width, texts[1], fontName, fontSize, fontBold, false, foreColor, alignment, screenOnly);
+            }
+            else if (text.Contains("<s>"))
+            {
+                string[] texts = text.Split("<s>", joinAgainExceptFirstOne: true);
+
+                x += AddText(x, y, width, texts[0], fontName, fontSize, fontBold, fontItalic, foreColor, alignment, screenOnly).Width;
+
+                texts = texts[1].Split("</s>", joinAgainExceptFirstOne: true);
+
+                x += AddText(x, y - 0.5F, width, texts[0], fontName, fontSize - 1, fontBold, fontItalic, foreColor, alignment, screenOnly).Width;
+
+                return AddText(x, y, width, texts[1], fontName, fontSize, fontBold, fontItalic, foreColor, alignment, screenOnly);
             }
             else
             {
@@ -272,18 +324,13 @@ namespace Escher
                 artifact.Font = font;
                 artifact.screenOnly = screenOnly;
 
-                GraphicsUnit pageUnit = graphics.PageUnit;
-
-                graphics.PageUnit = GraphicsUnit.Display;
-
                 RectangleF dimension = GetTextDimension(graphics, artifact.Text, artifact.Font);
 
-                artifact.Width = dimension.Width / this.scale;
-                artifact.Height = dimension.Height / this.scale;
+                artifact.Width = dimension.Width;
+                artifact.Height = dimension.Height;
 
-                artifact.X -= dimension.Left / this.scale;
-
-                graphics.PageUnit = pageUnit;
+                artifact.X -= dimension.Left;
+                artifact.Y -= dimension.Top;
 
                 switch (alignment)
                 {
@@ -299,7 +346,7 @@ namespace Escher
                 }
                 artifacts.Add(artifact);
 
-                return artifact.Height;
+                return dimension;
             }
         }
 

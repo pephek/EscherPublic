@@ -68,7 +68,7 @@ namespace Escher
             }
             else
             {
-                return string.Format("<tr><td>{0}</td><td>{1}</td><td>{2}</td></tr>", entry.Number, entry.Value.Replace("!", ""), entry.Color?.Replace("!", ""));
+                return string.Format("<tr><td><b>{0}</b></td><td>{1}</td><td>{2}</td></tr>", entry.Number, entry.Value.Replace("!", ""), entry.Color?.Replace("!", ""));
             }
         }
 

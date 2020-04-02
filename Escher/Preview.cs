@@ -300,26 +300,12 @@ namespace Escher
 
             artifacts = new Artifacts(g, this.pageScale);
 
-            artifacts.AddText(1, 50, 0, "donker- tot lichtblauw", "Times New Roman", 5, foreColor: Color.Black, screenOnly: true);
-            artifacts.AddText(1, 60, 0, "donker- tot lichtblauw", "Times New Roman", 6, foreColor: Color.Black, screenOnly: true);
-            artifacts.AddText(1, 70, 0, "donker- tot lichtblauw", "Times New Roman", 7, foreColor: Color.Black, screenOnly: true);
-            artifacts.AddText(1, 80, 0, "donker- tot lichtblauw", "Arial", 5, foreColor: Color.Black, screenOnly: true);
-            artifacts.AddText(1, 90, 0, "donker- tot lichtblauw", "Arial", 6, foreColor: Color.Black, screenOnly: true);
-            artifacts.AddText(1, 100, 0, "donker- tot lichtblauw", "Arial", 7, foreColor: Color.Black, screenOnly: true);
-
             // Form caption
-            artifacts.AddText(1, 1, 0, "Escher · Preview", "Microsoft Sans Serif", 8, foreColor: Color.Gray, screenOnly: true);
+            artifacts.AddText(1, 1, 0, string.Format("Escher · Preview on <b>{0}</b> · Page Number <b>{1}</b>", format.FormatName, pageNumber), "Microsoft Sans Serif", 7, foreColor: Color.Gray, screenOnly: true);
 
             // Legenda
-            artifacts.AddText(1, artifacts.Last().Bottom(2), 0, "c = ± color", "Microsoft Sans Serif", 8, foreColor: Color.Gray, screenOnly: true);
-            artifacts.AddText(1, artifacts.Last().Bottom(), 0, "n = ± number", "Microsoft Sans Serif", 8, foreColor: Color.Gray, screenOnly: true);
-            artifacts.AddText(1, artifacts.Last().Bottom(), 0, "v = ± value", "Microsoft Sans Serif", 8, foreColor: Color.Gray, screenOnly: true);
-            artifacts.AddText(1, artifacts.Last().Bottom(), 0, "f = ± frame", "Microsoft Sans Serif", 8, foreColor: Color.Gray, screenOnly: true);
-            artifacts.AddText(1, artifacts.Last().Bottom(), 0, "t = ± title", "Microsoft Sans Serif", 8, foreColor: Color.Gray, screenOnly: true);
-            artifacts.AddText(1, artifacts.Last().Bottom(), 0, "s = ± font", "Microsoft Sans Serif", 8, foreColor: Color.Gray, screenOnly: true);
-            artifacts.AddText(1, artifacts.Last().Bottom(2), 0, "p = page setup", "Microsoft Sans Serif", 8, foreColor: Color.Gray, screenOnly: true);
-            artifacts.AddText(1, artifacts.Last().Bottom(2), 0, char.ConvertFromUtf32(0x2191) + " = next", "Microsoft Sans Serif", 8, foreColor: Color.Gray, screenOnly: true);
-            artifacts.AddText(1, artifacts.Last().Bottom(), 0, char.ConvertFromUtf32(0x2193) + " = previous", "Microsoft Sans Serif", 8, foreColor: Color.Gray, screenOnly: true);
+            artifacts.AddText(1, artifacts.Last().Bottom(2), 0, "c = ± color · n = ± number · v = ± value · f = ± frame · t = ± title · s = ± font", "Microsoft Sans Serif", 7, foreColor: Color.Gray, screenOnly: true);
+            artifacts.AddText(1, artifacts.Last().Bottom(2), 0, "p = page setup · " + char.ConvertFromUtf32(0x2190) + " = previous page · " + char.ConvertFromUtf32(0x2192) + " = next page", "Microsoft Sans Serif", 7, foreColor: Color.Gray, screenOnly: true);
 
             // Form border
             artifacts.AddRectangle(0, 0, (this.Width - 1) / pageScale, (this.Height - 1) / pageScale, Color.Gray, screenOnly: true);
@@ -379,11 +365,11 @@ namespace Escher
                     case TitleStyle.Davo:
                         if (setup.IncludeTitle)
                         {
-                            y += artifacts.AddText(format.Free.Left, y, format.Free.Width, page.Country, format.TitleFont, 18, fontBold: true, foreColor: Color.Black, alignment: Alignment.Centered);
+                            y += artifacts.AddText(format.Free.Left, y, format.Free.Width, page.Country, format.TitleFont, 18, fontBold: true, foreColor: Color.Black, alignment: Alignment.Centered).Height;
                         }
                         else
                         {
-                            y += artifacts.AddText(format.Free.Left, y, format.Free.Width, page.Country, format.TitleFont, 18, fontBold: true, foreColor: Color.Gray, alignment: Alignment.Centered, screenOnly: true);
+                            y += artifacts.AddText(format.Free.Left, y, format.Free.Width, page.Country, format.TitleFont, 18, fontBold: true, foreColor: Color.Gray, alignment: Alignment.Centered, screenOnly: true).Height;
                         }
                         break;
                     case TitleStyle.Importa:
@@ -416,10 +402,10 @@ namespace Escher
             else
             {
                 // Eg. 1867-1869. Koning Willem III.
-                y += artifacts.AddText(format.Free.Left, y, format.Free.Width, string.IsNullOrEmpty(page.Series) ? "·" : page.Series, format.TitleFont, 7, foreColor: string.IsNullOrEmpty(page.Series) ? Color.White : Color.Black, alignment: Alignment.Centered);
+                y += artifacts.AddText(format.Free.Left, y, format.Free.Width, string.IsNullOrEmpty(page.Series) ? "·" : page.Series, format.TitleFont, 7, foreColor: string.IsNullOrEmpty(page.Series) ? Color.White : Color.Black, alignment: Alignment.Centered).Height;
 
                 // Eg. Type I.
-                y += artifacts.AddText(format.Free.Left, y, format.Free.Width, string.IsNullOrEmpty(page.MainType) ? "" : page.MainType, format.TitleFont, 7, alignment: Alignment.Centered);
+                y += artifacts.AddText(format.Free.Left, y, format.Free.Width, string.IsNullOrEmpty(page.MainType) ? "" : page.MainType, format.TitleFont, 7, alignment: Alignment.Centered).Height;
 
                 float pageMargin = page.Margin;
                 float yCombine;
@@ -439,7 +425,7 @@ namespace Escher
 
                     if (!string.IsNullOrEmpty(varieties.SubType))
                     {
-                        y += artifacts.AddText(format.Free.Left, y + artifacts.GetTextHeight(format.TitleFont, 9), format.Free.Width, varieties.SubType, format.TitleFont, 7, alignment: Alignment.Centered);
+                        y += artifacts.AddText(format.Free.Left, y + artifacts.GetTextHeight(format.TitleFont, 9), format.Free.Width, varieties.SubType, format.TitleFont, 7, alignment: Alignment.Centered).Height;
 
                         yCombine = y;
                     }
@@ -471,11 +457,11 @@ namespace Escher
 
                     if (textWidth <= rowWidth)
                     {
-                        y += artifacts.AddText(rowLeft + varieties.Horizontal, y + varieties.Vertical, rowWidth, text, format.TitleFont, fontSize, alignment: alignment);
+                        y += artifacts.AddText(rowLeft + varieties.Horizontal, y + varieties.Vertical, rowWidth, text, format.TitleFont, fontSize, alignment: alignment).Height;
                     }
                     else
                     {
-                        y += artifacts.AddText(rowLeft + varieties.Horizontal - textWidth, y + varieties.Vertical, rowWidth + 2 * textWidth, text, format.TitleFont, fontSize, alignment: alignment);
+                        y += artifacts.AddText(rowLeft + varieties.Horizontal - textWidth, y + varieties.Vertical, rowWidth + 2 * textWidth, text, format.TitleFont, fontSize, alignment: alignment).Height;
                     }
 
                     for (int r = 0; r < varieties.Rows.Count(); r++)
@@ -502,7 +488,7 @@ namespace Escher
                                 y -= 1; // As soon as we found a description then move the y-position 1 millimeter up
 
                                 // Eg. Zonder punt in linker onderhoek.
-                                y += artifacts.AddText(variety.FrameLeft, y + variety.Vertical, variety.FrameWidth, variety.Title, format.TitleFont, 5, alignment: variety.Alignment);
+                                y += artifacts.AddText(variety.FrameLeft, y + variety.Vertical, variety.FrameWidth, variety.Title, format.TitleFont, 5, alignment: variety.Alignment).Height;
 
                                 // There is at least one stamp with a description
                                 hasDescriptions = true;
@@ -602,7 +588,7 @@ namespace Escher
                             if (!variety.Skip && setup.IncludeValue)
                             {
                                 // Eg. 5 ct. mat ultramarijn
-                                yNew = artifacts.AddText(variety.FrameLeft - 1, y + variety.FrameOffset, variety.Width + 2, variety.Description, format.TitleFont, (int)setup.FontSize, alignment: Alignment.Centered); 
+                                yNew = artifacts.AddText(variety.FrameLeft - 1, y + variety.FrameOffset, variety.Width + 2, variety.Description, format.TitleFont, (int)setup.FontSize, alignment: Alignment.Centered).Height;
                             }
 
                             if (yNew > yMax)
