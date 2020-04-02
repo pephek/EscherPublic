@@ -9,12 +9,13 @@ namespace Escher
 {
     public class Page
     {
+        public string ImagesPath;
         public string Country;
+        public string Section;
         public string Copyright;
         public string Title;
         public string Series;
         public string MainType;
-        public string Folder;
         public double OffsetVertical;
         public double Spacing;
         public string AlbumNumber;
@@ -40,9 +41,9 @@ namespace Escher
             Varieties.Add(varieties);
         }
 
-        public void AddVariety(string number, string description, string title, Color frameColor, float width, float height, float extraWidth, float extraHeight, float horizontal, float vertical, bool skip, Appearance appearance, string picture, string overprint, Shape shape, Alignment alignment, string sheet)
+        public void AddVariety(string number, string description, string title, FrameColor frameColor, float width, float height, float extraWidth, float extraHeight, float horizontal, float vertical, bool skip, Appearance appearance, string picture, string overprint, Shape shape, Alignment alignment, string sheet)
         {
-            Variety variety = new Variety(number, description, frameColor, width, height, extraWidth, extraHeight, horizontal, vertical, title, shape, skip, "", appearance, picture, overprint, alignment, sheet);
+            Variety variety = new Variety(number, description, frameColor.GetColor(), width, height, extraWidth, extraHeight, horizontal, vertical, title, shape, skip, "", appearance, picture, overprint, alignment, sheet);
 
             Varieties varieties = Varieties[Varieties.Count() - 1];
 
@@ -83,6 +84,23 @@ namespace Escher
         public float RowWidth(int v, int r)
         {
             return RowWidth(v, r, 0, out int ignore);
+        }
+
+        public float RowHeight(int v, int r)
+        {
+            float rowHeight = 0;
+
+            List<Variety> row = Varieties[v].Rows[r];
+
+            for (int s = 0; s < row.Count(); s++)
+            {
+                if (row[s].Height > rowHeight)
+                {
+                    rowHeight = row[s].Height;
+                }
+            }
+
+            return rowHeight;
         }
 
         public float RowLeft(int v, int r, float freeLeft, float freeWidth)

@@ -107,7 +107,9 @@
     <Compile Include="Enums\Class.cs" />
     <Compile Include="Enums\ColorStyle.cs" />
     <Compile Include="Enums\FontSize.cs" />
+    <Compile Include="Enums\FrameColor.cs" />
     <Compile Include="Enums\FrameStyle.cs" />
+    <Compile Include="Enums\PaintMode.cs" />
     <Compile Include="Enums\PrintMode.cs" />
     <Compile Include="Enums\Shape.cs" />
     <Compile Include="Enums\SheetNumber.cs" />

@@ -14,7 +14,7 @@ namespace Escher
         public string Value;
         public string Number;
         public string Color;
-        public Color FrameColor;
+        public FrameColor FrameColor;
         public float Width;
         public float Height;
         public float ExtraWidth;

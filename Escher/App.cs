@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Configuration;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -129,6 +130,41 @@ namespace Escher
         public static void SetSetting(string setting, bool value)
         {
             SetSetting(setting, value.ToString());
+        }
+
+        public static string GetImage(string path, string number, float width, float height, ColorStyle colorStyle, bool thumbnail)
+        {
+            string image = null;
+
+            if (number.Contains('('))
+            {
+                number = number.Substring(0, number.IndexOf('(') - 1).Trim();
+            }
+
+            // Remove any spaces in the number
+            number = number.Replace(" ", "");
+
+            // If we don't want the thumbnail image then we want the album page image in either grey scale or full color
+            if (!thumbnail)
+            {
+                path = string.Format("{0}\\{1}", path, colorStyle == ColorStyle.Color ? "xlcolor" : "xlprint");
+            }
+
+            // Finalize the path with the number
+            path = string.Format("{0}\\{1}.jpg", path, number);
+
+            // If we want the thumbnail but don't have one then we are going to create one
+            if (thumbnail)
+            {
+                throw new Exception("toto");
+            }
+
+            if (File.Exists(path))
+            {
+                image = path;
+            }
+
+            return image;
         }
     }
 }

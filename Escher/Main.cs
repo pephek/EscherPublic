@@ -320,7 +320,7 @@ namespace Escher
                 Page page = PageHelper.Get(design, pageNumber);
 
                 Preview preview = new Preview();
-                preview.PreparePage(page, mode: PrintMode.ToScreen, number: pageNumber);
+                preview.SetPage(page, pageNumber: pageNumber, printMode: PrintMode.ToScreen, paintMode: PaintMode.MatchScreen);
                 preview.Show();
             }
             else if (e.Url.AbsolutePath.StartsWith("stamp("))

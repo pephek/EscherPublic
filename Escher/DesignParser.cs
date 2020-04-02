@@ -269,10 +269,10 @@ namespace Escher
                     {
                         case "":
                         case "black":
-                            entry.FrameColor = Color.Black;
+                            entry.FrameColor = FrameColor.Black;
                             break;
                         case "white":
-                            entry.FrameColor = Color.White;
+                            entry.FrameColor = FrameColor.White;
                             break;
                         default:
                             throw new Exception(string.Format("Unknown frame color '{0}'", val));

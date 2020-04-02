@@ -122,6 +122,101 @@ namespace Escher
             }
         }
 
+        private void AddImage(float x, float y, float width, float height, string filename, Image image)
+        {
+            Artifact artifact = new Artifact(ArtifactType.Image);
+
+            artifact.X = x;
+            artifact.Y = y;
+            artifact.Width = width;
+            artifact.Height = height;
+            artifact.Filename = filename;
+            artifact.Picture = image;
+
+            artifacts.Add(artifact);
+        }
+
+        public void AddImage(string path, string number, float x, float y, float width, float height, float extraWidth, float extraHeight, Shape shape, Appearance appearance, string picture, ColorStyle colorStyle)
+        {
+            number = !string.IsNullOrEmpty(picture) ? picture.Trim() : number.Trim();
+
+            if (number.Contains('('))
+            {
+                number = number.Substring(0, number.IndexOf('(') - 1).Trim();
+            }
+
+            string imageFile = null;
+
+            Image image = null;
+
+            string n = number;
+
+            while (image == null && n != "")
+            {
+                imageFile = App.GetImage(path, n, width, height, colorStyle, false);
+
+                if (!string.IsNullOrEmpty(imageFile))
+                {
+                    image = Image.FromFile(imageFile);
+                }
+
+                if (image == null)
+                {
+                    if (!Char.IsDigit(n[0]))
+                    {
+                        n = n.Substring(1);
+                    }
+                    else if (!Char.IsDigit(n[n.Length - 1]) || n.Contains('+'))
+                    {
+                        n = n.Substring(0, n.Length - 1);
+                    }
+                    else
+                    {
+                        n = "";
+                    }
+                }
+            }
+
+            if (image == null)
+            {
+                return; // No need to stay here if the image is not found, return immediately
+            }
+
+            switch (shape)
+            {
+                case Shape.Triangle45:
+                    AddImage(x + 3 * 5 / (float) Math.Sqrt(2), y + 2 * 5 / (float) Math.Sqrt(2), width - 2 * 5 / (float) Math.Sqrt(2), height - 5 - 2 * 5 / (float) Math.Sqrt(2), imageFile, image);
+                    break;
+                case Shape.Triangle60Inverted:
+                    AddImage(x + 5 + 5 / (float)Math.Sqrt(3), y + 5, width - 2 * (5 + 5 / (float)Math.Sqrt(3)), height - 2 * (5 + 5 / (float)Math.Sqrt(3)), imageFile, image);
+                    break;
+                case Shape.Triangle60:
+                    AddImage(x + 5 + 5 / (float)Math.Sqrt(3), y + 2 * 5, width - 2 * (5 + 5 / (float)Math.Sqrt(3)), height - 2 * (5 + 5 / (float)Math.Sqrt(3)), imageFile, image);
+                    break;
+                case Shape.RectangleRotated:
+                    AddImage(x + 5 * (float)Math.Sqrt(2), y + 5 * (float)Math.Sqrt(2), width - 2 * 5 * (float)Math.Sqrt(2), height - 2 * 5 * (float)Math.Sqrt(2), imageFile, image);
+                    break;
+                default:
+                    for (int i = 0; i < appearance.NumberOfStamps(); i++)
+                    {
+                        float z = 1;
+                        switch (appearance)
+                        {
+                            case Appearance.Singular:
+                                x += 2;
+                                y += 2;
+                                width -= 4;
+                                height -= 4;
+                                break;
+                            default:
+                                throw new Exception("todo");
+                        }
+                        AddImage(x, y, z * width, z * height, imageFile, image);
+                    }
+                    break;
+            }
+        }
+
         public float AddText(float x, float y, float width, string text, string fontName, float fontSize, bool fontBold = false, bool fontItalic = false, Color? foreColor = null, Alignment alignment = Alignment.Left, bool screenOnly = false)
         {
             Font font = new Font(fontName, fontSize, (fontBold ? FontStyle.Bold : 0) | (fontItalic ? FontStyle.Italic : 0));

@@ -19,7 +19,7 @@ namespace Escher
         public SolidBrush TextColor;
         public string Text;
         public string Filename;
-        public PictureBox Picture;
+        public Image Picture;
         public Font Font;
         public Appearance Appearance;
         public bool screenOnly;

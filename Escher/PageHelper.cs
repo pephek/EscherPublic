@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -26,6 +27,16 @@ namespace Escher
             page.Copyright = country.Copyright;
             page.Title = country.Value;
 
+            // Loop up the folder
+            // a) Frankeerzegels
+            // b) Briefmarken
+            // c) Cinderellas
+            DesignEntry part = design.LastOrDefault(entry => entry.Class == Class.Part && entry.PageNumber <= pageNumber);
+
+            page.Section = part.Text;
+
+            page.ImagesPath = string.Format("{0}\\{1}\\{2}\\", App.GetSetting("ImagesFolder"), page.Country, page.Section);
+
             // Look up the sub title
             // a) 1867-1869. Koning Willem III.
             // b) ALTDEUTSCHLAND
@@ -44,14 +55,6 @@ namespace Escher
             {
                 page.MainType = mainType.Text;
             }
-
-            // Loop up the folder
-            // a) Frankeerzegels
-            // b) Briefmarken
-            // c) Cinderellas
-            DesignEntry part = design.LastOrDefault(entry => entry.Class == Class.Part && entry.PageNumber <= pageNumber);
-
-            page.Folder = part.Text;
 
             // Look up the first entry having this page number
             int first = design.FindIndex(entry => entry.PageNumber == pageNumber);
