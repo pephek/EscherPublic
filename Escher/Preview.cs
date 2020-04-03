@@ -92,7 +92,7 @@ namespace Escher
                     switch (e.Modifiers)
                     {
                         case Keys.Shift:
-                            this.screenMode = this.screenMode.GetNext();
+                            this.screenMode = this.screenMode.Next();
                             this.Location = new Point(0, 0);
                             RefreshPreview(resizePreview: true);
                             break;
@@ -102,7 +102,7 @@ namespace Escher
                     }
                     break;
                 case Keys.OemMinus:
-                    this.screenMode = this.screenMode.GetPrev();
+                    this.screenMode = this.screenMode.Prev();
                     this.Location = new Point(0, 0);
                     RefreshPreview(resizePreview: true);
                     break;

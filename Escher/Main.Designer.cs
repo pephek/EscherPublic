@@ -47,11 +47,11 @@
             this.findAlbumNumberToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripMenuItem6 = new System.Windows.Forms.ToolStripSeparator();
             this.exitToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.experimentToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.designsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.helpToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.aboutToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.webBrowser = new System.Windows.Forms.WebBrowser();
-            this.experimentToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -197,6 +197,13 @@
             this.exitToolStripMenuItem.Text = "Exit";
             this.exitToolStripMenuItem.Click += new System.EventHandler(this.exitToolStripMenuItem_Click);
             // 
+            // experimentToolStripMenuItem
+            // 
+            this.experimentToolStripMenuItem.Name = "experimentToolStripMenuItem";
+            this.experimentToolStripMenuItem.Size = new System.Drawing.Size(283, 26);
+            this.experimentToolStripMenuItem.Text = "Experiment";
+            this.experimentToolStripMenuItem.Click += new System.EventHandler(this.experimentToolStripMenuItem_Click);
+            // 
             // designsToolStripMenuItem
             // 
             this.designsToolStripMenuItem.Name = "designsToolStripMenuItem";
@@ -226,22 +233,15 @@
             this.webBrowser.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.webBrowser.MinimumSize = new System.Drawing.Size(20, 20);
             this.webBrowser.Name = "webBrowser";
-            this.webBrowser.Size = new System.Drawing.Size(837, 1067);
+            this.webBrowser.Size = new System.Drawing.Size(837, 1271);
             this.webBrowser.TabIndex = 1;
-            // 
-            // experimentToolStripMenuItem
-            // 
-            this.experimentToolStripMenuItem.Name = "experimentToolStripMenuItem";
-            this.experimentToolStripMenuItem.Size = new System.Drawing.Size(283, 26);
-            this.experimentToolStripMenuItem.Text = "Experiment";
-            this.experimentToolStripMenuItem.Click += new System.EventHandler(this.experimentToolStripMenuItem_Click);
             // 
             // Main
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.White;
-            this.ClientSize = new System.Drawing.Size(837, 1095);
+            this.ClientSize = new System.Drawing.Size(837, 1299);
             this.Controls.Add(this.webBrowser);
             this.Controls.Add(this.menuStrip1);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));

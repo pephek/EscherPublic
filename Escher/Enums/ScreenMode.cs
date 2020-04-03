@@ -15,7 +15,7 @@ namespace Escher
 
     public static class ScreenModeExtensions
     {
-        public static ScreenMode GetNext(this ScreenMode screenMode)
+        public static ScreenMode Next(this ScreenMode screenMode)
         {
             switch (screenMode)
             {
@@ -30,7 +30,7 @@ namespace Escher
             }
         }
 
-        public static ScreenMode GetPrev(this ScreenMode screenMode)
+        public static ScreenMode Prev(this ScreenMode screenMode)
         {
             switch (screenMode)
             {
