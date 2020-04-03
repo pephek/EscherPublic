@@ -156,7 +156,8 @@ namespace Escher
                         break;
 
                     case Class.Stamp:
-                        string s = string.Format("<a href=\"stamp({0},{1},{2})\"><img src=\"{3}\\{4}\\{5}\\{6}.jpg\"></a>&nbsp;", country, part, entry.Number, App.GetSetting("ImagesFolder"), country, part, entry.Number);
+                        string thumbnail = ImageHelper.GetThumbnailImage(App.GetSetting("ImagesFolder"), country, part, entry.Number, entry.Width, entry.Height);
+                        string s = string.Format("<a href=\"stamp({0},{1},{2})\"><img src=\"{3}\" title=\"{4}\"></a>&nbsp;", country, part, entry.Number, thumbnail, entry.Number);
                         html.Append(s);
                         break;
                 }

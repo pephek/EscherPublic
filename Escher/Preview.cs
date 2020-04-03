@@ -89,16 +89,16 @@ namespace Escher
                     ShowPageSetup();
                     break;
                 case Keys.Oemplus:
-                    if (e.Modifiers == Keys.Shift)
+                    switch (e.Modifiers)
                     {
-                        this.screenMode = this.screenMode.GetNext();
-                        this.Location = new Point(0, 0);
-                        RefreshPreview(resizePreview: true);
-                    }
-                    else
-                    {
-                        this.Location = new Point(0, 0);
-                        RefreshPreview(resizePreview: true);
+                        case Keys.Shift:
+                            this.screenMode = this.screenMode.GetNext();
+                            this.Location = new Point(0, 0);
+                            RefreshPreview(resizePreview: true);
+                            break;
+                        case Keys.None:
+                            this.Location = new Point(0, 0);
+                            break;
                     }
                     break;
                 case Keys.OemMinus:
@@ -378,7 +378,7 @@ namespace Escher
             artifacts = new Artifacts(g, this.pageScale);
 
             // Form caption
-            artifacts.AddText(1, 1, 0, string.Format("Escher · Preview · Paper <b>{0}</b> · Page Number <b>{1}</b>", format.FormatName, pageNumber), "Microsoft Sans Serif", 7, foreColor: Color.Gray, screenOnly: true);
+            artifacts.AddText(1, 1, 0, string.Format("Escher · Preview · Paper:<b>{0}</b> · Page Number:<b>{1}</b>", format.FormatName, pageNumber), "Microsoft Sans Serif", 7, foreColor: Color.Gray, screenOnly: true);
 
             // Legenda
             artifacts.AddText(1, artifacts.Last().Bottom(2), 0, "c: ± color · n: ± number · v: ± value · f: ± frame · t: ± title · s: ± font", "Microsoft Sans Serif", 7, foreColor: Color.Gray, screenOnly: true);
@@ -589,7 +589,7 @@ namespace Escher
                             float x1 = variety.FrameLeft;
                             float y1 = y + variety.FrameOffset + (rowHeight - variety.Height) / 2;
 
-                            // Stamo/sheet
+                            // Stamp/sheet
 
                             float currentX = x1;
                             float currentY = y1;

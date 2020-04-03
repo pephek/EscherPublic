@@ -122,7 +122,7 @@ namespace Escher
             }
         }
 
-        private void AddImage(float x, float y, float width, float height, string filename, Image image)
+        private void AddImage(float x, float y, float width, float height, Image image)
         {
             Artifact artifact = new Artifact(ArtifactType.Image);
 
@@ -130,7 +130,6 @@ namespace Escher
             artifact.Y = y;
             artifact.Width = width;
             artifact.Height = height;
-            artifact.Filename = filename;
             artifact.Picture = image;
 
             artifacts.Add(artifact);
@@ -145,20 +144,13 @@ namespace Escher
                 number = number.Substring(0, number.IndexOf('(') - 1).Trim();
             }
 
-            string imageFile = null;
-
             Image image = null;
 
             string n = number;
 
             while (image == null && n != "")
             {
-                imageFile = App.GetImage(path, n, width, height, colorStyle, false);
-
-                if (!string.IsNullOrEmpty(imageFile))
-                {
-                    image = Image.FromFile(imageFile);
-                }
+                image = ImageHelper.GetDisplayImage(path, n, colorStyle);
 
                 if (image == null)
                 {
@@ -185,16 +177,16 @@ namespace Escher
             switch (shape)
             {
                 case Shape.Triangle45:
-                    AddImage(x + 3 * 5 / (float) Math.Sqrt(2), y + 2 * 5 / (float) Math.Sqrt(2), width - 2 * 5 / (float) Math.Sqrt(2), height - 5 - 2 * 5 / (float) Math.Sqrt(2), imageFile, image);
+                    AddImage(x + 3 * 5 / (float) Math.Sqrt(2), y + 2 * 5 / (float) Math.Sqrt(2), width - 2 * 5 / (float) Math.Sqrt(2), height - 5 - 2 * 5 / (float) Math.Sqrt(2), image);
                     break;
                 case Shape.Triangle60Inverted:
-                    AddImage(x + 5 + 5 / (float)Math.Sqrt(3), y + 5, width - 2 * (5 + 5 / (float)Math.Sqrt(3)), height - 2 * (5 + 5 / (float)Math.Sqrt(3)), imageFile, image);
+                    AddImage(x + 5 + 5 / (float)Math.Sqrt(3), y + 5, width - 2 * (5 + 5 / (float)Math.Sqrt(3)), height - 2 * (5 + 5 / (float)Math.Sqrt(3)), image);
                     break;
                 case Shape.Triangle60:
-                    AddImage(x + 5 + 5 / (float)Math.Sqrt(3), y + 2 * 5, width - 2 * (5 + 5 / (float)Math.Sqrt(3)), height - 2 * (5 + 5 / (float)Math.Sqrt(3)), imageFile, image);
+                    AddImage(x + 5 + 5 / (float)Math.Sqrt(3), y + 2 * 5, width - 2 * (5 + 5 / (float)Math.Sqrt(3)), height - 2 * (5 + 5 / (float)Math.Sqrt(3)), image);
                     break;
                 case Shape.RectangleRotated:
-                    AddImage(x + 5 * (float)Math.Sqrt(2), y + 5 * (float)Math.Sqrt(2), width - 2 * 5 * (float)Math.Sqrt(2), height - 2 * 5 * (float)Math.Sqrt(2), imageFile, image);
+                    AddImage(x + 5 * (float)Math.Sqrt(2), y + 5 * (float)Math.Sqrt(2), width - 2 * 5 * (float)Math.Sqrt(2), height - 2 * 5 * (float)Math.Sqrt(2), image);
                     break;
                 default:
                     for (int i = 0; i < appearance.NumberOfStamps(); i++)
@@ -211,7 +203,7 @@ namespace Escher
                             default:
                                 throw new Exception("todo");
                         }
-                        AddImage(x, y, z * width, z * height, imageFile, image);
+                        AddImage(x, y, z * width, z * height, image);
                     }
                     break;
             }

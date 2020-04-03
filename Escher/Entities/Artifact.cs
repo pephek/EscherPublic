@@ -18,7 +18,6 @@ namespace Escher
         public Color ForeColor;
         public SolidBrush TextColor;
         public string Text;
-        public string Filename;
         public Image Picture;
         public Font Font;
         public Appearance Appearance;

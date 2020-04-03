@@ -332,5 +332,10 @@ namespace Escher
         {
 
         }
+
+        private void experimentToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            Experiments.ExperimentWithSomething();
+        }
     }
 }
