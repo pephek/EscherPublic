@@ -21,7 +21,7 @@ namespace Escher
         public readonly string Title;
         public readonly Shape Shape;
         public readonly bool Skip;
-        public readonly string Part;
+        public readonly string Section;
         public readonly Appearance Appearance;
         public readonly string Picture;
         public readonly string Overprint;
@@ -47,7 +47,7 @@ namespace Escher
             string title,
             Shape shape,
             bool skip,
-            string part,
+            string section,
             Appearance appearance,
             string picture,
             string overprint,
@@ -67,7 +67,7 @@ namespace Escher
             Title = title;
             Shape = shape;
             Skip = skip;
-            Part = part;
+            Section = section;
             Appearance = appearance;
             Picture = picture;
             Overprint = overprint;

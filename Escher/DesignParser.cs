@@ -151,7 +151,7 @@ namespace Escher
                     break;
 
                 case "part": // Eg. Part:=Frankeerzegels
-                    entry.SetClass(Class.Part, val);
+                    entry.SetClass(Class.Section, val);
                     break;
 
                 case "type": // Eg. Type:=Type I

@@ -31,9 +31,9 @@ namespace Escher
             // a) Frankeerzegels
             // b) Briefmarken
             // c) Cinderellas
-            DesignEntry part = design.LastOrDefault(entry => entry.Class == Class.Part && entry.PageNumber <= pageNumber);
+            DesignEntry section = design.LastOrDefault(entry => entry.Class == Class.Section && entry.PageNumber <= pageNumber);
 
-            page.Section = part.Text;
+            page.Section = section.Text;
 
             page.ImagesPath = string.Format("{0}\\{1}\\{2}\\", App.GetSetting("ImagesFolder"), page.Country, page.Section);
 

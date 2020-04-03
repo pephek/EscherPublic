@@ -40,7 +40,7 @@ namespace Escher
             return image;
         }
 
-        public static string GetThumbnailImage(string imagesFolder, string country, string section, string number, float width, float height)
+        public static string GetThumbnailImage(string imagesFolder, string country, string section, string number, float width, float height, out bool existsDisplayImage)
         {
             number = NormalizeNumber(number);
 
@@ -59,10 +59,10 @@ namespace Escher
                 Directory.CreateDirectory(folder);
 
                 Directory.CreateDirectory(string.Format("{0}\\image", folder));
-                Directory.CreateDirectory(string.Format("{0}\\print", folder));
                 Directory.CreateDirectory(string.Format("{0}\\color", folder));
-                Directory.CreateDirectory(string.Format("{0}\\xlprint", folder));
+                Directory.CreateDirectory(string.Format("{0}\\print", folder));
                 Directory.CreateDirectory(string.Format("{0}\\xlcolor", folder));
+                Directory.CreateDirectory(string.Format("{0}\\xlprint", folder));
 
                 string source = string.Format("{0}\\image\\{1}.jpg", folder, number);
 
@@ -70,7 +70,10 @@ namespace Escher
                 {
                     CreateThumbnail(source, thumbnail, width, height);
                 }
+
             }
+
+            existsDisplayImage = File.Exists(string.Format("{0}\\{1}\\{2}\\xlcolor\\{3}.jpg", imagesFolder, country, section, number));
 
             return thumbnail;
         }

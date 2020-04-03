@@ -10,7 +10,7 @@ namespace Escher
     {
         None,
         Country,
-        Part,
+        Section,
         Type,
         Series,
         Varieties,

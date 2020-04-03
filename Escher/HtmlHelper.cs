@@ -21,9 +21,9 @@ namespace Escher
             {
                 DesignEntry entry = design[i];
 
-                if (entry.Class == Class.Part)
+                if (entry.Class == Class.Section)
                 {
-                    html.Append(string.Format("<li><a href=\"#part({0},{1})\"><small>{2}</small></a>", country, entry.Text, entry.Text));
+                    html.Append(string.Format("<li><a href=\"#section({0},{1})\"><small>{2}</small></a>", country, entry.Text, entry.Text));
                 }
 
                 i++;
@@ -90,10 +90,33 @@ namespace Escher
         {
             StringBuilder html = new StringBuilder();
 
-            html.Append("<style>a, a.visited {color: blue;} body, td {font-family: Arial; font-size: 75%;}</style>");
+            html.Append(@"
+                <style>
+                    a, a.visited {
+                        color: blue;
+                    }
+                    body, td {
+                        font-family: Arial;
+                        font-size: 75%;
+                    }
+                    img.display-image-exists {
+                        border: 1px solid #ddd;
+                        border-radius: 3px;
+                        padding: 30px;
+                    }
+                    img.display-image-not-exists {
+                        border: 2px solid rgba(255, 0, 0, 1);
+                        border-radius: 3px;
+                        padding: 3px;
+                    }
+                    img:hover {
+                        box-shadow: 0 0 3px 1px rgba(0, 140, 186, 0.5);
+                    }
+                </style>
+            ");
 
             string country = "";
-            string part = "";
+            string section = "";
 
             for (int i = 0; i < design.Count(); i++)
             {
@@ -119,9 +142,9 @@ namespace Escher
                         html.Append(GetTableOfContents(design, i));
                         break;
 
-                    case Class.Part:
-                        part = entry.Text;
-                        html.Append(string.Format("<a name=\"part({0},{1})\"></a>", country, entry.Text));
+                    case Class.Section:
+                        section = entry.Text;
+                        html.Append(string.Format("<a name=\"section({0},{1})\"></a>", country, entry.Text));
                         html.Append(GetHeading("2", entry.Text));
                         break;
 
@@ -156,8 +179,17 @@ namespace Escher
                         break;
 
                     case Class.Stamp:
-                        string thumbnail = ImageHelper.GetThumbnailImage(App.GetSetting("ImagesFolder"), country, part, entry.Number, entry.Width, entry.Height);
-                        string s = string.Format("<a href=\"stamp({0},{1},{2})\"><img src=\"{3}\" title=\"{4}\"></a>&nbsp;", country, part, entry.Number, thumbnail, entry.Number);
+                        string thumbnail = ImageHelper.GetThumbnailImage(App.GetSetting("ImagesFolder"), country, section, entry.Number, entry.Width, entry.Height, out bool existsDisplayImage);
+                        string s;
+                        if (existsDisplayImage)
+                        {
+                            s = string.Format("<a href=\"stamp({0},{1},{2})\"><img src=\"{3}\" title=\"{4}\" style=\"border:3px solid white\"></a>", country, section, entry.Number, thumbnail, entry.Number);
+
+                        }
+                        else
+                        {
+                            s = string.Format("<a href=\"stamp({0},{1},{2})\"><img src=\"{3}\" title=\"{4}\" style=\"border:3px dotted red\">&nbsp;</a>", country, section, entry.Number, thumbnail, entry.Number);
+                        }
                         html.Append(s);
                         break;
                 }
