@@ -26,5 +26,10 @@ namespace Escher
         {
             return design.FirstOrDefault(entry => entry.Class == Class.PageFeed && entry.AlbumNumber.ToLower() == albumNumber.ToLower());
         }
+
+        public static int NumberOfPages(this Design design)
+        {
+            return design[design.Count() - 2].PageNumber;
+        }
     }
 }

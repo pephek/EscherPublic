@@ -9,6 +9,40 @@ namespace Escher
     public enum ScreenMode
     {
         MatchPaper,
-        MatchScreen
+        MatchScreenHeight,
+        MatchScreenWidth
+    }
+
+    public static class ScreenModeExtensions
+    {
+        public static ScreenMode GetNext(this ScreenMode screenMode)
+        {
+            switch (screenMode)
+            {
+                case ScreenMode.MatchPaper:
+                    return ScreenMode.MatchScreenHeight;
+                case ScreenMode.MatchScreenHeight:
+                    return ScreenMode.MatchScreenWidth;
+                case ScreenMode.MatchScreenWidth:
+                    return ScreenMode.MatchPaper;
+                default:
+                    throw new ArgumentOutOfRangeException("screenMode");
+            }
+        }
+
+        public static ScreenMode GetPrev(this ScreenMode screenMode)
+        {
+            switch (screenMode)
+            {
+                case ScreenMode.MatchPaper:
+                    return ScreenMode.MatchScreenWidth;
+                case ScreenMode.MatchScreenHeight:
+                    return ScreenMode.MatchPaper;
+                case ScreenMode.MatchScreenWidth:
+                    return ScreenMode.MatchScreenHeight;
+                default:
+                    throw new ArgumentOutOfRangeException("screenMode");
+            }
+        }
     }
 }

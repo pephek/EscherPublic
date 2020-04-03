@@ -318,10 +318,8 @@ namespace Escher
 
                 int pageNumber = Int32.Parse(e.Url.AbsolutePath.Replace("page(", "").Replace(")", ""));
 
-                Page page = PageHelper.Get(design, pageNumber);
-
                 Preview preview = new Preview();
-                preview.SetPreview(page, pageNumber: pageNumber, printMode: PrintMode.ToScreen, screenMode: ScreenMode.MatchScreen);
+                preview.SetPreview(design, pageNumber: pageNumber, printMode: PrintMode.ToScreen, screenMode: ScreenMode.MatchScreenHeight);
                 preview.Show();
             }
             else if (e.Url.AbsolutePath.StartsWith("stamp("))

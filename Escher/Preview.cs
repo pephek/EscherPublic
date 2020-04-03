@@ -14,6 +14,7 @@ namespace Escher
 {
     public partial class Preview : Form
     {
+        private Design design;
         private Page page;
         private PrintMode printMode;
         private ScreenMode screenMode;
@@ -24,14 +25,20 @@ namespace Escher
         private float dpiX;
         private float dpiY;
 
+        private bool mouseDown;
+        private Point mouseLastLocation;
+
         public Preview()
         {
             InitializeComponent();
         }
 
-        public void SetPreview(Page page, int pageNumber, PrintMode printMode, ScreenMode screenMode)
+        public void SetPreview(Design design, int pageNumber, PrintMode printMode, ScreenMode screenMode)
         {
-            this.page = page;
+            this.design = design;
+
+            this.page = PageHelper.Get(design, pageNumber);
+
             this.pageNumber = pageNumber;
             this.printMode = printMode;
             this.screenMode = screenMode;
@@ -45,37 +52,92 @@ namespace Escher
             ResizePreview(PageSetup.Get().PageFormat, this.printMode, this.screenMode, out this.pageScale, out this.transformScale);
         }
 
-        private void Preview_Load(object sender, EventArgs e)
+        protected override void OnLoad(EventArgs e)
         {
-            this.Left = 0;
-            this.Top = 0;
+            this.Location = new Point(0, 0);
         }
 
-        private void Preview_Paint(object sender, PaintEventArgs e)
+        protected override void OnPaint(PaintEventArgs e)
         {
             RefreshPreview(resizePreview: false);
         }
 
-        private void Preview_KeyPress(object sender, KeyPressEventArgs e)
+        protected override void OnKeyDown(KeyEventArgs e)
         {
-            switch (e.KeyChar)
+            switch (e.KeyCode)
             {
-                case (char)Keys.Escape:
+                case Keys.Escape:
                     this.Close();
                     break;
-                default:
-                    switch (e.KeyChar.ToString().ToLower())
+                case Keys.Left:
+                    if (this.pageNumber > 1)
                     {
-                        case "p":
-                            ShowPageSetup();
-                            break;
-                        case "+":
-                            this.screenMode = (this.screenMode == ScreenMode.MatchPaper ? ScreenMode.MatchScreen : ScreenMode.MatchPaper);
-                            RefreshPreview(resizePreview: true);
-                            break;
+                        this.pageNumber--;
+                        this.page = PageHelper.Get(design, pageNumber);
+                        RefreshPreview(resizePreview: false);
                     }
                     break;
+                case Keys.Right:
+                    if (this.pageNumber < this.design.NumberOfPages())
+                    {
+                        this.pageNumber++;
+                        this.page = PageHelper.Get(design, pageNumber);
+                        RefreshPreview(resizePreview: false);
+                    }
+                    break;
+                case Keys.P:
+                    ShowPageSetup();
+                    break;
+                case Keys.Oemplus:
+                    if (e.Modifiers == Keys.Shift)
+                    {
+                        this.screenMode = this.screenMode.GetNext();
+                        this.Location = new Point(0, 0);
+                        RefreshPreview(resizePreview: true);
+                    }
+                    else
+                    {
+                        this.Location = new Point(0, 0);
+                        RefreshPreview(resizePreview: true);
+                    }
+                    break;
+                case Keys.OemMinus:
+                    this.screenMode = this.screenMode.GetPrev();
+                    this.Location = new Point(0, 0);
+                    RefreshPreview(resizePreview: true);
+                    break;
             }
+        }
+
+        protected override void OnMouseDown(MouseEventArgs e)
+        {
+            this.mouseDown = true;
+            this.mouseLastLocation = e.Location;
+        }
+
+        protected override void OnMouseMove(MouseEventArgs e)
+        {
+            if (mouseDown)
+            {
+                this.Location = new Point((this.Location.X - this.mouseLastLocation.X) + e.X, (this.Location.Y - this.mouseLastLocation.Y) + e.Y);
+
+                this.Update();
+            }
+        }
+
+        protected override void OnMouseUp(MouseEventArgs e)
+        {
+            this.mouseDown = false;
+        }
+
+        protected override void OnMouseDoubleClick(MouseEventArgs e)
+        {
+            this.Location = new Point(0, 0);
+        }
+
+        private void vScrollBar_ValueChanged(object sender, EventArgs e)
+        {
+            RefreshPreview(resizePreview: false);
         }
 
         private void ShowPageSetup()
@@ -98,6 +160,10 @@ namespace Escher
         {
             if (resizePreview)
             {
+                if (this.screenMode == ScreenMode.MatchScreenWidth)
+                {
+                    vScrollBar.Value = 0;
+                }
                 ResizePreview(PageSetup.Get().PageFormat, this.printMode, this.screenMode, out this.pageScale, out this.transformScale);
             }
 
@@ -113,7 +179,7 @@ namespace Escher
 
                 g.PageUnit = pageUnit;
 
-                PrintPreview(g, this.artifacts, this.pageScale, this.transformScale, this.printMode);
+                PrintPreview(g, this.artifacts, this.pageScale, this.transformScale, this.printMode, this.screenMode);
             }
 
         }
@@ -145,13 +211,18 @@ namespace Escher
             g.DrawString(text, font, brush, 5, 30);
         }
 
-        private void PrintPreview(Graphics g, Artifacts artifacts, float pageScale, float transformScale, PrintMode printMode)
+        private void PrintPreview(Graphics g, Artifacts artifacts, float pageScale, float transformScale, PrintMode printMode, ScreenMode screenMode)
         {
             Pen pen;
 
             if (printMode == PrintMode.ToScreen)
             {
                 g.ScaleTransform(transformScale, transformScale);
+
+                if (screenMode == ScreenMode.MatchScreenWidth)
+                {
+                    g.TranslateTransform(0, -vScrollBar.Value);
+                }
             }
 
             // Determines smoothness for shapes such as lines, ellipses, and polygons
@@ -230,6 +301,8 @@ namespace Escher
                 screenMode = ScreenMode.MatchPaper;
             }
 
+            vScrollBar.Visible = screenMode == ScreenMode.MatchScreenWidth;
+
             int screenWidthInPixels = Screen.FromControl(this).WorkingArea.Width;
             int screenHeightInPixels = Screen.FromControl(this).WorkingArea.Height;
 
@@ -239,35 +312,40 @@ namespace Escher
             int width = 0;
             int height = 0;
 
-            transformScale = 1;
+            switch (screenMode)
+            {
+                case ScreenMode.MatchPaper:
+                    width = pageWidthInPixels;
+                    height = pageHeightInPixels;
+                    break;
+
+                case ScreenMode.MatchScreenHeight:
+                    height = screenHeightInPixels;
+                    width = (int)(pageFormat.PageWidth * screenHeightInPixels / pageFormat.PageHeight);
+                    break;
+
+                case ScreenMode.MatchScreenWidth:
+                    width = screenWidthInPixels;
+                    height = (int)(pageFormat.PageHeight * screenWidthInPixels / pageFormat.PageWidth);
+                    vScrollBar.Maximum = height - screenHeightInPixels;
+                    vScrollBar.LargeChange = screenHeightInPixels;
+                    vScrollBar.SmallChange = screenHeightInPixels / 10;
+                    break;
+            }
 
             switch (screenMode)
             {
                 case ScreenMode.MatchPaper:
-
-                    width = pageWidthInPixels;
-                    height = pageHeightInPixels;
-
+                    transformScale = 1;
                     break;
-
-                case ScreenMode.MatchScreen:
-
-                    if (pageFormat.PageHeight > pageFormat.PageWidth)
-                    {
-                        width = (int)(pageFormat.PageWidth * screenHeightInPixels / pageFormat.PageHeight);
-                        height = screenHeightInPixels;
-                    }
-                    else
-                    {
-                        width = screenWidthInPixels;
-                        height = (int)(pageFormat.PageHeight * screenWidthInPixels / pageFormat.PageWidth);
-                    }
-
+                case ScreenMode.MatchScreenHeight:
+                case ScreenMode.MatchScreenWidth:
                     float transformScaleX = (float)width / pageWidthInPixels;
                     float transformScaleY = (float)height / pageHeightInPixels;
-
                     transformScale = (transformScaleX + transformScaleY) / 2;
-
+                    break;
+                default:
+                    transformScale = 1;
                     break;
             }
 
@@ -276,8 +354,7 @@ namespace Escher
 
             pageScale = (pageScaleX + pageScaleY) / 2 / transformScale;
 
-            this.Width = width;
-            this.Height = height;
+            this.Size = new Size(width, height);
         }
 
         private void AssemblePreview(Graphics g, Page page, int pageNumber, PrintMode printMode, ScreenMode screenMode)
@@ -301,11 +378,13 @@ namespace Escher
             artifacts = new Artifacts(g, this.pageScale);
 
             // Form caption
-            artifacts.AddText(1, 1, 0, string.Format("Escher · Preview on <b>{0}</b> · Page Number <b>{1}</b>", format.FormatName, pageNumber), "Microsoft Sans Serif", 7, foreColor: Color.Gray, screenOnly: true);
+            artifacts.AddText(1, 1, 0, string.Format("Escher · Preview · Paper <b>{0}</b> · Page Number <b>{1}</b>", format.FormatName, pageNumber), "Microsoft Sans Serif", 7, foreColor: Color.Gray, screenOnly: true);
 
             // Legenda
-            artifacts.AddText(1, artifacts.Last().Bottom(2), 0, "c = ± color · n = ± number · v = ± value · f = ± frame · t = ± title · s = ± font", "Microsoft Sans Serif", 7, foreColor: Color.Gray, screenOnly: true);
-            artifacts.AddText(1, artifacts.Last().Bottom(2), 0, "p = page setup · " + char.ConvertFromUtf32(0x2190) + " = previous page · " + char.ConvertFromUtf32(0x2192) + " = next page", "Microsoft Sans Serif", 7, foreColor: Color.Gray, screenOnly: true);
+            artifacts.AddText(1, artifacts.Last().Bottom(2), 0, "c: ± color · n: ± number · v: ± value · f: ± frame · t: ± title · s: ± font", "Microsoft Sans Serif", 7, foreColor: Color.Gray, screenOnly: true);
+            artifacts.AddText(1, artifacts.Last().Bottom(2), 0, "+: next match · -: previous match · =: pin", "Microsoft Sans Serif", 7, foreColor: Color.Gray, screenOnly: true);
+            artifacts.AddText(1, artifacts.Last().Bottom(2), 0, char.ConvertFromUtf32(0x2190) + ": previous page · " + char.ConvertFromUtf32(0x2192) + ": next page" + " · p: page setup", "Microsoft Sans Serif", 7, foreColor: Color.Gray, screenOnly: true);
+            artifacts.AddText(1, artifacts.Last().Bottom(2), 0, "esc: close", "Microsoft Sans Serif", 7, foreColor: Color.Gray, screenOnly: true);
 
             // Form border
             artifacts.AddRectangle(0, 0, (this.Width - 1) / pageScale, (this.Height - 1) / pageScale, Color.Gray, screenOnly: true);
