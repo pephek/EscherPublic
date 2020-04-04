@@ -245,29 +245,11 @@ namespace Escher
 
             if (accepted)
             {
-                //pbColor.SizeMode = PictureBoxSizeMode.Normal;
-
-                //Bitmap oldBitmap = new Bitmap(pbImage.Image);
-                //Bitmap newBitmap = new Bitmap(this.selection.Width, this.selection.Height);
-                //Rectangle newBitmapRect = new Rectangle(0, 0, selection.Width, selection.Height);
-                //using (Graphics graphics = Graphics.FromImage(newBitmap))
-                //{
-                //    graphics.DrawImage(oldBitmap, newBitmapRect, selection, GraphicsUnit.Pixel);
-                //}
-                //pbColor.Image = newBitmap;
-
-                pbColor.Image = ImageHelper.GetSelectionFromImage(pbImage.Image, this.selection);
+                pbColor.Image = ImageHelper.GetSelectionFromImage(pbImage.Image, this.selection, convertToGrayscale: false);
                 UpdateColorImage();
 
-                pbPrint.Image = ImageHelper.GetSelectionFromImage(pbImage.Image, this.selection);
+                pbPrint.Image = ImageHelper.GetSelectionFromImage(pbImage.Image, this.selection, convertToGrayscale: true); ;
                 UpdatePrintImage();
-                //pbColor.SizeMode = PictureBoxSizeMode.Normal;
-                //pbColor.Width = selection.Width;
-                //pbColor.Height = selection.Height;
-                //pbColor.Left = 0;
-                //pbColor.Top = 0;
-                //pbColor.Visible = true;
-                //pbImage.Visible = false;
             }
 
             this.colorStyle = ColorStyle.Greyscale;

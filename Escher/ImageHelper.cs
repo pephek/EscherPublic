@@ -139,13 +139,29 @@ namespace Escher
             largeBitmap.Dispose();
         }
 
-        public static Image GetSelectionFromImage(Image image, Rectangle selection)
+        public static Image GetSelectionFromImage(Image image, Rectangle selection, bool convertToGrayscale)
         {
             Bitmap bitmap = new Bitmap(selection.Width, selection.Height);
 
             using (Graphics graphics = Graphics.FromImage(bitmap))
             {
                 graphics.DrawImage(new Bitmap(image), new Rectangle(0, 0, selection.Width, selection.Height), selection, GraphicsUnit.Pixel);
+            }
+
+            if (convertToGrayscale)
+            {
+                for (int y = 0; y < bitmap.Height; y++)
+                {
+                    for (int x = 0; x < bitmap.Width; x++)
+                    {
+                        Color pixel = bitmap.GetPixel(x, y);
+
+                        // Convert to grayscale as used in television
+                        int grayscale = (int)(0.299 * pixel.R + 0.587 * pixel.G + 0.114 * pixel.B);
+
+                        bitmap.SetPixel(x, y, Color.FromArgb(pixel.A, grayscale, grayscale, grayscale));
+                    }
+                }
             }
 
             return bitmap;
