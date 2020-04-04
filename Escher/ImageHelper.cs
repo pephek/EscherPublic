@@ -138,5 +138,17 @@ namespace Escher
             smallBitmap.Dispose();
             largeBitmap.Dispose();
         }
+
+        public static Image GetSelectionFromImage(Image image, Rectangle selection)
+        {
+            Bitmap bitmap = new Bitmap(selection.Width, selection.Height);
+
+            using (Graphics graphics = Graphics.FromImage(bitmap))
+            {
+                graphics.DrawImage(new Bitmap(image), new Rectangle(0, 0, selection.Width, selection.Height), selection, GraphicsUnit.Pixel);
+            }
+
+            return bitmap;
+        }
     }
 }

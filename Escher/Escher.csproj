@@ -172,6 +172,7 @@
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DependentUpon>Resources.resx</DependentUpon>
+      <DesignTime>True</DesignTime>
     </Compile>
     <EmbeddedResource Include="Select.resx">
       <DependentUpon>Select.cs</DependentUpon>
@@ -201,6 +202,39 @@
       <ProductName>.NET Framework 3.5 SP1</ProductName>
       <Install>false</Install>
     </BootstrapperPackage>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Images\Save_16x.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Images\RectangularSelection_16x.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Images\Close_red_16x.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Images\Previous_16x.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Images\Next_16x.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Images\ZoomIn_16x.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Images\ZoomOut_16x.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Images\Checkmark_16x.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Images\Reverse_16x.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Images\OneX_16x.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Images\TwoX_16x.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
