@@ -68,6 +68,8 @@
             this.udAngle.Name = "udAngle";
             this.udAngle.Size = new System.Drawing.Size(57, 22);
             this.udAngle.TabIndex = 1;
+            this.udAngle.ValueChanged += new System.EventHandler(this.udAngle_ValueChanged);
+            this.udAngle.Enter += new System.EventHandler(this.udAngle_ValueChanged);
             // 
             // panelButtons
             // 

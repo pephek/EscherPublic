@@ -218,8 +218,7 @@ namespace Escher
         /// <param name="clipOk">see comments above, not used if upsizeOk = true</param>
         /// <param name="backgroundColor">color to fill exposed parts of the background</param>
         /// <returns>new Bitmap object, may be larger than input image</returns>
-        public static Bitmap Rotate(this Image inputImage, float angleDegrees, bool upsizeOk,
-                                         bool clipOk, Color backgroundColor)
+        public static Bitmap Rotate(this Image inputImage, float angleDegrees, bool upsizeOk, bool clipOk, Color backgroundColor)
         {
             // Test for zero rotation and return a clone of the input image
             if (angleDegrees == 0f)

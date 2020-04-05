@@ -13,6 +13,8 @@ namespace Escher
 {
     public partial class Rotate : Form
     {
+        private const float cMultiplier = 2F;
+
         private string folder;
         private string country;
         private string section;
@@ -69,19 +71,19 @@ namespace Escher
             pbImage.SizeMode = PictureBoxSizeMode.AutoSize;
 
             int width;
-            int height = (int)(1.5 * pbImage.Height) + panelButtons.Height;
+            int height = (int)(cMultiplier * pbImage.Height) + panelButtons.Height;
 
-            if ((int)(1.5 * pbImage.Image.Width) > panelButtons.Width)
+            if ((int)(cMultiplier * pbImage.Image.Width) > panelButtons.Width)
             {
-                width = (int)(1.5 * pbImage.Width);
-                pbImage.Location = new Point(0, 0);
-                panelButtons.Location = new Point((width - panelButtons.Width) / 2, (int)(1.5 * pbImage.Height));
+                width = (int)(cMultiplier * pbImage.Width);
+                //pbImage.Location = new Point(0, 0);
+                panelButtons.Location = new Point((width - panelButtons.Width) / 2, (int)(cMultiplier * pbImage.Height));
             }
             else
             {
                 width = panelButtons.Width;
-                pbImage.Location = new Point((panelButtons.Width - (int)(1.5 * pbImage.Width)) / 2, 0);
-                panelButtons.Location = new Point(0, (int)(1.5 * pbImage.Height));
+                //pbImage.Location = new Point((panelButtons.Width - (int)(cMultiplier * pbImage.Width)) / 2, 0);
+                panelButtons.Location = new Point(0, (int)(cMultiplier * pbImage.Height));
             }
 
             panelSelection.Top = panelButtons.Top;
@@ -113,8 +115,17 @@ namespace Escher
 
         private void UpdateImage()
         {
-            pbImage.Left = pbImage.Width / 4;
-            pbImage.Top = pbImage.Height / 4;
+            pbImage.Left = (this.Width - pbImage.Width) / 2;
+            pbImage.Top = ((this.Height - panelButtons.Height) - pbImage.Height) / 2;
+        }
+
+        private void udAngle_ValueChanged(object sender, EventArgs e)
+        {
+            pbImage.Image.Dispose();
+
+            pbImage.Image = Image.FromFile(this.image).Rotate((float)udAngle.Value, true, false, Color.Black);
+
+            UpdateImage();
         }
     }
 }
