@@ -21,7 +21,7 @@ namespace Escher
             // a) NEDERLAND
             // b) BADEN
             // c) REPUBLIK MALUKU SELATAN
-            DesignEntry country = design.LastOrDefault(entry => entry.Class == Class.Country && entry.PageNumber <= pageNumber);
+            DesignEntry country = design.GetCountry(pageNumber);
 
             page.Country = country.Text;
             page.Copyright = country.Copyright;
@@ -31,7 +31,7 @@ namespace Escher
             // a) Frankeerzegels
             // b) Briefmarken
             // c) Cinderellas
-            DesignEntry section = design.LastOrDefault(entry => entry.Class == Class.Section && entry.PageNumber <= pageNumber);
+            DesignEntry section = design.GetSection(pageNumber);
 
             page.Section = section.Text;
 
@@ -41,7 +41,7 @@ namespace Escher
             // a) 1867-1869. Koning Willem III.
             // b) ALTDEUTSCHLAND
             // c) 1950. U.P.U.
-            DesignEntry series = design.LastOrDefault(entry => entry.Class == Class.Series && entry.PageNumber <= pageNumber);
+            DesignEntry series = design.GetSeries(pageNumber);
 
             page.Series = series.Text;
 

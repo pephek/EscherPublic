@@ -324,14 +324,21 @@ namespace Escher
             }
             else if (e.Url.AbsolutePath.StartsWith("stamp("))
             {
-                string[] path = e.Url.AbsolutePath.Replace("stamp(", "").Replace(")", "").Split("%7C");
+                int index = Int32.Parse(e.Url.AbsolutePath.Replace("stamp(", "").Replace(")", ""));
 
-                string[] numbers = design.GetStampsFromSeries(pageNumber: Int32.Parse(path[3]), number: path[2]);
+                DesignEntry stamp = design[index];
+
+                Design stamps = design.GetStampsFromSeries(pageNumber: stamp.PageNumber, number: stamp.Number);
+
+                DialogResult dialogResult;
 
                 Select select = new Select();
-                if (select.SetImage(folder: App.GetSetting("ImagesFolder"), country: path[0], section: path[1], number: path[2], numbers: numbers))
+
+                dialogResult = select.SetImage(stamps: stamps, stamp: stamp, folder: App.GetSetting("ImagesFolder"), country: design.GetCountry(stamp.PageNumber).Text, section: design.GetSection(stamp.PageNumber).Text);
+
+                if (dialogResult == DialogResult.OK)
                 {
-                    select.Show();
+                    dialogResult = select.ShowDialog();
                 }
 
                 e.Cancel = true;

@@ -183,12 +183,12 @@ namespace Escher
                         string s;
                         if (existsDisplayImage)
                         {
-                            s = string.Format("<a href=\"stamp({0}|{1}|{2}|{3})\"><img src=\"{4}\" title=\"{5}\" style=\"border:3px solid white\"></a>", country, section, entry.Number, entry.PageNumber, thumbnail, entry.Number);
+                            s = string.Format("<a href=\"stamp({0})\"><img src=\"{1}\" title=\"{2}\" style=\"border:3px solid white\"></a>", i, thumbnail, entry.Number);
 
                         }
                         else
                         {
-                            s = string.Format("<a href=\"stamp({0}|{1}|{2}|{3})\"><img src=\"{4}\" title=\"{5}\" style=\"border:3px dotted red\">&nbsp;</a>", country, section, entry.Number, entry.PageNumber, thumbnail, entry.Number);
+                            s = string.Format("<a href=\"stamp({0})\"><img src=\"{1}\" title=\"{2}\" style=\"border:3px dotted red\">&nbsp;</a>", i, thumbnail, entry.Number);
                         }
                         html.Append(s);
                         break;

@@ -32,9 +32,24 @@ namespace Escher
             return design[design.Count() - 2].PageNumber;
         }
 
-        public static string[] GetStampsFromSeries(this Design design, int pageNumber, string number)
+        public static DesignEntry GetCountry(this Design design, int pageNumber)
         {
-            List<string> numbers = new List<string>();
+            return design.LastOrDefault(entry => entry.Class == Class.Country && entry.PageNumber <= pageNumber);
+        }
+
+        public static DesignEntry GetSection(this Design design, int pageNumber)
+        {
+            return design.LastOrDefault(entry => entry.Class == Class.Section && entry.PageNumber <= pageNumber);
+        }
+
+        public static DesignEntry GetSeries(this Design design, int pageNumber)
+        {
+            return design.LastOrDefault(entry => entry.Class == Class.Series && entry.PageNumber <= pageNumber);
+        }
+
+        public static Design GetStampsFromSeries(this Design design, int pageNumber, string number)
+        {
+            Design stamps = new Design();
 
             for (int i = 0; i < design.Count(); i++)
             {
@@ -53,16 +68,16 @@ namespace Escher
 
                     while (design[j].Class == Class.Stamp)
                     {
-                        numbers.Add(design[j].Number);
+                        stamps.Add(design[j]);
 
                         j++;
                     }
 
-                    return numbers.ToArray();
+                    return stamps;
                 }
             }
 
-            return new string[] { number };
+            return stamps;
         }
     }
 }

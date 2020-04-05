@@ -15,12 +15,10 @@ namespace Escher
     {
         private const float cMultiplier = 2F;
 
+        private DesignEntry stamp;
         private string folder;
         private string country;
         private string section;
-        private string number;
-        private float width;
-        private float height;
 
         private string image;
         private string thumbnail;
@@ -35,7 +33,7 @@ namespace Escher
             InitializeComponent();
         }
 
-        public DialogResult SetImage(string folder, string country, string section, string number, float xwidth, float xheight)
+        public DialogResult SetImage(DesignEntry stamp, string folder, string country, string section)
         {
             this.BackColor = Color.Black;
 
@@ -48,17 +46,15 @@ namespace Escher
             buttonReject.BackColor = Color.White;
             buttonAccept.BackColor = Color.White;
 
+            this.stamp = stamp;
             this.folder = folder;
             this.country = country;
             this.section = section;
-            this.number = number;
-            this.width = xwidth;
-            this.height = xheight;
 
             string path = string.Format("{0}\\{1}\\{2}", folder, country, section);
 
-            this.image = string.Format("{0}\\image\\{1}.jpg", path, number);
-            this.thumbnail = string.Format("{0}\\{1}.jpg", path, number);
+            this.image = string.Format("{0}\\image\\{1}.jpg", path, stamp.Number);
+            this.thumbnail = string.Format("{0}\\{1}.jpg", path, stamp.Number);
 
             if (!File.Exists(this.image))
             {

@@ -14,11 +14,13 @@ namespace Escher
 {
     public partial class Select : Form
     {
+        private bool hasChanges = false;
+
+        private Design stamps;
+        private DesignEntry stamp;
         private string folder;
         private string country;
         private string section;
-        private string number;
-        private string[] numbers;
 
         private string image;
         private string color;
@@ -36,7 +38,7 @@ namespace Escher
             InitializeComponent();
         }
 
-        public bool SetImage(string folder, string country, string section, string number, string[] numbers)
+        public DialogResult SetImage(Design stamps, DesignEntry stamp, string folder, string country, string section)
         {
             this.BackColor = Color.Black;
 
@@ -54,25 +56,23 @@ namespace Escher
             buttonReject.BackColor = Color.White;
             buttonAccept.BackColor = Color.White;
 
+            this.stamps = stamps;
+            this.stamp = stamp;
             this.folder = folder;
             this.country = country;
             this.section = section;
-            this.number = number;
-            this.numbers = numbers;
 
             string path = string.Format("{0}\\{1}\\{2}", folder, country, section);
 
-            this.image = string.Format("{0}\\image\\{1}.jpg", path, number);
-            this.color = string.Format("{0}\\xlcolor\\{1}.jpg", path, number);
-            this.print = string.Format("{0}\\xlprint\\{1}.jpg", path, number);
+            this.image = string.Format("{0}\\image\\{1}.jpg", path, stamp.Number);
+            this.color = string.Format("{0}\\xlcolor\\{1}.jpg", path, stamp.Number);
+            this.print = string.Format("{0}\\xlprint\\{1}.jpg", path, stamp.Number);
 
             if (!File.Exists(this.image))
             {
                 MessageBox.Show(string.Format("Image '{0}' does not exist!", this.image), App.GetName(), MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
 
-                this.Close();
-
-                return false;
+                return DialogResult.Cancel;
             }
 
             pbImage.Load(this.image);
@@ -132,8 +132,8 @@ namespace Escher
 
             buttonSave.Enabled = false;
 
-            buttonPrev.Enabled = Array.IndexOf(numbers, number) > 0;
-            buttonNext.Enabled = Array.IndexOf(numbers, number) < numbers.Length - 1;
+            buttonPrev.Enabled = this.stamps.FindIndex(s => s.Number == this.stamp.Number) > 0;
+            buttonNext.Enabled = this.stamps.FindIndex(s => s.Number == this.stamp.Number) < this.stamps.Count() - 1;
 
             this.CancelButton = buttonClose;
             this.AcceptButton = buttonSelect;
@@ -149,7 +149,7 @@ namespace Escher
 
             this.Location = new Point((screenWidthInPixels - width) / 2, (screenHeightInPixels - height) / 2);
 
-            return true;
+            return DialogResult.OK;
         }
 
         private void pbImage_MouseMove(object sender, MouseEventArgs e)
@@ -219,9 +219,9 @@ namespace Escher
         {
             if (DiscardChanges() == DialogResult.Yes)
             {
-                if (!SetImage(this.folder, this.country, this.section, this.numbers[Array.IndexOf(this.numbers, this.number) + 1], this.numbers))
+                if (SetImage(this.stamps, this.stamps[this.stamps.FindIndex(s => s.Number == this.stamp.Number) + 1], this.folder, this.country, this.section) == DialogResult.Cancel)
                 {
-                    this.Close();
+                    buttonClose_Click(sender, e);
                 }
             }
         }
@@ -230,9 +230,9 @@ namespace Escher
         {
             if (DiscardChanges() == DialogResult.Yes)
             {
-                if (!SetImage(this.folder, this.country, this.section, this.numbers[Array.IndexOf(this.numbers, this.number) - 1], this.numbers))
+                if (SetImage(this.stamps, this.stamps[this.stamps.FindIndex(s => s.Number == this.stamp.Number) - 1], this.folder, this.country, this.section) == DialogResult.Cancel)
                 {
-                    this.Close();
+                    buttonClose_Click(sender, e);
                 }
             }
         }
@@ -243,7 +243,7 @@ namespace Escher
 
             Rotate rotate = new Rotate();
 
-            dialogResult = rotate.SetImage(this.folder, this.country, this.section, this.number, 0, 0);
+            dialogResult = rotate.SetImage(this.stamp, this.folder, this.country, this.section);
 
             if (dialogResult == DialogResult.OK)
             {
@@ -251,6 +251,7 @@ namespace Escher
 
                 if (dialogResult == DialogResult.OK)
                 {
+                    this.hasChanges = true;
                     throw new Exception("todo");
                 }
             }
@@ -288,6 +289,8 @@ namespace Escher
 
         private void buttonSave_Click(object sender, EventArgs e)
         {
+            this.hasChanges = true;
+
             pbColor.Image.SaveAsJpeg(this.color, 100);
             pbPrint.Image.SaveAsJpeg(this.print, 100);
 
@@ -298,6 +301,8 @@ namespace Escher
         {
             if (DiscardChanges() == DialogResult.Yes)
             {
+                this.DialogResult = hasChanges ? DialogResult.OK : DialogResult.Cancel;
+
                 this.Close();
             }
         }
@@ -316,7 +321,7 @@ namespace Escher
         {
             if (buttonSave.Enabled)
             {
-                return MessageBox.Show("The images have been changed, do you want to discard the changes?", App.GetName() + " · Discard changes", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+                return MessageBox.Show("The image has been changed, do you want to discard the changes?", App.GetName() + " · Discard changes", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
             }
             else
             {
