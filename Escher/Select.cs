@@ -24,12 +24,12 @@ namespace Escher
         private string color;
         private string print;
 
-        private ColorStyle colorStyle;
         private bool isSelecting;
-
         private Point selectionStart;
         private Rectangle selection = new Rectangle();
         private Brush selectionBrush = new SolidBrush(Color.FromArgb(64, 0, 0, 0)); // Color.FromArgb(128, 72, 145, 220)
+
+        private ColorStyle colorStyle;
 
         public Select()
         {
@@ -42,10 +42,13 @@ namespace Escher
 
             buttonPrev.BackColor = Color.White;
             buttonNext.BackColor = Color.White;
+            buttonRotate.BackColor = Color.White;
+            buttonBrightness.BackColor = Color.White;
             buttonSelect.BackColor = Color.White;
             buttonSave.BackColor = Color.White;
             buttonClose.BackColor = Color.White;
             buttonToggle.BackColor = Color.White;
+
             buttonZoomIn.BackColor = Color.White;
             buttonZoomOut.BackColor = Color.White;
             buttonReject.BackColor = Color.White;
@@ -98,6 +101,8 @@ namespace Escher
             panelSelection.Visible = false;
 
             pbColor.Visible = false;
+            pbColor.SizeMode = PictureBoxSizeMode.StretchImage;
+
             if (File.Exists(this.color))
             {
                 pbColor.Load(this.color);
@@ -109,6 +114,8 @@ namespace Escher
             }
 
             pbPrint.Visible = false;
+            pbPrint.SizeMode = PictureBoxSizeMode.StretchImage;
+
             if (File.Exists(this.print))
             {
                 pbPrint.Load(this.print);
@@ -121,7 +128,7 @@ namespace Escher
 
             this.colorStyle = ColorStyle.Greyscale;
 
-            UpdateDisplayImage();
+            UpdateImage();
 
             buttonSave.Enabled = false;
 
@@ -198,14 +205,14 @@ namespace Escher
         {
             this.colorStyle = this.colorStyle.Toggle();
 
-            UpdateDisplayImage();
+            UpdateImage();
         }
 
         private void pbColor_Click(object sender, EventArgs e)
         {
             this.colorStyle = this.colorStyle.Toggle();
 
-            UpdateDisplayImage();
+            UpdateImage();
         }
 
         private void buttonNext_Click(object sender, EventArgs e)
@@ -230,11 +237,30 @@ namespace Escher
             }
         }
 
+        private void buttonRotate_Click(object sender, EventArgs e)
+        {
+            DialogResult dialogResult;
+
+            Rotate rotate = new Rotate();
+
+            dialogResult = rotate.SetImage(this.folder, this.country, this.section, this.number, 0, 0);
+
+            if (dialogResult == DialogResult.OK)
+            {
+                dialogResult = rotate.ShowDialog();
+
+                if (dialogResult == DialogResult.OK)
+                {
+                    throw new Exception("todo");
+                }
+            }
+        }
+
         private void buttonToggle_Click(object sender, EventArgs e)
         {
             this.colorStyle = this.colorStyle.Toggle();
 
-            UpdateDisplayImage();
+            UpdateImage();
         }
 
         private void buttonSelect_Click(object sender, EventArgs e)
@@ -262,8 +288,8 @@ namespace Escher
 
         private void buttonSave_Click(object sender, EventArgs e)
         {
-            ImageHelper.SaveImageAsJpeg(pbColor.Image, this.color);
-            ImageHelper.SaveImageAsJpeg(pbPrint.Image, this.print);
+            pbColor.Image.SaveAsJpeg(this.color, 100);
+            pbPrint.Image.SaveAsJpeg(this.print, 100);
 
             buttonSave.Enabled = false;
         }
@@ -319,33 +345,35 @@ namespace Escher
 
             if (accepted)
             {
-                pbColor.Image = ImageHelper.GetSelectionFromImage(pbImage.Image, this.selection, convertToGrayscale: false);
+                pbColor.Image = pbImage.Image.GetSelection(this.selection, convertToGrayscale: false);
                 UpdateColorImage();
 
-                pbPrint.Image = ImageHelper.GetSelectionFromImage(pbImage.Image, this.selection, convertToGrayscale: true); ;
+                pbPrint.Image = pbImage.Image.GetSelection(this.selection, convertToGrayscale: true); ;
                 UpdatePrintImage();
             }
 
             this.colorStyle = ColorStyle.Greyscale;
 
-            UpdateDisplayImage();
+            UpdateImage();
         }
 
         private void UpdateColorImage()
         {
-            pbColor.Size = new Size(pbColor.Image.Width * 2 / 3, pbColor.Image.Height * 2 / 3);
-            pbColor.Location = new Point((pbImage.Width - pbColor.Width) / 2, (pbImage.Height - pbColor.Height) / 2);
-            pbColor.SizeMode = PictureBoxSizeMode.StretchImage;
+            pbColor.Width = pbColor.Image.Width * 2 / 3;
+            pbColor.Height = pbColor.Image.Height * 2 / 3;
+            pbColor.Left = pbImage.Left + pbImage.Width / 2 - pbColor.Width / 2;
+            pbColor.Top = pbImage.Top + pbImage.Height / 2 - pbColor.Height / 2;
         }
 
         private void UpdatePrintImage()
         {
-            pbPrint.Size = new Size(pbPrint.Image.Width * 2 / 3, pbPrint.Image.Height * 2 / 3);
-            pbPrint.Location = new Point((pbImage.Width - pbPrint.Width) / 2, (pbImage.Height - pbPrint.Height) / 2);
-            pbPrint.SizeMode = PictureBoxSizeMode.StretchImage;
+            pbPrint.Width = pbPrint.Image.Width * 2 / 3;
+            pbPrint.Height = pbPrint.Image.Height * 2 / 3;
+            pbPrint.Left = pbImage.Left + pbImage.Width / 2 - pbPrint.Width / 2;
+            pbPrint.Top = pbImage.Top + pbImage.Height / 2 - pbPrint.Height / 2;
         }
 
-        private void UpdateDisplayImage()
+        private void UpdateImage()
         {
             pbColor.Visible = false;
             pbPrint.Visible = false;
@@ -378,6 +406,25 @@ namespace Escher
                         break;
                 }
             }
+        }
+
+        private void pbImage_Click(object sender, EventArgs e)
+        {
+            //pbImage.Image = pbImage.Image.Rotate(5, true, true, Color.Black);
+            //pbImage.Width = pbImage.Image.Width;
+            //pbImage.Height = pbImage.Image.Height;
+            //this.Width = pbImage.Image.Width;
+            //Bitmap bitmap = new Bitmap(pbImage.Image);
+            //Rectangle r = new Rectangle(0, 0, bitmap.Width, bitmap.Height);
+            //int alpha = 128;
+            //using (Graphics g = Graphics.FromImage(bitmap))
+            //{
+            //    using (Brush cloud_brush = new SolidBrush(Color.FromArgb(alpha, Color.White)))
+            //    {
+            //        g.FillRectangle(cloud_brush, r);
+            //    }
+            //}
+            //pbImage.Image = bitmap;
         }
     }
 }

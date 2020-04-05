@@ -63,6 +63,26 @@ namespace Escher.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap AdRotator_16x {
+            get {
+                object obj = ResourceManager.GetObject("AdRotator_16x", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap Brightness_16x {
+            get {
+                object obj = ResourceManager.GetObject("Brightness_16x", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap Checkmark_16x {
             get {
                 object obj = ResourceManager.GetObject("Checkmark_16x", resourceCulture);
