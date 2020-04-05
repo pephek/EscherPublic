@@ -14,6 +14,12 @@ namespace Escher
 {
     public partial class Select : Form
     {
+        private string folder;
+        private string country;
+        private string section;
+        private string number;
+        private string[] numbers;
+
         private string image;
         private string color;
         private string print;
@@ -30,7 +36,7 @@ namespace Escher
             InitializeComponent();
         }
 
-        public void SetImage (string folder, string country, string section, string number)
+        public bool SetImage(string folder, string country, string section, string number, string[] numbers)
         {
             this.BackColor = Color.Black;
 
@@ -45,11 +51,26 @@ namespace Escher
             buttonReject.BackColor = Color.White;
             buttonAccept.BackColor = Color.White;
 
-            folder = string.Format("{0}\\{1}\\{2}", folder, country, section);
+            this.folder = folder;
+            this.country = country;
+            this.section = section;
+            this.number = number;
+            this.numbers = numbers;
 
-            this.image = string.Format("{0}\\image\\{1}.jpg", folder, number);
-            this.color = string.Format("{0}\\xlcolor\\{1}.jpg", folder, number);
-            this.print = string.Format("{0}\\xlprint\\{1}.jpg", folder, number);
+            string path = string.Format("{0}\\{1}\\{2}", folder, country, section);
+
+            this.image = string.Format("{0}\\image\\{1}.jpg", path, number);
+            this.color = string.Format("{0}\\xlcolor\\{1}.jpg", path, number);
+            this.print = string.Format("{0}\\xlprint\\{1}.jpg", path, number);
+
+            if (!File.Exists(this.image))
+            {
+                MessageBox.Show(string.Format("Image '{0}' does not exist!", this.image), App.GetName(), MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+
+                this.Close();
+
+                return false;
+            }
 
             pbImage.Load(this.image);
             pbImage.SizeMode = PictureBoxSizeMode.AutoSize;
@@ -82,6 +103,10 @@ namespace Escher
                 pbColor.Load(this.color);
                 UpdateColorImage();
             }
+            else
+            {
+                pbColor.Image = null;
+            }
 
             pbPrint.Visible = false;
             if (File.Exists(this.print))
@@ -89,12 +114,19 @@ namespace Escher
                 pbPrint.Load(this.print);
                 UpdatePrintImage();
             }
+            else
+            {
+                pbPrint.Image = null;
+            }
 
             this.colorStyle = ColorStyle.Greyscale;
 
             UpdateDisplayImage();
 
             buttonSave.Enabled = false;
+
+            buttonPrev.Enabled = Array.IndexOf(numbers, number) > 0;
+            buttonNext.Enabled = Array.IndexOf(numbers, number) < numbers.Length - 1;
 
             this.CancelButton = buttonClose;
             this.AcceptButton = buttonSelect;
@@ -109,6 +141,8 @@ namespace Escher
             int screenHeightInPixels = Screen.FromControl(this).WorkingArea.Height;
 
             this.Location = new Point((screenWidthInPixels - width) / 2, (screenHeightInPixels - height) / 2);
+
+            return true;
         }
 
         private void pbImage_MouseMove(object sender, MouseEventArgs e)
@@ -174,6 +208,28 @@ namespace Escher
             UpdateDisplayImage();
         }
 
+        private void buttonNext_Click(object sender, EventArgs e)
+        {
+            if (DiscardChanges() == DialogResult.Yes)
+            {
+                if (!SetImage(this.folder, this.country, this.section, this.numbers[Array.IndexOf(this.numbers, this.number) + 1], this.numbers))
+                {
+                    this.Close();
+                }
+            }
+        }
+
+        private void buttonPrev_Click(object sender, EventArgs e)
+        {
+            if (DiscardChanges() == DialogResult.Yes)
+            {
+                if (!SetImage(this.folder, this.country, this.section, this.numbers[Array.IndexOf(this.numbers, this.number) - 1], this.numbers))
+                {
+                    this.Close();
+                }
+            }
+        }
+
         private void buttonToggle_Click(object sender, EventArgs e)
         {
             this.colorStyle = this.colorStyle.Toggle();
@@ -206,12 +262,18 @@ namespace Escher
 
         private void buttonSave_Click(object sender, EventArgs e)
         {
-            this.Close();
+            ImageHelper.SaveImageAsJpeg(pbColor.Image, this.color);
+            ImageHelper.SaveImageAsJpeg(pbPrint.Image, this.print);
+
+            buttonSave.Enabled = false;
         }
 
         private void buttonClose_Click(object sender, EventArgs e)
         {
-            this.Close();
+            if (DiscardChanges() == DialogResult.Yes)
+            {
+                this.Close();
+            }
         }
 
         private void buttonReject_Click(object sender, EventArgs e)
@@ -222,6 +284,18 @@ namespace Escher
         private void buttonAccept_Click(object sender, EventArgs e)
         {
             Update(accepted: true);
+        }
+
+        private DialogResult DiscardChanges()
+        {
+            if (buttonSave.Enabled)
+            {
+                return MessageBox.Show("The images have been changed, do you want to discard the changes?", App.GetName() + " · Discard changes", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+            }
+            else
+            {
+                return DialogResult.Yes;
+            }
         }
 
         private void Update(bool accepted)

@@ -30,17 +30,17 @@
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Select));
             this.panelButtons = new System.Windows.Forms.Panel();
-            this.panelSelection = new System.Windows.Forms.Panel();
+            this.buttonToggle = new System.Windows.Forms.Button();
+            this.buttonSelect = new System.Windows.Forms.Button();
             this.buttonClose = new System.Windows.Forms.Button();
+            this.buttonSave = new System.Windows.Forms.Button();
+            this.buttonPrev = new System.Windows.Forms.Button();
+            this.buttonNext = new System.Windows.Forms.Button();
+            this.panelSelection = new System.Windows.Forms.Panel();
             this.buttonZoomOut = new System.Windows.Forms.Button();
             this.buttonZoomIn = new System.Windows.Forms.Button();
             this.buttonAccept = new System.Windows.Forms.Button();
             this.buttonReject = new System.Windows.Forms.Button();
-            this.buttonToggle = new System.Windows.Forms.Button();
-            this.buttonSelect = new System.Windows.Forms.Button();
-            this.buttonSave = new System.Windows.Forms.Button();
-            this.buttonPrev = new System.Windows.Forms.Button();
-            this.buttonNext = new System.Windows.Forms.Button();
             this.pbPrint = new System.Windows.Forms.PictureBox();
             this.pbColor = new System.Windows.Forms.PictureBox();
             this.pbImage = new System.Windows.Forms.PictureBox();
@@ -65,17 +65,29 @@
             this.panelButtons.Size = new System.Drawing.Size(204, 39);
             this.panelButtons.TabIndex = 4;
             // 
-            // panelSelection
+            // buttonToggle
             // 
-            this.panelSelection.BackColor = System.Drawing.Color.Black;
-            this.panelSelection.Controls.Add(this.buttonZoomOut);
-            this.panelSelection.Controls.Add(this.buttonZoomIn);
-            this.panelSelection.Controls.Add(this.buttonAccept);
-            this.panelSelection.Controls.Add(this.buttonReject);
-            this.panelSelection.Location = new System.Drawing.Point(225, 327);
-            this.panelSelection.Name = "panelSelection";
-            this.panelSelection.Size = new System.Drawing.Size(137, 39);
-            this.panelSelection.TabIndex = 8;
+            this.buttonToggle.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.buttonToggle.Image = global::Escher.Properties.Resources.Reverse_16x;
+            this.buttonToggle.Location = new System.Drawing.Point(69, 3);
+            this.buttonToggle.Name = "buttonToggle";
+            this.buttonToggle.Size = new System.Drawing.Size(32, 32);
+            this.buttonToggle.TabIndex = 9;
+            this.buttonToggle.TabStop = false;
+            this.buttonToggle.UseVisualStyleBackColor = true;
+            this.buttonToggle.Click += new System.EventHandler(this.buttonToggle_Click);
+            // 
+            // buttonSelect
+            // 
+            this.buttonSelect.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.buttonSelect.Image = global::Escher.Properties.Resources.RectangularSelection_16x;
+            this.buttonSelect.Location = new System.Drawing.Point(102, 3);
+            this.buttonSelect.Name = "buttonSelect";
+            this.buttonSelect.Size = new System.Drawing.Size(32, 32);
+            this.buttonSelect.TabIndex = 8;
+            this.buttonSelect.TabStop = false;
+            this.buttonSelect.UseVisualStyleBackColor = true;
+            this.buttonSelect.Click += new System.EventHandler(this.buttonSelect_Click);
             // 
             // buttonClose
             // 
@@ -88,6 +100,53 @@
             this.buttonClose.TabStop = false;
             this.buttonClose.UseVisualStyleBackColor = true;
             this.buttonClose.Click += new System.EventHandler(this.buttonClose_Click);
+            // 
+            // buttonSave
+            // 
+            this.buttonSave.Image = global::Escher.Properties.Resources.Save_16x;
+            this.buttonSave.Location = new System.Drawing.Point(135, 3);
+            this.buttonSave.Name = "buttonSave";
+            this.buttonSave.Size = new System.Drawing.Size(32, 32);
+            this.buttonSave.TabIndex = 6;
+            this.buttonSave.TabStop = false;
+            this.buttonSave.UseVisualStyleBackColor = true;
+            this.buttonSave.Click += new System.EventHandler(this.buttonSave_Click);
+            // 
+            // buttonPrev
+            // 
+            this.buttonPrev.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.buttonPrev.Image = global::Escher.Properties.Resources.Previous_16x;
+            this.buttonPrev.Location = new System.Drawing.Point(3, 3);
+            this.buttonPrev.Name = "buttonPrev";
+            this.buttonPrev.Size = new System.Drawing.Size(32, 32);
+            this.buttonPrev.TabIndex = 3;
+            this.buttonPrev.TabStop = false;
+            this.buttonPrev.UseVisualStyleBackColor = true;
+            this.buttonPrev.Click += new System.EventHandler(this.buttonPrev_Click);
+            // 
+            // buttonNext
+            // 
+            this.buttonNext.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.buttonNext.Image = global::Escher.Properties.Resources.Next_16x;
+            this.buttonNext.Location = new System.Drawing.Point(36, 3);
+            this.buttonNext.Name = "buttonNext";
+            this.buttonNext.Size = new System.Drawing.Size(32, 32);
+            this.buttonNext.TabIndex = 4;
+            this.buttonNext.TabStop = false;
+            this.buttonNext.UseVisualStyleBackColor = true;
+            this.buttonNext.Click += new System.EventHandler(this.buttonNext_Click);
+            // 
+            // panelSelection
+            // 
+            this.panelSelection.BackColor = System.Drawing.Color.Black;
+            this.panelSelection.Controls.Add(this.buttonZoomOut);
+            this.panelSelection.Controls.Add(this.buttonZoomIn);
+            this.panelSelection.Controls.Add(this.buttonAccept);
+            this.panelSelection.Controls.Add(this.buttonReject);
+            this.panelSelection.Location = new System.Drawing.Point(225, 327);
+            this.panelSelection.Name = "panelSelection";
+            this.panelSelection.Size = new System.Drawing.Size(137, 39);
+            this.panelSelection.TabIndex = 8;
             // 
             // buttonZoomOut
             // 
@@ -128,63 +187,6 @@
             this.buttonReject.TabIndex = 0;
             this.buttonReject.UseVisualStyleBackColor = true;
             this.buttonReject.Click += new System.EventHandler(this.buttonReject_Click);
-            // 
-            // buttonToggle
-            // 
-            this.buttonToggle.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.buttonToggle.Image = global::Escher.Properties.Resources.Reverse_16x;
-            this.buttonToggle.Location = new System.Drawing.Point(69, 3);
-            this.buttonToggle.Name = "buttonToggle";
-            this.buttonToggle.Size = new System.Drawing.Size(32, 32);
-            this.buttonToggle.TabIndex = 9;
-            this.buttonToggle.TabStop = false;
-            this.buttonToggle.UseVisualStyleBackColor = true;
-            this.buttonToggle.Click += new System.EventHandler(this.buttonToggle_Click);
-            // 
-            // buttonSelect
-            // 
-            this.buttonSelect.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.buttonSelect.Image = global::Escher.Properties.Resources.RectangularSelection_16x;
-            this.buttonSelect.Location = new System.Drawing.Point(102, 3);
-            this.buttonSelect.Name = "buttonSelect";
-            this.buttonSelect.Size = new System.Drawing.Size(32, 32);
-            this.buttonSelect.TabIndex = 8;
-            this.buttonSelect.TabStop = false;
-            this.buttonSelect.UseVisualStyleBackColor = true;
-            this.buttonSelect.Click += new System.EventHandler(this.buttonSelect_Click);
-            // 
-            // buttonSave
-            // 
-            this.buttonSave.Image = global::Escher.Properties.Resources.Save_16x;
-            this.buttonSave.Location = new System.Drawing.Point(135, 3);
-            this.buttonSave.Name = "buttonSave";
-            this.buttonSave.Size = new System.Drawing.Size(32, 32);
-            this.buttonSave.TabIndex = 6;
-            this.buttonSave.TabStop = false;
-            this.buttonSave.UseVisualStyleBackColor = true;
-            this.buttonSave.Click += new System.EventHandler(this.buttonSave_Click);
-            // 
-            // buttonPrev
-            // 
-            this.buttonPrev.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.buttonPrev.Image = global::Escher.Properties.Resources.Previous_16x;
-            this.buttonPrev.Location = new System.Drawing.Point(3, 3);
-            this.buttonPrev.Name = "buttonPrev";
-            this.buttonPrev.Size = new System.Drawing.Size(32, 32);
-            this.buttonPrev.TabIndex = 3;
-            this.buttonPrev.TabStop = false;
-            this.buttonPrev.UseVisualStyleBackColor = true;
-            // 
-            // buttonNext
-            // 
-            this.buttonNext.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.buttonNext.Image = global::Escher.Properties.Resources.Next_16x;
-            this.buttonNext.Location = new System.Drawing.Point(36, 3);
-            this.buttonNext.Name = "buttonNext";
-            this.buttonNext.Size = new System.Drawing.Size(32, 32);
-            this.buttonNext.TabIndex = 4;
-            this.buttonNext.TabStop = false;
-            this.buttonNext.UseVisualStyleBackColor = true;
             // 
             // pbPrint
             // 

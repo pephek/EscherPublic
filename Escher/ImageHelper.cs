@@ -166,5 +166,34 @@ namespace Escher
 
             return bitmap;
         }
+
+        private static ImageCodecInfo GetEncoderInfo(String mimeType)
+        {
+            int j;
+            ImageCodecInfo[] encoders;
+            encoders = ImageCodecInfo.GetImageEncoders();
+            for (j = 0; j < encoders.Length; ++j)
+            {
+                if (encoders[j].MimeType == mimeType)
+                    return encoders[j];
+            }
+            return null;
+        }
+
+        public static void SaveImageAsJpeg(Image image, string jpeg)
+        {
+            ImageCodecInfo imageCodecInfo;
+            System.Drawing.Imaging.Encoder encoder;
+            EncoderParameter encoderParameter;
+            EncoderParameters encoderParameters;
+
+            imageCodecInfo = GetEncoderInfo("image/jpeg");
+            encoder = System.Drawing.Imaging.Encoder.Quality;
+            encoderParameters = new EncoderParameters(1);
+            encoderParameter = new EncoderParameter(encoder, 100L);
+            encoderParameters.Param[0] = encoderParameter;
+
+            image.Save(jpeg, imageCodecInfo, encoderParameters);
+        }
     }
 }

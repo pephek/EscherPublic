@@ -324,11 +324,15 @@ namespace Escher
             }
             else if (e.Url.AbsolutePath.StartsWith("stamp("))
             {
-                string[] path = e.Url.AbsolutePath.Replace("stamp(", "").Replace(")", "").Split(',');
+                string[] path = e.Url.AbsolutePath.Replace("stamp(", "").Replace(")", "").Split("%7C");
+
+                string[] numbers = design.GetStampsFromSeries(pageNumber: Int32.Parse(path[3]), number: path[2]);
 
                 Select select = new Select();
-                select.SetImage(folder: App.GetSetting("ImagesFolder"), country: path[0], section: path[1], number: path[2]);
-                select.Show();
+                if (select.SetImage(folder: App.GetSetting("ImagesFolder"), country: path[0], section: path[1], number: path[2], numbers: numbers))
+                {
+                    select.Show();
+                }
 
                 e.Cancel = true;
             }

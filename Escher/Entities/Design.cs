@@ -31,5 +31,38 @@ namespace Escher
         {
             return design[design.Count() - 2].PageNumber;
         }
+
+        public static string[] GetStampsFromSeries(this Design design, int pageNumber, string number)
+        {
+            List<string> numbers = new List<string>();
+
+            for (int i = 0; i < design.Count(); i++)
+            {
+                DesignEntry entry = design[i];
+
+                if (entry.PageNumber == pageNumber && entry.Class == Class.Stamp && entry.Number == number)
+                {
+                    int j = i;
+
+                    while (design[j].Class == Class.Stamp)
+                    {
+                        j--;
+                    }
+
+                    j++;
+
+                    while (design[j].Class == Class.Stamp)
+                    {
+                        numbers.Add(design[j].Number);
+
+                        j++;
+                    }
+
+                    return numbers.ToArray();
+                }
+            }
+
+            return new string[] { number };
+        }
     }
 }
