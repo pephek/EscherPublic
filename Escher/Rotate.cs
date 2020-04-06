@@ -173,5 +173,10 @@ namespace Escher
                 return DialogResult.Yes;
             }
         }
+
+        private void buttonSelect_Click(object sender, EventArgs e)
+        {
+
+        }
     }
 }

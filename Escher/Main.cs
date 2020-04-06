@@ -332,13 +332,13 @@ namespace Escher
 
                 DialogResult dialogResult;
 
-                Select select = new Select();
+                Imaging imaging = new Imaging();
 
-                dialogResult = select.SetImage(stamps: stamps, stamp: stamp, folder: App.GetSetting("ImagesFolder"), country: design.GetCountry(stamp.PageNumber).Text, section: design.GetSection(stamp.PageNumber).Text);
+                dialogResult = imaging.SetImage(stamps: stamps, stamp: stamp, folder: App.GetSetting("ImagesFolder"), country: design.GetCountry(stamp.PageNumber).Text, section: design.GetSection(stamp.PageNumber).Text);
 
                 if (dialogResult == DialogResult.OK)
                 {
-                    dialogResult = select.ShowDialog();
+                    dialogResult = imaging.ShowDialog();
                 }
 
                 e.Cancel = true;

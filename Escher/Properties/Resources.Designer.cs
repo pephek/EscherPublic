@@ -103,6 +103,26 @@ namespace Escher.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap ImageCrop_16x {
+            get {
+                object obj = ResourceManager.GetObject("ImageCrop_16x", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap ImageNotFound {
+            get {
+                object obj = ResourceManager.GetObject("ImageNotFound", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap Next_16x {
             get {
                 object obj = ResourceManager.GetObject("Next_16x", resourceCulture);
@@ -166,6 +186,16 @@ namespace Escher.Properties {
         internal static System.Drawing.Bitmap TwoX_16x {
             get {
                 object obj = ResourceManager.GetObject("TwoX_16x", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap Undo_16x {
+            get {
+                object obj = ResourceManager.GetObject("Undo_16x", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }

@@ -112,6 +112,7 @@
     <Compile Include="Enums\FontSize.cs" />
     <Compile Include="Enums\FrameColor.cs" />
     <Compile Include="Enums\FrameStyle.cs" />
+    <Compile Include="Enums\ImagingMode.cs" />
     <Compile Include="Enums\ScreenMode.cs" />
     <Compile Include="Enums\PrintMode.cs" />
     <Compile Include="Enums\Shape.cs" />
@@ -120,6 +121,12 @@
     <Compile Include="Experiments.cs" />
     <Compile Include="HtmlHelper.cs" />
     <Compile Include="ImageHelper.cs" />
+    <Compile Include="Imaging.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Imaging.Designer.cs">
+      <DependentUpon>Imaging.cs</DependentUpon>
+    </Compile>
     <Compile Include="Main.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -160,6 +167,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Editor.resx">
       <DependentUpon>Editor.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Imaging.resx">
+      <DependentUpon>Imaging.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Main.resx">
       <DependentUpon>Main.cs</DependentUpon>
@@ -250,6 +260,15 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Images\Brightness_16x.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Images\ImageCrop_16x.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Images\Undo_16x.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Images\ImageNotFound.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
