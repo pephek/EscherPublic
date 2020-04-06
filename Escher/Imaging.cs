@@ -53,6 +53,7 @@ namespace Escher
 
             buttonRotate.Click += new EventHandler((sender, e) => SetMode(ImagingMode.Rotating));
             buttonCrop.Click += new EventHandler((sender, e) => SetMode(ImagingMode.Cropping));
+            buttonBrighten.Click += new EventHandler((sender, e) => SetMode(ImagingMode.Brightening));
             buttonSelect.Click += new EventHandler((sender, e) => SetMode(ImagingMode.Selecting));
 
             buttonSave.Click += new EventHandler((sender, e) => Save());
@@ -63,6 +64,7 @@ namespace Escher
             buttonReject.Click += new EventHandler((sender, e) => AcceptOrReject(accepted: false));
 
             angle.ValueChanged += new EventHandler((sender, e) => Rotate((float)angle.Value));
+            brightness.ValueChanged += new EventHandler((sender, e) => Brightness((float)brightness.Value));
 
             pTrial.MouseMove += new MouseEventHandler((sender, e) => MouseMoved(e.Button, e.Location));
             pTrial.MouseDown += new MouseEventHandler((sender, e) => MouseIsDown(e.Location));
@@ -329,14 +331,19 @@ namespace Escher
             pTrial.Cursor = Cursors.Default;
 
             angle.Visible = false;
+            brightness.Visible = false;
 
             this.isSelecting = false;
 
             switch (this.mode)
             {
                 case ImagingMode.Rotating:
-                    angle.Visible = true;
                     angle.Value = 0.0M;
+                    angle.Visible = true;
+                    break;
+                case ImagingMode.Brightening:
+                    brightness.Value = 0;
+                    brightness.Visible = true;
                     break;
                 case ImagingMode.Cropping:
                 case ImagingMode.Selecting:
@@ -373,24 +380,44 @@ namespace Escher
                 switch (this.mode)
                 {
                     case ImagingMode.Rotating:
-                    case ImagingMode.Cropping:
 
                         pImage.Image.Dispose();
 
-                        if (this.mode == ImagingMode.Rotating)
-                        {
-                            pImage.Image = new Bitmap(pTrial.Image);
-                        }
-                        else
-                        {
-                            pImage.Image = pTrial.Image.GetSelection(this.selection, convertToGrayscale: false);
-                        }
+                        pImage.Image = new Bitmap(pTrial.Image);
 
                         pImage.Image.SaveAsJpeg(cImage, 100);
 
                         ImageHelper.CreateThumbnail(cImage, cThumb, stamp.Width, stamp.Height);
 
                         LoadImage(pThumb, cThumb);
+
+                        break;
+
+                    case ImagingMode.Cropping:
+
+                        pImage.Image.Dispose();
+                        pImage.Image = pTrial.Image.GetSelection(this.selection, convertToGrayscale: false);
+                        pImage.Image.SaveAsJpeg(cImage, 100);
+
+                        ImageHelper.CreateThumbnail(cImage, cThumb, stamp.Width, stamp.Height);
+                        LoadImage(pThumb, cThumb);
+
+                        break;
+
+                    case ImagingMode.Brightening:
+
+                        pImage.Image.Dispose();
+                        pImage.Image = new Bitmap(pTrial.Image);
+                        pImage.Image.SaveAsJpeg(cImage, 100);
+
+                        ImageHelper.CreateThumbnail(cImage, cThumb, stamp.Width, stamp.Height);
+                        LoadImage(pThumb, cThumb);
+
+                        pColor.Image = pColor.Image.Brighten((float)brightness.Value / 100);
+                        pColor.Image.SaveAsJpeg(cColor, 100);
+
+                        pPrint.Image = pPrint.Image.Brighten((float)brightness.Value / 100);
+                        pPrint.Image.SaveAsJpeg(cPrint, 100);
 
                         break;
 
@@ -433,6 +460,17 @@ namespace Escher
             pTrial.Image.Dispose();
 
             pTrial.Image = pImage.Image.Rotate(value, true, false, Color.Black);
+
+            buttonAccept.Enabled = (value != 0);
+
+            SetLocations(this.baseWidth, this.baseHeight);
+        }
+
+        private void Brightness(float value)
+        {
+            pTrial.Image.Dispose();
+
+            pTrial.Image = pImage.Image.Brighten(value / 100);
 
             buttonAccept.Enabled = (value != 0);
 

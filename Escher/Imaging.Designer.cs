@@ -51,6 +51,7 @@
             this.labelMode = new System.Windows.Forms.Label();
             this.angle = new System.Windows.Forms.NumericUpDown();
             this.pTrial = new System.Windows.Forms.PictureBox();
+            this.brightness = new System.Windows.Forms.NumericUpDown();
             this.panelImaging.SuspendLayout();
             this.panelButtons.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pPrint)).BeginInit();
@@ -59,11 +60,13 @@
             ((System.ComponentModel.ISupportInitialize)(this.pImage)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.angle)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pTrial)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.brightness)).BeginInit();
             this.SuspendLayout();
             // 
             // panelImaging
             // 
             this.panelImaging.BackColor = System.Drawing.Color.Black;
+            this.panelImaging.Controls.Add(this.brightness);
             this.panelImaging.Controls.Add(this.angle);
             this.panelImaging.Controls.Add(this.buttonAccept);
             this.panelImaging.Controls.Add(this.buttonReject);
@@ -152,7 +155,6 @@
             // 
             // buttonBrighten
             // 
-            this.buttonBrighten.Enabled = false;
             this.buttonBrighten.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.buttonBrighten.Image = global::Escher.Properties.Resources.Brightness_16x;
             this.buttonBrighten.Location = new System.Drawing.Point(215, 3);
@@ -313,6 +315,19 @@
             this.pTrial.TabStop = false;
             this.pTrial.Visible = false;
             // 
+            // brightness
+            // 
+            this.brightness.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.brightness.Location = new System.Drawing.Point(73, 4);
+            this.brightness.Minimum = new decimal(new int[] {
+            100,
+            0,
+            0,
+            -2147483648});
+            this.brightness.Name = "brightness";
+            this.brightness.Size = new System.Drawing.Size(74, 30);
+            this.brightness.TabIndex = 3;
+            // 
             // Imaging
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
@@ -340,6 +355,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.pImage)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.angle)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.pTrial)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.brightness)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -369,5 +385,6 @@
         private System.Windows.Forms.Label labelMode;
         private System.Windows.Forms.NumericUpDown angle;
         private System.Windows.Forms.PictureBox pTrial;
+        private System.Windows.Forms.NumericUpDown brightness;
     }
 }
