@@ -68,7 +68,7 @@ namespace Escher
 
             PageSetup.Load();
 
-            LoadDesign("_ Nederland");
+            LoadDesign("_ Test");
         }
 
         private void refreshDesignsToolStripMenuItem_Click(object sender, EventArgs eventArgs)

@@ -321,7 +321,7 @@ namespace Escher
         {
             if (buttonSave.Enabled)
             {
-                return MessageBox.Show("The image has been changed, do you want to discard the changes?", App.GetName() + " · Discard changes", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+                return MessageBox.Show("The image has unsaved changed, do you want to discard the changes?", App.GetName() + " · Discard changes", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
             }
             else
             {

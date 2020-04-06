@@ -31,19 +31,21 @@
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Rotate));
             this.udAngle = new System.Windows.Forms.NumericUpDown();
             this.panelButtons = new System.Windows.Forms.Panel();
+            this.buttonSelect = new System.Windows.Forms.Button();
             this.buttonSave = new System.Windows.Forms.Button();
             this.buttonClose = new System.Windows.Forms.Button();
             this.pbImage = new System.Windows.Forms.PictureBox();
-            this.buttonSelect = new System.Windows.Forms.Button();
             this.panelSelection = new System.Windows.Forms.Panel();
             this.buttonZoomOut = new System.Windows.Forms.Button();
             this.buttonZoomIn = new System.Windows.Forms.Button();
             this.buttonAccept = new System.Windows.Forms.Button();
             this.buttonReject = new System.Windows.Forms.Button();
+            this.pbThumb = new System.Windows.Forms.PictureBox();
             ((System.ComponentModel.ISupportInitialize)(this.udAngle)).BeginInit();
             this.panelButtons.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pbImage)).BeginInit();
             this.panelSelection.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.pbThumb)).BeginInit();
             this.SuspendLayout();
             // 
             // udAngle
@@ -83,6 +85,15 @@
             this.panelButtons.Size = new System.Drawing.Size(171, 39);
             this.panelButtons.TabIndex = 2;
             // 
+            // buttonSelect
+            // 
+            this.buttonSelect.Image = global::Escher.Properties.Resources.RectangularSelection_16x;
+            this.buttonSelect.Location = new System.Drawing.Point(69, 3);
+            this.buttonSelect.Name = "buttonSelect";
+            this.buttonSelect.Size = new System.Drawing.Size(32, 32);
+            this.buttonSelect.TabIndex = 10;
+            this.buttonSelect.UseVisualStyleBackColor = true;
+            // 
             // buttonSave
             // 
             this.buttonSave.Image = global::Escher.Properties.Resources.Save_16x;
@@ -91,6 +102,7 @@
             this.buttonSave.Size = new System.Drawing.Size(32, 32);
             this.buttonSave.TabIndex = 9;
             this.buttonSave.UseVisualStyleBackColor = true;
+            this.buttonSave.Click += new System.EventHandler(this.buttonSave_Click);
             // 
             // buttonClose
             // 
@@ -102,6 +114,7 @@
             this.buttonClose.TabIndex = 8;
             this.buttonClose.TabStop = false;
             this.buttonClose.UseVisualStyleBackColor = true;
+            this.buttonClose.Click += new System.EventHandler(this.buttonClose_Click);
             // 
             // pbImage
             // 
@@ -111,15 +124,6 @@
             this.pbImage.Size = new System.Drawing.Size(124, 91);
             this.pbImage.TabIndex = 0;
             this.pbImage.TabStop = false;
-            // 
-            // buttonSelect
-            // 
-            this.buttonSelect.Image = global::Escher.Properties.Resources.RectangularSelection_16x;
-            this.buttonSelect.Location = new System.Drawing.Point(69, 3);
-            this.buttonSelect.Name = "buttonSelect";
-            this.buttonSelect.Size = new System.Drawing.Size(32, 32);
-            this.buttonSelect.TabIndex = 10;
-            this.buttonSelect.UseVisualStyleBackColor = true;
             // 
             // panelSelection
             // 
@@ -171,6 +175,14 @@
             this.buttonReject.TabIndex = 0;
             this.buttonReject.UseVisualStyleBackColor = true;
             // 
+            // pbThumb
+            // 
+            this.pbThumb.Location = new System.Drawing.Point(335, 200);
+            this.pbThumb.Name = "pbThumb";
+            this.pbThumb.Size = new System.Drawing.Size(103, 71);
+            this.pbThumb.TabIndex = 10;
+            this.pbThumb.TabStop = false;
+            // 
             // Rotate
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
@@ -178,6 +190,7 @@
             this.BackColor = System.Drawing.Color.White;
             this.CancelButton = this.buttonClose;
             this.ClientSize = new System.Drawing.Size(800, 450);
+            this.Controls.Add(this.pbThumb);
             this.Controls.Add(this.panelSelection);
             this.Controls.Add(this.panelButtons);
             this.Controls.Add(this.pbImage);
@@ -189,6 +202,7 @@
             this.panelButtons.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.pbImage)).EndInit();
             this.panelSelection.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.pbThumb)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -206,5 +220,6 @@
         private System.Windows.Forms.Button buttonZoomIn;
         private System.Windows.Forms.Button buttonAccept;
         private System.Windows.Forms.Button buttonReject;
+        private System.Windows.Forms.PictureBox pbThumb;
     }
 }

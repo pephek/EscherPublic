@@ -15,13 +15,15 @@ namespace Escher
     {
         private const float cMultiplier = 2F;
 
+        private bool hasChanges = false;
+
         private DesignEntry stamp;
         private string folder;
         private string country;
         private string section;
 
         private string image;
-        private string thumbnail;
+        private string thumb;
 
         private bool isSelecting;
         private Point selectionStart;
@@ -54,7 +56,7 @@ namespace Escher
             string path = string.Format("{0}\\{1}\\{2}", folder, country, section);
 
             this.image = string.Format("{0}\\image\\{1}.jpg", path, stamp.Number);
-            this.thumbnail = string.Format("{0}\\{1}.jpg", path, stamp.Number);
+            this.thumb= string.Format("{0}\\{1}.jpg", path, stamp.Number);
 
             if (!File.Exists(this.image))
             {
@@ -72,13 +74,11 @@ namespace Escher
             if ((int)(cMultiplier * pbImage.Image.Width) > panelButtons.Width)
             {
                 width = (int)(cMultiplier * pbImage.Width);
-                //pbImage.Location = new Point(0, 0);
                 panelButtons.Location = new Point((width - panelButtons.Width) / 2, (int)(cMultiplier * pbImage.Height));
             }
             else
             {
                 width = panelButtons.Width;
-                //pbImage.Location = new Point((panelButtons.Width - (int)(cMultiplier * pbImage.Width)) / 2, 0);
                 panelButtons.Location = new Point(0, (int)(cMultiplier * pbImage.Height));
             }
 
@@ -87,6 +87,18 @@ namespace Escher
 
             panelSelection.Enabled = false;
             panelSelection.Visible = false;
+
+            pbThumb.Visible = false;
+            pbThumb.SizeMode = PictureBoxSizeMode.Normal;
+
+            if (File.Exists(this.thumb))
+            {
+                pbThumb.Load(this.thumb);
+            }
+            else
+            {
+                pbThumb.Image = null;
+            }
 
             buttonSave.Enabled = false;
 
@@ -104,15 +116,22 @@ namespace Escher
 
             this.Location = new Point((screenWidthInPixels - width) / 2, (screenHeightInPixels - height) / 2);
 
-            UpdateImage();
+            UpdateImages();
 
             return DialogResult.OK;
         }
 
-        private void UpdateImage()
+        private void UpdateImages()
         {
             pbImage.Left = (this.Width - pbImage.Width) / 2;
             pbImage.Top = ((this.Height - panelButtons.Height) - pbImage.Height) / 2;
+
+            if (pbThumb.Image != null)
+            {
+                pbThumb.Visible = true;
+                pbThumb.Left = pbImage.Left + pbImage.Width / 2 - pbThumb.Width / 2;
+                pbThumb.Top = pbImage.Top + pbImage.Height / 2 - pbThumb.Height / 2;
+            }
         }
 
         private void udAngle_ValueChanged(object sender, EventArgs e)
@@ -121,7 +140,38 @@ namespace Escher
 
             pbImage.Image = Image.FromFile(this.image).Rotate((float)udAngle.Value, true, false, Color.Black);
 
-            UpdateImage();
+            UpdateImages();
+
+            buttonSave.Enabled = true;
+        }
+
+        private void buttonSave_Click(object sender, EventArgs e)
+        {
+            this.hasChanges = true;
+
+            buttonSave.Enabled = false;
+        }
+
+        private void buttonClose_Click(object sender, EventArgs e)
+        {
+            if (DiscardChanges() == DialogResult.Yes)
+            {
+                this.DialogResult = hasChanges ? DialogResult.OK : DialogResult.Cancel;
+
+                this.Close();
+            }
+        }
+
+        private DialogResult DiscardChanges()
+        {
+            if (buttonSave.Enabled)
+            {
+                return MessageBox.Show("The image has unsaved changed, do you want to discard the changes?", App.GetName() + " · Discard changes", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+            }
+            else
+            {
+                return DialogResult.Yes;
+            }
         }
     }
 }
