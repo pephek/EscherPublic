@@ -79,7 +79,7 @@ namespace Escher
             return thumbnail;
         }
 
-        private static void CreateThumbnail(string large, string small, float width, float height)
+        public static void CreateThumbnail(string large, string small, float width, float height)
         {
             int thumbnailWidth;
             int thumbnailHeight;

@@ -17,6 +17,7 @@ namespace Escher
         private const string cThumb = "_thumb.jpg";
         private const string cColor = "_color.jpg";
         private const string cPrint = "_print.jpg";
+        private const string cTrial = "_trial.jpg";
 
         private Design stamps;
         private DesignEntry stamp;
@@ -32,6 +33,7 @@ namespace Escher
         private ImagingMode mode;
 
         private bool isChanged;
+        private bool isSelecting;
 
         private int baseWidth;
         private int baseHeight;
@@ -45,8 +47,10 @@ namespace Escher
             buttonPrevious.Click += new EventHandler((sender, e) => Previous());
             buttonNext.Click += new EventHandler((sender, e) => Next());
 
-            buttonRotate.Click += new EventHandler((sender, e) => Rotate());
+            buttonRotate.Click += new EventHandler((sender, e) => SetMode(ImagingMode.Rotating));
+            buttonCrop.Click += new EventHandler((sender, e) => SetMode(ImagingMode.Cropping));
 
+            buttonUndo.Click += new EventHandler((sender, e) => Undo());
             buttonClose.Click += new EventHandler((sender, e) => Exit());
 
             buttonAccept.Click += new EventHandler((sender, e) => AcceptOrReject(sender, e, accepted: true));
@@ -110,6 +114,7 @@ namespace Escher
             LoadImage(pthumb, cThumb);
             LoadImage(pcolor, cColor);
             LoadImage(pprint, cPrint);
+            LoadImage(ptrial, cTrial);
 
             this.baseWidth = pimage.Width;
             this.baseHeight = pimage.Height;
@@ -186,6 +191,7 @@ namespace Escher
 
             pictureBox.Width = pictureBox.Image.Width;
             pictureBox.Height = pictureBox.Image.Height;
+            pictureBox.SizeMode = PictureBoxSizeMode.AutoSize;
         }
 
         protected override void OnKeyDown(KeyEventArgs e)
@@ -241,9 +247,9 @@ namespace Escher
             }
         }
 
-        private void Rotate()
+        private void Undo()
         {
-            SetMode(ImagingMode.Rotating);
+            SetImage(this.stamps, this.stamp, this.folder, this.country, this.section);
         }
 
         private void Exit()
@@ -255,6 +261,45 @@ namespace Escher
                 this.Close();
             }
         }
+
+        private void SetMode(ImagingMode mode)
+        {
+            this.mode = mode;
+
+            labelMode.Text = this.mode.Text();
+
+            panelButtons.Visible = false;
+            panelImaging.Visible = true;
+
+            ptrial.Visible = true;
+            pimage.Visible = false;
+            pthumb.Visible = false;
+            pcolor.Visible = false;
+            pprint.Visible = false;
+
+            ptrial.Image = new Bitmap(pimage.Image);
+            ptrial.Cursor = Cursors.Default;
+
+            angle.Visible = false;
+
+            this.isSelecting = false;
+
+            switch (this.mode)
+            {
+                case ImagingMode.Rotating:
+                    angle.Visible = true;
+                    angle.Value = 0.0M;
+                    break;
+                case ImagingMode.Cropping:
+                    ptrial.Cursor = Cursors.Cross;
+                    break;
+            }
+
+            buttonAccept.Enabled = false;
+
+            SetLocations(this.baseWidth, this.baseHeight);
+        }
+
         private void AcceptOrReject(object sender, EventArgs e, bool accepted)
         {
             if (accepted)
@@ -263,6 +308,22 @@ namespace Escher
 
                 buttonSave.Enabled = true;
                 buttonUndo.Enabled = true;
+
+                switch (this.mode)
+                {
+                    case ImagingMode.Rotating:
+
+                        pimage.Image.Dispose();
+                        pimage.Image = new Bitmap(ptrial.Image);
+
+                        pimage.Image.SaveAsJpeg(cImage, 100);
+
+                        ImageHelper.CreateThumbnail(cImage, cThumb, stamp.Width, stamp.Height);
+
+                        LoadImage(pthumb, cThumb);
+
+                        break;
+                }
             }
 
             this.mode = ImagingMode.None;
@@ -277,34 +338,8 @@ namespace Escher
             pthumb.Visible = true;
             pcolor.Visible = true;
             pprint.Visible = true;
-        }
 
-        private void SetMode(ImagingMode mode)
-        {
-            this.mode = mode;
-
-            labelMode.Text = this.mode.Text();
-
-            panelButtons.Visible = false;
-            panelImaging.Visible = true;
-
-            ptrial.Image = new Bitmap(pimage.Image);
-            ptrial.Location = pimage.Location;
-            ptrial.Size = pimage.Size;
-            ptrial.SizeMode = PictureBoxSizeMode.AutoSize;
-
-            ptrial.Visible = true;
-            pimage.Visible = false;
-            pthumb.Visible = false;
-            pcolor.Visible = false;
-            pprint.Visible = false;
-
-            switch (this.mode)
-            {
-                case ImagingMode.Rotating:
-                    angle.Value = 0.0M;
-                    break;
-            }
+            SetLocations(this.baseWidth, this.baseHeight);
         }
 
         private void Rotate(float value)
@@ -312,6 +347,8 @@ namespace Escher
             ptrial.Image.Dispose();
 
             ptrial.Image = pimage.Image.Rotate(value, true, false, Color.Black);
+
+            buttonAccept.Enabled = (value != 0);
 
             SetLocations(this.baseWidth, this.baseHeight);
         }
