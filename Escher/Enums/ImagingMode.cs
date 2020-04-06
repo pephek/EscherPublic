@@ -30,7 +30,7 @@ namespace Escher
                 case ImagingMode.Brightening:
                     return "Brighten Image";
                 case ImagingMode.Selecting:
-                    return "Select Image Vignette & Frame";
+                    return "Select Vignette";
                 default:
                     throw new ArgumentOutOfRangeException("imagingMode");
             }

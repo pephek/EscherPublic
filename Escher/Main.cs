@@ -308,6 +308,14 @@ namespace Escher
             }
         }
 
+        private void webBrowser_PreviewKeyDown(object sender, PreviewKeyDownEventArgs e)
+        {
+            if (e.KeyCode == Keys.F5)
+            {
+                e.IsInputKey = true;
+            }
+        }
+
         private void WebBrowser_Navigating(object sender, WebBrowserNavigatingEventArgs e)
         {
             if (e.Url.AbsolutePath.StartsWith("page(") && e.Url.AbsolutePath.EndsWith(""))

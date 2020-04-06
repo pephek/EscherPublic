@@ -44,21 +44,21 @@
             this.buttonSave = new System.Windows.Forms.Button();
             this.buttonPrevious = new System.Windows.Forms.Button();
             this.buttonNext = new System.Windows.Forms.Button();
-            this.pprint = new System.Windows.Forms.PictureBox();
-            this.pcolor = new System.Windows.Forms.PictureBox();
-            this.pthumb = new System.Windows.Forms.PictureBox();
-            this.pimage = new System.Windows.Forms.PictureBox();
+            this.pPrint = new System.Windows.Forms.PictureBox();
+            this.pColor = new System.Windows.Forms.PictureBox();
+            this.pThumb = new System.Windows.Forms.PictureBox();
+            this.pImage = new System.Windows.Forms.PictureBox();
             this.labelMode = new System.Windows.Forms.Label();
             this.angle = new System.Windows.Forms.NumericUpDown();
-            this.ptrial = new System.Windows.Forms.PictureBox();
+            this.pTrial = new System.Windows.Forms.PictureBox();
             this.panelImaging.SuspendLayout();
             this.panelButtons.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.pprint)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.pcolor)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.pthumb)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.pimage)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pPrint)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pColor)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pThumb)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pImage)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.angle)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.ptrial)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pTrial)).BeginInit();
             this.SuspendLayout();
             // 
             // panelImaging
@@ -227,45 +227,45 @@
             this.buttonNext.TabStop = false;
             this.buttonNext.UseVisualStyleBackColor = true;
             // 
-            // pprint
+            // pPrint
             // 
-            this.pprint.BackColor = System.Drawing.Color.Black;
-            this.pprint.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.pprint.Location = new System.Drawing.Point(194, 207);
-            this.pprint.Name = "pprint";
-            this.pprint.Size = new System.Drawing.Size(135, 112);
-            this.pprint.TabIndex = 9;
-            this.pprint.TabStop = false;
+            this.pPrint.BackColor = System.Drawing.Color.Black;
+            this.pPrint.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.pPrint.Location = new System.Drawing.Point(194, 207);
+            this.pPrint.Name = "pPrint";
+            this.pPrint.Size = new System.Drawing.Size(135, 112);
+            this.pPrint.TabIndex = 9;
+            this.pPrint.TabStop = false;
             // 
-            // pcolor
+            // pColor
             // 
-            this.pcolor.BackColor = System.Drawing.Color.Black;
-            this.pcolor.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.pcolor.Location = new System.Drawing.Point(155, 186);
-            this.pcolor.Name = "pcolor";
-            this.pcolor.Size = new System.Drawing.Size(135, 112);
-            this.pcolor.TabIndex = 8;
-            this.pcolor.TabStop = false;
+            this.pColor.BackColor = System.Drawing.Color.Black;
+            this.pColor.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.pColor.Location = new System.Drawing.Point(155, 186);
+            this.pColor.Name = "pColor";
+            this.pColor.Size = new System.Drawing.Size(135, 112);
+            this.pColor.TabIndex = 8;
+            this.pColor.TabStop = false;
             // 
-            // pthumb
+            // pThumb
             // 
-            this.pthumb.BackColor = System.Drawing.Color.Black;
-            this.pthumb.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.pthumb.Location = new System.Drawing.Point(114, 150);
-            this.pthumb.Name = "pthumb";
-            this.pthumb.Size = new System.Drawing.Size(135, 112);
-            this.pthumb.TabIndex = 7;
-            this.pthumb.TabStop = false;
+            this.pThumb.BackColor = System.Drawing.Color.Black;
+            this.pThumb.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.pThumb.Location = new System.Drawing.Point(114, 150);
+            this.pThumb.Name = "pThumb";
+            this.pThumb.Size = new System.Drawing.Size(135, 112);
+            this.pThumb.TabIndex = 7;
+            this.pThumb.TabStop = false;
             // 
-            // pimage
+            // pImage
             // 
-            this.pimage.BackColor = System.Drawing.Color.Black;
-            this.pimage.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.pimage.Location = new System.Drawing.Point(69, 113);
-            this.pimage.Name = "pimage";
-            this.pimage.Size = new System.Drawing.Size(135, 112);
-            this.pimage.TabIndex = 6;
-            this.pimage.TabStop = false;
+            this.pImage.BackColor = System.Drawing.Color.Black;
+            this.pImage.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.pImage.Location = new System.Drawing.Point(69, 113);
+            this.pImage.Name = "pImage";
+            this.pImage.Size = new System.Drawing.Size(135, 112);
+            this.pImage.TabIndex = 6;
+            this.pImage.TabStop = false;
             // 
             // labelMode
             // 
@@ -302,16 +302,16 @@
             this.angle.Size = new System.Drawing.Size(74, 30);
             this.angle.TabIndex = 2;
             // 
-            // ptrial
+            // pTrial
             // 
-            this.ptrial.BackColor = System.Drawing.Color.Black;
-            this.ptrial.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.ptrial.Location = new System.Drawing.Point(214, 235);
-            this.ptrial.Name = "ptrial";
-            this.ptrial.Size = new System.Drawing.Size(135, 112);
-            this.ptrial.TabIndex = 13;
-            this.ptrial.TabStop = false;
-            this.ptrial.Visible = false;
+            this.pTrial.BackColor = System.Drawing.Color.Black;
+            this.pTrial.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.pTrial.Location = new System.Drawing.Point(214, 235);
+            this.pTrial.Name = "pTrial";
+            this.pTrial.Size = new System.Drawing.Size(135, 112);
+            this.pTrial.TabIndex = 13;
+            this.pTrial.TabStop = false;
+            this.pTrial.Visible = false;
             // 
             // Imaging
             // 
@@ -319,14 +319,14 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.White;
             this.ClientSize = new System.Drawing.Size(926, 450);
-            this.Controls.Add(this.ptrial);
+            this.Controls.Add(this.pTrial);
             this.Controls.Add(this.labelMode);
             this.Controls.Add(this.panelButtons);
             this.Controls.Add(this.panelImaging);
-            this.Controls.Add(this.pprint);
-            this.Controls.Add(this.pcolor);
-            this.Controls.Add(this.pthumb);
-            this.Controls.Add(this.pimage);
+            this.Controls.Add(this.pPrint);
+            this.Controls.Add(this.pColor);
+            this.Controls.Add(this.pThumb);
+            this.Controls.Add(this.pImage);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.KeyPreview = true;
@@ -334,12 +334,12 @@
             this.Text = "Imaging";
             this.panelImaging.ResumeLayout(false);
             this.panelButtons.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.pprint)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.pcolor)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.pthumb)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.pimage)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pPrint)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pColor)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pThumb)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pImage)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.angle)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.ptrial)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pTrial)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -347,10 +347,10 @@
 
         #endregion
 
-        private System.Windows.Forms.PictureBox pimage;
-        private System.Windows.Forms.PictureBox pthumb;
-        private System.Windows.Forms.PictureBox pcolor;
-        private System.Windows.Forms.PictureBox pprint;
+        private System.Windows.Forms.PictureBox pImage;
+        private System.Windows.Forms.PictureBox pThumb;
+        private System.Windows.Forms.PictureBox pColor;
+        private System.Windows.Forms.PictureBox pPrint;
         private System.Windows.Forms.Panel panelImaging;
         private System.Windows.Forms.Button buttonAccept;
         private System.Windows.Forms.Button buttonReject;
@@ -368,6 +368,6 @@
         private System.Windows.Forms.Button buttonUndo;
         private System.Windows.Forms.Label labelMode;
         private System.Windows.Forms.NumericUpDown angle;
-        private System.Windows.Forms.PictureBox ptrial;
+        private System.Windows.Forms.PictureBox pTrial;
     }
 }

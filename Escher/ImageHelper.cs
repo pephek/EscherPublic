@@ -94,6 +94,8 @@ namespace Escher
 
                 float ratio = width / imageWidth < height / imageHeight ? width / imageWidth : height / imageHeight;
 
+                ratio *= 120 / image.HorizontalResolution; // !!!
+
                 thumbnailWidth = (int)(ratio * image.Width);
                 thumbnailHeight = (int)(ratio * image.Height);
             }
