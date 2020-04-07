@@ -166,30 +166,20 @@ namespace Escher
     {
         public static Image GetSelection(this Image image, Rectangle selection, bool convertToGrayscale)
         {
-            Bitmap bitmap = new Bitmap(selection.Width, selection.Height);
+            LocklessBitmap bitmap = new LocklessBitmap(selection.Width, selection.Height);
 
-            using (Graphics graphics = Graphics.FromImage(bitmap))
+            using (Graphics graphics = Graphics.FromImage(bitmap.Bitmap))
             {
-                graphics.DrawImage(new Bitmap(image), new Rectangle(0, 0, selection.Width, selection.Height), selection, GraphicsUnit.Pixel);
+                //graphics.DrawImage(new Bitmap(image), new Rectangle(0, 0, selection.Width, selection.Height), selection, GraphicsUnit.Pixel);
+                graphics.DrawImage(image, new Rectangle(0, 0, selection.Width, selection.Height), selection, GraphicsUnit.Pixel);
             }
 
             if (convertToGrayscale)
             {
-                for (int y = 0; y < bitmap.Height; y++)
-                {
-                    for (int x = 0; x < bitmap.Width; x++)
-                    {
-                        Color pixel = bitmap.GetPixel(x, y);
-
-                        // Convert to grayscale as used in television
-                        int grayscale = (int)(0.299 * pixel.R + 0.587 * pixel.G + 0.114 * pixel.B);
-
-                        bitmap.SetPixel(x, y, Color.FromArgb(pixel.A, grayscale, grayscale, grayscale));
-                    }
-                }
+                bitmap.SetToGrayscale();
             }
 
-            return bitmap;
+            return bitmap.Bitmap;
         }
 
         public static void SaveAsJpeg(this Image image, string jpeg, long quality)
