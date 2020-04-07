@@ -39,8 +39,9 @@ namespace Escher
         private Rectangle selection = new Rectangle();
         private Brush selectionBrush;
 
-        private int baseWidth;
-        private int baseHeight;
+        private Size baseSizePortrait = new Size();
+        private Size baseSizeLandscape = new Size();
+        private Size baseSize;
 
         public Imaging()
         {
@@ -75,6 +76,43 @@ namespace Escher
             this.KeyPreview = true;
         }
 
+        private void GetBaseSizes(string rootPath)
+        {
+            foreach (DesignEntry stamp in this.series)
+            {
+                string imagePath = string.Format("{0}\\image\\{1}.jpg", rootPath, stamp.Number);
+
+                if (File.Exists(imagePath))
+                {
+                    using (Image image = Image.FromFile(imagePath))
+                    {
+                        if (image.Width < image.Height) // Portrait
+                        {
+                            if (image.Width > this.baseSizePortrait.Width)
+                            {
+                                this.baseSizePortrait.Width = image.Width;
+                            }
+                            if (image.Height > this.baseSizePortrait.Height)
+                            {
+                                this.baseSizePortrait.Height = image.Height;
+                            }
+                        }
+                        else // Landscape
+                        {
+                            if (image.Width > this.baseSizeLandscape.Width)
+                            {
+                                this.baseSizeLandscape.Width = image.Width;
+                            }
+                            if (image.Height > this.baseSizeLandscape.Height)
+                            {
+                                this.baseSizeLandscape.Height = image.Height;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
         public void SetImage(Design series, string stampNumber, string folder, string country, string section)
         {
             this.series = series;
@@ -100,6 +138,11 @@ namespace Escher
             if (File.Exists(this.image)) File.Copy(this.image, cImage, overwrite: true);
             if (File.Exists(this.color)) File.Copy(this.color, cColor, overwrite: true);
             if (File.Exists(this.print)) File.Copy(this.print, cPrint, overwrite: true);
+
+            if (this.baseSizePortrait.IsEmpty && this.baseSizeLandscape.IsEmpty)
+            {
+                GetBaseSizes(path);
+            }
 
             ResetImage();
 
@@ -134,32 +177,31 @@ namespace Escher
             pPrint.SizeMode = PictureBoxSizeMode.AutoSize;
             pTrial.SizeMode = PictureBoxSizeMode.AutoSize;
 
-            this.baseWidth = pImage.Width;
-            this.baseHeight = pImage.Height;
+            this.baseSize = (pImage.Width < pImage.Height ? this.baseSizePortrait : this.baseSizeLandscape);
 
             int width;
             int height;
 
-            if (this.baseWidth < this.baseHeight) // Portrait stamp
+            if (this.baseSize.Width < this.baseSize.Height) // Portrait stamp
             {
-                width = 3 * this.baseWidth;
-                height = 2 * this.baseHeight;
+                width = 3 * this.baseSize.Width;
+                height = 2 * this.baseSize.Height;
             }
             else // Landscape stamp
             {
-                width = 2 * this.baseWidth;
-                height = 3 * this.baseHeight;
+                width = 2 * this.baseSize.Width;
+                height = 3 * this.baseSize.Height;
             }
 
-            SetLocations(this.baseWidth, this.baseHeight);
+            SetLocations(this.baseSize);
 
             if (panelButtons.Width > width)
             {
                 width = panelButtons.Width;
             }
 
-            panelButtons.Location = new Point(this.baseWidth - panelButtons.Width / 2, height - panelButtons.Height);
-            panelImaging.Location = new Point(this.baseWidth - panelImaging.Width / 2, height - panelButtons.Height);
+            panelButtons.Location = new Point(baseSize.Width - panelButtons.Width / 2, height - panelButtons.Height);
+            panelImaging.Location = new Point(baseSize.Width - panelImaging.Width / 2, height - panelButtons.Height);
 
             panelButtons.Visible = true;
             panelImaging.Visible = false;
@@ -177,8 +219,11 @@ namespace Escher
             }
         }
 
-        private void SetLocations(int w, int h)
+        private void SetLocations(Size baseSize)
         {
+            int w = baseSize.Width;
+            int h = baseSize.Height;
+
             if (w < h) // Portrait stamp
             {
                 pThumb.Location = new Point(w - pThumb.Width / 2, h - pThumb.Height / 2);
@@ -345,7 +390,7 @@ namespace Escher
 
             buttonAccept.Enabled = false;
 
-            SetLocations(this.baseWidth, this.baseHeight);
+            SetLocations(this.baseSize);
 
             this.Focus();
 
@@ -441,7 +486,7 @@ namespace Escher
             pColor.Visible = true;
             pPrint.Visible = true;
 
-            SetLocations(this.baseWidth, this.baseHeight);
+            SetLocations(this.baseSize);
         }
 
         private void Rotate(float value)
@@ -452,7 +497,7 @@ namespace Escher
 
             buttonAccept.Enabled = (value != 0);
 
-            SetLocations(this.baseWidth, this.baseHeight);
+            SetLocations(this.baseSize);
         }
 
         private void Brightness(float value)
@@ -463,7 +508,7 @@ namespace Escher
 
             buttonAccept.Enabled = (value != 0);
 
-            SetLocations(this.baseWidth, this.baseHeight);
+            SetLocations(this.baseSize);
         }
 
         private void MouseMoved(MouseButtons button, Point location)
