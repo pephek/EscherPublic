@@ -7,11 +7,27 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Forms;
 
 namespace Escher
 {
     public class ImageHelper
     {
+        public static Image LoadImageAndUnlock(string imagePath)
+        {
+            Bitmap bitmap = null;
+
+            if (File.Exists(imagePath))
+            {
+                using (Image image = Image.FromFile(imagePath))
+                {
+                    bitmap = new Bitmap(image);
+                }
+            }
+
+            return bitmap;
+        }
+
         private static string NormalizeNumber(string number)
         {
             if (number.Contains('('))
@@ -27,18 +43,11 @@ namespace Escher
 
         public static Image GetDisplayImage(string path, string number, ColorStyle colorStyle)
         {
-            Image image = null;
-
             number = NormalizeNumber(number);
 
             path = string.Format("{0}\\{1}\\{2}.jpg", path, colorStyle == ColorStyle.Color ? "xlcolor" : "xlprint", number);
 
-            if (File.Exists(path))
-            {
-                image = Image.FromFile(path);
-            }
-
-            return image;
+            return LoadImageAndUnlock(path);
         }
 
         public static string GetThumbnailImage(string imagesFolder, string country, string section, string number, float width, float height, out bool existsDisplayImage)
@@ -140,6 +149,16 @@ namespace Escher
 
             smallBitmap.Dispose();
             largeBitmap.Dispose();
+        }
+    }
+
+    public static class PictureBoxExtensionMethods
+    {
+        public static void LoadImageAndUnlock(this PictureBox pictureBox, string imagePath)
+        {
+            Image image = ImageHelper.LoadImageAndUnlock(imagePath) ?? Escher.Properties.Resources.ImageNotFound;
+
+            pictureBox.Image = image;
         }
     }
 

@@ -103,6 +103,16 @@ namespace Escher.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap IconFile_16x {
+            get {
+                object obj = ResourceManager.GetObject("IconFile_16x", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap ImageCrop_16x {
             get {
                 object obj = ResourceManager.GetObject("ImageCrop_16x", resourceCulture);

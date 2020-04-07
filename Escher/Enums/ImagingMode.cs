@@ -12,7 +12,8 @@ namespace Escher
         Rotating,
         Cropping,
         Brightening,
-        Selecting
+        Selecting,
+        Thumbnail
     }
 
     public static class ImagingModeExtensions
@@ -31,6 +32,8 @@ namespace Escher
                     return "Brighten Image";
                 case ImagingMode.Selecting:
                     return "Select Vignette";
+                case ImagingMode.Thumbnail:
+                    return "Create Thmbnail";
                 default:
                     throw new ArgumentOutOfRangeException("imagingMode");
             }

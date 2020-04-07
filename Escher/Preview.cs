@@ -124,6 +124,7 @@ namespace Escher
                         DesignEntry stamp = series.GetStampFromSeries(artifact.Number);
 
                         Imaging imaging = new Imaging();
+
                         imaging.SetImage(
                             series: series,
                             stampNumber: stamp.Number,
@@ -131,7 +132,11 @@ namespace Escher
                             country: design.GetCountry(stamp.PageNumber).Text,
                             section: design.GetSection(stamp.PageNumber).Text
                         );
-                        DialogResult dialogResult = imaging.ShowDialog();
+
+                        if (imaging.ShowDialog() == DialogResult.OK)
+                        {
+                            RefreshPreview(resizePreview: false);
+                        }
 
                         return;
                     }

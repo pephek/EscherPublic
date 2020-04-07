@@ -32,7 +32,7 @@ namespace Escher
 
         private ImagingMode mode;
 
-        private bool isChanged;
+        private bool isChanged = false;
 
         private bool isSelecting;
         private Point selectionStart;
@@ -55,6 +55,7 @@ namespace Escher
             buttonCrop.Click += new EventHandler((sender, e) => SetMode(ImagingMode.Cropping));
             buttonBrighten.Click += new EventHandler((sender, e) => SetMode(ImagingMode.Brightening));
             buttonSelect.Click += new EventHandler((sender, e) => SetMode(ImagingMode.Selecting));
+            buttonThumbnail.Click += new EventHandler((sender, e) => SetMode(ImagingMode.Thumbnail));
 
             buttonSave.Click += new EventHandler((sender, e) => Save());
             buttonUndo.Click += new EventHandler((sender, e) => Undo());
@@ -106,14 +107,13 @@ namespace Escher
             buttonNext.Enabled = this.series.FindIndex(s => s.Number == this.stamp.Number) < this.series.Count() - 1;
 
             buttonRotate.Enabled = File.Exists(cImage);
-            buttonCrop.Enabled = File.Exists(cImage);
-            buttonBrighten.Enabled = File.Exists(cImage);
-            buttonSelect.Enabled = File.Exists(cImage);
+            buttonCrop.Enabled = buttonRotate.Enabled;
+            buttonBrighten.Enabled = buttonRotate.Enabled;
+            buttonSelect.Enabled = buttonRotate.Enabled;
+            buttonThumbnail.Enabled = buttonRotate.Enabled;
 
             buttonSave.Enabled = false;
             buttonUndo.Enabled = false;
-
-            isChanged = false;
         }
 
         private void ResetImage()
@@ -122,11 +122,17 @@ namespace Escher
 
             labelMode.Text = this.mode.Text(this.stamp.Number);
 
-            LoadImage(pImage, cImage);
-            LoadImage(pThumb, cThumb);
-            LoadImage(pColor, cColor);
-            LoadImage(pPrint, cPrint);
-            LoadImage(pTrial, cTrial);
+            pImage.LoadImageAndUnlock(cImage);
+            pThumb.LoadImageAndUnlock(cThumb);
+            pColor.LoadImageAndUnlock(cColor);
+            pPrint.LoadImageAndUnlock(cPrint);
+            pTrial.LoadImageAndUnlock(cTrial);
+
+            pImage.SizeMode = PictureBoxSizeMode.AutoSize;
+            pThumb.SizeMode = PictureBoxSizeMode.AutoSize;
+            pColor.SizeMode = PictureBoxSizeMode.AutoSize;
+            pPrint.SizeMode = PictureBoxSizeMode.AutoSize;
+            pTrial.SizeMode = PictureBoxSizeMode.AutoSize;
 
             this.baseWidth = pImage.Width;
             this.baseHeight = pImage.Height;
@@ -189,24 +195,6 @@ namespace Escher
                 pColor.Location = new Point((int)(0.5 * w) - pColor.Width / 2, (int)(0.5 * h) - pColor.Height / 2);
                 pPrint.Location = new Point((int)(1.5 * w) - pPrint.Width / 2, (int)(0.5 * h) - pPrint.Height / 2);
             }
-        }
-
-        private void LoadImage(PictureBox pictureBox, string imagePath)
-        {
-            if (File.Exists(imagePath))
-            {
-                using (Image image = Image.FromFile(imagePath))
-                {
-                    Bitmap bitmap = new Bitmap(image);
-                    pictureBox.Image = bitmap;
-                }
-            }
-            else
-            {
-                pictureBox.Image = Escher.Properties.Resources.ImageNotFound;
-            }
-
-            pictureBox.SizeMode = PictureBoxSizeMode.AutoSize;
         }
 
         protected override void OnKeyUp(KeyEventArgs e)
@@ -360,6 +348,11 @@ namespace Escher
             SetLocations(this.baseWidth, this.baseHeight);
 
             this.Focus();
+
+            if (mode == ImagingMode.Thumbnail)
+            {
+                AcceptOrReject(accepted: true);
+            }
         }
 
         private void AcceptOrReject(bool accepted)
@@ -380,7 +373,7 @@ namespace Escher
                         pImage.Image.SaveAsJpeg(cImage, 100);
 
                         ImageHelper.CreateThumbnail(cImage, cThumb, stamp.Width, stamp.Height);
-                        LoadImage(pThumb, cThumb);
+                        pThumb.LoadImageAndUnlock(cThumb);
 
                         break;
 
@@ -391,7 +384,7 @@ namespace Escher
                         pImage.Image.SaveAsJpeg(cImage, 100);
 
                         ImageHelper.CreateThumbnail(cImage, cThumb, stamp.Width, stamp.Height);
-                        LoadImage(pThumb, cThumb);
+                        pThumb.LoadImageAndUnlock(cThumb);
 
                         break;
 
@@ -402,7 +395,7 @@ namespace Escher
                         pImage.Image.SaveAsJpeg(cImage, 100);
 
                         ImageHelper.CreateThumbnail(cImage, cThumb, stamp.Width, stamp.Height);
-                        LoadImage(pThumb, cThumb);
+                        pThumb.LoadImageAndUnlock(cThumb);
 
                         pColor.Image = pColor.Image.Brighten((float)brightness.Value / 100);
                         pColor.Image.SaveAsJpeg(cColor, 100);
@@ -417,14 +410,19 @@ namespace Escher
                         pColor.Image.Dispose();
                         pColor.Image = pTrial.Image.GetSelection(this.selection, convertToGrayscale: false);
                         pColor.Image.SaveAsJpeg(cColor, 100);
-
-                        LoadImage(pColor, cColor);
+                        pColor.LoadImageAndUnlock(cColor);
 
                         pPrint.Image.Dispose();
                         pPrint.Image = pTrial.Image.GetSelection(this.selection, convertToGrayscale: true);
                         pPrint.Image.SaveAsJpeg(cPrint, 100);
+                        pPrint.LoadImageAndUnlock(cPrint);
 
-                        LoadImage(pPrint, cPrint);
+                        break;
+
+                    case ImagingMode.Thumbnail:
+
+                        ImageHelper.CreateThumbnail(cImage, cThumb, stamp.Width, stamp.Height);
+                        pThumb.LoadImageAndUnlock(cThumb);
 
                         break;
                 }

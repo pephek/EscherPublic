@@ -30,9 +30,12 @@
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Imaging));
             this.panelImaging = new System.Windows.Forms.Panel();
-            this.buttonAccept = new System.Windows.Forms.Button();
-            this.buttonReject = new System.Windows.Forms.Button();
+            this.brightness = new System.Windows.Forms.NumericUpDown();
+            this.angle = new System.Windows.Forms.NumericUpDown();
             this.panelButtons = new System.Windows.Forms.Panel();
+            this.labelMode = new System.Windows.Forms.Label();
+            this.pTrial = new System.Windows.Forms.PictureBox();
+            this.buttonThumbnail = new System.Windows.Forms.Button();
             this.buttonUndo = new System.Windows.Forms.Button();
             this.buttonCrop = new System.Windows.Forms.Button();
             this.buttonZoomOut = new System.Windows.Forms.Button();
@@ -44,23 +47,21 @@
             this.buttonSave = new System.Windows.Forms.Button();
             this.buttonPrevious = new System.Windows.Forms.Button();
             this.buttonNext = new System.Windows.Forms.Button();
+            this.buttonAccept = new System.Windows.Forms.Button();
+            this.buttonReject = new System.Windows.Forms.Button();
             this.pPrint = new System.Windows.Forms.PictureBox();
             this.pColor = new System.Windows.Forms.PictureBox();
             this.pThumb = new System.Windows.Forms.PictureBox();
             this.pImage = new System.Windows.Forms.PictureBox();
-            this.labelMode = new System.Windows.Forms.Label();
-            this.angle = new System.Windows.Forms.NumericUpDown();
-            this.pTrial = new System.Windows.Forms.PictureBox();
-            this.brightness = new System.Windows.Forms.NumericUpDown();
             this.panelImaging.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.brightness)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.angle)).BeginInit();
             this.panelButtons.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.pTrial)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pPrint)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pColor)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pThumb)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pImage)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.angle)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.pTrial)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.brightness)).BeginInit();
             this.SuspendLayout();
             // 
             // panelImaging
@@ -75,27 +76,47 @@
             this.panelImaging.Size = new System.Drawing.Size(151, 39);
             this.panelImaging.TabIndex = 10;
             // 
-            // buttonAccept
+            // brightness
             // 
-            this.buttonAccept.Image = global::Escher.Properties.Resources.Checkmark_16x;
-            this.buttonAccept.Location = new System.Drawing.Point(3, 3);
-            this.buttonAccept.Name = "buttonAccept";
-            this.buttonAccept.Size = new System.Drawing.Size(32, 32);
-            this.buttonAccept.TabIndex = 1;
-            this.buttonAccept.UseVisualStyleBackColor = true;
+            this.brightness.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.brightness.Location = new System.Drawing.Point(73, 4);
+            this.brightness.Minimum = new decimal(new int[] {
+            100,
+            0,
+            0,
+            -2147483648});
+            this.brightness.Name = "brightness";
+            this.brightness.Size = new System.Drawing.Size(74, 30);
+            this.brightness.TabIndex = 3;
             // 
-            // buttonReject
+            // angle
             // 
-            this.buttonReject.Image = global::Escher.Properties.Resources.Close_red_16x;
-            this.buttonReject.Location = new System.Drawing.Point(36, 3);
-            this.buttonReject.Name = "buttonReject";
-            this.buttonReject.Size = new System.Drawing.Size(32, 32);
-            this.buttonReject.TabIndex = 0;
-            this.buttonReject.UseVisualStyleBackColor = true;
+            this.angle.DecimalPlaces = 1;
+            this.angle.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.angle.Increment = new decimal(new int[] {
+            1,
+            0,
+            0,
+            65536});
+            this.angle.Location = new System.Drawing.Point(73, 4);
+            this.angle.Maximum = new decimal(new int[] {
+            90,
+            0,
+            0,
+            0});
+            this.angle.Minimum = new decimal(new int[] {
+            90,
+            0,
+            0,
+            -2147483648});
+            this.angle.Name = "angle";
+            this.angle.Size = new System.Drawing.Size(74, 30);
+            this.angle.TabIndex = 2;
             // 
             // panelButtons
             // 
             this.panelButtons.BackColor = System.Drawing.Color.Black;
+            this.panelButtons.Controls.Add(this.buttonThumbnail);
             this.panelButtons.Controls.Add(this.buttonUndo);
             this.panelButtons.Controls.Add(this.buttonCrop);
             this.panelButtons.Controls.Add(this.buttonZoomOut);
@@ -109,13 +130,46 @@
             this.panelButtons.Controls.Add(this.buttonNext);
             this.panelButtons.Location = new System.Drawing.Point(353, 133);
             this.panelButtons.Name = "panelButtons";
-            this.panelButtons.Size = new System.Drawing.Size(390, 39);
+            this.panelButtons.Size = new System.Drawing.Size(422, 39);
             this.panelButtons.TabIndex = 11;
+            // 
+            // labelMode
+            // 
+            this.labelMode.AutoSize = true;
+            this.labelMode.BackColor = System.Drawing.Color.Black;
+            this.labelMode.ForeColor = System.Drawing.Color.White;
+            this.labelMode.Location = new System.Drawing.Point(3, 3);
+            this.labelMode.Name = "labelMode";
+            this.labelMode.Size = new System.Drawing.Size(73, 17);
+            this.labelMode.TabIndex = 12;
+            this.labelMode.Text = "labelMode";
+            // 
+            // pTrial
+            // 
+            this.pTrial.BackColor = System.Drawing.Color.Black;
+            this.pTrial.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.pTrial.Location = new System.Drawing.Point(214, 235);
+            this.pTrial.Name = "pTrial";
+            this.pTrial.Size = new System.Drawing.Size(135, 112);
+            this.pTrial.TabIndex = 13;
+            this.pTrial.TabStop = false;
+            this.pTrial.Visible = false;
+            // 
+            // buttonThumbnail
+            // 
+            this.buttonThumbnail.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.buttonThumbnail.Image = global::Escher.Properties.Resources.IconFile_16x;
+            this.buttonThumbnail.Location = new System.Drawing.Point(281, 3);
+            this.buttonThumbnail.Name = "buttonThumbnail";
+            this.buttonThumbnail.Size = new System.Drawing.Size(32, 32);
+            this.buttonThumbnail.TabIndex = 16;
+            this.buttonThumbnail.TabStop = false;
+            this.buttonThumbnail.UseVisualStyleBackColor = true;
             // 
             // buttonUndo
             // 
             this.buttonUndo.Image = global::Escher.Properties.Resources.Undo_16x;
-            this.buttonUndo.Location = new System.Drawing.Point(321, 3);
+            this.buttonUndo.Location = new System.Drawing.Point(354, 3);
             this.buttonUndo.Name = "buttonUndo";
             this.buttonUndo.Size = new System.Drawing.Size(32, 32);
             this.buttonUndo.TabIndex = 15;
@@ -190,7 +244,7 @@
             // 
             this.buttonClose.DialogResult = System.Windows.Forms.DialogResult.Cancel;
             this.buttonClose.Image = global::Escher.Properties.Resources.Close_red_16x;
-            this.buttonClose.Location = new System.Drawing.Point(354, 3);
+            this.buttonClose.Location = new System.Drawing.Point(387, 3);
             this.buttonClose.Name = "buttonClose";
             this.buttonClose.Size = new System.Drawing.Size(32, 32);
             this.buttonClose.TabIndex = 7;
@@ -200,7 +254,7 @@
             // buttonSave
             // 
             this.buttonSave.Image = global::Escher.Properties.Resources.Save_16x;
-            this.buttonSave.Location = new System.Drawing.Point(288, 3);
+            this.buttonSave.Location = new System.Drawing.Point(321, 3);
             this.buttonSave.Name = "buttonSave";
             this.buttonSave.Size = new System.Drawing.Size(32, 32);
             this.buttonSave.TabIndex = 6;
@@ -228,6 +282,24 @@
             this.buttonNext.TabIndex = 4;
             this.buttonNext.TabStop = false;
             this.buttonNext.UseVisualStyleBackColor = true;
+            // 
+            // buttonAccept
+            // 
+            this.buttonAccept.Image = global::Escher.Properties.Resources.Checkmark_16x;
+            this.buttonAccept.Location = new System.Drawing.Point(3, 3);
+            this.buttonAccept.Name = "buttonAccept";
+            this.buttonAccept.Size = new System.Drawing.Size(32, 32);
+            this.buttonAccept.TabIndex = 1;
+            this.buttonAccept.UseVisualStyleBackColor = true;
+            // 
+            // buttonReject
+            // 
+            this.buttonReject.Image = global::Escher.Properties.Resources.Close_red_16x;
+            this.buttonReject.Location = new System.Drawing.Point(36, 3);
+            this.buttonReject.Name = "buttonReject";
+            this.buttonReject.Size = new System.Drawing.Size(32, 32);
+            this.buttonReject.TabIndex = 0;
+            this.buttonReject.UseVisualStyleBackColor = true;
             // 
             // pPrint
             // 
@@ -269,65 +341,6 @@
             this.pImage.TabIndex = 6;
             this.pImage.TabStop = false;
             // 
-            // labelMode
-            // 
-            this.labelMode.AutoSize = true;
-            this.labelMode.BackColor = System.Drawing.Color.Black;
-            this.labelMode.ForeColor = System.Drawing.Color.White;
-            this.labelMode.Location = new System.Drawing.Point(3, 3);
-            this.labelMode.Name = "labelMode";
-            this.labelMode.Size = new System.Drawing.Size(73, 17);
-            this.labelMode.TabIndex = 12;
-            this.labelMode.Text = "labelMode";
-            // 
-            // angle
-            // 
-            this.angle.DecimalPlaces = 1;
-            this.angle.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.angle.Increment = new decimal(new int[] {
-            1,
-            0,
-            0,
-            65536});
-            this.angle.Location = new System.Drawing.Point(73, 4);
-            this.angle.Maximum = new decimal(new int[] {
-            90,
-            0,
-            0,
-            0});
-            this.angle.Minimum = new decimal(new int[] {
-            90,
-            0,
-            0,
-            -2147483648});
-            this.angle.Name = "angle";
-            this.angle.Size = new System.Drawing.Size(74, 30);
-            this.angle.TabIndex = 2;
-            // 
-            // pTrial
-            // 
-            this.pTrial.BackColor = System.Drawing.Color.Black;
-            this.pTrial.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.pTrial.Location = new System.Drawing.Point(214, 235);
-            this.pTrial.Name = "pTrial";
-            this.pTrial.Size = new System.Drawing.Size(135, 112);
-            this.pTrial.TabIndex = 13;
-            this.pTrial.TabStop = false;
-            this.pTrial.Visible = false;
-            // 
-            // brightness
-            // 
-            this.brightness.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.brightness.Location = new System.Drawing.Point(73, 4);
-            this.brightness.Minimum = new decimal(new int[] {
-            100,
-            0,
-            0,
-            -2147483648});
-            this.brightness.Name = "brightness";
-            this.brightness.Size = new System.Drawing.Size(74, 30);
-            this.brightness.TabIndex = 3;
-            // 
             // Imaging
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
@@ -348,14 +361,14 @@
             this.Name = "Imaging";
             this.Text = "Imaging";
             this.panelImaging.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.brightness)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.angle)).EndInit();
             this.panelButtons.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.pTrial)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.pPrint)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.pColor)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.pThumb)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.pImage)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.angle)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.pTrial)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.brightness)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -386,5 +399,6 @@
         private System.Windows.Forms.NumericUpDown angle;
         private System.Windows.Forms.PictureBox pTrial;
         private System.Windows.Forms.NumericUpDown brightness;
+        private System.Windows.Forms.Button buttonThumbnail;
     }
 }

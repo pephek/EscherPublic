@@ -339,6 +339,7 @@ namespace Escher
                 Design stamps = design.GetStampsFromSeries(pageNumber: stamp.PageNumber, number: stamp.Number);
 
                 Imaging imaging = new Imaging();
+
                 imaging.SetImage(
                     series: stamps,
                     stampNumber: stamp.Number,
@@ -346,7 +347,11 @@ namespace Escher
                     country: design.GetCountry(stamp.PageNumber).Text,
                     section: design.GetSection(stamp.PageNumber).Text
                 );
-                DialogResult dialogResult = imaging.ShowDialog();
+
+                if (imaging.ShowDialog() == DialogResult.OK)
+                {
+                    webBrowser.Refresh();
+                }
 
                 e.Cancel = true;
             }
