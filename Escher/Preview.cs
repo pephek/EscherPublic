@@ -111,6 +111,33 @@ namespace Escher
 
         protected override void OnMouseDown(MouseEventArgs e)
         {
+            foreach (Artifact artifact in artifacts.Get())
+            {
+                if (artifact.Type == ArtifactType.Image && !string.IsNullOrEmpty(artifact.Number))
+                {
+                    Artifact artefact = artifact.GetScaledCopy(this.pageScale * this.transformScale);
+
+                    if (artefact.Overlaps(e.Location))
+                    {
+                        Design series = design.GetStampsFromSeries(pageNumber: this.pageNumber, number: artifact.Number);
+
+                        DesignEntry stamp = series.GetStampFromSeries(artifact.Number);
+
+                        Imaging imaging = new Imaging();
+                        imaging.SetImage(
+                            series: series,
+                            stampNumber: stamp.Number,
+                            folder: App.GetSetting("ImagesFolder"),
+                            country: design.GetCountry(stamp.PageNumber).Text,
+                            section: design.GetSection(stamp.PageNumber).Text
+                        );
+                        DialogResult dialogResult = imaging.ShowDialog();
+
+                        return;
+                    }
+                }
+            }
+
             this.mouseDown = true;
             this.mouseLastLocation = e.Location;
         }

@@ -338,16 +338,15 @@ namespace Escher
 
                 Design stamps = design.GetStampsFromSeries(pageNumber: stamp.PageNumber, number: stamp.Number);
 
-                DialogResult dialogResult;
-
                 Imaging imaging = new Imaging();
-
-                dialogResult = imaging.SetImage(stamps: stamps, stamp: stamp, folder: App.GetSetting("ImagesFolder"), country: design.GetCountry(stamp.PageNumber).Text, section: design.GetSection(stamp.PageNumber).Text);
-
-                if (dialogResult == DialogResult.OK)
-                {
-                    dialogResult = imaging.ShowDialog();
-                }
+                imaging.SetImage(
+                    series: stamps,
+                    stampNumber: stamp.Number,
+                    folder: App.GetSetting("ImagesFolder"),
+                    country: design.GetCountry(stamp.PageNumber).Text,
+                    section: design.GetSection(stamp.PageNumber).Text
+                );
+                DialogResult dialogResult = imaging.ShowDialog();
 
                 e.Cancel = true;
             }

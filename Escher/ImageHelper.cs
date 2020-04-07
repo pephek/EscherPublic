@@ -145,26 +145,6 @@ namespace Escher
 
     public static class ImageExtensionMethods
     {
-        public static Image GetGrayscale(this Image image)
-        {
-            Bitmap bitmap = new Bitmap(image);
-
-            for (int y = 0; y < bitmap.Height; y++)
-            {
-                for (int x = 0; x < bitmap.Width; x++)
-                {
-                    Color pixel = bitmap.GetPixel(x, y);
-
-                    // Convert to grayscale as used in television
-                    int grayscale = (int)(0.299 * pixel.R + 0.587 * pixel.G + 0.114 * pixel.B);
-
-                    bitmap.SetPixel(x, y, Color.FromArgb(pixel.A, grayscale, grayscale, grayscale));
-                }
-            }
-
-            return bitmap;
-        }
-
         public static Image GetSelection(this Image image, Rectangle selection, bool convertToGrayscale)
         {
             Bitmap bitmap = new Bitmap(selection.Width, selection.Height);

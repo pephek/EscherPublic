@@ -19,7 +19,7 @@ namespace Escher
         private const string cPrint = "_print.jpg";
         private const string cTrial = "_trial.jpg";
 
-        private Design stamps;
+        private Design series;
         private DesignEntry stamp;
         private string folder;
         private string country;
@@ -74,13 +74,14 @@ namespace Escher
             this.KeyPreview = true;
         }
 
-        public DialogResult SetImage(Design stamps, DesignEntry stamp, string folder, string country, string section)
+        public void SetImage(Design series, string stampNumber, string folder, string country, string section)
         {
-            this.stamps = stamps;
-            this.stamp = stamp;
+            this.series = series;
             this.folder = folder;
             this.country = country;
             this.section = section;
+
+            this.stamp = series.GetStampFromSeries(stampNumber);
 
             string path = string.Format("{0}\\{1}\\{2}", folder, country, section);
 
@@ -88,13 +89,6 @@ namespace Escher
             this.image = string.Format("{0}\\image\\{1}.jpg", path, stamp.Number);
             this.color = string.Format("{0}\\xlcolor\\{1}.jpg", path, stamp.Number);
             this.print = string.Format("{0}\\xlprint\\{1}.jpg", path, stamp.Number);
-
-            if (!File.Exists(this.image))
-            {
-                MessageBox.Show(string.Format("Image '{0}' is not found!", this.image), App.GetName() + " · Image not found", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
-
-                return DialogResult.Cancel;
-            }
 
             if (File.Exists(cThumb)) File.Delete(cThumb);
             if (File.Exists(cImage)) File.Delete(cImage);
@@ -108,22 +102,25 @@ namespace Escher
 
             ResetImage();
 
-            buttonPrevious.Enabled = this.stamps.FindIndex(s => s.Number == this.stamp.Number) > 0;
-            buttonNext.Enabled = this.stamps.FindIndex(s => s.Number == this.stamp.Number) < this.stamps.Count() - 1;
+            buttonPrevious.Enabled = this.series.FindIndex(s => s.Number == this.stamp.Number) > 0;
+            buttonNext.Enabled = this.series.FindIndex(s => s.Number == this.stamp.Number) < this.series.Count() - 1;
+
+            buttonRotate.Enabled = File.Exists(cImage);
+            buttonCrop.Enabled = File.Exists(cImage);
+            buttonBrighten.Enabled = File.Exists(cImage);
+            buttonSelect.Enabled = File.Exists(cImage);
 
             buttonSave.Enabled = false;
             buttonUndo.Enabled = false;
 
             isChanged = false;
-
-            return DialogResult.OK;
         }
 
         private void ResetImage()
         {
             this.mode = ImagingMode.None;
 
-            labelMode.Text = this.mode.Text();
+            labelMode.Text = this.mode.Text(this.stamp.Number);
 
             LoadImage(pImage, cImage);
             LoadImage(pThumb, cThumb);
@@ -155,8 +152,8 @@ namespace Escher
                 width = panelButtons.Width;
             }
 
-            panelButtons.Location = new Point(0, height - panelButtons.Height);
-            panelImaging.Location = new Point(0, height - panelButtons.Height);
+            panelButtons.Location = new Point(this.baseWidth - panelButtons.Width / 2, height - panelButtons.Height);
+            panelImaging.Location = new Point(this.baseWidth - panelImaging.Width / 2, height - panelButtons.Height);
 
             panelButtons.Visible = true;
             panelImaging.Visible = false;
@@ -186,6 +183,11 @@ namespace Escher
             }
             else // Landscape stamp
             {
+                pThumb.Location = new Point(w - pThumb.Width / 2, (int)(2.0 * h) - pThumb.Height / 2);
+                pImage.Location = new Point(w - pImage.Width / 2, (int)(2.0 * h) - pImage.Height / 2);
+                pTrial.Location = new Point(w - pTrial.Width / 2, (int)(2.0 * h) - pTrial.Height / 2);
+                pColor.Location = new Point((int)(0.5 * w) - pColor.Width / 2, (int)(0.5 * h) - pColor.Height / 2);
+                pPrint.Location = new Point((int)(1.5 * w) - pPrint.Width / 2, (int)(0.5 * h) - pPrint.Height / 2);
             }
         }
 
@@ -204,8 +206,6 @@ namespace Escher
                 pictureBox.Image = Escher.Properties.Resources.ImageNotFound;
             }
 
-            pictureBox.Width = pictureBox.Image.Width;
-            pictureBox.Height = pictureBox.Image.Height;
             pictureBox.SizeMode = PictureBoxSizeMode.AutoSize;
         }
 
@@ -263,10 +263,7 @@ namespace Escher
         {
             if (DiscardChanges() == DialogResult.Yes)
             {
-                if (SetImage(this.stamps, this.stamps[this.stamps.FindIndex(s => s.Number == this.stamp.Number) - 1], this.folder, this.country, this.section) == DialogResult.Cancel)
-                {
-                    Close();
-                }
+                SetImage(this.series, this.series[this.series.FindIndex(s => s.Number == this.stamp.Number) - 1].Number, this.folder, this.country, this.section);
             }
         }
 
@@ -274,10 +271,7 @@ namespace Escher
         {
             if (DiscardChanges() == DialogResult.Yes)
             {
-                if (SetImage(this.stamps, this.stamps[this.stamps.FindIndex(s => s.Number == this.stamp.Number) + 1], this.folder, this.country, this.section) == DialogResult.Cancel)
-                {
-                    Close();
-                }
+                SetImage(this.series, this.series[this.series.FindIndex(s => s.Number == this.stamp.Number) + 1].Number, this.folder, this.country, this.section);
             }
         }
 
@@ -290,7 +284,7 @@ namespace Escher
                 if (File.Exists(cColor)) File.Copy(cColor, this.color, overwrite: true);
                 if (File.Exists(cPrint)) File.Copy(cPrint, this.print, overwrite: true);
 
-                SetImage(this.stamps, this.stamp, this.folder, this.country, this.section);
+                SetImage(this.series, this.stamp.Number, this.folder, this.country, this.section);
             }
         }
 
@@ -298,7 +292,7 @@ namespace Escher
         {
             if (MessageBox.Show("Are you sure you want to undo the changes?", App.GetName() + " · Undo changes", MessageBoxButtons.YesNo, MessageBoxIcon.Question, MessageBoxDefaultButton.Button2) == DialogResult.Yes)
             {
-                SetImage(this.stamps, this.stamp, this.folder, this.country, this.section);
+                SetImage(this.series, this.stamp.Number, this.folder, this.country, this.section);
             }
         }
 
@@ -382,13 +376,10 @@ namespace Escher
                     case ImagingMode.Rotating:
 
                         pImage.Image.Dispose();
-
                         pImage.Image = new Bitmap(pTrial.Image);
-
                         pImage.Image.SaveAsJpeg(cImage, 100);
 
                         ImageHelper.CreateThumbnail(cImage, cThumb, stamp.Width, stamp.Height);
-
                         LoadImage(pThumb, cThumb);
 
                         break;
@@ -441,7 +432,7 @@ namespace Escher
 
             this.mode = ImagingMode.None;
 
-            labelMode.Text = this.mode.Text();
+            labelMode.Text = this.mode.Text(this.stamp.Number);
 
             panelButtons.Visible = true;
             panelImaging.Visible = false;

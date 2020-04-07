@@ -21,6 +21,7 @@ namespace Escher
         public Image Picture;
         public Font Font;
         public Appearance Appearance;
+        public string Number;
         public bool screenOnly;
 
         public Artifact(ArtifactType type)
@@ -55,6 +56,11 @@ namespace Escher
 
                 return artifact;
             }
+        }
+
+        public bool Overlaps(Point location)
+        {
+            return (location.X >= X && location.X <= Right() && location.Y >= Y && location.Y <= Bottom()) ;
         }
     }
 }

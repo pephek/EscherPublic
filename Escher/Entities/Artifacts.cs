@@ -122,7 +122,7 @@ namespace Escher
             }
         }
 
-        private void AddImage(float x, float y, float width, float height, Image image)
+        private void AddImage(float x, float y, float width, float height, string number, Image image)
         {
             Artifact artifact = new Artifact(ArtifactType.Image);
 
@@ -130,6 +130,7 @@ namespace Escher
             artifact.Y = y;
             artifact.Width = width;
             artifact.Height = height;
+            artifact.Number = number;
             artifact.Picture = image;
 
             artifacts.Add(artifact);
@@ -177,16 +178,16 @@ namespace Escher
             switch (shape)
             {
                 case Shape.Triangle45:
-                    AddImage(x + 3 * 5 / (float) Math.Sqrt(2), y + 2 * 5 / (float) Math.Sqrt(2), width - 2 * 5 / (float) Math.Sqrt(2), height - 5 - 2 * 5 / (float) Math.Sqrt(2), image);
+                    AddImage(x + 3 * 5 / (float) Math.Sqrt(2), y + 2 * 5 / (float) Math.Sqrt(2), width - 2 * 5 / (float) Math.Sqrt(2), height - 5 - 2 * 5 / (float) Math.Sqrt(2), n, image);
                     break;
                 case Shape.Triangle60Inverted:
-                    AddImage(x + 5 + 5 / (float)Math.Sqrt(3), y + 5, width - 2 * (5 + 5 / (float)Math.Sqrt(3)), height - 2 * (5 + 5 / (float)Math.Sqrt(3)), image);
+                    AddImage(x + 5 + 5 / (float)Math.Sqrt(3), y + 5, width - 2 * (5 + 5 / (float)Math.Sqrt(3)), height - 2 * (5 + 5 / (float)Math.Sqrt(3)), n, image);
                     break;
                 case Shape.Triangle60:
-                    AddImage(x + 5 + 5 / (float)Math.Sqrt(3), y + 2 * 5, width - 2 * (5 + 5 / (float)Math.Sqrt(3)), height - 2 * (5 + 5 / (float)Math.Sqrt(3)), image);
+                    AddImage(x + 5 + 5 / (float)Math.Sqrt(3), y + 2 * 5, width - 2 * (5 + 5 / (float)Math.Sqrt(3)), height - 2 * (5 + 5 / (float)Math.Sqrt(3)), n, image);
                     break;
                 case Shape.RectangleRotated:
-                    AddImage(x + 5 * (float)Math.Sqrt(2), y + 5 * (float)Math.Sqrt(2), width - 2 * 5 * (float)Math.Sqrt(2), height - 2 * 5 * (float)Math.Sqrt(2), image);
+                    AddImage(x + 5 * (float)Math.Sqrt(2), y + 5 * (float)Math.Sqrt(2), width - 2 * 5 * (float)Math.Sqrt(2), height - 2 * 5 * (float)Math.Sqrt(2), n, image);
                     break;
                 default:
                     for (int i = 0; i < appearance.NumberOfStamps(); i++)
@@ -203,7 +204,7 @@ namespace Escher
                             default:
                                 throw new Exception("todo");
                         }
-                        AddImage(x, y, z * width, z * height, image);
+                        AddImage(x, y, z * width, z * height, n, image);
                     }
                     break;
             }

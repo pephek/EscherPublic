@@ -47,6 +47,11 @@ namespace Escher
             return design.LastOrDefault(entry => entry.Class == Class.Series && entry.PageNumber <= pageNumber);
         }
 
+        public static DesignEntry GetStampFromSeries(this Design series, string stampNumber)
+        {
+            return series.FirstOrDefault(entry => entry.Number.ToLower() == stampNumber.ToLower());
+        }
+
         public static Design GetStampsFromSeries(this Design design, int pageNumber, string number)
         {
             Design stamps = new Design();
