@@ -182,6 +182,20 @@ namespace Escher
             image.Save(jpeg, imageCodecInfo, encoderParameters);
         }
 
+        public static Bitmap Recolor(this Image image, float r, float g, float b)
+        {
+            LocklessBitmap recoloredBitmap = new LocklessBitmap(image.Width, image.Height);
+
+            using (Graphics graphics = Graphics.FromImage(recoloredBitmap.Bitmap))
+            {
+                graphics.DrawImage(image, new Rectangle(0, 0, image.Width, image.Height));
+            }
+
+            recoloredBitmap.Recolor(r, g, b);
+
+            return recoloredBitmap.Bitmap;
+        }
+
         public static Bitmap Brighten(this Image image, float brightness)
         {
             float contrast = 1.0f; // no change in contrast

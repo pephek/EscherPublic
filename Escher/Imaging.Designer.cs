@@ -31,6 +31,7 @@
             this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Imaging));
             this.panelImaging = new System.Windows.Forms.Panel();
+            this.resize = new System.Windows.Forms.NumericUpDown();
             this.brightness = new System.Windows.Forms.NumericUpDown();
             this.angle = new System.Windows.Forms.NumericUpDown();
             this.panelButtons = new System.Windows.Forms.Panel();
@@ -41,7 +42,17 @@
             this.toolTipSelect = new System.Windows.Forms.ToolTip(this.components);
             this.toolTipThumbnail = new System.Windows.Forms.ToolTip(this.components);
             this.toolTipResize = new System.Windows.Forms.ToolTip(this.components);
+            this.r = new ColorSlider.ColorSlider();
+            this.g = new ColorSlider.ColorSlider();
+            this.b = new ColorSlider.ColorSlider();
+            this.toolTipRecolor = new System.Windows.Forms.ToolTip(this.components);
+            this.panelRecolor = new System.Windows.Forms.Panel();
+            this.toolTipRerunRecolor = new System.Windows.Forms.ToolTip(this.components);
+            this.labelRecolor = new System.Windows.Forms.Label();
+            this.buttonRerunRecolor = new System.Windows.Forms.Button();
             this.pTrial = new System.Windows.Forms.PictureBox();
+            this.buttonBlacken = new System.Windows.Forms.Button();
+            this.buttonRecolor = new System.Windows.Forms.Button();
             this.buttonResize = new System.Windows.Forms.Button();
             this.buttonThumbnail = new System.Windows.Forms.Button();
             this.buttonUndo = new System.Windows.Forms.Button();
@@ -61,17 +72,18 @@
             this.pColor = new System.Windows.Forms.PictureBox();
             this.pThumb = new System.Windows.Forms.PictureBox();
             this.pImage = new System.Windows.Forms.PictureBox();
-            this.resize = new System.Windows.Forms.NumericUpDown();
+            this.toolTipBlacken = new System.Windows.Forms.ToolTip(this.components);
             this.panelImaging.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.resize)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.brightness)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.angle)).BeginInit();
             this.panelButtons.SuspendLayout();
+            this.panelRecolor.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pTrial)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pPrint)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pColor)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pThumb)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pImage)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.resize)).BeginInit();
             this.SuspendLayout();
             // 
             // panelImaging
@@ -86,6 +98,24 @@
             this.panelImaging.Name = "panelImaging";
             this.panelImaging.Size = new System.Drawing.Size(151, 39);
             this.panelImaging.TabIndex = 10;
+            // 
+            // resize
+            // 
+            this.resize.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.resize.Location = new System.Drawing.Point(73, 4);
+            this.resize.Minimum = new decimal(new int[] {
+            50,
+            0,
+            0,
+            0});
+            this.resize.Name = "resize";
+            this.resize.Size = new System.Drawing.Size(74, 30);
+            this.resize.TabIndex = 4;
+            this.resize.Value = new decimal(new int[] {
+            100,
+            0,
+            0,
+            0});
             // 
             // brightness
             // 
@@ -127,6 +157,8 @@
             // panelButtons
             // 
             this.panelButtons.BackColor = System.Drawing.Color.Black;
+            this.panelButtons.Controls.Add(this.buttonBlacken);
+            this.panelButtons.Controls.Add(this.buttonRecolor);
             this.panelButtons.Controls.Add(this.buttonResize);
             this.panelButtons.Controls.Add(this.buttonThumbnail);
             this.panelButtons.Controls.Add(this.buttonUndo);
@@ -142,7 +174,7 @@
             this.panelButtons.Controls.Add(this.buttonNext);
             this.panelButtons.Location = new System.Drawing.Point(240, 44);
             this.panelButtons.Name = "panelButtons";
-            this.panelButtons.Size = new System.Drawing.Size(455, 39);
+            this.panelButtons.Size = new System.Drawing.Size(540, 39);
             this.panelButtons.TabIndex = 11;
             // 
             // labelMode
@@ -178,7 +210,7 @@
             // 
             this.toolTipSelect.IsBalloon = true;
             this.toolTipSelect.ToolTipIcon = System.Windows.Forms.ToolTipIcon.Info;
-            this.toolTipSelect.ToolTipTitle = "Brighten";
+            this.toolTipSelect.ToolTipTitle = "Select";
             // 
             // toolTipThumbnail
             // 
@@ -192,6 +224,243 @@
             this.toolTipResize.ToolTipIcon = System.Windows.Forms.ToolTipIcon.Info;
             this.toolTipResize.ToolTipTitle = "Resize";
             // 
+            // r
+            // 
+            this.r.BackColor = System.Drawing.Color.Black;
+            this.r.BarPenColorBottom = System.Drawing.Color.FromArgb(((int)(((byte)(87)))), ((int)(((byte)(94)))), ((int)(((byte)(110)))));
+            this.r.BarPenColorTop = System.Drawing.Color.FromArgb(((int)(((byte)(55)))), ((int)(((byte)(60)))), ((int)(((byte)(74)))));
+            this.r.BorderRoundRectSize = new System.Drawing.Size(8, 8);
+            this.r.ColorSchema = ColorSlider.ColorSlider.ColorSchemas.RedColors;
+            this.r.ElapsedInnerColor = System.Drawing.Color.Black;
+            this.r.ElapsedPenColorBottom = System.Drawing.Color.FromArgb(((int)(((byte)(87)))), ((int)(((byte)(94)))), ((int)(((byte)(110)))));
+            this.r.ElapsedPenColorTop = System.Drawing.Color.FromArgb(((int)(((byte)(55)))), ((int)(((byte)(60)))), ((int)(((byte)(74)))));
+            this.r.Font = new System.Drawing.Font("Microsoft Sans Serif", 6F);
+            this.r.ForeColor = System.Drawing.Color.White;
+            this.r.LargeChange = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
+            this.r.Location = new System.Drawing.Point(4, 42);
+            this.r.Margin = new System.Windows.Forms.Padding(4);
+            this.r.Maximum = new decimal(new int[] {
+            25,
+            0,
+            0,
+            0});
+            this.r.Minimum = new decimal(new int[] {
+            25,
+            0,
+            0,
+            -2147483648});
+            this.r.Name = "r";
+            this.r.ScaleDivisions = new decimal(new int[] {
+            10,
+            0,
+            0,
+            0});
+            this.r.ScaleSubDivisions = new decimal(new int[] {
+            4,
+            0,
+            0,
+            0});
+            this.r.ShowDivisionsText = true;
+            this.r.ShowSmallScale = true;
+            this.r.Size = new System.Drawing.Size(760, 59);
+            this.r.SmallChange = new decimal(new int[] {
+            1,
+            0,
+            0,
+            65536});
+            this.r.TabIndex = 15;
+            this.r.Text = "Red";
+            this.r.ThumbInnerColor = System.Drawing.Color.Red;
+            this.r.ThumbPenColor = System.Drawing.Color.Red;
+            this.r.ThumbRoundRectSize = new System.Drawing.Size(16, 16);
+            this.r.ThumbSize = new System.Drawing.Size(16, 16);
+            this.r.TickAdd = 0F;
+            this.r.TickColor = System.Drawing.Color.White;
+            this.r.TickDivide = 0F;
+            this.r.Value = new decimal(new int[] {
+            0,
+            0,
+            0,
+            0});
+            // 
+            // g
+            // 
+            this.g.BackColor = System.Drawing.Color.Black;
+            this.g.BarPenColorBottom = System.Drawing.Color.FromArgb(((int)(((byte)(87)))), ((int)(((byte)(94)))), ((int)(((byte)(110)))));
+            this.g.BarPenColorTop = System.Drawing.Color.FromArgb(((int)(((byte)(55)))), ((int)(((byte)(60)))), ((int)(((byte)(74)))));
+            this.g.BorderRoundRectSize = new System.Drawing.Size(8, 8);
+            this.g.ColorSchema = ColorSlider.ColorSlider.ColorSchemas.RedColors;
+            this.g.ElapsedInnerColor = System.Drawing.Color.Black;
+            this.g.ElapsedPenColorBottom = System.Drawing.Color.FromArgb(((int)(((byte)(87)))), ((int)(((byte)(94)))), ((int)(((byte)(110)))));
+            this.g.ElapsedPenColorTop = System.Drawing.Color.FromArgb(((int)(((byte)(55)))), ((int)(((byte)(60)))), ((int)(((byte)(74)))));
+            this.g.Font = new System.Drawing.Font("Microsoft Sans Serif", 6F);
+            this.g.ForeColor = System.Drawing.Color.White;
+            this.g.LargeChange = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
+            this.g.Location = new System.Drawing.Point(4, 88);
+            this.g.Margin = new System.Windows.Forms.Padding(4);
+            this.g.Maximum = new decimal(new int[] {
+            25,
+            0,
+            0,
+            0});
+            this.g.Minimum = new decimal(new int[] {
+            25,
+            0,
+            0,
+            -2147483648});
+            this.g.Name = "g";
+            this.g.ScaleDivisions = new decimal(new int[] {
+            10,
+            0,
+            0,
+            0});
+            this.g.ScaleSubDivisions = new decimal(new int[] {
+            4,
+            0,
+            0,
+            0});
+            this.g.ShowDivisionsText = true;
+            this.g.ShowSmallScale = true;
+            this.g.Size = new System.Drawing.Size(760, 59);
+            this.g.SmallChange = new decimal(new int[] {
+            1,
+            0,
+            0,
+            65536});
+            this.g.TabIndex = 16;
+            this.g.Text = "Red";
+            this.g.ThumbInnerColor = System.Drawing.Color.Green;
+            this.g.ThumbPenColor = System.Drawing.Color.Green;
+            this.g.ThumbRoundRectSize = new System.Drawing.Size(16, 16);
+            this.g.ThumbSize = new System.Drawing.Size(16, 16);
+            this.g.TickAdd = 0F;
+            this.g.TickColor = System.Drawing.Color.White;
+            this.g.TickDivide = 0F;
+            this.g.Value = new decimal(new int[] {
+            0,
+            0,
+            0,
+            0});
+            // 
+            // b
+            // 
+            this.b.BackColor = System.Drawing.Color.Black;
+            this.b.BarPenColorBottom = System.Drawing.Color.FromArgb(((int)(((byte)(87)))), ((int)(((byte)(94)))), ((int)(((byte)(110)))));
+            this.b.BarPenColorTop = System.Drawing.Color.FromArgb(((int)(((byte)(55)))), ((int)(((byte)(60)))), ((int)(((byte)(74)))));
+            this.b.BorderRoundRectSize = new System.Drawing.Size(8, 8);
+            this.b.ColorSchema = ColorSlider.ColorSlider.ColorSchemas.RedColors;
+            this.b.ElapsedInnerColor = System.Drawing.Color.Black;
+            this.b.ElapsedPenColorBottom = System.Drawing.Color.FromArgb(((int)(((byte)(87)))), ((int)(((byte)(94)))), ((int)(((byte)(110)))));
+            this.b.ElapsedPenColorTop = System.Drawing.Color.FromArgb(((int)(((byte)(55)))), ((int)(((byte)(60)))), ((int)(((byte)(74)))));
+            this.b.Font = new System.Drawing.Font("Microsoft Sans Serif", 6F);
+            this.b.ForeColor = System.Drawing.Color.White;
+            this.b.LargeChange = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
+            this.b.Location = new System.Drawing.Point(4, 134);
+            this.b.Margin = new System.Windows.Forms.Padding(4);
+            this.b.Maximum = new decimal(new int[] {
+            25,
+            0,
+            0,
+            0});
+            this.b.Minimum = new decimal(new int[] {
+            25,
+            0,
+            0,
+            -2147483648});
+            this.b.Name = "b";
+            this.b.ScaleDivisions = new decimal(new int[] {
+            10,
+            0,
+            0,
+            0});
+            this.b.ScaleSubDivisions = new decimal(new int[] {
+            4,
+            0,
+            0,
+            0});
+            this.b.ShowDivisionsText = true;
+            this.b.ShowSmallScale = true;
+            this.b.Size = new System.Drawing.Size(760, 59);
+            this.b.SmallChange = new decimal(new int[] {
+            1,
+            0,
+            0,
+            65536});
+            this.b.TabIndex = 17;
+            this.b.Text = "Red";
+            this.b.ThumbInnerColor = System.Drawing.Color.Blue;
+            this.b.ThumbPenColor = System.Drawing.Color.Blue;
+            this.b.ThumbRoundRectSize = new System.Drawing.Size(16, 16);
+            this.b.ThumbSize = new System.Drawing.Size(16, 16);
+            this.b.TickAdd = 0F;
+            this.b.TickColor = System.Drawing.Color.White;
+            this.b.TickDivide = 0F;
+            this.b.Value = new decimal(new int[] {
+            0,
+            0,
+            0,
+            0});
+            // 
+            // toolTipRecolor
+            // 
+            this.toolTipRecolor.IsBalloon = true;
+            this.toolTipRecolor.ToolTipIcon = System.Windows.Forms.ToolTipIcon.Info;
+            this.toolTipRecolor.ToolTipTitle = "Adjust";
+            // 
+            // panelRecolor
+            // 
+            this.panelRecolor.BackColor = System.Drawing.Color.Black;
+            this.panelRecolor.Controls.Add(this.labelRecolor);
+            this.panelRecolor.Controls.Add(this.buttonRerunRecolor);
+            this.panelRecolor.Controls.Add(this.b);
+            this.panelRecolor.Controls.Add(this.g);
+            this.panelRecolor.Controls.Add(this.r);
+            this.panelRecolor.Location = new System.Drawing.Point(135, 455);
+            this.panelRecolor.Name = "panelRecolor";
+            this.panelRecolor.Size = new System.Drawing.Size(786, 184);
+            this.panelRecolor.TabIndex = 17;
+            // 
+            // toolTipRerunRecolor
+            // 
+            this.toolTipRerunRecolor.IsBalloon = true;
+            this.toolTipRerunRecolor.ToolTipIcon = System.Windows.Forms.ToolTipIcon.Info;
+            this.toolTipRerunRecolor.ToolTipTitle = "Reset";
+            // 
+            // labelRecolor
+            // 
+            this.labelRecolor.AutoSize = true;
+            this.labelRecolor.BackColor = System.Drawing.Color.Black;
+            this.labelRecolor.ForeColor = System.Drawing.Color.White;
+            this.labelRecolor.Location = new System.Drawing.Point(42, 10);
+            this.labelRecolor.Name = "labelRecolor";
+            this.labelRecolor.Size = new System.Drawing.Size(176, 17);
+            this.labelRecolor.TabIndex = 20;
+            this.labelRecolor.Text = "R = R% · G = G% · B = B%";
+            // 
+            // buttonRerunRecolor
+            // 
+            this.buttonRerunRecolor.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.buttonRerunRecolor.Image = global::Escher.Properties.Resources.Rerun_16x;
+            this.buttonRerunRecolor.Location = new System.Drawing.Point(4, 3);
+            this.buttonRerunRecolor.Name = "buttonRerunRecolor";
+            this.buttonRerunRecolor.Size = new System.Drawing.Size(32, 32);
+            this.buttonRerunRecolor.TabIndex = 19;
+            this.buttonRerunRecolor.TabStop = false;
+            this.toolTipRerunRecolor.SetToolTip(this.buttonRerunRecolor, "Reset the RGB color components to 0%");
+            this.buttonRerunRecolor.UseVisualStyleBackColor = true;
+            // 
             // pTrial
             // 
             this.pTrial.BackColor = System.Drawing.Color.Black;
@@ -203,11 +472,35 @@
             this.pTrial.TabStop = false;
             this.pTrial.Visible = false;
             // 
+            // buttonBlacken
+            // 
+            this.buttonBlacken.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.buttonBlacken.Image = global::Escher.Properties.Resources.Airbrush_16x;
+            this.buttonBlacken.Location = new System.Drawing.Point(281, 3);
+            this.buttonBlacken.Name = "buttonBlacken";
+            this.buttonBlacken.Size = new System.Drawing.Size(32, 32);
+            this.buttonBlacken.TabIndex = 19;
+            this.buttonBlacken.TabStop = false;
+            this.toolTipBrighten.SetToolTip(this.buttonBlacken, "Black the backgroun around the stamp");
+            this.buttonBlacken.UseVisualStyleBackColor = true;
+            // 
+            // buttonRecolor
+            // 
+            this.buttonRecolor.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.buttonRecolor.Image = global::Escher.Properties.Resources.ColorPalette_16x;
+            this.buttonRecolor.Location = new System.Drawing.Point(215, 3);
+            this.buttonRecolor.Name = "buttonRecolor";
+            this.buttonRecolor.Size = new System.Drawing.Size(32, 32);
+            this.buttonRecolor.TabIndex = 18;
+            this.buttonRecolor.TabStop = false;
+            this.toolTipRecolor.SetToolTip(this.buttonRecolor, "Adjust the RGB color components from -10% to +10%");
+            this.buttonRecolor.UseVisualStyleBackColor = true;
+            // 
             // buttonResize
             // 
             this.buttonResize.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.buttonResize.Image = global::Escher.Properties.Resources.Resize_16x;
-            this.buttonResize.Location = new System.Drawing.Point(248, 3);
+            this.buttonResize.Location = new System.Drawing.Point(314, 3);
             this.buttonResize.Name = "buttonResize";
             this.buttonResize.Size = new System.Drawing.Size(32, 32);
             this.buttonResize.TabIndex = 17;
@@ -219,7 +512,7 @@
             // 
             this.buttonThumbnail.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.buttonThumbnail.Image = global::Escher.Properties.Resources.IconFile_16x;
-            this.buttonThumbnail.Location = new System.Drawing.Point(314, 3);
+            this.buttonThumbnail.Location = new System.Drawing.Point(380, 3);
             this.buttonThumbnail.Name = "buttonThumbnail";
             this.buttonThumbnail.Size = new System.Drawing.Size(32, 32);
             this.buttonThumbnail.TabIndex = 16;
@@ -230,7 +523,7 @@
             // buttonUndo
             // 
             this.buttonUndo.Image = global::Escher.Properties.Resources.Undo_16x;
-            this.buttonUndo.Location = new System.Drawing.Point(387, 3);
+            this.buttonUndo.Location = new System.Drawing.Point(453, 3);
             this.buttonUndo.Name = "buttonUndo";
             this.buttonUndo.Size = new System.Drawing.Size(32, 32);
             this.buttonUndo.TabIndex = 15;
@@ -246,7 +539,7 @@
             this.buttonCrop.Size = new System.Drawing.Size(32, 32);
             this.buttonCrop.TabIndex = 14;
             this.buttonCrop.TabStop = false;
-            this.toolTipCrop.SetToolTip(this.buttonCrop, "Crop the image to remove too much black space around the borders");
+            this.toolTipCrop.SetToolTip(this.buttonCrop, "Crop the image to remove too much black background around the stamp");
             this.buttonCrop.UseVisualStyleBackColor = true;
             // 
             // buttonZoomOut
@@ -273,7 +566,7 @@
             // 
             this.buttonBrighten.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.buttonBrighten.Image = global::Escher.Properties.Resources.Brightness_16x;
-            this.buttonBrighten.Location = new System.Drawing.Point(215, 3);
+            this.buttonBrighten.Location = new System.Drawing.Point(248, 3);
             this.buttonBrighten.Name = "buttonBrighten";
             this.buttonBrighten.Size = new System.Drawing.Size(32, 32);
             this.buttonBrighten.TabIndex = 11;
@@ -297,7 +590,7 @@
             // 
             this.buttonSelect.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.buttonSelect.Image = global::Escher.Properties.Resources.RectangularSelection_16x;
-            this.buttonSelect.Location = new System.Drawing.Point(281, 3);
+            this.buttonSelect.Location = new System.Drawing.Point(347, 3);
             this.buttonSelect.Name = "buttonSelect";
             this.buttonSelect.Size = new System.Drawing.Size(32, 32);
             this.buttonSelect.TabIndex = 8;
@@ -309,7 +602,7 @@
             // 
             this.buttonClose.DialogResult = System.Windows.Forms.DialogResult.Cancel;
             this.buttonClose.Image = global::Escher.Properties.Resources.Close_red_16x;
-            this.buttonClose.Location = new System.Drawing.Point(420, 3);
+            this.buttonClose.Location = new System.Drawing.Point(486, 3);
             this.buttonClose.Name = "buttonClose";
             this.buttonClose.Size = new System.Drawing.Size(32, 32);
             this.buttonClose.TabIndex = 7;
@@ -319,7 +612,7 @@
             // buttonSave
             // 
             this.buttonSave.Image = global::Escher.Properties.Resources.Save_16x;
-            this.buttonSave.Location = new System.Drawing.Point(354, 3);
+            this.buttonSave.Location = new System.Drawing.Point(420, 3);
             this.buttonSave.Name = "buttonSave";
             this.buttonSave.Size = new System.Drawing.Size(32, 32);
             this.buttonSave.TabIndex = 6;
@@ -406,30 +699,19 @@
             this.pImage.TabIndex = 6;
             this.pImage.TabStop = false;
             // 
-            // resize
+            // toolTipBlacken
             // 
-            this.resize.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.resize.Location = new System.Drawing.Point(73, 4);
-            this.resize.Minimum = new decimal(new int[] {
-            50,
-            0,
-            0,
-            0});
-            this.resize.Name = "resize";
-            this.resize.Size = new System.Drawing.Size(74, 30);
-            this.resize.TabIndex = 4;
-            this.resize.Value = new decimal(new int[] {
-            100,
-            0,
-            0,
-            0});
+            this.toolTipBlacken.IsBalloon = true;
+            this.toolTipBlacken.ToolTipIcon = System.Windows.Forms.ToolTipIcon.Info;
+            this.toolTipBlacken.ToolTipTitle = "Blacken";
             // 
             // Imaging
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.White;
-            this.ClientSize = new System.Drawing.Size(926, 450);
+            this.ClientSize = new System.Drawing.Size(1230, 910);
+            this.Controls.Add(this.panelRecolor);
             this.Controls.Add(this.pTrial);
             this.Controls.Add(this.labelMode);
             this.Controls.Add(this.panelButtons);
@@ -444,15 +726,17 @@
             this.Name = "Imaging";
             this.Text = "Imaging";
             this.panelImaging.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.resize)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.brightness)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.angle)).EndInit();
             this.panelButtons.ResumeLayout(false);
+            this.panelRecolor.ResumeLayout(false);
+            this.panelRecolor.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pTrial)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.pPrint)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.pColor)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.pThumb)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.pImage)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.resize)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -492,5 +776,16 @@
         private System.Windows.Forms.ToolTip toolTipResize;
         private System.Windows.Forms.Button buttonResize;
         private System.Windows.Forms.NumericUpDown resize;
+        private ColorSlider.ColorSlider r;
+        private ColorSlider.ColorSlider b;
+        private ColorSlider.ColorSlider g;
+        private System.Windows.Forms.Button buttonRecolor;
+        private System.Windows.Forms.ToolTip toolTipRecolor;
+        private System.Windows.Forms.Panel panelRecolor;
+        private System.Windows.Forms.Button buttonRerunRecolor;
+        private System.Windows.Forms.ToolTip toolTipRerunRecolor;
+        private System.Windows.Forms.Label labelRecolor;
+        private System.Windows.Forms.Button buttonBlacken;
+        private System.Windows.Forms.ToolTip toolTipBlacken;
     }
 }

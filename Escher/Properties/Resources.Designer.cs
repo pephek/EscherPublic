@@ -73,6 +73,16 @@ namespace Escher.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap Airbrush_16x {
+            get {
+                object obj = ResourceManager.GetObject("Airbrush_16x", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap Brightness_16x {
             get {
                 object obj = ResourceManager.GetObject("Brightness_16x", resourceCulture);
@@ -96,6 +106,16 @@ namespace Escher.Properties {
         internal static System.Drawing.Bitmap Close_red_16x {
             get {
                 object obj = ResourceManager.GetObject("Close_red_16x", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap ColorPalette_16x {
+            get {
+                object obj = ResourceManager.GetObject("ColorPalette_16x", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -166,6 +186,16 @@ namespace Escher.Properties {
         internal static System.Drawing.Bitmap RectangularSelection_16x {
             get {
                 object obj = ResourceManager.GetObject("RectangularSelection_16x", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap Rerun_16x {
+            get {
+                object obj = ResourceManager.GetObject("Rerun_16x", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }

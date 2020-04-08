@@ -71,5 +71,29 @@ namespace Escher
                 }
             }
         }
+
+        public static void Recolor(this LocklessBitmap bitmap, float r, float g, float b)
+        {
+            for (int y = 0; y < bitmap.Height; y++)
+            {
+                for (int x = 0; x < bitmap.Width; x++)
+                {
+                    Color pixel = bitmap.GetPixel(x, y);
+
+                    byte rPixel = pixel.R;
+                    byte gPixel = pixel.G;
+                    byte bPixel = pixel.B;
+
+                    if (r != 0)
+                        rPixel = (byte)Math.Min((1 - r) * pixel.R, 255);
+                    if (g != 0)
+                        gPixel = (byte)Math.Min((1 - g) * pixel.G, 255);
+                    if (b != 0)
+                        bPixel = (byte)Math.Min((1 - b) * pixel.B, 255);
+
+                    bitmap.SetPixel(x, y, Color.FromArgb(pixel.A, rPixel, gPixel, bPixel));
+                }
+            }
+        }
     }
 }

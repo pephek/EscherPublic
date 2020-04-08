@@ -54,7 +54,9 @@ namespace Escher
 
             buttonRotate.Click += new EventHandler((sender, e) => SetMode(ImagingMode.Rotating));
             buttonCrop.Click += new EventHandler((sender, e) => SetMode(ImagingMode.Cropping));
+            buttonRecolor.Click += new EventHandler((sender, e) => SetMode(ImagingMode.Recolor));
             buttonBrighten.Click += new EventHandler((sender, e) => SetMode(ImagingMode.Brightening));
+            buttonBlacken.Click += new EventHandler((sender, e) => SetMode(ImagingMode.Brightening));
             buttonResize.Click += new EventHandler((sender, e) => SetMode(ImagingMode.Resize));
             buttonSelect.Click += new EventHandler((sender, e) => SetMode(ImagingMode.Selecting));
             buttonThumbnail.Click += new EventHandler((sender, e) => SetMode(ImagingMode.Thumbnail));
@@ -69,6 +71,12 @@ namespace Escher
             angle.ValueChanged += new EventHandler((sender, e) => Rotate((float)angle.Value));
             brightness.ValueChanged += new EventHandler((sender, e) => Brightness((float)brightness.Value));
             resize.ValueChanged += new EventHandler((sender, e) => Resice((float)resize.Value));
+
+            r.ValueChanged += new EventHandler((sender, e) => Recolor((float)r.Value, (float)g.Value, (float)b.Value));
+            g.ValueChanged += new EventHandler((sender, e) => Recolor((float)r.Value, (float)g.Value, (float)b.Value));
+            b.ValueChanged += new EventHandler((sender, e) => Recolor((float)r.Value, (float)g.Value, (float)b.Value));
+
+            buttonRerunRecolor.Click += new EventHandler((sender, e) => RerunRecolor());
 
             pTrial.MouseMove += new MouseEventHandler((sender, e) => MouseMoved(e.Button, e.Location));
             pTrial.MouseDown += new MouseEventHandler((sender, e) => MouseIsDown(e.Location));
@@ -179,7 +187,9 @@ namespace Escher
 
             buttonRotate.Enabled = File.Exists(cImage);
             buttonCrop.Enabled = buttonRotate.Enabled;
+            buttonRecolor.Enabled = buttonRotate.Enabled;
             buttonBrighten.Enabled = buttonRotate.Enabled;
+            buttonBlacken.Enabled = buttonRotate.Enabled;
             buttonResize.Enabled = buttonRotate.Enabled;
             buttonSelect.Enabled = buttonRotate.Enabled;
             buttonThumbnail.Enabled = buttonRotate.Enabled;
@@ -189,6 +199,7 @@ namespace Escher
 
             panelButtons.Visible = true;
             panelImaging.Visible = false;
+            panelRecolor.Visible = false;
 
             this.CancelButton = buttonClose;
             this.AcceptButton = null;
@@ -220,6 +231,12 @@ namespace Escher
             }
 
             panelImaging.Location = new Point(width / 2 - panelImaging.Width / 2, height);
+
+            panelRecolor.Location = new Point(5, height - panelRecolor.Height);
+            panelRecolor.Width = width - 2 * panelRecolor.Left;
+            r.Width = panelRecolor.Width - r.Left;
+            g.Width = r.Width;
+            b.Width = r.Width;
 
             height += panelButtons.Height;
 
@@ -347,6 +364,7 @@ namespace Escher
 
             panelButtons.Visible = false;
             panelImaging.Visible = true;
+            panelRecolor.Visible = false;
 
             pTrial.Visible = true;
             pImage.Visible = false;
@@ -391,6 +409,10 @@ namespace Escher
                         this.selectionBrush = new SolidBrush(Color.FromArgb(192, 255, 255, 255));
                     }
                     break;
+                case ImagingMode.Recolor:
+                    panelRecolor.Visible = true;
+                    RerunRecolor();
+                    break;
             }
 
             buttonAccept.Enabled = false;
@@ -434,6 +456,16 @@ namespace Escher
 
                         pImage.Image.Dispose();
                         pImage.Image = pTrial.Image.GetSelection(this.selection, convertToGrayscale: false);
+                        pImage.Image.SaveAsJpeg(cImage, 100);
+
+                        ImageHelper.CreateThumbnail(cImage, cThumb, stamp.Width, stamp.Height);
+                        pThumb.LoadImageAndUnlock(cThumb);
+
+                        break;
+
+                    case ImagingMode.Recolor:
+
+                        pImage.Image = pImage.Image.Recolor((float)r.Value / 100, (float)g.Value / 100, (float)b.Value / 100);
                         pImage.Image.SaveAsJpeg(cImage, 100);
 
                         ImageHelper.CreateThumbnail(cImage, cThumb, stamp.Width, stamp.Height);
@@ -501,6 +533,7 @@ namespace Escher
 
             panelButtons.Visible = true;
             panelImaging.Visible = false;
+            panelRecolor.Visible = false;
 
             pTrial.Visible = false;
             pImage.Visible = true;
@@ -529,8 +562,6 @@ namespace Escher
             pTrial.Image = pImage.Image.Brighten(value / 100);
 
             buttonAccept.Enabled = (value != 0);
-
-            Repaint();
         }
 
         private void Resice(float value)
@@ -540,8 +571,31 @@ namespace Escher
             pTrial.Image = pImage.Image.Resize(value / 100);
 
             buttonAccept.Enabled = (value != 100);
+        }
 
-            Repaint();
+        private void Recolor(float r, float g, float b)
+        {
+            if ((bool)panelRecolor.Tag)
+            {
+                labelRecolor.Text = string.Format("R = {0}% · G = {1}% · B = {2}%", r, g, b);
+
+                pTrial.Image.Dispose();
+
+                pTrial.Image = pImage.Image.Recolor(r / 100, g / 100, b / 100);
+
+                buttonAccept.Enabled = (r != 0 || g != 0 || b != 0);
+            }
+        }
+
+        private void RerunRecolor()
+        {
+            panelRecolor.Tag = false;
+            r.Value = 0;
+            g.Value = 0;
+            b.Value = 0;
+            panelRecolor.Tag = true;
+
+            Recolor((float)r.Value, (float)g.Value, (float)b.Value);
         }
 
         private void MouseMoved(MouseButtons button, Point location)

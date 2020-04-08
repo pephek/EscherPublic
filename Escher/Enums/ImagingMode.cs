@@ -11,7 +11,9 @@ namespace Escher
         None,
         Rotating,
         Cropping,
+        Recolor,
         Brightening,
+        Blackening,
         Resize,
         Selecting,
         Thumbnail
@@ -29,14 +31,18 @@ namespace Escher
                     return "Rotate Image";
                 case ImagingMode.Cropping:
                     return "Crop Image";
+                case ImagingMode.Recolor:
+                    return "Adjust Image Color";
                 case ImagingMode.Brightening:
                     return "Brighten Image";
+                case ImagingMode.Blackening:
+                    return "Blacking Background";
                 case ImagingMode.Resize:
                     return "Resize Image";
                 case ImagingMode.Selecting:
                     return "Select Vignette";
                 case ImagingMode.Thumbnail:
-                    return "Create Thmbnail";
+                    return "Create Thumbnail Image";
                 default:
                     throw new ArgumentOutOfRangeException("imagingMode");
             }

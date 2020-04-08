@@ -259,5 +259,20 @@
   <ItemGroup>
     <None Include="Images\Resize_16x.png" />
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\ColorSlider\ColorSlider.csproj">
+      <Project>{16e224dc-7ff0-4908-8318-d6a3ac2e797a}</Project>
+      <Name>ColorSlider</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Images\ColorPalette_16x.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Images\Rerun_16x.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Images\Airbrush_16x.png" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
