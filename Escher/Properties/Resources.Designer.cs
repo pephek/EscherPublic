@@ -173,6 +173,16 @@ namespace Escher.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap Resize_16x {
+            get {
+                object obj = ResourceManager.GetObject("Resize_16x", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap Reverse_16x {
             get {
                 object obj = ResourceManager.GetObject("Reverse_16x", resourceCulture);

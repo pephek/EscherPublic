@@ -12,6 +12,7 @@ namespace Escher
         Rotating,
         Cropping,
         Brightening,
+        Resize,
         Selecting,
         Thumbnail
     }
@@ -30,6 +31,8 @@ namespace Escher
                     return "Crop Image";
                 case ImagingMode.Brightening:
                     return "Brighten Image";
+                case ImagingMode.Resize:
+                    return "Resize Image";
                 case ImagingMode.Selecting:
                     return "Select Vignette";
                 case ImagingMode.Thumbnail:

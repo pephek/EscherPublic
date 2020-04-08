@@ -196,10 +196,10 @@ namespace Escher
                         switch (appearance)
                         {
                             case Appearance.Singular:
-                                x += 2;
-                                y += 2;
-                                width -= 4;
-                                height -= 4;
+                                x += 4;
+                                y += 4;
+                                width -= 8;
+                                height -= 8;
                                 break;
                             default:
                                 throw new Exception("todo");

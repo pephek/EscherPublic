@@ -28,13 +28,21 @@
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Imaging));
             this.panelImaging = new System.Windows.Forms.Panel();
             this.brightness = new System.Windows.Forms.NumericUpDown();
             this.angle = new System.Windows.Forms.NumericUpDown();
             this.panelButtons = new System.Windows.Forms.Panel();
             this.labelMode = new System.Windows.Forms.Label();
+            this.toolTipRotate = new System.Windows.Forms.ToolTip(this.components);
+            this.toolTipCrop = new System.Windows.Forms.ToolTip(this.components);
+            this.toolTipBrighten = new System.Windows.Forms.ToolTip(this.components);
+            this.toolTipSelect = new System.Windows.Forms.ToolTip(this.components);
+            this.toolTipThumbnail = new System.Windows.Forms.ToolTip(this.components);
+            this.toolTipResize = new System.Windows.Forms.ToolTip(this.components);
             this.pTrial = new System.Windows.Forms.PictureBox();
+            this.buttonResize = new System.Windows.Forms.Button();
             this.buttonThumbnail = new System.Windows.Forms.Button();
             this.buttonUndo = new System.Windows.Forms.Button();
             this.buttonCrop = new System.Windows.Forms.Button();
@@ -53,6 +61,7 @@
             this.pColor = new System.Windows.Forms.PictureBox();
             this.pThumb = new System.Windows.Forms.PictureBox();
             this.pImage = new System.Windows.Forms.PictureBox();
+            this.resize = new System.Windows.Forms.NumericUpDown();
             this.panelImaging.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.brightness)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.angle)).BeginInit();
@@ -62,11 +71,13 @@
             ((System.ComponentModel.ISupportInitialize)(this.pColor)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pThumb)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pImage)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.resize)).BeginInit();
             this.SuspendLayout();
             // 
             // panelImaging
             // 
             this.panelImaging.BackColor = System.Drawing.Color.Black;
+            this.panelImaging.Controls.Add(this.resize);
             this.panelImaging.Controls.Add(this.brightness);
             this.panelImaging.Controls.Add(this.angle);
             this.panelImaging.Controls.Add(this.buttonAccept);
@@ -100,12 +111,12 @@
             65536});
             this.angle.Location = new System.Drawing.Point(73, 4);
             this.angle.Maximum = new decimal(new int[] {
-            90,
+            180,
             0,
             0,
             0});
             this.angle.Minimum = new decimal(new int[] {
-            90,
+            180,
             0,
             0,
             -2147483648});
@@ -116,6 +127,7 @@
             // panelButtons
             // 
             this.panelButtons.BackColor = System.Drawing.Color.Black;
+            this.panelButtons.Controls.Add(this.buttonResize);
             this.panelButtons.Controls.Add(this.buttonThumbnail);
             this.panelButtons.Controls.Add(this.buttonUndo);
             this.panelButtons.Controls.Add(this.buttonCrop);
@@ -128,9 +140,9 @@
             this.panelButtons.Controls.Add(this.buttonSave);
             this.panelButtons.Controls.Add(this.buttonPrevious);
             this.panelButtons.Controls.Add(this.buttonNext);
-            this.panelButtons.Location = new System.Drawing.Point(353, 133);
+            this.panelButtons.Location = new System.Drawing.Point(240, 44);
             this.panelButtons.Name = "panelButtons";
-            this.panelButtons.Size = new System.Drawing.Size(422, 39);
+            this.panelButtons.Size = new System.Drawing.Size(455, 39);
             this.panelButtons.TabIndex = 11;
             // 
             // labelMode
@@ -144,6 +156,42 @@
             this.labelMode.TabIndex = 12;
             this.labelMode.Text = "labelMode";
             // 
+            // toolTipRotate
+            // 
+            this.toolTipRotate.IsBalloon = true;
+            this.toolTipRotate.ToolTipIcon = System.Windows.Forms.ToolTipIcon.Info;
+            this.toolTipRotate.ToolTipTitle = "Rotate";
+            // 
+            // toolTipCrop
+            // 
+            this.toolTipCrop.IsBalloon = true;
+            this.toolTipCrop.ToolTipIcon = System.Windows.Forms.ToolTipIcon.Info;
+            this.toolTipCrop.ToolTipTitle = "Crop";
+            // 
+            // toolTipBrighten
+            // 
+            this.toolTipBrighten.IsBalloon = true;
+            this.toolTipBrighten.ToolTipIcon = System.Windows.Forms.ToolTipIcon.Info;
+            this.toolTipBrighten.ToolTipTitle = "Brighten";
+            // 
+            // toolTipSelect
+            // 
+            this.toolTipSelect.IsBalloon = true;
+            this.toolTipSelect.ToolTipIcon = System.Windows.Forms.ToolTipIcon.Info;
+            this.toolTipSelect.ToolTipTitle = "Brighten";
+            // 
+            // toolTipThumbnail
+            // 
+            this.toolTipThumbnail.IsBalloon = true;
+            this.toolTipThumbnail.ToolTipIcon = System.Windows.Forms.ToolTipIcon.Info;
+            this.toolTipThumbnail.ToolTipTitle = "Thumbnail";
+            // 
+            // toolTipResize
+            // 
+            this.toolTipResize.IsBalloon = true;
+            this.toolTipResize.ToolTipIcon = System.Windows.Forms.ToolTipIcon.Info;
+            this.toolTipResize.ToolTipTitle = "Resize";
+            // 
             // pTrial
             // 
             this.pTrial.BackColor = System.Drawing.Color.Black;
@@ -155,21 +203,34 @@
             this.pTrial.TabStop = false;
             this.pTrial.Visible = false;
             // 
+            // buttonResize
+            // 
+            this.buttonResize.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.buttonResize.Image = global::Escher.Properties.Resources.Resize_16x;
+            this.buttonResize.Location = new System.Drawing.Point(248, 3);
+            this.buttonResize.Name = "buttonResize";
+            this.buttonResize.Size = new System.Drawing.Size(32, 32);
+            this.buttonResize.TabIndex = 17;
+            this.buttonResize.TabStop = false;
+            this.toolTipResize.SetToolTip(this.buttonResize, "Resize the image between 50% and 100%");
+            this.buttonResize.UseVisualStyleBackColor = true;
+            // 
             // buttonThumbnail
             // 
             this.buttonThumbnail.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.buttonThumbnail.Image = global::Escher.Properties.Resources.IconFile_16x;
-            this.buttonThumbnail.Location = new System.Drawing.Point(281, 3);
+            this.buttonThumbnail.Location = new System.Drawing.Point(314, 3);
             this.buttonThumbnail.Name = "buttonThumbnail";
             this.buttonThumbnail.Size = new System.Drawing.Size(32, 32);
             this.buttonThumbnail.TabIndex = 16;
             this.buttonThumbnail.TabStop = false;
+            this.toolTipThumbnail.SetToolTip(this.buttonThumbnail, "(Re)create the thumbnail of the image");
             this.buttonThumbnail.UseVisualStyleBackColor = true;
             // 
             // buttonUndo
             // 
             this.buttonUndo.Image = global::Escher.Properties.Resources.Undo_16x;
-            this.buttonUndo.Location = new System.Drawing.Point(354, 3);
+            this.buttonUndo.Location = new System.Drawing.Point(387, 3);
             this.buttonUndo.Name = "buttonUndo";
             this.buttonUndo.Size = new System.Drawing.Size(32, 32);
             this.buttonUndo.TabIndex = 15;
@@ -185,6 +246,7 @@
             this.buttonCrop.Size = new System.Drawing.Size(32, 32);
             this.buttonCrop.TabIndex = 14;
             this.buttonCrop.TabStop = false;
+            this.toolTipCrop.SetToolTip(this.buttonCrop, "Crop the image to remove too much black space around the borders");
             this.buttonCrop.UseVisualStyleBackColor = true;
             // 
             // buttonZoomOut
@@ -216,6 +278,7 @@
             this.buttonBrighten.Size = new System.Drawing.Size(32, 32);
             this.buttonBrighten.TabIndex = 11;
             this.buttonBrighten.TabStop = false;
+            this.toolTipBrighten.SetToolTip(this.buttonBrighten, "Adjust the brightness between -100 and +100");
             this.buttonBrighten.UseVisualStyleBackColor = true;
             // 
             // buttonRotate
@@ -227,24 +290,26 @@
             this.buttonRotate.Size = new System.Drawing.Size(32, 32);
             this.buttonRotate.TabIndex = 10;
             this.buttonRotate.TabStop = false;
+            this.toolTipRotate.SetToolTip(this.buttonRotate, "Rotate the image between -180° and +180°");
             this.buttonRotate.UseVisualStyleBackColor = true;
             // 
             // buttonSelect
             // 
             this.buttonSelect.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.buttonSelect.Image = global::Escher.Properties.Resources.RectangularSelection_16x;
-            this.buttonSelect.Location = new System.Drawing.Point(248, 3);
+            this.buttonSelect.Location = new System.Drawing.Point(281, 3);
             this.buttonSelect.Name = "buttonSelect";
             this.buttonSelect.Size = new System.Drawing.Size(32, 32);
             this.buttonSelect.TabIndex = 8;
             this.buttonSelect.TabStop = false;
+            this.toolTipSelect.SetToolTip(this.buttonSelect, "Select the vignette (and frame) of the stamp");
             this.buttonSelect.UseVisualStyleBackColor = true;
             // 
             // buttonClose
             // 
             this.buttonClose.DialogResult = System.Windows.Forms.DialogResult.Cancel;
             this.buttonClose.Image = global::Escher.Properties.Resources.Close_red_16x;
-            this.buttonClose.Location = new System.Drawing.Point(387, 3);
+            this.buttonClose.Location = new System.Drawing.Point(420, 3);
             this.buttonClose.Name = "buttonClose";
             this.buttonClose.Size = new System.Drawing.Size(32, 32);
             this.buttonClose.TabIndex = 7;
@@ -254,7 +319,7 @@
             // buttonSave
             // 
             this.buttonSave.Image = global::Escher.Properties.Resources.Save_16x;
-            this.buttonSave.Location = new System.Drawing.Point(321, 3);
+            this.buttonSave.Location = new System.Drawing.Point(354, 3);
             this.buttonSave.Name = "buttonSave";
             this.buttonSave.Size = new System.Drawing.Size(32, 32);
             this.buttonSave.TabIndex = 6;
@@ -341,6 +406,24 @@
             this.pImage.TabIndex = 6;
             this.pImage.TabStop = false;
             // 
+            // resize
+            // 
+            this.resize.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.resize.Location = new System.Drawing.Point(73, 4);
+            this.resize.Minimum = new decimal(new int[] {
+            50,
+            0,
+            0,
+            0});
+            this.resize.Name = "resize";
+            this.resize.Size = new System.Drawing.Size(74, 30);
+            this.resize.TabIndex = 4;
+            this.resize.Value = new decimal(new int[] {
+            100,
+            0,
+            0,
+            0});
+            // 
             // Imaging
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
@@ -369,6 +452,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.pColor)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.pThumb)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.pImage)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.resize)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -400,5 +484,13 @@
         private System.Windows.Forms.PictureBox pTrial;
         private System.Windows.Forms.NumericUpDown brightness;
         private System.Windows.Forms.Button buttonThumbnail;
+        private System.Windows.Forms.ToolTip toolTipRotate;
+        private System.Windows.Forms.ToolTip toolTipCrop;
+        private System.Windows.Forms.ToolTip toolTipBrighten;
+        private System.Windows.Forms.ToolTip toolTipSelect;
+        private System.Windows.Forms.ToolTip toolTipThumbnail;
+        private System.Windows.Forms.ToolTip toolTipResize;
+        private System.Windows.Forms.Button buttonResize;
+        private System.Windows.Forms.NumericUpDown resize;
     }
 }

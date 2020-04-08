@@ -31,6 +31,17 @@ namespace Escher
         public Preview()
         {
             InitializeComponent();
+
+            this.Load += new EventHandler((sender, e) => this.Location = new Point(0, 0));
+            this.Paint += new PaintEventHandler((sender, e) => RefreshPreview(resizePreview: false));
+            this.KeyDown += new KeyEventHandler((sender, e) => HandleKeyDown(e.KeyCode, e.Modifiers));
+            this.MouseDown += new MouseEventHandler((sender, e) => HandleMouseDown(e.Location));
+            this.MouseMove += new MouseEventHandler((sender, e) => HandleMouseMove(e.X, e.Y));
+            this.MouseUp += new MouseEventHandler((sender, e) => HandleMouseUp());
+            this.MouseDoubleClick += new MouseEventHandler((sender, e) => this.Location = new Point(0, 0));
+
+            vScrollBar.KeyDown += new KeyEventHandler((sender, e) => HandleKeyDown(e.KeyCode, e.Modifiers));
+            vScrollBar.ValueChanged += new EventHandler((sender, e) => RefreshPreview(resizePreview: false));
         }
 
         public void SetPreview(Design design, int pageNumber, PrintMode printMode, ScreenMode screenMode)
@@ -52,19 +63,9 @@ namespace Escher
             ResizePreview(PageSetup.Get().PageFormat, this.printMode, this.screenMode, out this.pageScale, out this.transformScale);
         }
 
-        protected override void OnLoad(EventArgs e)
+        private void HandleKeyDown(Keys keyCode, Keys modifiers)
         {
-            this.Location = new Point(0, 0);
-        }
-
-        protected override void OnPaint(PaintEventArgs e)
-        {
-            RefreshPreview(resizePreview: false);
-        }
-
-        protected override void OnKeyDown(KeyEventArgs e)
-        {
-            switch (e.KeyCode)
+            switch (keyCode)
             {
                 case Keys.Escape:
                     this.Close();
@@ -89,7 +90,7 @@ namespace Escher
                     ShowPageSetup();
                     break;
                 case Keys.Oemplus:
-                    switch (e.Modifiers)
+                    switch (modifiers)
                     {
                         case Keys.Shift:
                             this.screenMode = this.screenMode.Next();
@@ -109,7 +110,7 @@ namespace Escher
             }
         }
 
-        protected override void OnMouseDown(MouseEventArgs e)
+        private void HandleMouseDown(Point location)
         {
             foreach (Artifact artifact in artifacts.Get())
             {
@@ -117,7 +118,7 @@ namespace Escher
                 {
                     Artifact artefact = artifact.GetScaledCopy(this.pageScale * this.transformScale);
 
-                    if (artefact.Overlaps(e.Location))
+                    if (artefact.Overlaps(location))
                     {
                         Design series = design.GetStampsFromSeries(pageNumber: this.pageNumber, number: artifact.Number);
 
@@ -144,32 +145,22 @@ namespace Escher
             }
 
             this.mouseDown = true;
-            this.mouseLastLocation = e.Location;
+            this.mouseLastLocation = location;
         }
 
-        protected override void OnMouseMove(MouseEventArgs e)
+        private void HandleMouseMove(int x, int y)
         {
             if (mouseDown)
             {
-                this.Location = new Point((this.Location.X - this.mouseLastLocation.X) + e.X, (this.Location.Y - this.mouseLastLocation.Y) + e.Y);
+                this.Location = new Point((this.Location.X - this.mouseLastLocation.X) + x, (this.Location.Y - this.mouseLastLocation.Y) + y);
 
                 this.Update();
             }
         }
 
-        protected override void OnMouseUp(MouseEventArgs e)
+        private void HandleMouseUp()
         {
             this.mouseDown = false;
-        }
-
-        protected override void OnMouseDoubleClick(MouseEventArgs e)
-        {
-            this.Location = new Point(0, 0);
-        }
-
-        private void vScrollBar_ValueChanged(object sender, EventArgs e)
-        {
-            RefreshPreview(resizePreview: false);
         }
 
         private void ShowPageSetup()

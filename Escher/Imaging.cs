@@ -55,6 +55,7 @@ namespace Escher
             buttonRotate.Click += new EventHandler((sender, e) => SetMode(ImagingMode.Rotating));
             buttonCrop.Click += new EventHandler((sender, e) => SetMode(ImagingMode.Cropping));
             buttonBrighten.Click += new EventHandler((sender, e) => SetMode(ImagingMode.Brightening));
+            buttonResize.Click += new EventHandler((sender, e) => SetMode(ImagingMode.Resize));
             buttonSelect.Click += new EventHandler((sender, e) => SetMode(ImagingMode.Selecting));
             buttonThumbnail.Click += new EventHandler((sender, e) => SetMode(ImagingMode.Thumbnail));
 
@@ -67,6 +68,7 @@ namespace Escher
 
             angle.ValueChanged += new EventHandler((sender, e) => Rotate((float)angle.Value));
             brightness.ValueChanged += new EventHandler((sender, e) => Brightness((float)brightness.Value));
+            resize.ValueChanged += new EventHandler((sender, e) => Resice((float)resize.Value));
 
             pTrial.MouseMove += new MouseEventHandler((sender, e) => MouseMoved(e.Button, e.Location));
             pTrial.MouseDown += new MouseEventHandler((sender, e) => MouseIsDown(e.Location));
@@ -111,6 +113,15 @@ namespace Escher
                     }
                 }
             }
+
+            if (this.baseSizePortrait.IsEmpty)
+            {
+                this.baseSizePortrait = Escher.Properties.Resources.ImageNotFound.Size;
+            }
+            if (this.baseSizeLandscape.IsEmpty)
+            {
+                this.baseSizeLandscape = Escher.Properties.Resources.ImageNotFound.Size;
+            }
         }
 
         public void SetImage(Design series, string stampNumber, string folder, string country, string section)
@@ -139,10 +150,7 @@ namespace Escher
             if (File.Exists(this.color)) File.Copy(this.color, cColor, overwrite: true);
             if (File.Exists(this.print)) File.Copy(this.print, cPrint, overwrite: true);
 
-            if (this.baseSizePortrait.IsEmpty && this.baseSizeLandscape.IsEmpty)
-            {
-                GetBaseSizes(path);
-            }
+            GetBaseSizes(path);
 
             ResetImage();
 
@@ -152,6 +160,7 @@ namespace Escher
             buttonRotate.Enabled = File.Exists(cImage);
             buttonCrop.Enabled = buttonRotate.Enabled;
             buttonBrighten.Enabled = buttonRotate.Enabled;
+            buttonResize.Enabled = buttonRotate.Enabled;
             buttonSelect.Enabled = buttonRotate.Enabled;
             buttonThumbnail.Enabled = buttonRotate.Enabled;
 
@@ -359,6 +368,7 @@ namespace Escher
 
             angle.Visible = false;
             brightness.Visible = false;
+            resize.Visible = false;
 
             this.isSelecting = false;
 
@@ -371,6 +381,10 @@ namespace Escher
                 case ImagingMode.Brightening:
                     brightness.Value = 0;
                     brightness.Visible = true;
+                    break;
+                case ImagingMode.Resize:
+                    resize.Value = 100;
+                    resize.Visible = true;
                     break;
                 case ImagingMode.Cropping:
                 case ImagingMode.Selecting:
@@ -442,11 +456,25 @@ namespace Escher
                         ImageHelper.CreateThumbnail(cImage, cThumb, stamp.Width, stamp.Height);
                         pThumb.LoadImageAndUnlock(cThumb);
 
-                        pColor.Image = pColor.Image.Brighten((float)brightness.Value / 100);
-                        pColor.Image.SaveAsJpeg(cColor, 100);
+                        if (File.Exists(this.color))
+                        {
+                            pColor.Image = pColor.Image.Brighten((float)brightness.Value / 100);
+                            pColor.Image.SaveAsJpeg(cColor, 100);
+                        }
 
-                        pPrint.Image = pPrint.Image.Brighten((float)brightness.Value / 100);
-                        pPrint.Image.SaveAsJpeg(cPrint, 100);
+                        if (File.Exists(this.print))
+                        {
+                            pPrint.Image = pPrint.Image.Brighten((float)brightness.Value / 100);
+                            pPrint.Image.SaveAsJpeg(cPrint, 100);
+                        }
+
+                        break;
+
+                    case ImagingMode.Resize:
+
+                        pImage.Image.Dispose();
+                        pImage.Image = new Bitmap(pTrial.Image);
+                        pImage.Image.SaveAsJpeg(cImage, 100);
 
                         break;
 
@@ -507,6 +535,17 @@ namespace Escher
             pTrial.Image = pImage.Image.Brighten(value / 100);
 
             buttonAccept.Enabled = (value != 0);
+
+            SetLocations(this.baseSize);
+        }
+
+        private void Resice(float value)
+        {
+            pTrial.Image.Dispose();
+
+            pTrial.Image = pImage.Image.Resize(value / 100);
+
+            buttonAccept.Enabled = (value != 100);
 
             SetLocations(this.baseSize);
         }

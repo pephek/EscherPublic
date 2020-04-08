@@ -114,40 +114,29 @@ namespace Escher
 
         private static void CreateThumbnail(string large, string small, int width, int height, int quality)
         {
-            Bitmap smallBitmap;
-            Graphics graphics;
-
             Bitmap largeBitmap = new Bitmap(large);
 
-            smallBitmap = new Bitmap(width, height);
+            Bitmap thumbnailBitmap = new Bitmap(width, height);
 
-            graphics = Graphics.FromImage(smallBitmap);
+            using (Graphics g = Graphics.FromImage(thumbnailBitmap))
+            {
+                g.CompositingMode = System.Drawing.Drawing2D.CompositingMode.SourceOver;
+                g.CompositingQuality = System.Drawing.Drawing2D.CompositingQuality.HighQuality;
+                g.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.HighQuality;
+                g.InterpolationMode = System.Drawing.Drawing2D.InterpolationMode.HighQualityBicubic;
+                g.PixelOffsetMode = System.Drawing.Drawing2D.PixelOffsetMode.HighQuality;
 
-            graphics.CompositingMode = System.Drawing.Drawing2D.CompositingMode.SourceOver;
-            graphics.CompositingQuality = System.Drawing.Drawing2D.CompositingQuality.HighQuality;
-            graphics.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.HighQuality;
-            graphics.InterpolationMode = System.Drawing.Drawing2D.InterpolationMode.HighQualityBicubic;
-            graphics.PixelOffsetMode = System.Drawing.Drawing2D.PixelOffsetMode.HighQuality;
+                g.DrawImage(largeBitmap, 0, 0, width, height);
+            }
 
-            graphics.DrawImage(largeBitmap, 0, 0, width, height);
-
-            graphics.Dispose();
-
+            ImageCodecInfo imageCodecInfo = ImageCodecInfo.GetImageEncoders().FirstOrDefault(e => e.MimeType == "image/jpeg");
             EncoderParameters encoderParams = new EncoderParameters();
             EncoderParameter encoderParam = new EncoderParameter(System.Drawing.Imaging.Encoder.Quality, quality);
             encoderParams.Param[0] = encoderParam;
 
-            ImageCodecInfo[] imageCodesInfo = ImageCodecInfo.GetImageEncoders();
+            thumbnailBitmap.Save(small, imageCodecInfo, encoderParams);
 
-            for (int i = 0; i < imageCodesInfo.Length; i++)
-            {
-                if (imageCodesInfo[i].FormatDescription.Equals("JPEG"))
-                {
-                    smallBitmap.Save(small, imageCodesInfo[i], encoderParams);
-                }
-            }
-
-            smallBitmap.Dispose();
+            thumbnailBitmap.Dispose();
             largeBitmap.Dispose();
         }
     }
@@ -184,31 +173,13 @@ namespace Escher
 
         public static void SaveAsJpeg(this Image image, string jpeg, long quality)
         {
-            ImageCodecInfo imageCodecInfo;
-            System.Drawing.Imaging.Encoder encoder;
-            EncoderParameter encoderParameter;
-            EncoderParameters encoderParameters;
-
-            imageCodecInfo = GetEncoderInfo("image/jpeg");
-            encoder = System.Drawing.Imaging.Encoder.Quality;
-            encoderParameters = new EncoderParameters(1);
-            encoderParameter = new EncoderParameter(encoder, 100L);
+            ImageCodecInfo imageCodecInfo = ImageCodecInfo.GetImageEncoders().FirstOrDefault(e => e.MimeType == "image/jpeg");
+            System.Drawing.Imaging.Encoder encoder = System.Drawing.Imaging.Encoder.Quality;
+            EncoderParameters encoderParameters = new EncoderParameters(1);
+            EncoderParameter encoderParameter = new EncoderParameter(encoder, 100L);
             encoderParameters.Param[0] = encoderParameter;
 
             image.Save(jpeg, imageCodecInfo, encoderParameters);
-        }
-
-        private static ImageCodecInfo GetEncoderInfo(String mimeType)
-        {
-            int j;
-            ImageCodecInfo[] encoders;
-            encoders = ImageCodecInfo.GetImageEncoders();
-            for (j = 0; j < encoders.Length; ++j)
-            {
-                if (encoders[j].MimeType == mimeType)
-                    return encoders[j];
-            }
-            return null;
         }
 
         public static Bitmap Brighten(this Image image, float brightness)
@@ -232,14 +203,39 @@ namespace Escher
             imageAttributes.SetColorMatrix(new ColorMatrix(ptsArray), ColorMatrixFlag.Default, ColorAdjustType.Bitmap);
             imageAttributes.SetGamma(gamma, ColorAdjustType.Bitmap);
 
-            Bitmap newBitmap = new Bitmap(image.Width, image.Height);
+            Bitmap brightenedBitmap = new Bitmap(image.Width, image.Height);
 
-            Graphics g = Graphics.FromImage(newBitmap);
+            using (Graphics g = Graphics.FromImage(brightenedBitmap))
+            {
+                g.DrawImage(image, new Rectangle(0, 0, brightenedBitmap.Width, brightenedBitmap.Height), 0, 0, image.Width, image.Height,
+                    GraphicsUnit.Pixel, imageAttributes);
+            }
 
-            g.DrawImage(image, new Rectangle(0, 0, newBitmap.Width, newBitmap.Height), 0, 0, image.Width, image.Height,
-                GraphicsUnit.Pixel, imageAttributes);
 
-            return newBitmap;
+            return brightenedBitmap;
+        }
+
+        public static Bitmap Resize(this Image image, float ratio)
+        {
+            Bitmap resizedBitmap;
+
+            int width = (int)(ratio * image.Width);
+            int height = (int)(ratio * image.Height);
+
+            resizedBitmap = new Bitmap(width, height);
+
+            using (Graphics g = Graphics.FromImage(resizedBitmap))
+            {
+                g.CompositingMode = System.Drawing.Drawing2D.CompositingMode.SourceOver;
+                g.CompositingQuality = System.Drawing.Drawing2D.CompositingQuality.HighQuality;
+                g.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.HighQuality;
+                g.InterpolationMode = System.Drawing.Drawing2D.InterpolationMode.HighQualityBicubic;
+                g.PixelOffsetMode = System.Drawing.Drawing2D.PixelOffsetMode.HighQuality;
+
+                g.DrawImage(image, 0, 0, width, height);
+            }
+
+            return resizedBitmap;
         }
 
         /// <summary>

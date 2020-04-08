@@ -39,7 +39,6 @@
             this.vScrollBar.Name = "vScrollBar";
             this.vScrollBar.Size = new System.Drawing.Size(19, 520);
             this.vScrollBar.TabIndex = 0;
-            this.vScrollBar.ValueChanged += new System.EventHandler(this.vScrollBar_ValueChanged);
             // 
             // Preview
             // 
