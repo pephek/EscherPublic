@@ -78,8 +78,11 @@ namespace Escher
             this.KeyPreview = true;
         }
 
-        private void GetBaseSizes(string rootPath)
+        private void GetPortraitAndLandscapeBaseSizes(string rootPath)
         {
+            this.baseSizePortrait = new Size();
+            this.baseSizeLandscape = new Size();
+
             foreach (DesignEntry stamp in this.series)
             {
                 string imagePath = string.Format("{0}\\image\\{1}.jpg", rootPath, stamp.Number);
@@ -122,6 +125,11 @@ namespace Escher
             {
                 this.baseSizeLandscape = Escher.Properties.Resources.ImageNotFound.Size;
             }
+
+            this.baseSizePortrait.Width = (int)(1.1 * this.baseSizePortrait.Width);
+            this.baseSizePortrait.Height = (int)(1.1 * this.baseSizePortrait.Height);
+            this.baseSizeLandscape.Width = (int)(1.1 * this.baseSizeLandscape.Width);
+            this.baseSizeLandscape.Height = (int)(1.1 * this.baseSizeLandscape.Height);
         }
 
         public void SetImage(Design series, string stampNumber, string folder, string country, string section)
@@ -134,6 +142,8 @@ namespace Escher
             this.stamp = series.GetStampFromSeries(stampNumber);
 
             string path = string.Format("{0}\\{1}\\{2}", folder, country, section);
+
+            GetPortraitAndLandscapeBaseSizes(path);
 
             this.thumb = string.Format("{0}\\{1}.jpg", path, stamp.Number);
             this.image = string.Format("{0}\\image\\{1}.jpg", path, stamp.Number);
@@ -150,30 +160,6 @@ namespace Escher
             if (File.Exists(this.color)) File.Copy(this.color, cColor, overwrite: true);
             if (File.Exists(this.print)) File.Copy(this.print, cPrint, overwrite: true);
 
-            GetBaseSizes(path);
-
-            ResetImage();
-
-            buttonPrevious.Enabled = this.series.FindIndex(s => s.Number == this.stamp.Number) > 0;
-            buttonNext.Enabled = this.series.FindIndex(s => s.Number == this.stamp.Number) < this.series.Count() - 1;
-
-            buttonRotate.Enabled = File.Exists(cImage);
-            buttonCrop.Enabled = buttonRotate.Enabled;
-            buttonBrighten.Enabled = buttonRotate.Enabled;
-            buttonResize.Enabled = buttonRotate.Enabled;
-            buttonSelect.Enabled = buttonRotate.Enabled;
-            buttonThumbnail.Enabled = buttonRotate.Enabled;
-
-            buttonSave.Enabled = false;
-            buttonUndo.Enabled = false;
-        }
-
-        private void ResetImage()
-        {
-            this.mode = ImagingMode.None;
-
-            labelMode.Text = this.mode.Text(this.stamp.Number);
-
             pImage.LoadImageAndUnlock(cImage);
             pThumb.LoadImageAndUnlock(cThumb);
             pColor.LoadImageAndUnlock(cColor);
@@ -188,35 +174,54 @@ namespace Escher
 
             this.baseSize = (pImage.Width < pImage.Height ? this.baseSizePortrait : this.baseSizeLandscape);
 
-            int width;
-            int height;
+            buttonPrevious.Enabled = this.series.FindIndex(s => s.Number == this.stamp.Number) > 0;
+            buttonNext.Enabled = this.series.FindIndex(s => s.Number == this.stamp.Number) < this.series.Count() - 1;
 
-            if (this.baseSize.Width < this.baseSize.Height) // Portrait stamp
-            {
-                width = 3 * this.baseSize.Width;
-                height = 2 * this.baseSize.Height;
-            }
-            else // Landscape stamp
-            {
-                width = 2 * this.baseSize.Width;
-                height = 3 * this.baseSize.Height;
-            }
+            buttonRotate.Enabled = File.Exists(cImage);
+            buttonCrop.Enabled = buttonRotate.Enabled;
+            buttonBrighten.Enabled = buttonRotate.Enabled;
+            buttonResize.Enabled = buttonRotate.Enabled;
+            buttonSelect.Enabled = buttonRotate.Enabled;
+            buttonThumbnail.Enabled = buttonRotate.Enabled;
 
-            SetLocations(this.baseSize);
-
-            if (panelButtons.Width > width)
-            {
-                width = panelButtons.Width;
-            }
-
-            panelButtons.Location = new Point(baseSize.Width - panelButtons.Width / 2, height - panelButtons.Height);
-            panelImaging.Location = new Point(baseSize.Width - panelImaging.Width / 2, height - panelButtons.Height);
+            buttonSave.Enabled = false;
+            buttonUndo.Enabled = false;
 
             panelButtons.Visible = true;
             panelImaging.Visible = false;
 
             this.CancelButton = buttonClose;
             this.AcceptButton = null;
+
+            this.mode = ImagingMode.None;
+
+            labelMode.Text = this.mode.Text(this.stamp.Number);
+
+            Repaint();
+        }
+
+        private void Repaint()
+        {
+            int width = 2 * this.baseSize.Width;
+            int height = 2 * this.baseSize.Height;
+
+            if (panelButtons.Width > width)
+            {
+                width = panelButtons.Width;
+            }
+
+            if (panelButtons.Width > this.baseSize.Width)
+            {
+                panelButtons.Location = new Point(width / 2 - panelButtons.Width / 2, height);
+            }
+            else
+            {
+                panelButtons.Location = new Point(baseSize.Width / 2 - panelButtons.Width / 2, height);
+            }
+
+            panelImaging.Location = new Point(width / 2 - panelImaging.Width / 2, height);
+
+            height += panelButtons.Height;
 
             int screenWidthInPixels = Screen.FromControl(this).WorkingArea.Width;
             int screenHeightInPixels = Screen.FromControl(this).WorkingArea.Height;
@@ -226,29 +231,15 @@ namespace Escher
                 this.Size = new Size(width, height);
                 this.Location = new Point((screenWidthInPixels - width) / 2, (screenHeightInPixels - height) / 2);
             }
-        }
 
-        private void SetLocations(Size baseSize)
-        {
             int w = baseSize.Width;
             int h = baseSize.Height;
 
-            if (w < h) // Portrait stamp
-            {
-                pThumb.Location = new Point(w - pThumb.Width / 2, h - pThumb.Height / 2);
-                pImage.Location = new Point(w - pImage.Width / 2, h - pImage.Height / 2);
-                pTrial.Location = new Point(w - pTrial.Width / 2, h - pTrial.Height / 2);
-                pColor.Location = new Point((int)(2.5 * w) - pColor.Width / 2, (int)(0.5 * h) - pColor.Height / 2);
-                pPrint.Location = new Point((int)(2.5 * w) - pPrint.Width / 2, (int)(1.5 * h) - pPrint.Height / 2);
-            }
-            else // Landscape stamp
-            {
-                pThumb.Location = new Point(w - pThumb.Width / 2, (int)(2.0 * h) - pThumb.Height / 2);
-                pImage.Location = new Point(w - pImage.Width / 2, (int)(2.0 * h) - pImage.Height / 2);
-                pTrial.Location = new Point(w - pTrial.Width / 2, (int)(2.0 * h) - pTrial.Height / 2);
-                pColor.Location = new Point((int)(0.5 * w) - pColor.Width / 2, (int)(0.5 * h) - pColor.Height / 2);
-                pPrint.Location = new Point((int)(1.5 * w) - pPrint.Width / 2, (int)(0.5 * h) - pPrint.Height / 2);
-            }
+            pThumb.Location = new Point(w / 2 - pThumb.Width / 2, h / 2 - pThumb.Height / 2);
+            pImage.Location = new Point(w / 2 - pImage.Width / 2, h * 3 / 2 - pImage.Height / 2);
+            pColor.Location = new Point(w * 3 / 2 - pColor.Width / 2, h / 2 - pColor.Height / 2);
+            pPrint.Location = new Point(w * 3 / 2 - pPrint.Width / 2, h * 3 / 2 - pPrint.Height / 2);
+            pTrial.Location = new Point(w - pTrial.Width / 2, h - pTrial.Height / 2);
         }
 
         protected override void OnKeyUp(KeyEventArgs e)
@@ -404,7 +395,7 @@ namespace Escher
 
             buttonAccept.Enabled = false;
 
-            SetLocations(this.baseSize);
+            Repaint();
 
             this.Focus();
 
@@ -426,6 +417,9 @@ namespace Escher
                 switch (this.mode)
                 {
                     case ImagingMode.Rotating:
+
+                        this.baseSize.Width = (int)((float)pTrial.Image.Width / pImage.Image.Width * this.baseSize.Width);
+                        this.baseSize.Height = (int)((float)pTrial.Image.Height / pImage.Image.Height * this.baseSize.Height);
 
                         pImage.Image.Dispose();
                         pImage.Image = new Bitmap(pTrial.Image);
@@ -514,7 +508,7 @@ namespace Escher
             pColor.Visible = true;
             pPrint.Visible = true;
 
-            SetLocations(this.baseSize);
+            Repaint();
         }
 
         private void Rotate(float value)
@@ -525,7 +519,7 @@ namespace Escher
 
             buttonAccept.Enabled = (value != 0);
 
-            SetLocations(this.baseSize);
+            Repaint();
         }
 
         private void Brightness(float value)
@@ -536,7 +530,7 @@ namespace Escher
 
             buttonAccept.Enabled = (value != 0);
 
-            SetLocations(this.baseSize);
+            Repaint();
         }
 
         private void Resice(float value)
@@ -547,7 +541,7 @@ namespace Escher
 
             buttonAccept.Enabled = (value != 100);
 
-            SetLocations(this.baseSize);
+            Repaint();
         }
 
         private void MouseMoved(MouseButtons button, Point location)
