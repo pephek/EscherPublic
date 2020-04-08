@@ -73,6 +73,7 @@
             this.pThumb = new System.Windows.Forms.PictureBox();
             this.pImage = new System.Windows.Forms.PictureBox();
             this.toolTipBlacken = new System.Windows.Forms.ToolTip(this.components);
+            this.blacken = new System.Windows.Forms.NumericUpDown();
             this.panelImaging.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.resize)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.brightness)).BeginInit();
@@ -84,11 +85,13 @@
             ((System.ComponentModel.ISupportInitialize)(this.pColor)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pThumb)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pImage)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.blacken)).BeginInit();
             this.SuspendLayout();
             // 
             // panelImaging
             // 
             this.panelImaging.BackColor = System.Drawing.Color.Black;
+            this.panelImaging.Controls.Add(this.blacken);
             this.panelImaging.Controls.Add(this.resize);
             this.panelImaging.Controls.Add(this.brightness);
             this.panelImaging.Controls.Add(this.angle);
@@ -481,7 +484,7 @@
             this.buttonBlacken.Size = new System.Drawing.Size(32, 32);
             this.buttonBlacken.TabIndex = 19;
             this.buttonBlacken.TabStop = false;
-            this.toolTipBrighten.SetToolTip(this.buttonBlacken, "Black the backgroun around the stamp");
+            this.toolTipBrighten.SetToolTip(this.buttonBlacken, "Blacken the background around the stamp");
             this.buttonBlacken.UseVisualStyleBackColor = true;
             // 
             // buttonRecolor
@@ -705,6 +708,14 @@
             this.toolTipBlacken.ToolTipIcon = System.Windows.Forms.ToolTipIcon.Info;
             this.toolTipBlacken.ToolTipTitle = "Blacken";
             // 
+            // blacken
+            // 
+            this.blacken.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.blacken.Location = new System.Drawing.Point(73, 4);
+            this.blacken.Name = "blacken";
+            this.blacken.Size = new System.Drawing.Size(74, 30);
+            this.blacken.TabIndex = 5;
+            // 
             // Imaging
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
@@ -737,6 +748,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.pColor)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.pThumb)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.pImage)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.blacken)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -787,5 +799,6 @@
         private System.Windows.Forms.Label labelRecolor;
         private System.Windows.Forms.Button buttonBlacken;
         private System.Windows.Forms.ToolTip toolTipBlacken;
+        private System.Windows.Forms.NumericUpDown blacken;
     }
 }

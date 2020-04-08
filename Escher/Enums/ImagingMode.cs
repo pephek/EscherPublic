@@ -36,7 +36,7 @@ namespace Escher
                 case ImagingMode.Brightening:
                     return "Brighten Image";
                 case ImagingMode.Blackening:
-                    return "Blacking Background";
+                    return "Blackening Background";
                 case ImagingMode.Resize:
                     return "Resize Image";
                 case ImagingMode.Selecting:

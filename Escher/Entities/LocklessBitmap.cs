@@ -56,6 +56,12 @@ namespace Escher
 
     public static class LocklessBitmapExtensionMethods
     {
+        private static int Grayscale(Color pixel)
+        {
+            // Convert to grayscale as used in television
+            return (int)(0.299 * pixel.R + 0.587 * pixel.G + 0.114 * pixel.B);
+        }
+
         public static void SetToGrayscale(this LocklessBitmap bitmap)
         {
             for (int y = 0; y < bitmap.Height; y++)
@@ -64,12 +70,67 @@ namespace Escher
                 {
                     Color pixel = bitmap.GetPixel(x, y);
 
-                    // Convert to grayscale as used in television
-                    int grayscale = (int)(0.299 * pixel.R + 0.587 * pixel.G + 0.114 * pixel.B);
+                    int grayscale = Grayscale(pixel);
 
                     bitmap.SetPixel(x, y, Color.FromArgb(pixel.A, grayscale, grayscale, grayscale));
                 }
             }
+        }
+
+        public static void Blacken(this LocklessBitmap bitmap, byte threshold)
+        {
+            for (int y = 0; y < bitmap.Height; y++)
+            {
+                int x = 0;
+
+                while (x <= bitmap.Width - 1 && Grayscale(bitmap.GetPixel(x, y)) <= threshold)
+                {
+                    bitmap.SetPixel(x, y, Color.FromArgb(bitmap.GetPixel(x, y).A, 0, 0, 0));
+                    x++;
+                }
+
+                x = bitmap.Width - 1;
+
+                while (x >= 0 && Grayscale(bitmap.GetPixel(x, y)) <= threshold)
+                {
+                    bitmap.SetPixel(x, y, Color.FromArgb(bitmap.GetPixel(x, y).A, 0, 0, 0));
+                    x--;
+                }
+            }
+
+            for (int x = 0; x < bitmap.Width; x++)
+            {
+                int y = 0;
+
+                while (y <= bitmap.Height - 1 && Grayscale(bitmap.GetPixel(x, y)) <= threshold)
+                {
+                    bitmap.SetPixel(x, y, Color.FromArgb(bitmap.GetPixel(x, y).A, 0, 0, 0));
+                    y++;
+                }
+
+                y = bitmap.Height - 1;
+
+                while (y >= 0 && Grayscale(bitmap.GetPixel(x, y)) <= threshold)
+                {
+                    bitmap.SetPixel(x, y, Color.FromArgb(bitmap.GetPixel(x, y).A, 0, 0, 0));
+                    y--;
+                }
+            }
+
+            //for (int y = 0; y < bitmap.Height; y++)
+            //{
+            //    for (int x = 0; x < bitmap.Width; x++)
+            //    {
+            //        Color pixel = bitmap.GetPixel(x, y);
+
+            //        int grayscale = Grayscale(pixel);
+
+            //        if (grayscale <= threshold)
+            //        {
+            //            bitmap.SetPixel(x, y, Color.FromArgb(pixel.A, 0, 0, 0));
+            //        }
+            //    }
+            //}
         }
 
         public static void Recolor(this LocklessBitmap bitmap, float r, float g, float b)

@@ -56,7 +56,7 @@ namespace Escher
             buttonCrop.Click += new EventHandler((sender, e) => SetMode(ImagingMode.Cropping));
             buttonRecolor.Click += new EventHandler((sender, e) => SetMode(ImagingMode.Recolor));
             buttonBrighten.Click += new EventHandler((sender, e) => SetMode(ImagingMode.Brightening));
-            buttonBlacken.Click += new EventHandler((sender, e) => SetMode(ImagingMode.Brightening));
+            buttonBlacken.Click += new EventHandler((sender, e) => SetMode(ImagingMode.Blackening));
             buttonResize.Click += new EventHandler((sender, e) => SetMode(ImagingMode.Resize));
             buttonSelect.Click += new EventHandler((sender, e) => SetMode(ImagingMode.Selecting));
             buttonThumbnail.Click += new EventHandler((sender, e) => SetMode(ImagingMode.Thumbnail));
@@ -70,6 +70,7 @@ namespace Escher
 
             angle.ValueChanged += new EventHandler((sender, e) => Rotate((float)angle.Value));
             brightness.ValueChanged += new EventHandler((sender, e) => Brightness((float)brightness.Value));
+            blacken.ValueChanged += new EventHandler((sender, e) => Blacken((byte)blacken.Value));
             resize.ValueChanged += new EventHandler((sender, e) => Resice((float)resize.Value));
 
             r.ValueChanged += new EventHandler((sender, e) => Recolor((float)r.Value, (float)g.Value, (float)b.Value));
@@ -377,6 +378,7 @@ namespace Escher
 
             angle.Visible = false;
             brightness.Visible = false;
+            blacken.Visible = false;
             resize.Visible = false;
 
             this.isSelecting = false;
@@ -390,6 +392,10 @@ namespace Escher
                 case ImagingMode.Brightening:
                     brightness.Value = 0;
                     brightness.Visible = true;
+                    break;
+                case ImagingMode.Blackening:
+                    blacken.Value = 0;
+                    blacken.Visible = true;
                     break;
                 case ImagingMode.Resize:
                     resize.Value = 100;
@@ -496,6 +502,16 @@ namespace Escher
 
                         break;
 
+                    case ImagingMode.Blackening:
+
+                        pImage.Image = pImage.Image.Blacken((byte)blacken.Value);
+                        pImage.Image.SaveAsJpeg(cImage, 100);
+
+                        ImageHelper.CreateThumbnail(cImage, cThumb, stamp.Width, stamp.Height);
+                        pThumb.LoadImageAndUnlock(cThumb);
+
+                        break;
+
                     case ImagingMode.Resize:
 
                         pImage.Image.Dispose();
@@ -560,6 +576,15 @@ namespace Escher
             pTrial.Image.Dispose();
 
             pTrial.Image = pImage.Image.Brighten(value / 100);
+
+            buttonAccept.Enabled = (value != 0);
+        }
+
+        private void Blacken(byte value)
+        {
+            pTrial.Image.Dispose();
+
+            pTrial.Image = pImage.Image.Blacken(value);
 
             buttonAccept.Enabled = (value != 0);
         }
