@@ -210,6 +210,20 @@ namespace Escher
             return blackendBitmap.Bitmap;
         }
 
+        public static Bitmap Measure(this Image image, byte threshold)
+        {
+            LocklessBitmap bitmap = new LocklessBitmap(image.Width, image.Height);
+
+            using (Graphics graphics = Graphics.FromImage(bitmap.Bitmap))
+            {
+                graphics.DrawImage(image, new Rectangle(0, 0, image.Width, image.Height));
+            }
+
+            bitmap.Measure(threshold);
+
+            return bitmap.Bitmap;
+        }
+
         public static Bitmap Brighten(this Image image, float brightness)
         {
             float contrast = 1.0f; // no change in contrast

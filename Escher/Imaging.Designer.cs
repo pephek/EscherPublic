@@ -49,8 +49,12 @@
             this.panelRecolor = new System.Windows.Forms.Panel();
             this.toolTipRerunRecolor = new System.Windows.Forms.ToolTip(this.components);
             this.labelRecolor = new System.Windows.Forms.Label();
+            this.toolTipBlacken = new System.Windows.Forms.ToolTip(this.components);
+            this.blacken = new System.Windows.Forms.NumericUpDown();
+            this.toolTipMeasure = new System.Windows.Forms.ToolTip(this.components);
             this.buttonRerunRecolor = new System.Windows.Forms.Button();
             this.pTrial = new System.Windows.Forms.PictureBox();
+            this.buttonMeasure = new System.Windows.Forms.Button();
             this.buttonBlacken = new System.Windows.Forms.Button();
             this.buttonRecolor = new System.Windows.Forms.Button();
             this.buttonResize = new System.Windows.Forms.Button();
@@ -72,25 +76,26 @@
             this.pColor = new System.Windows.Forms.PictureBox();
             this.pThumb = new System.Windows.Forms.PictureBox();
             this.pImage = new System.Windows.Forms.PictureBox();
-            this.toolTipBlacken = new System.Windows.Forms.ToolTip(this.components);
-            this.blacken = new System.Windows.Forms.NumericUpDown();
+            this.measure = new System.Windows.Forms.NumericUpDown();
             this.panelImaging.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.resize)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.brightness)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.angle)).BeginInit();
             this.panelButtons.SuspendLayout();
             this.panelRecolor.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.blacken)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pTrial)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pPrint)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pColor)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pThumb)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pImage)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.blacken)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.measure)).BeginInit();
             this.SuspendLayout();
             // 
             // panelImaging
             // 
             this.panelImaging.BackColor = System.Drawing.Color.Black;
+            this.panelImaging.Controls.Add(this.measure);
             this.panelImaging.Controls.Add(this.blacken);
             this.panelImaging.Controls.Add(this.resize);
             this.panelImaging.Controls.Add(this.brightness);
@@ -160,6 +165,7 @@
             // panelButtons
             // 
             this.panelButtons.BackColor = System.Drawing.Color.Black;
+            this.panelButtons.Controls.Add(this.buttonMeasure);
             this.panelButtons.Controls.Add(this.buttonBlacken);
             this.panelButtons.Controls.Add(this.buttonRecolor);
             this.panelButtons.Controls.Add(this.buttonResize);
@@ -177,7 +183,7 @@
             this.panelButtons.Controls.Add(this.buttonNext);
             this.panelButtons.Location = new System.Drawing.Point(240, 44);
             this.panelButtons.Name = "panelButtons";
-            this.panelButtons.Size = new System.Drawing.Size(540, 39);
+            this.panelButtons.Size = new System.Drawing.Size(555, 39);
             this.panelButtons.TabIndex = 11;
             // 
             // labelMode
@@ -452,6 +458,26 @@
             this.labelRecolor.TabIndex = 20;
             this.labelRecolor.Text = "R = R% · G = G% · B = B%";
             // 
+            // toolTipBlacken
+            // 
+            this.toolTipBlacken.IsBalloon = true;
+            this.toolTipBlacken.ToolTipIcon = System.Windows.Forms.ToolTipIcon.Info;
+            this.toolTipBlacken.ToolTipTitle = "Blacken";
+            // 
+            // blacken
+            // 
+            this.blacken.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.blacken.Location = new System.Drawing.Point(73, 4);
+            this.blacken.Name = "blacken";
+            this.blacken.Size = new System.Drawing.Size(74, 30);
+            this.blacken.TabIndex = 5;
+            // 
+            // toolTipMeasure
+            // 
+            this.toolTipMeasure.IsBalloon = true;
+            this.toolTipMeasure.ToolTipIcon = System.Windows.Forms.ToolTipIcon.Info;
+            this.toolTipMeasure.ToolTipTitle = "Measure";
+            // 
             // buttonRerunRecolor
             // 
             this.buttonRerunRecolor.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
@@ -475,6 +501,18 @@
             this.pTrial.TabStop = false;
             this.pTrial.Visible = false;
             // 
+            // buttonMeasure
+            // 
+            this.buttonMeasure.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.buttonMeasure.Image = global::Escher.Properties.Resources.RulerMeasure_16x;
+            this.buttonMeasure.Location = new System.Drawing.Point(314, 3);
+            this.buttonMeasure.Name = "buttonMeasure";
+            this.buttonMeasure.Size = new System.Drawing.Size(32, 32);
+            this.buttonMeasure.TabIndex = 20;
+            this.buttonMeasure.TabStop = false;
+            this.toolTipMeasure.SetToolTip(this.buttonMeasure, "Measure the size of the stamp");
+            this.buttonMeasure.UseVisualStyleBackColor = true;
+            // 
             // buttonBlacken
             // 
             this.buttonBlacken.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
@@ -484,7 +522,7 @@
             this.buttonBlacken.Size = new System.Drawing.Size(32, 32);
             this.buttonBlacken.TabIndex = 19;
             this.buttonBlacken.TabStop = false;
-            this.toolTipBrighten.SetToolTip(this.buttonBlacken, "Blacken the background around the stamp");
+            this.toolTipBlacken.SetToolTip(this.buttonBlacken, "Blacken the background around the stamp");
             this.buttonBlacken.UseVisualStyleBackColor = true;
             // 
             // buttonRecolor
@@ -503,7 +541,7 @@
             // 
             this.buttonResize.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.buttonResize.Image = global::Escher.Properties.Resources.Resize_16x;
-            this.buttonResize.Location = new System.Drawing.Point(314, 3);
+            this.buttonResize.Location = new System.Drawing.Point(347, 3);
             this.buttonResize.Name = "buttonResize";
             this.buttonResize.Size = new System.Drawing.Size(32, 32);
             this.buttonResize.TabIndex = 17;
@@ -515,7 +553,7 @@
             // 
             this.buttonThumbnail.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.buttonThumbnail.Image = global::Escher.Properties.Resources.IconFile_16x;
-            this.buttonThumbnail.Location = new System.Drawing.Point(380, 3);
+            this.buttonThumbnail.Location = new System.Drawing.Point(413, 3);
             this.buttonThumbnail.Name = "buttonThumbnail";
             this.buttonThumbnail.Size = new System.Drawing.Size(32, 32);
             this.buttonThumbnail.TabIndex = 16;
@@ -526,7 +564,7 @@
             // buttonUndo
             // 
             this.buttonUndo.Image = global::Escher.Properties.Resources.Undo_16x;
-            this.buttonUndo.Location = new System.Drawing.Point(453, 3);
+            this.buttonUndo.Location = new System.Drawing.Point(486, 3);
             this.buttonUndo.Name = "buttonUndo";
             this.buttonUndo.Size = new System.Drawing.Size(32, 32);
             this.buttonUndo.TabIndex = 15;
@@ -593,7 +631,7 @@
             // 
             this.buttonSelect.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.buttonSelect.Image = global::Escher.Properties.Resources.RectangularSelection_16x;
-            this.buttonSelect.Location = new System.Drawing.Point(347, 3);
+            this.buttonSelect.Location = new System.Drawing.Point(380, 3);
             this.buttonSelect.Name = "buttonSelect";
             this.buttonSelect.Size = new System.Drawing.Size(32, 32);
             this.buttonSelect.TabIndex = 8;
@@ -605,7 +643,7 @@
             // 
             this.buttonClose.DialogResult = System.Windows.Forms.DialogResult.Cancel;
             this.buttonClose.Image = global::Escher.Properties.Resources.Close_red_16x;
-            this.buttonClose.Location = new System.Drawing.Point(486, 3);
+            this.buttonClose.Location = new System.Drawing.Point(519, 3);
             this.buttonClose.Name = "buttonClose";
             this.buttonClose.Size = new System.Drawing.Size(32, 32);
             this.buttonClose.TabIndex = 7;
@@ -615,7 +653,7 @@
             // buttonSave
             // 
             this.buttonSave.Image = global::Escher.Properties.Resources.Save_16x;
-            this.buttonSave.Location = new System.Drawing.Point(420, 3);
+            this.buttonSave.Location = new System.Drawing.Point(453, 3);
             this.buttonSave.Name = "buttonSave";
             this.buttonSave.Size = new System.Drawing.Size(32, 32);
             this.buttonSave.TabIndex = 6;
@@ -702,19 +740,13 @@
             this.pImage.TabIndex = 6;
             this.pImage.TabStop = false;
             // 
-            // toolTipBlacken
+            // measure
             // 
-            this.toolTipBlacken.IsBalloon = true;
-            this.toolTipBlacken.ToolTipIcon = System.Windows.Forms.ToolTipIcon.Info;
-            this.toolTipBlacken.ToolTipTitle = "Blacken";
-            // 
-            // blacken
-            // 
-            this.blacken.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.blacken.Location = new System.Drawing.Point(73, 4);
-            this.blacken.Name = "blacken";
-            this.blacken.Size = new System.Drawing.Size(74, 30);
-            this.blacken.TabIndex = 5;
+            this.measure.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.measure.Location = new System.Drawing.Point(73, 4);
+            this.measure.Name = "measure";
+            this.measure.Size = new System.Drawing.Size(74, 30);
+            this.measure.TabIndex = 6;
             // 
             // Imaging
             // 
@@ -743,12 +775,13 @@
             this.panelButtons.ResumeLayout(false);
             this.panelRecolor.ResumeLayout(false);
             this.panelRecolor.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.blacken)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.pTrial)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.pPrint)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.pColor)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.pThumb)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.pImage)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.blacken)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.measure)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -800,5 +833,8 @@
         private System.Windows.Forms.Button buttonBlacken;
         private System.Windows.Forms.ToolTip toolTipBlacken;
         private System.Windows.Forms.NumericUpDown blacken;
+        private System.Windows.Forms.Button buttonMeasure;
+        private System.Windows.Forms.ToolTip toolTipMeasure;
+        private System.Windows.Forms.NumericUpDown measure;
     }
 }

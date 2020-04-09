@@ -45,6 +45,116 @@ namespace Escher
             return result;
         }
 
+        public int GetGrayscale(int x, int y)
+        {
+            Color pixel = GetPixel(x, y);
+
+            // Convert to grayscale as used in television
+            return (int)(0.299 * pixel.R + 0.587 * pixel.G + 0.114 * pixel.B);
+        }
+
+        public bool IsColor(int x, int y, Color color)
+        {
+            return Bits[x + (y * Width)] == color.ToArgb();
+        }
+
+        public bool HasColor(int x1, int y1, int x2, int y2, Color color, float percentage)
+        {
+            int count = 0;
+            int match = 0;
+
+            for (int y = y1; y <= y2; y++)
+            {
+                for (int x = x1; x <= x2; x++)
+                {
+                    count++;
+                    if (IsColor(x, y, color))
+                    {
+                        match++;
+                    }
+                }
+            }
+
+            return (float)match / count >= percentage;
+        }
+
+        public void SetPixels(int x1, int y1, int x2, int y2, Color color)
+        {
+            for (int y = y1; y <= y2; y++)
+            {
+                for (int x = x1; x <= x2; x++)
+                {
+                    SetPixel(x, y, color);
+                }
+            }
+        }
+
+        public LocklessBitmap Copy(Rectangle area)
+        {
+            LocklessBitmap copy = new LocklessBitmap(area.Width, area.Height);
+
+            for (int y = 0; y < area.Height; y++)
+            {
+                for (int x = 0; x < area.Width; x++)
+                {
+                    copy.SetPixel(x, y, GetPixel(x + area.X, y + area.Y));
+                }
+            }
+
+            return copy;
+        }
+
+        public LocklessBitmap Rotate(int angle)
+        {
+            LocklessBitmap rotated = null;
+
+            switch (angle)
+            {
+                case 0:
+                    rotated = new LocklessBitmap(Width, Height);
+                    for (int x = 0; x < rotated.Width; x++)
+                    {
+                        for (int y = 0; y < rotated.Height; y++)
+                        {
+                            rotated.SetPixel(x, y, GetPixel(x, y));
+                        }
+                    }
+                    break;
+                case 180:
+                    rotated = new LocklessBitmap(Width, Height);
+                    for (int x = 0; x < rotated.Width; x++)
+                    {
+                        for (int y = 0; y < rotated.Height; y++)
+                        {
+                            rotated.SetPixel(x, y, GetPixel((Width - 1) - x, (Height - 1) - y));
+                        }
+                    }
+                    break;
+                case 90:
+                    rotated = new LocklessBitmap(Height, Width);
+                    for (int y = 0; y < rotated.Height; y++)
+                    {
+                        for (int x = 0; x < rotated.Width; x++)
+                        {
+                            rotated.SetPixel(x, y, GetPixel(y, (Height - 1) - x));
+                        }
+                    }
+                    break;
+                case -90:
+                    rotated = new LocklessBitmap(Height, Width);
+                    for (int y = 0; y < rotated.Height; y++)
+                    {
+                        for (int x = 0; x < rotated.Width; x++)
+                        {
+                            rotated.SetPixel(x, y, GetPixel((Width - 1) - y, x));
+                        }
+                    }
+                    break;
+            }
+
+            return rotated;
+        }
+
         public void Dispose()
         {
             if (Disposed) return;
@@ -56,23 +166,15 @@ namespace Escher
 
     public static class LocklessBitmapExtensionMethods
     {
-        private static int Grayscale(Color pixel)
-        {
-            // Convert to grayscale as used in television
-            return (int)(0.299 * pixel.R + 0.587 * pixel.G + 0.114 * pixel.B);
-        }
-
         public static void SetToGrayscale(this LocklessBitmap bitmap)
         {
             for (int y = 0; y < bitmap.Height; y++)
             {
                 for (int x = 0; x < bitmap.Width; x++)
                 {
-                    Color pixel = bitmap.GetPixel(x, y);
+                    int grayscale = bitmap.GetGrayscale(x, y);
 
-                    int grayscale = Grayscale(pixel);
-
-                    bitmap.SetPixel(x, y, Color.FromArgb(pixel.A, grayscale, grayscale, grayscale));
+                    bitmap.SetPixel(x, y, Color.FromArgb(bitmap.GetPixel(x, y).A, grayscale, grayscale, grayscale));
                 }
             }
         }
@@ -83,7 +185,7 @@ namespace Escher
             {
                 int x = 0;
 
-                while (x <= bitmap.Width - 1 && Grayscale(bitmap.GetPixel(x, y)) <= threshold)
+                while (x <= bitmap.Width - 1 && bitmap.GetGrayscale(x, y) <= threshold)
                 {
                     bitmap.SetPixel(x, y, Color.FromArgb(bitmap.GetPixel(x, y).A, 0, 0, 0));
                     x++;
@@ -91,7 +193,7 @@ namespace Escher
 
                 x = bitmap.Width - 1;
 
-                while (x >= 0 && Grayscale(bitmap.GetPixel(x, y)) <= threshold)
+                while (x >= 0 && bitmap.GetGrayscale(x, y) <= threshold)
                 {
                     bitmap.SetPixel(x, y, Color.FromArgb(bitmap.GetPixel(x, y).A, 0, 0, 0));
                     x--;
@@ -102,7 +204,7 @@ namespace Escher
             {
                 int y = 0;
 
-                while (y <= bitmap.Height - 1 && Grayscale(bitmap.GetPixel(x, y)) <= threshold)
+                while (y <= bitmap.Height - 1 && bitmap.GetGrayscale(x, y) <= threshold)
                 {
                     bitmap.SetPixel(x, y, Color.FromArgb(bitmap.GetPixel(x, y).A, 0, 0, 0));
                     y++;
@@ -110,27 +212,12 @@ namespace Escher
 
                 y = bitmap.Height - 1;
 
-                while (y >= 0 && Grayscale(bitmap.GetPixel(x, y)) <= threshold)
+                while (y >= 0 && bitmap.GetGrayscale(x, y) <= threshold)
                 {
                     bitmap.SetPixel(x, y, Color.FromArgb(bitmap.GetPixel(x, y).A, 0, 0, 0));
                     y--;
                 }
             }
-
-            //for (int y = 0; y < bitmap.Height; y++)
-            //{
-            //    for (int x = 0; x < bitmap.Width; x++)
-            //    {
-            //        Color pixel = bitmap.GetPixel(x, y);
-
-            //        int grayscale = Grayscale(pixel);
-
-            //        if (grayscale <= threshold)
-            //        {
-            //            bitmap.SetPixel(x, y, Color.FromArgb(pixel.A, 0, 0, 0));
-            //        }
-            //    }
-            //}
         }
 
         public static void Recolor(this LocklessBitmap bitmap, float r, float g, float b)
@@ -155,6 +242,193 @@ namespace Escher
                     bitmap.SetPixel(x, y, Color.FromArgb(pixel.A, rPixel, gPixel, bPixel));
                 }
             }
+        }
+
+        public static bool Measure(this LocklessBitmap bitmap, byte threshold)
+        {
+            int width = bitmap.Width;
+            int height = bitmap.Height;
+
+            int xMin = width / 8;
+            int xMax = width - xMin;
+            int yMin = height / 8;
+            int yMax = height - yMin;
+
+            Rectangle[] areas = new Rectangle[]
+            { 
+                new Rectangle(xMin, 0, xMax - xMin, yMin),
+                new Rectangle(xMax, yMin, xMin, yMax - yMin),
+                new Rectangle(xMin, yMax, xMax - xMin, yMin),
+                new Rectangle(0, yMin, xMin, yMax - yMin)
+            };
+
+            LocklessBitmap[] bitmaps = new LocklessBitmap[]
+            {
+                bitmap.Copy(areas[0]).Rotate(0),
+                bitmap.Copy(areas[1]).Rotate(-90),
+                bitmap.Copy(areas[2]).Rotate(180),
+                bitmap.Copy(areas[3]).Rotate(90)
+            };
+
+            int y1, y2;
+
+            for (int i = 0; i < bitmaps.Length; i++)
+            {
+                LocklessBitmap b = bitmaps[i];
+
+                for (int y = 0; y < b.Height; y++)
+                {
+                    for (int x = 0; x < b.Width; x++)
+                    {
+                        b.SetPixel(x, y, b.GetGrayscale(x, y) <= threshold ? Color.Black : Color.White);
+                    }
+                }
+
+                bool removed = true;
+
+                while (removed)
+                {
+                    removed = false;
+
+                    for (int y = 1; y < b.Height - 1; y++)
+                    {
+                        for (int x = 1; x < b.Width - 1; x++)
+                        {
+                            Color otherColor = b.IsColor(x, y, Color.Black) ? Color.White : Color.Black;
+
+                            int otherCount = 0;
+
+                            for (int dx = -1; dx <= +1; dx++)
+                            {
+                                for (int dy = -1; dy <= +1; dy++)
+                                {
+                                    if (!(dx == 0 && dy == 0))
+                                    {
+                                        if (b.IsColor(x + dx, y + dy, otherColor))
+                                        {
+                                            otherCount++;
+                                        }
+                                    }
+                                }
+                            }
+
+                            if (otherCount >= 6)
+                            {
+                                b.SetPixel(x, y, otherColor);
+
+                                removed = true;
+                            }
+                        }
+                    }
+                }
+
+                y1 = 0;
+                while (y1 < b.Height && b.HasColor(0, y1, b.Width - 1, y1, Color.Black, 0.90F))
+                {
+                    y1++;
+                }
+
+                if (!(y1 > 0 && y1 < b.Height))
+                {
+                    continue; // Not found the upper boundfound, so continue with the next side
+                }
+
+                y2 = y1;
+                while (y2 < b.Height && !b.HasColor(0, y2, b.Width - 1, y2, Color.White, 1))
+                {
+                    y2++;
+                }
+
+                if (!(y2 > y1 && y2 < b.Height))
+                {
+                    continue; // Not found the lower boundfound, so continue with the next side
+                }
+
+                for (int x = 1; x < b.Width - 1; x++) // Iterate from +1 to Width-2 because of the pixel removal !!!
+                {
+                    for (int y = y2; y > y1; y--)
+                    {
+                        if (!b.IsColor(x, y, Color.White))
+                        {
+                            for (int yy = y; yy > y1; yy--)
+                            {
+                                b.SetPixel(x, yy, Color.Black);
+                            }
+
+                            break;
+                        }
+                    }
+                }
+
+                float[] p = new float[b.Width - 2];
+
+                for (int x = 1; x < b.Width - 1; x++) // Iterate from +1 to Width-2 because of the pixel removal which not done at the side !!!
+                {
+                    for (int y = y1; y <= y2; y++)
+                    {
+                        if (b.IsColor(x, y, Color.White))
+                        {
+                            p[x - 1] = y;
+
+                            break;
+                        }
+                        else
+                        {
+                            b.SetPixel(x, y, Color.LightGray);
+                        }
+                    }
+                }
+
+                for (int m = 1; m <= 10; m++)
+                {
+                    if (m % 2 == 0)
+                    {
+                        for (int pi = 1; pi < p.Length - 1; pi++)
+                        {
+                            p[pi] = (p[pi - 1] + p[pi] + p[pi + 1]) / 3;
+                        }
+                    }
+                    else
+                    {
+                        for (int pi = p.Length - 2; pi >= 1; pi--)
+                        {
+                            p[pi] = (p[pi - 1] + p[pi] + p[pi + 1]) / 3;
+                        }
+
+                    }
+                }
+
+                for (int x = 1; x < b.Width - 1; x++) // Iterate from +1 to Width-2 because of the pixel removal which not done at the side !!!
+                {
+                    b.SetPixel(x, (int)p[x - 1], Color.Red);
+                }
+
+                b.SetPixels(0, y1, b.Width - 1, y1, Color.Red);
+                b.SetPixels(0, y2, b.Width - 1, y2, Color.Red);
+            }
+
+            int r;
+            int t;
+
+            r = 100;
+            t = 100;
+
+            for (int i = 0; i < bitmaps.Length; i++)
+            {
+                LocklessBitmap b = bitmaps[i];
+
+                for (int y = 0; y < b.Height; y++)
+                {
+                    for (int x = 0; x < b.Width; x++)
+                    {
+                        bitmap.SetPixel(r + x, t + y, b.GetPixel(x, y));
+                    }
+                }
+
+                t += bitmaps[i].Height;
+            }
+
+            return false;
         }
     }
 }

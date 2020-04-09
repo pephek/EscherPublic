@@ -274,5 +274,8 @@
   <ItemGroup>
     <None Include="Images\Airbrush_16x.png" />
   </ItemGroup>
+  <ItemGroup>
+    <None Include="Images\RulerMeasure_16x.png" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

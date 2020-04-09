@@ -14,6 +14,7 @@ namespace Escher
         Recolor,
         Brightening,
         Blackening,
+        Measuring,
         Resize,
         Selecting,
         Thumbnail
@@ -37,6 +38,8 @@ namespace Escher
                     return "Brighten Image";
                 case ImagingMode.Blackening:
                     return "Blackening Background";
+                case ImagingMode.Measuring:
+                    return "Measuring Stamp";
                 case ImagingMode.Resize:
                     return "Resize Image";
                 case ImagingMode.Selecting:
