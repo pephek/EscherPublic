@@ -602,11 +602,15 @@ namespace Escher
 
         private void Measure(byte value)
         {
+            this.UseWaitCursor = true;
+
             pTrial.Image.Dispose();
 
             pTrial.Image = pImage.Image.Measure(value);
 
             buttonAccept.Enabled = true;
+
+            this.UseWaitCursor = false;
         }
 
         private void Resice(float value)

@@ -104,6 +104,17 @@ namespace Escher
             return copy;
         }
 
+        public void Copy(LocklessBitmap bitmap, Rectangle area)
+        {
+            for (int y = 0; y < area.Height; y++)
+            {
+                for (int x = 0; x < area.Width; x++)
+                {
+                    SetPixel(x + area.X, y + area.Y, bitmap.GetPixel(x, y));
+                }
+            }
+        }
+
         public LocklessBitmap Rotate(int angle)
         {
             LocklessBitmap rotated = null;
@@ -262,19 +273,36 @@ namespace Escher
                 new Rectangle(0, yMin, xMin, yMax - yMin)
             };
 
+            int[] rotation = new int[] { 0, -90, 180, +90 };
+
+            int[] antiRotation = new int[] { 0, +90, 180, -90 };
+
             LocklessBitmap[] bitmaps = new LocklessBitmap[]
             {
-                bitmap.Copy(areas[0]).Rotate(0),
-                bitmap.Copy(areas[1]).Rotate(-90),
-                bitmap.Copy(areas[2]).Rotate(180),
-                bitmap.Copy(areas[3]).Rotate(90)
+                bitmap.Copy(areas[0]).Rotate(rotation[0]),
+                bitmap.Copy(areas[1]).Rotate(rotation[1]),
+                bitmap.Copy(areas[2]).Rotate(rotation[2]),
+                bitmap.Copy(areas[3]).Rotate(rotation[3])
             };
 
-            int y1, y2;
+            int[,] bounds = new int[4,2];
+
+            float[][] perforations = new float[4][];
+
+            Dictionary<int, float>[] teeth = new Dictionary<int, float>[4];
+            Dictionary<int, float>[] holes = new Dictionary<int, float>[4];
 
             for (int i = 0; i < bitmaps.Length; i++)
             {
                 LocklessBitmap b = bitmaps[i];
+
+                teeth[i] = new Dictionary<int, float>();
+                holes[i] = new Dictionary<int, float>();
+
+                bounds[i, 0] = 0;
+                bounds[i, 1] = 0;
+
+                perforations[i] = new float[0];
 
                 for (int y = 0; y < b.Height; y++)
                 {
@@ -322,6 +350,8 @@ namespace Escher
                     }
                 }
 
+                int y1, y2;
+
                 y1 = 0;
                 while (y1 < b.Height && b.HasColor(0, y1, b.Width - 1, y1, Color.Black, 0.90F))
                 {
@@ -330,7 +360,7 @@ namespace Escher
 
                 if (!(y1 > 0 && y1 < b.Height))
                 {
-                    continue; // Not found the upper boundfound, so continue with the next side
+                    continue; // Not found the upper bound, so continue with the next side
                 }
 
                 y2 = y1;
@@ -341,7 +371,7 @@ namespace Escher
 
                 if (!(y2 > y1 && y2 < b.Height))
                 {
-                    continue; // Not found the lower boundfound, so continue with the next side
+                    continue; // Not found the lower bound, so continue with the next side
                 }
 
                 for (int x = 1; x < b.Width - 1; x++) // Iterate from +1 to Width-2 because of the pixel removal !!!
@@ -360,7 +390,9 @@ namespace Escher
                     }
                 }
 
-                float[] p = new float[b.Width - 2];
+                perforations[i] = new float[b.Width - 2];
+
+                float[] perfs = perforations[i];
 
                 for (int x = 1; x < b.Width - 1; x++) // Iterate from +1 to Width-2 because of the pixel removal which not done at the side !!!
                 {
@@ -368,7 +400,7 @@ namespace Escher
                     {
                         if (b.IsColor(x, y, Color.White))
                         {
-                            p[x - 1] = y;
+                            perfs[x - 1] = y;
 
                             break;
                         }
@@ -379,54 +411,119 @@ namespace Escher
                     }
                 }
 
-                for (int m = 1; m <= 10; m++)
+                for (int m = 1; m <= 25; m++)
                 {
                     if (m % 2 == 0)
                     {
-                        for (int pi = 1; pi < p.Length - 1; pi++)
+                        for (int p = 1; p < perfs.Length - 1; p++)
                         {
-                            p[pi] = (p[pi - 1] + p[pi] + p[pi + 1]) / 3;
+                            perfs[p] = (perfs[p - 1] + perfs[p] + perfs[p + 1]) / 3;
                         }
                     }
                     else
                     {
-                        for (int pi = p.Length - 2; pi >= 1; pi--)
+                        for (int p = perfs.Length - 2; p >= 1; p--)
                         {
-                            p[pi] = (p[pi - 1] + p[pi] + p[pi + 1]) / 3;
+                            perfs[p] = (perfs[p - 1] + perfs[p] + perfs[p + 1]) / 3;
                         }
 
                     }
                 }
 
-                for (int x = 1; x < b.Width - 1; x++) // Iterate from +1 to Width-2 because of the pixel removal which not done at the side !!!
+                teeth[i] = new Dictionary<int, float>();
+                holes[i] = new Dictionary<int, float>();
+
+                for (int p = 1; p < perfs.Length - 1; p++)
                 {
-                    b.SetPixel(x, (int)p[x - 1], Color.Red);
-                }
-
-                b.SetPixels(0, y1, b.Width - 1, y1, Color.Red);
-                b.SetPixels(0, y2, b.Width - 1, y2, Color.Red);
-            }
-
-            int r;
-            int t;
-
-            r = 100;
-            t = 100;
-
-            for (int i = 0; i < bitmaps.Length; i++)
-            {
-                LocklessBitmap b = bitmaps[i];
-
-                for (int y = 0; y < b.Height; y++)
-                {
-                    for (int x = 0; x < b.Width; x++)
+                    if (perfs[p] < perfs[p - 1] && perfs[p] < perfs[p + 1])
                     {
-                        bitmap.SetPixel(r + x, t + y, b.GetPixel(x, y));
+                        teeth[i].Add(p, perfs[p]);
+                    }
+                    if (perfs[p] > perfs[p - 1] && perfs[p] > perfs[p + 1])
+                    {
+                        holes[i].Add(p, perfs[p]);
                     }
                 }
 
-                t += bitmaps[i].Height;
+                for (int x = 1; x < b.Width - 1; x++)
+                {
+                    int y = (int)perfs[x - 1];
+                    b.SetPixels(x, y - 1, x, y + 1, Color.Blue);
+                }
+
+                bounds[i,0] = y1;
+                bounds[i,1] = y2;
+                b.SetPixels(0, y1, b.Width - 1, y1, Color.Magenta);
+                b.SetPixels(0, y2, b.Width - 1, y2, Color.Magenta);
             }
+
+            for (int i = 0; i < bitmaps.Length; i++)
+            {
+                bitmaps[i] = bitmap.Copy(areas[i]).Rotate(rotation[i]);
+
+                LocklessBitmap b = bitmaps[i];
+
+                b.SetToGrayscale();
+
+                if (bounds[i,0] != 0)
+                {
+                    b.SetPixels(0, bounds[i, 0] - 1, b.Width - 1, bounds[i, 0] + 1, Color.Red);
+                }
+                if (bounds[i, 1] != 0)
+                {
+                    b.SetPixels(0, bounds[i, 1] - 1, b.Width - 1, bounds[i, 1] + 1, Color.Black);
+                }
+                if (teeth[i].Count() != 0)
+                {
+                    foreach (KeyValuePair<int, float> t in teeth[i])
+                    {
+                        int y = (int)Math.Round((double)t.Value);
+
+                        b.SetPixels(t.Key - 1, 0, t.Key + 1, y, Color.Yellow);
+                    }
+                }
+                if (holes[i].Count() != 0)
+                {
+                    foreach (KeyValuePair<int, float> h in holes[i])
+                    {
+                        int y = (int)Math.Round((double)h.Value);
+
+                        b.SetPixels(h.Key - 1, y, h.Key + 1, b.Height - 1, Color.Blue);
+                    }
+                }
+                if (perforations[i].Length != 0)
+                {
+                    for (int x = 1; x < b.Width - 1; x++)
+                    {
+                        int y = (int)Math.Round((double)perforations[i][x - 1]);
+
+                        b.SetPixels(x, y - 1, x, y + 1, Color.Magenta);
+                    }
+                }
+
+                bitmap.Copy(bitmaps[i].Rotate(antiRotation[i]), areas[i]);
+            }
+
+            //int ri;
+            //int to;
+
+            //ri = 100;
+            //to = 100;
+
+            //for (int i = 0; i < bitmaps.Length; i++)
+            //{
+            //    LocklessBitmap b = bitmaps[i];
+
+            //    for (int y = 0; y < b.Height; y++)
+            //    {
+            //        for (int x = 0; x < b.Width; x++)
+            //        {
+            //            bitmap.SetPixel(ri + x, to + y, b.GetPixel(x, y));
+            //        }
+            //    }
+
+            //    to += bitmaps[i].Height;
+            //}
 
             return false;
         }
