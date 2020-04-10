@@ -453,8 +453,6 @@ namespace Escher
 
                 bounds[i,0] = y1;
                 bounds[i,1] = y2;
-                b.SetPixels(0, y1, b.Width - 1, y1, Color.Magenta);
-                b.SetPixels(0, y2, b.Width - 1, y2, Color.Magenta);
             }
 
             for (int i = 0; i < bitmaps.Length; i++)
@@ -504,26 +502,21 @@ namespace Escher
                 bitmap.Copy(bitmaps[i].Rotate(antiRotation[i]), areas[i]);
             }
 
-            //int ri;
-            //int to;
+            int bmi = 0;
 
-            //ri = 100;
-            //to = 100;
+            if (bounds[bmi, 0] != 0)
+            {
+                int x1 = areas[bmi].Right;
+                int x2 = bitmap.Width - 1;
+                int y = areas[bmi].Top + bounds[bmi, 0];
 
-            //for (int i = 0; i < bitmaps.Length; i++)
-            //{
-            //    LocklessBitmap b = bitmaps[i];
+                if (bounds[bmi + 1, 0] != 0)
+                {
+                    x2 = areas[bmi + 1].Right - bounds[bmi + 1, 0];
+                }
 
-            //    for (int y = 0; y < b.Height; y++)
-            //    {
-            //        for (int x = 0; x < b.Width; x++)
-            //        {
-            //            bitmap.SetPixel(ri + x, to + y, b.GetPixel(x, y));
-            //        }
-            //    }
-
-            //    to += bitmaps[i].Height;
-            //}
+                bitmap.SetPixels(x1, y, x2, y, Color.Red);
+            }
 
             return false;
         }
