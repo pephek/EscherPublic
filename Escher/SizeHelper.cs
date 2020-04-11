@@ -46,19 +46,19 @@ namespace Escher
             switch (perfs.Length)
             {
                 case 4:
-                    perforations[(int)Side.Top] = GetPerforation(perfs[0]);
-                    perforations[(int)Side.Right] = GetPerforation(perfs[1]);
-                    perforations[(int)Side.Bottom] = GetPerforation(perfs[2]);
-                    perforations[(int)Side.Left] = GetPerforation(perfs[3]);
+                    perforations[(int)Side.Top] = GetPerforation(perfs[(int)Side.Top]);
+                    perforations[(int)Side.Right] = GetPerforation(perfs[(int)Side.Right]);
+                    perforations[(int)Side.Bottom] = GetPerforation(perfs[(int)Side.Bottom]);
+                    perforations[(int)Side.Left] = GetPerforation(perfs[(int)Side.Left]);
                     break;
                 case 2:
-                    perforations[(int)Side.Top] = GetPerforation(perfs[0]);
-                    perforations[(int)Side.Right] = GetPerforation(perfs[1]);
+                    perforations[(int)Side.Top] = GetPerforation(perfs[(int)Side.Top]);
+                    perforations[(int)Side.Right] = GetPerforation(perfs[(int)Side.Right]);
                     perforations[(int)Side.Bottom] = perforations[(int)Side.Top];
                     perforations[(int)Side.Left] = perforations[(int)Side.Right];
                     break;
                 case 1:
-                    perforations[(int)Side.Top] = GetPerforation(perfs[0]);
+                    perforations[(int)Side.Top] = GetPerforation(perfs[(int)Side.Top]);
                     perforations[(int)Side.Right] = perforations[(int)Side.Top];
                     perforations[(int)Side.Bottom] = perforations[(int)Side.Top];
                     perforations[(int)Side.Left] = perforations[(int)Side.Top];
@@ -92,20 +92,20 @@ namespace Escher
 
             LocklessBitmap[] bitmaps = new LocklessBitmap[]
             {
-                bitmap.Copy(areas[0]).Rotate(rotation[0]),
-                bitmap.Copy(areas[1]).Rotate(rotation[1]),
-                bitmap.Copy(areas[2]).Rotate(rotation[2]),
-                bitmap.Copy(areas[3]).Rotate(rotation[3])
+                bitmap.Copy(areas[(int)Side.Top]).Rotate(rotation[(int)Side.Top]),
+                bitmap.Copy(areas[(int)Side.Right]).Rotate(rotation[(int)Side.Right]),
+                bitmap.Copy(areas[(int)Side.Bottom]).Rotate(rotation[(int)Side.Bottom]),
+                bitmap.Copy(areas[(int)Side.Left]).Rotate(rotation[(int)Side.Left])
             };
 
-            int[] edges = new int[4] { 0, 0, 0, 0 };
+            int[] edges = new int[] { 0, 0, 0, 0 };
 
             float[][] perforations = new float[4][];
 
             Dictionary<int, float>[] teeth = new Dictionary<int, float>[4];
             Dictionary<int, float>[] holes = new Dictionary<int, float>[4];
 
-            for (int i = 0; i < bitmaps.Length; i++)
+            for (int i = (int)Side.Top; i <= (int)Side.Left; i++)
             {
                 LocklessBitmap b = bitmaps[i];
 
@@ -267,10 +267,10 @@ namespace Escher
             int widthInPixels = 0;
             int heightInPixels = 0;
 
-            int top = edges[0];
-            int right = edges[1] != 0 ? bitmap.Width - edges[1] - 1 : 0;
-            int bottom = edges[2] != 0 ? bitmap.Height - edges[2] - 1 : 0;
-            int left = edges[3];
+            int top = edges[(int)Side.Top];
+            int right = edges[(int)Side.Right] != 0 ? bitmap.Width - edges[(int)Side.Right] - 1 : 0;
+            int bottom = edges[(int)Side.Bottom] != 0 ? bitmap.Height - edges[(int)Side.Bottom] - 1 : 0;
+            int left = edges[(int)Side.Left];
 
             if (left != 0 && right != 0)
             {
@@ -282,7 +282,7 @@ namespace Escher
                 heightInPixels = bottom - top;
             }
 
-            for (int i = 0; i < bitmaps.Length; i++)
+            for (int i = (int)Side.Top; i <= (int)Side.Left; i++)
             {
                 bitmaps[i] = bitmap.Copy(areas[i]).Rotate(rotation[i]);
 
@@ -330,7 +330,7 @@ namespace Escher
 
             float[] sizes = new float[4] { 0, 0, 0, 0 };
 
-            for (int i = 0; i < bitmaps.Length; i++)
+            for (int i = (int)Side.Top; i <= (int)Side.Left; i++)
             {
                 if (teeth[i].Count >= 5 && holes[i].Count >= 5)
                 {
@@ -358,14 +358,25 @@ namespace Escher
                 }
             }
 
-            float horizontal = sizes[0] != 0 && sizes[2] != 0 ? (sizes[0] + sizes[2]) / 2 : (sizes[0] != 0 ? sizes[0] : sizes[2]);
-            float vertical = sizes[1] != 0 && sizes[3] != 0 ? (sizes[1] + sizes[3]) / 2 : (sizes[1] != 0 ? sizes[1] : sizes[3]);
+            float horizontal =
+                sizes[(int)Side.Top] != 0 && sizes[(int)Side.Bottom] != 0 ?
+                (sizes[(int)Side.Top] + sizes[(int)Side.Bottom]) / 2 :
+                (sizes[(int)Side.Top] != 0 ?
+                    sizes[(int)Side.Top] :
+                    sizes[(int)Side.Bottom]);
+
+            float vertical =
+                sizes[(int)Side.Right] != 0 && sizes[(int)Side.Left] != 0 ?
+                (sizes[(int)Side.Right] + sizes[(int)Side.Left]) / 2 :
+                (sizes[(int)Side.Right] != 0 ?
+                    sizes[(int)Side.Right] :
+                    sizes[(int)Side.Left]);
 
             string size = string.Format(
                 "{0} × {1} {2} {3} · {4} × {5} · {6}",
                 Math.Round(horizontal, 1), Math.Round(vertical, 1), char.ConvertFromUtf32(0x2190),
-                Math.Round(sizes[0], 1), Math.Round(sizes[2], 1),
-                Math.Round(sizes[1], 1), Math.Round(sizes[3], 1)
+                Math.Round(sizes[(int)Side.Top], 1), Math.Round(sizes[(int)Side.Bottom], 1),
+                Math.Round(sizes[(int)Side.Right], 1), Math.Round(sizes[(int)Side.Left], 1)
             );
 
             return size;
