@@ -9,14 +9,14 @@ namespace Escher
     public enum ImagingMode
     {
         None,
-        Rotating,
-        Cropping,
+        Rotate,
+        Crop,
         Recolor,
-        Brightening,
-        Blackening,
-        Measuring,
+        Brighten,
+        Blacken,
+        Measure,
         Resize,
-        Selecting,
+        Select,
         Thumbnail
     }
 
@@ -28,21 +28,21 @@ namespace Escher
             {
                 case ImagingMode.None:
                     return string.Format("Stamp Number = {0} · Scale = {1}%", number, (int)(100 * scale));
-                case ImagingMode.Rotating:
+                case ImagingMode.Rotate:
                     return "Rotate Image";
-                case ImagingMode.Cropping:
+                case ImagingMode.Crop:
                     return "Crop Image";
                 case ImagingMode.Recolor:
                     return "Adjust Image Color";
-                case ImagingMode.Brightening:
+                case ImagingMode.Brighten:
                     return "Brighten Image";
-                case ImagingMode.Blackening:
+                case ImagingMode.Blacken:
                     return "Blackening Background";
-                case ImagingMode.Measuring:
+                case ImagingMode.Measure:
                     return "Measuring Stamp";
                 case ImagingMode.Resize:
                     return "Resize Image";
-                case ImagingMode.Selecting:
+                case ImagingMode.Select:
                     return "Select Vignette";
                 case ImagingMode.Thumbnail:
                     return "Create Thumbnail Image";

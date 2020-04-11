@@ -149,6 +149,7 @@
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="SizeHelper.cs" />
     <Compile Include="StampSheet.cs" />
     <Compile Include="DesignValidator.cs" />
     <EmbeddedResource Include="About.resx">

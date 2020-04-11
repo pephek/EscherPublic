@@ -210,7 +210,7 @@ namespace Escher
             return blackendBitmap.Bitmap;
         }
 
-        public static Bitmap Measure(this Image image, byte threshold)
+        public static Bitmap Measure(this Image image, byte threshold, string perforation, out string size)
         {
             LocklessBitmap bitmap = new LocklessBitmap(image.Width, image.Height);
 
@@ -219,7 +219,7 @@ namespace Escher
                 graphics.DrawImage(image, new Rectangle(0, 0, image.Width, image.Height));
             }
 
-            bitmap.Measure(threshold);
+            size = SizeHelper.Measure(bitmap, SizeHelper.GetPerforations(perforation), threshold);
 
             return bitmap.Bitmap;
         }

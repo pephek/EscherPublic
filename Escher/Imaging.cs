@@ -52,14 +52,14 @@ namespace Escher
             buttonPrevious.Click += new EventHandler((sender, e) => Previous());
             buttonNext.Click += new EventHandler((sender, e) => Next());
 
-            buttonRotate.Click += new EventHandler((sender, e) => SetMode(ImagingMode.Rotating));
-            buttonCrop.Click += new EventHandler((sender, e) => SetMode(ImagingMode.Cropping));
+            buttonRotate.Click += new EventHandler((sender, e) => SetMode(ImagingMode.Rotate));
+            buttonCrop.Click += new EventHandler((sender, e) => SetMode(ImagingMode.Crop));
             buttonRecolor.Click += new EventHandler((sender, e) => SetMode(ImagingMode.Recolor));
-            buttonBrighten.Click += new EventHandler((sender, e) => SetMode(ImagingMode.Brightening));
-            buttonBlacken.Click += new EventHandler((sender, e) => SetMode(ImagingMode.Blackening));
-            buttonMeasure.Click += new EventHandler((sender, e) => SetMode(ImagingMode.Measuring));
+            buttonBrighten.Click += new EventHandler((sender, e) => SetMode(ImagingMode.Brighten));
+            buttonBlacken.Click += new EventHandler((sender, e) => SetMode(ImagingMode.Blacken));
+            buttonMeasure.Click += new EventHandler((sender, e) => SetMode(ImagingMode.Measure));
             buttonResize.Click += new EventHandler((sender, e) => SetMode(ImagingMode.Resize));
-            buttonSelect.Click += new EventHandler((sender, e) => SetMode(ImagingMode.Selecting));
+            buttonSelect.Click += new EventHandler((sender, e) => SetMode(ImagingMode.Select));
             buttonThumbnail.Click += new EventHandler((sender, e) => SetMode(ImagingMode.Thumbnail));
 
             buttonSave.Click += new EventHandler((sender, e) => Save());
@@ -72,7 +72,7 @@ namespace Escher
             angle.ValueChanged += new EventHandler((sender, e) => Rotate((float)angle.Value));
             brightness.ValueChanged += new EventHandler((sender, e) => Brightness((float)brightness.Value));
             blacken.ValueChanged += new EventHandler((sender, e) => Blacken((byte)blacken.Value));
-            measure.ValueChanged += new EventHandler((sender, e) => Measure((byte)measure.Value));
+            measure.ValueChanged += new EventHandler((sender, e) => Measure((byte)measure.Value, this.stamp.Perforation));
             resize.ValueChanged += new EventHandler((sender, e) => Resice((float)resize.Value));
 
             r.ValueChanged += new EventHandler((sender, e) => Recolor((float)r.Value, (float)g.Value, (float)b.Value));
@@ -193,7 +193,7 @@ namespace Escher
             buttonRecolor.Enabled = buttonRotate.Enabled;
             buttonBrighten.Enabled = buttonRotate.Enabled;
             buttonBlacken.Enabled = buttonRotate.Enabled;
-            buttonMeasure.Enabled = buttonRotate.Enabled;
+            buttonMeasure.Enabled = !string.IsNullOrEmpty(this.stamp.Perforation);
             buttonResize.Enabled = buttonRotate.Enabled;
             buttonSelect.Enabled = buttonRotate.Enabled;
             buttonThumbnail.Enabled = buttonRotate.Enabled;
@@ -389,32 +389,35 @@ namespace Escher
 
             switch (this.mode)
             {
-                case ImagingMode.Rotating:
+                case ImagingMode.Rotate:
                     angle.Value = 0.0M;
                     angle.Visible = true;
                     break;
-                case ImagingMode.Brightening:
+                case ImagingMode.Brighten:
                     brightness.Value = 0;
                     brightness.Visible = true;
                     break;
-                case ImagingMode.Blackening:
+                case ImagingMode.Blacken:
                     blacken.Value = 0;
                     blacken.Visible = true;
                     break;
-                case ImagingMode.Measuring:
-                    measure.Value = 0;
+                case ImagingMode.Measure:
+                    measure.Tag = false;
+                    measure.Value = 64;
+                    measure.Tag = true;
                     measure.Visible = true;
+                    Measure((byte)measure.Value, this.stamp.Perforation);
                     break;
                 case ImagingMode.Resize:
                     resize.Value = 100;
                     resize.Visible = true;
                     break;
-                case ImagingMode.Cropping:
-                case ImagingMode.Selecting:
+                case ImagingMode.Crop:
+                case ImagingMode.Select:
                     pTrial.Cursor = Cursors.Cross;
                     this.isSelecting = true;
                     this.selection = new Rectangle();
-                    if (this.mode == ImagingMode.Selecting)
+                    if (this.mode == ImagingMode.Select)
                     {
                         this.selectionBrush = new SolidBrush(Color.FromArgb(64, 0, 0, 0));
                     }
@@ -447,12 +450,15 @@ namespace Escher
             {
                 this.isChanged = true;
 
-                buttonSave.Enabled = true;
-                buttonUndo.Enabled = true;
+                if (this.mode != ImagingMode.Measure)
+                {
+                    buttonSave.Enabled = true;
+                    buttonUndo.Enabled = true;
+                }
 
                 switch (this.mode)
                 {
-                    case ImagingMode.Rotating:
+                    case ImagingMode.Rotate:
 
                         this.baseSize.Width = (int)((float)pTrial.Image.Width / pImage.Image.Width * this.baseSize.Width);
                         this.baseSize.Height = (int)((float)pTrial.Image.Height / pImage.Image.Height * this.baseSize.Height);
@@ -466,7 +472,7 @@ namespace Escher
 
                         break;
 
-                    case ImagingMode.Cropping:
+                    case ImagingMode.Crop:
 
                         pImage.Image.Dispose();
                         pImage.Image = pTrial.Image.GetSelection(this.selection, convertToGrayscale: false);
@@ -487,7 +493,7 @@ namespace Escher
 
                         break;
 
-                    case ImagingMode.Brightening:
+                    case ImagingMode.Brighten:
 
                         pImage.Image.Dispose();
                         pImage.Image = new Bitmap(pTrial.Image);
@@ -510,7 +516,7 @@ namespace Escher
 
                         break;
 
-                    case ImagingMode.Blackening:
+                    case ImagingMode.Blacken:
 
                         pImage.Image = pImage.Image.Blacken((byte)blacken.Value);
                         pImage.Image.SaveAsJpeg(cImage, 100);
@@ -520,7 +526,7 @@ namespace Escher
 
                         break;
 
-                    case ImagingMode.Measuring:
+                    case ImagingMode.Measure:
                         break;
 
                     case ImagingMode.Resize:
@@ -531,7 +537,7 @@ namespace Escher
 
                         break;
 
-                    case ImagingMode.Selecting:
+                    case ImagingMode.Select:
 
                         pColor.Image.Dispose();
                         pColor.Image = pTrial.Image.GetSelection(this.selection, convertToGrayscale: false);
@@ -573,78 +579,101 @@ namespace Escher
 
         private void Rotate(float value)
         {
-            pTrial.Image.Dispose();
+            if (this.mode == ImagingMode.Rotate)
+            {
+                pTrial.Image.Dispose();
 
-            pTrial.Image = pImage.Image.Rotate(value, true, false, Color.Black);
+                pTrial.Image = pImage.Image.Rotate(value, true, false, Color.Black);
 
-            buttonAccept.Enabled = (value != 0);
+                buttonAccept.Enabled = (value != 0);
 
-            Repaint();
+                Repaint();
+            }
         }
 
         private void Brightness(float value)
         {
-            pTrial.Image.Dispose();
+            if (mode == ImagingMode.Brighten)
+            {
+                pTrial.Image.Dispose();
 
-            pTrial.Image = pImage.Image.Brighten(value / 100);
+                pTrial.Image = pImage.Image.Brighten(value / 100);
 
-            buttonAccept.Enabled = (value != 0);
+                buttonAccept.Enabled = (value != 0);
+            }
         }
 
         private void Blacken(byte value)
         {
-            pTrial.Image.Dispose();
+            if (this.mode == ImagingMode.Blacken)
+            {
+                pTrial.Image.Dispose();
 
-            pTrial.Image = pImage.Image.Blacken(value);
+                pTrial.Image = pImage.Image.Blacken(value);
 
-            buttonAccept.Enabled = (value != 0);
+                buttonAccept.Enabled = (value != 0);
+            }
         }
 
-        private void Measure(byte value)
+        private void Measure(byte value, string perforation)
         {
-            this.UseWaitCursor = true;
+            if (this.mode == ImagingMode.Measure && (bool)measure.Tag)
+            {
+                this.UseWaitCursor = true;
 
-            pTrial.Image.Dispose();
+                pTrial.Image.Dispose();
 
-            pTrial.Image = pImage.Image.Measure(value);
+                pTrial.Image = pImage.Image.Measure(value, perforation, out string size).Resize(2.0F); Repaint();
 
-            buttonAccept.Enabled = true;
+                buttonAccept.Enabled = true;
 
-            this.UseWaitCursor = false;
+                this.UseWaitCursor = false;
+
+                labelMode.Text = string.Format("{0} : {1}", this.mode.Text(), size);
+            }
         }
 
         private void Resice(float value)
         {
-            pTrial.Image.Dispose();
+            if (this.mode == ImagingMode.Resize)
+            {
+                pTrial.Image.Dispose();
 
-            pTrial.Image = pImage.Image.Resize(value / 100);
+                pTrial.Image = pImage.Image.Resize(value / 100);
 
-            buttonAccept.Enabled = (value != 100);
+                buttonAccept.Enabled = (value != 100);
+            }
         }
 
         private void Recolor(float r, float g, float b)
         {
-            if ((bool)panelRecolor.Tag)
+            if (this.mode == ImagingMode.Recolor)
             {
-                labelRecolor.Text = string.Format("R = {0}% · G = {1}% · B = {2}%", r, g, b);
+                if ((bool)panelRecolor.Tag)
+                {
+                    labelRecolor.Text = string.Format("R = {0}% · G = {1}% · B = {2}%", r, g, b);
 
-                pTrial.Image.Dispose();
+                    pTrial.Image.Dispose();
 
-                pTrial.Image = pImage.Image.Recolor(r / 100, g / 100, b / 100);
+                    pTrial.Image = pImage.Image.Recolor(r / 100, g / 100, b / 100);
 
-                buttonAccept.Enabled = (r != 0 || g != 0 || b != 0);
+                    buttonAccept.Enabled = (r != 0 || g != 0 || b != 0);
+                }
             }
         }
 
         private void RerunRecolor()
         {
-            panelRecolor.Tag = false;
-            r.Value = 0;
-            g.Value = 0;
-            b.Value = 0;
-            panelRecolor.Tag = true;
+            if (this.mode == ImagingMode.Recolor)
+            {
+                panelRecolor.Tag = false;
+                r.Value = 0;
+                g.Value = 0;
+                b.Value = 0;
+                panelRecolor.Tag = true;
 
-            Recolor((float)r.Value, (float)g.Value, (float)b.Value);
+                Recolor((float)r.Value, (float)g.Value, (float)b.Value);
+            }
         }
 
         private void MouseMoved(MouseButtons button, Point location)
