@@ -49,7 +49,7 @@ namespace Escher
 
             checkBoxIncludeImage.Checked = pageSetup.IncludeImage;
             checkBoxIncludeNumber.Checked = pageSetup.IncludeNumber;
-            checkBoxIncludeValue.Checked = pageSetup.IncludeValue;
+            checkBoxIncludeValue.Checked = pageSetup.IncludeValueAndColor;
 
             // Frame Options
 

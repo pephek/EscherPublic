@@ -741,32 +741,32 @@ namespace Escher
 
                         // Colors & Values
 
-                        float yMax;
-
-                        if (!varieties.Combine)
+                        if (setup.IncludeValueAndColor)
                         {
-                            yMax = y;
+                            Debug.WriteLine(string.Format("Iterating again {0} stamps for value & color", row.Count()));
+
+                            maxHeight = 0;
+
+                            for (int s = 0; s < row.Count(); s++)
+                            {
+                                Variety stamp = row[s];
+
+                                if (!stamp.Skip)
+                                {
+                                    // Eg. 5 ct. mat ultramarijn
+                                    float height = artifacts.AddText(stamp.FrameLeft - 1, y + stamp.FrameOffset, stamp.Width + 2, stamp.Description, format.TitleFont, (int)setup.FontSize, alignment: Alignment.Centered).Height;
+
+                                    maxHeight = Math.Max(maxHeight, height);
+                                }
+                            } // for (int s = 0; s < row.Count(); s++)
+
+                            y += maxHeight;
                         }
 
-                        for (int s = 0; s < row.Count(); s++)
-                        {
-                            Variety stamp = row[s];
+                        // Add 2 mm. spacing
+                        y += 2;
 
-                            float yNew = 0;
-
-                            if (!stamp.Skip && setup.IncludeValue)
-                            {
-                                // Eg. 5 ct. mat ultramarijn
-                                yNew = artifacts.AddText(stamp.FrameLeft - 1, y + stamp.FrameOffset, stamp.Width + 2, stamp.Description, format.TitleFont, (int)setup.FontSize, alignment: Alignment.Centered).Height;
-                            }
-
-                            if (yNew > yMax)
-                            {
-                                yMax = yNew;
-                            }
-                        }
-
-                        y = yMax + 2;
+                        Debug.WriteLine(string.Format("y after values & colors = {0}", Math.Round(y, 2)));
 
                     } // for (int r = 0; r < varieties.Rows.Count(); r++)
 

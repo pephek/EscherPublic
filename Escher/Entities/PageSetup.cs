@@ -12,7 +12,7 @@ namespace Escher
         public bool IncludeMarginForPunchHoles;
         public bool IncludeImage;
         public bool IncludeNumber;
-        public bool IncludeValue;
+        public bool IncludeValueAndColor;
         public FrameStyle FrameStyle;
         public ColorStyle ColorStyle;
         public FontSize FontSize;
@@ -32,7 +32,7 @@ namespace Escher
             pageSetup.IncludeMarginForPunchHoles = App.GetSetting("Print.IncludeMarginForPunchHoles", false);
             pageSetup.IncludeImage = App.GetSetting("Print.IncludeImage", true);
             pageSetup.IncludeNumber = App.GetSetting("Print.IncludeNumber", true);
-            pageSetup.IncludeValue = App.GetSetting("Print.IncludeValue", true);
+            pageSetup.IncludeValueAndColor = App.GetSetting("Print.IncludeValueAndColor", true);
             pageSetup.FrameStyle = App.GetSetting("Print.FrameStyle", FrameStyle.Thick);
             pageSetup.ColorStyle = App.GetSetting("Print.ColorStyle", ColorStyle.Color);
             pageSetup.FontSize = App.GetSetting("Print.FontSize", FontSize.Small);
