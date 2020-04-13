@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
+using System.Diagnostics;
 using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.Drawing.Text;
@@ -297,7 +298,7 @@ namespace Escher
                     case ArtifactType.Text:
                         g.DrawString(artifact.Text, artifact.Font, artifact.TextColor, artifact.X, artifact.Y);
                         //TextRenderer.DrawText(g, artifact.Text, artifact.Font, new Point((int)artifact.X, (int)artifact.Y), artifact.TextColor.Color);
-                        g.DrawRectangle(new Pen(Color.Red), artifact.X, artifact.Y, artifact.Width, artifact.Height);
+                        g.DrawRectangle(new Pen(Color.Red), artifact.X, artifact.Y, artifact.Width+1, artifact.Height);
                         break;
 
                     case ArtifactType.Image:
@@ -503,14 +504,26 @@ namespace Escher
             }
             else
             {
+                Debug.WriteLine("+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++");
+
+                Debug.WriteLine(string.Format("y at start = {0}", Math.Round(y, 2)));
+
                 // Eg. 1867-1869. Koning Willem III.
                 y += artifacts.AddText(format.Free.Left, y, format.Free.Width, string.IsNullOrEmpty(page.Series) ? "·" : page.Series, format.TitleFont, 7, foreColor: string.IsNullOrEmpty(page.Series) ? Color.White : Color.Black, alignment: Alignment.Centered).Height;
+
+                Debug.WriteLine(string.Format("y after series = {0}", Math.Round(y, 2)));
 
                 // Eg. Type I.
                 y += artifacts.AddText(format.Free.Left, y, format.Free.Width, string.IsNullOrEmpty(page.MainType) ? "" : page.MainType, format.TitleFont, 7, alignment: Alignment.Centered).Height;
 
+                y += artifacts.AddText(format.Free.Left, y, format.Free.Width, "", format.TitleFont, 7, alignment: Alignment.Centered).Height;
+
+                Debug.WriteLine(string.Format("y after main type = {0}", Math.Round(y, 2)));
+
                 float pageMargin = page.Margin;
                 float yCombine;
+
+                Debug.WriteLine(string.Format("Iterating {0} varieties", page.Varieties.Count()));
 
                 for (int v = 0; v < page.Varieties.Count(); v++)
                 {
@@ -527,9 +540,16 @@ namespace Escher
 
                     if (!string.IsNullOrEmpty(varieties.SubType))
                     {
-                        y += artifacts.AddText(format.Free.Left, y + artifacts.GetTextHeight(format.TitleFont, 9), format.Free.Width, varieties.SubType, format.TitleFont, 7, alignment: Alignment.Centered).Height;
+                        // Eg. Type II
+                        y += artifacts.GetTextHeight(format.TitleFont, 9);
 
-                        yCombine = y;
+                        Debug.WriteLine(string.Format("y after adding free space = {0}", Math.Round(y, 2)));
+
+                        y += artifacts.AddText(format.Free.Left, y, format.Free.Width, varieties.SubType, format.TitleFont, 7, alignment: Alignment.Centered).Height;
+
+                        Debug.WriteLine(string.Format("y after sub type = {0}", Math.Round(y, 2)));
+
+                        yCombine = y; // There is a new y position when varieties are combined
                     }
 
                     int n = varieties.Rows.Count() - 1;
@@ -544,53 +564,87 @@ namespace Escher
                     // Eg.A - Kamtanding 12¾ : 11¾.
                     float fontSize = varieties.FontOfDescription ? 5 : 7;
 
-                    string text = varieties.PublicDescription;
-                    Alignment alignment = varieties.Alignment;
+                    string text;
+                    Alignment alignment;
 
                     if (setup.IncludeNumber && !string.IsNullOrEmpty(varieties.PrivateDescription))
                     {
                         text = varieties.PrivateDescription;
                         alignment = Alignment.Centered;
                     }
-
-                    float textWidth = artifacts.GetTextWidth(text, format.TitleFont, fontSize);
-                    float rowWidth = page.RowWidth(v, 0);
-                    float rowLeft = page.RowLeft(v, 0, format.Free.Left, format.Free.Width);
-
-                    if (textWidth <= rowWidth)
-                    {
-                        y += artifacts.AddText(rowLeft + varieties.Horizontal, y + varieties.Vertical, rowWidth, text, format.TitleFont, fontSize, alignment: alignment).Height;
-                    }
                     else
                     {
-                        y += artifacts.AddText(rowLeft + varieties.Horizontal - textWidth, y + varieties.Vertical, rowWidth + 2 * textWidth, text, format.TitleFont, fontSize, alignment: alignment).Height;
+                        text = varieties.PublicDescription;
+                        alignment = varieties.Alignment;
                     }
+
+                    if (!string.IsNullOrEmpty(text))
+                    {
+                        float textWidth = artifacts.GetTextWidth(text, format.TitleFont, fontSize);
+                        float rowWidth = page.RowWidth(v, 0);
+                        float rowLeft = page.RowLeft(v, 0, format.Free.Left, format.Free.Width);
+
+                        Debug.WriteLine(string.Format("Text width = {0}", Math.Round(textWidth, 2)));
+                        Debug.WriteLine(string.Format("Row width = {0}", Math.Round(rowWidth, 2)));
+                        Debug.WriteLine(string.Format("Row left = {0}", Math.Round(rowLeft, 2)));
+
+                        if (textWidth <= rowWidth)
+                        {
+                            y += artifacts.AddText(rowLeft + varieties.Horizontal, y + varieties.Vertical, rowWidth, text, format.TitleFont, fontSize, alignment: alignment).Height;
+                        }
+                        else
+                        {
+                            y += artifacts.AddText(rowLeft + varieties.Horizontal - textWidth, y + varieties.Vertical, rowWidth + 2 * textWidth, text, format.TitleFont, fontSize, alignment: alignment).Height;
+                        }
+
+                        y += 1 - varieties.Vertical;
+                    }
+
+                    Debug.WriteLine(string.Format("y after varieties = {0}", Math.Round(y, 2)));
+
+                    Debug.WriteLine(string.Format("Iterating {0} rows", varieties.Rows.Count()));
 
                     for (int r = 0; r < varieties.Rows.Count(); r++)
                     {
                         List<Variety> row = varieties.Rows[r];
 
+                        Debug.WriteLine(string.Format("Iterating {0} stamps", row.Count()));
+
                         for (int s = 0; s < row.Count(); s++)
                         {
-                            Variety variety = row[s];
+                            Variety stamp = row[s];
 
-                            variety.FrameLeft = page.FrameLeft(v, r, s, format.Free.Left, format.Free.Width);
-                            variety.FrameOffset = page.FrameOffset(v, r, s);
-                            variety.FrameWidth = page.FrameWidth(v, r, s);
+                            stamp.FrameLeft = page.FrameLeft(v, r, s, format.Free.Left, format.Free.Width);
+                            stamp.FrameOffset = page.FrameOffset(v, r, s);
+                            stamp.FrameWidth = page.FrameWidth(v, r, s);
+
+                            Debug.WriteLine(string.Format("Frame[{0}]: left {1}, offset {2}, width {3}", s, stamp.FrameLeft, stamp.FrameOffset, stamp.FrameWidth));
                         }
 
-                        bool hasDescriptions = false;
+                        bool hasDescriptions = false; // No stamps have a description yet
+
+                        Debug.WriteLine(string.Format("Iterating again {0} stamps", row.Count()));
+
+                        float maxHeight = 0;
 
                         for (int s = 0; s < row.Count(); s++)
                         {
-                            Variety variety = row[s];
+                            Variety stamp = row[s];
 
-                            if (!string.IsNullOrEmpty(variety.Title))
+                            if (!string.IsNullOrEmpty(stamp.Title))
                             {
-                                y -= 1; // As soon as we found a description then move the y-position 1 millimeter up
+                                if (!hasDescriptions)
+                                {
+                                    // As soon as we found a description then move the y-position 1 millimeter up
+                                    y -= 1;
+
+                                    Debug.WriteLine(string.Format("y after moving 1 mm. up = {0}", Math.Round(y, 2)));
+                                }
 
                                 // Eg. Zonder punt in linker onderhoek.
-                                y += artifacts.AddText(variety.FrameLeft, y + variety.Vertical, variety.FrameWidth, variety.Title, format.TitleFont, 5, alignment: variety.Alignment).Height;
+                                float height = artifacts.AddText(stamp.FrameLeft, y + stamp.Vertical, stamp.FrameWidth, stamp.Title, format.TitleFont, 5, alignment: stamp.Alignment).Height;
+
+                                maxHeight = Math.Max(maxHeight, height);
 
                                 // There is at least one stamp with a description
                                 hasDescriptions = true;
@@ -600,31 +654,36 @@ namespace Escher
                         if (hasDescriptions)
                         {
                             // Now move the y-position 1 millimeter down
-                            y += 1 - row[0].Vertical;
+                            y += maxHeight + 1 - row[0].Vertical;
                         }
+
+                        Debug.WriteLine(string.Format("y after descriptions = {0}", Math.Round(y, 2)));
+
+                        Debug.WriteLine(string.Format("Iterating again {0} stamps", row.Count()));
 
                         float rowHeight = page.RowHeight(v, r);
 
+                        Debug.WriteLine(string.Format("Row height = {0}", Math.Round(rowHeight, 2)));
+
                         for (int s = 0; s < row.Count(); s++)
                         {
-                            Variety variety = row[s];
+                            Variety stamp = row[s];
 
-                            float x1 = variety.FrameLeft;
-                            float y1 = y + variety.FrameOffset + (rowHeight - variety.Height) / 2;
+                            float x1 = stamp.FrameLeft;
+                            float y1 = y + stamp.FrameOffset + (rowHeight - stamp.Height) / 2;
+
+                            Debug.Print(string.Format("Location[{0}]: x {1}, y {2}", s, Math.Round(x1, 2), Math.Round(y1, 2)));
 
                             // Stamp/sheet
 
-                            float currentX = x1;
-                            float currentY = y1;
-
-                            if (!variety.Skip)
+                            if (!stamp.Skip)
                             {
-                                if (string.IsNullOrEmpty(variety.Sheet))
+                                if (string.IsNullOrEmpty(stamp.Sheet))
                                 {
                                     // A page without album number is a title page, so do show the coat of arms
                                     if (setup.IncludeImage || string.IsNullOrEmpty(page.AlbumNumber))
                                     {
-                                        artifacts.AddImage(page.ImagesPath, variety.Number, currentX, currentY, variety.Width, variety.Height, variety.ExtraWidth, variety.ExtraHeight, variety.Shape, variety.Appearance, variety.Picture, setup.ColorStyle);
+                                        artifacts.AddImage(page.ImagesPath, stamp.Number, x1, y1, stamp.Width, stamp.Height, stamp.ExtraWidth, stamp.ExtraHeight, stamp.Shape, stamp.Appearance, stamp.Picture, setup.ColorStyle);
                                     }
                                 }
                                 else
@@ -635,15 +694,12 @@ namespace Escher
 
                             // Frame
 
-                            currentX = x1;
-                            currentY = y1;
-
-                            if (!variety.Skip && variety.FrameColor != Color.White)
+                            if (!stamp.Skip && stamp.FrameColor != Color.White)
                             {
-                                switch (variety.Shape)
+                                switch (stamp.Shape)
                                 {
                                     case Shape.Rectangle:
-                                        artifacts.AddRectangle(currentX, currentY, variety.Width, variety.Height, variety.FrameColor, frameStyle: setup.FrameStyle, appearance: variety.Appearance);
+                                        artifacts.AddRectangle(x1, y1, stamp.Width, stamp.Height, stamp.FrameColor, frameStyle: setup.FrameStyle, appearance: stamp.Appearance);
                                         break;
 
                                     default:
@@ -651,30 +707,41 @@ namespace Escher
                                 }
                             }
 
-                            currentX = x1 + variety.Width;
-                            currentY = y1 + variety.Height;
-
                         } // for (int s = 0; s < row.Count(); s++)
 
                         y += rowHeight + 1;
 
-                        for (int s = 0; s < row.Count(); s++)
-                        {
-                            Variety variety = row[s];
+                        Debug.WriteLine(string.Format("y after frames & images = {0}", Math.Round(y, 2)));
 
-                            if (!variety.Skip && setup.IncludeNumber)
-                            {
-                                // Eg. 7 IA
-                                artifacts.AddText(variety.FrameLeft, y + variety.FrameOffset, variety.Width, variety.Number == "0" ? "" : variety.Number, format.TitleFont, (float) setup.FontSize, fontBold: true, alignment: Alignment.Centered); 
-                            }
-                        } // for (int s = 0; s < row.Count(); s++)
+                        // Number
 
                         if (setup.IncludeNumber)
                         {
-                            y += artifacts.GetTextHeight(format.TitleFont, (int) setup.FontSize, fontBold: true);
+                            Debug.WriteLine(string.Format("Iterating again {0} stamps for number", row.Count()));
+
+                            maxHeight = 0;
+
+                            for (int s = 0; s < row.Count(); s++)
+                            {
+                                Variety stamp = row[s];
+
+                                if (!stamp.Skip)
+                                {
+                                    // Eg. 7 IA
+                                    float height = artifacts.AddText(stamp.FrameLeft, y + stamp.FrameOffset, stamp.Width, stamp.Number == "0" ? "" : stamp.Number, format.TitleFont, (float)setup.FontSize, fontBold: true, alignment: Alignment.Centered).Height;
+
+                                    maxHeight = Math.Max(maxHeight, height);
+                                }
+                            } // for (int s = 0; s < row.Count(); s++)
+
+                            y += maxHeight;
                         }
 
-                        float yMax = 0;
+                        Debug.WriteLine(string.Format("y after numbers = {0}", Math.Round(y, 2)));
+
+                        // Colors & Values
+
+                        float yMax;
 
                         if (!varieties.Combine)
                         {
@@ -683,14 +750,14 @@ namespace Escher
 
                         for (int s = 0; s < row.Count(); s++)
                         {
-                            Variety variety = row[s];
+                            Variety stamp = row[s];
 
                             float yNew = 0;
 
-                            if (!variety.Skip && setup.IncludeValue)
+                            if (!stamp.Skip && setup.IncludeValue)
                             {
                                 // Eg. 5 ct. mat ultramarijn
-                                yNew = artifacts.AddText(variety.FrameLeft - 1, y + variety.FrameOffset, variety.Width + 2, variety.Description, format.TitleFont, (int)setup.FontSize, alignment: Alignment.Centered).Height;
+                                yNew = artifacts.AddText(stamp.FrameLeft - 1, y + stamp.FrameOffset, stamp.Width + 2, stamp.Description, format.TitleFont, (int)setup.FontSize, alignment: Alignment.Centered).Height;
                             }
 
                             if (yNew > yMax)
@@ -699,7 +766,7 @@ namespace Escher
                             }
                         }
 
-                        y += yMax + 2;
+                        y = yMax + 2;
 
                     } // for (int r = 0; r < varieties.Rows.Count(); r++)
 

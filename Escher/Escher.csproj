@@ -278,5 +278,17 @@
   <ItemGroup>
     <None Include="Images\RulerMeasure_16x.png" />
   </ItemGroup>
+  <ItemGroup />
+  <ItemGroup>
+    <COMReference Include="VB6GraphicsProject">
+      <Guid>{90FB1F49-0FFF-4C30-B03E-FFD3E261EB68}</Guid>
+      <VersionMajor>2</VersionMajor>
+      <VersionMinor>0</VersionMinor>
+      <Lcid>0</Lcid>
+      <WrapperTool>tlbimp</WrapperTool>
+      <Isolated>False</Isolated>
+      <EmbedInteropTypes>True</EmbedInteropTypes>
+    </COMReference>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

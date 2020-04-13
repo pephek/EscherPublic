@@ -6,15 +6,16 @@ using System.Threading.Tasks;
 using System.Drawing;
 using System.Windows.Forms;
 using System.Drawing.Drawing2D;
+using System.Diagnostics;
 
 namespace Escher
 {
     public class Artifacts
     {
-        private List<Artifact> artifacts;
-
         private Graphics graphics;
         private float scale;
+
+        private List<Artifact> artifacts;
 
         public Artifacts(Graphics graphics, float scale)
         {
@@ -210,8 +211,13 @@ namespace Escher
             }
         }
 
-        public RectangleF AddText(float x, float y, float width, string text, string fontName, float fontSize, bool fontBold = false, bool fontItalic = false, Color? foreColor = null, Alignment alignment = Alignment.Left, bool screenOnly = false)
+        public SizeF AddText(float x, float y, float width, string text, string fontName, float fontSize, bool fontBold = false, bool fontItalic = false, Color? foreColor = null, Alignment alignment = Alignment.Left, bool screenOnly = false)
         {
+            //!TODO
+            //switch (fontSize)
+            //{
+            //    case 7: fontSize = 7.2F; break;
+            //}
             Font font = new Font(fontName, fontSize, (fontBold ? FontStyle.Bold : 0) | (fontItalic ? FontStyle.Italic : 0));
 
             text = text.Trim();
@@ -227,7 +233,7 @@ namespace Escher
 
             if (text == "")
             {
-                return new RectangleF(); // GetTextDimension(graphics, "", font).Height;
+                return new SizeF(0, graphics.MeasureString("X", font).Height);
             }
 
             int linefeed = text.IndexOf('%');
@@ -236,9 +242,11 @@ namespace Escher
             {
                 string[] texts = new string[] { text.Substring(0, linefeed), text.Substring(linefeed + 1)};
 
-                float height = AddText(x, y, width, texts[0], fontName, fontSize, fontBold, fontItalic, foreColor, alignment, screenOnly).Height;
+                SizeF first = AddText(x, y, width, texts[0], fontName, fontSize, fontBold, fontItalic, foreColor, alignment, screenOnly);
 
-                return AddText(x, y + height, width, texts[1], fontName, fontSize, fontBold, fontItalic, foreColor, alignment, screenOnly);
+                SizeF second = AddText(x, y + first.Height, width, texts[1], fontName, fontSize, fontBold, fontItalic, foreColor, alignment, screenOnly);
+
+                return new SizeF(Math.Max(first.Width, second.Width), first.Height + second.Height);
             }
             else if (width != 0 && GetTextDimension(graphics, text, font).Width > width)
             {
@@ -254,22 +262,6 @@ namespace Escher
 
                 return AddText(x, y, 4096, text, fontName, fontSize, fontBold, fontItalic, foreColor, alignment, screenOnly);
             }
-            //else if (text.Contains("<b>"))
-            //{
-            //    string[] texts = text.Split("<b>");
-
-            //    x += AddText(x, y, width, texts[0], fontName, fontSize, false, fontItalic, foreColor, alignment, screenOnly).Width;
-
-            //    return AddText(x, y, width, texts[1], fontName, fontSize, true, fontItalic, foreColor, alignment, screenOnly);
-            //}
-            //else if (text.Contains("</b>"))
-            //{
-            //    string[] texts = text.Split("</b>");
-
-            //    x += AddText(x, y, width, texts[0], fontName, fontSize, true, fontItalic, foreColor, alignment, screenOnly).Width;
-
-            //    return AddText(x, y, width, texts[1], fontName, fontSize, false, fontItalic, foreColor, alignment, screenOnly);
-            //}
             else if (text.Contains("<b>"))
             {
                 string[] texts = text.Split("<b>", joinAgainExceptFirstOne: true);
@@ -317,13 +309,13 @@ namespace Escher
                 artifact.Font = font;
                 artifact.screenOnly = screenOnly;
 
-                RectangleF dimension = GetTextDimension(graphics, artifact.Text, artifact.Font);
+                RectangleF dimension = GetTextDimension(this.graphics, artifact.Text, artifact.Font);
 
                 artifact.Width = dimension.Width;
-                artifact.Height = dimension.Height;
+                artifact.Height = this.graphics.MeasureString("X", font).Height; // fonts.GetTextHeight(graphics, fontName, fontSize); // font.GetHeight(graphics); // dimension.Height;
 
                 artifact.X -= dimension.Left;
-                artifact.Y -= dimension.Top;
+                //artifact.Y -= dimension.Top;
 
                 switch (alignment)
                 {
@@ -337,9 +329,17 @@ namespace Escher
                         break;
 
                 }
+
+                if (!screenOnly)
+                {
+                    string debug = string.Format("\t'{0}',x={1},y={2},[{3},{4},{5}] w={6} h={7}", text, Math.Round(artifact.X, 2), Math.Round(artifact.Y, 2), fontName, fontSize, fontBold, Math.Round(artifact.Width, 2), Math.Round(artifact.Height, 2));
+                    Debug.WriteLine(debug);
+                    debug = debug;
+                }
+
                 artifacts.Add(artifact);
 
-                return dimension;
+                return new SizeF(artifact.Width, artifact.Height);
             }
         }
 
@@ -349,21 +349,31 @@ namespace Escher
 
             CharacterRange[] ranges = new CharacterRange[] { new CharacterRange(0, text.Length) };
 
-            //StringFormat stringFormat = new StringFormat(StringFormat.GenericTypographic);
-            //stringFormat.SetMeasurableCharacterRanges(ranges);
-
             StringFormat stringFormat = new StringFormat();
-            stringFormat.Alignment = StringAlignment.Near;
-            stringFormat.LineAlignment = StringAlignment.Near;
             stringFormat.Trimming = StringTrimming.None;
-            stringFormat.FormatFlags = StringFormatFlags.MeasureTrailingSpaces;
+            stringFormat.FormatFlags = StringFormatFlags.NoClip;
             stringFormat.SetMeasurableCharacterRanges(ranges);
+
+            //StringFormat stringFormat = new StringFormat(StringFormat.GenericTypographic);
+            //StringFormat stringFormat = new StringFormat();
+            //stringFormat.Alignment = StringAlignment.Near;
+            //stringFormat.LineAlignment = StringAlignment.Near;
+            //stringFormat.Trimming = StringTrimming.None;
+            //stringFormat.FormatFlags = StringFormatFlags.MeasureTrailingSpaces;
+            //stringFormat.SetMeasurableCharacterRanges(ranges);
 
             RectangleF displayRectangleF = new RectangleF(0, 0, 4096, 4096);
             Region[] regions = graphics.MeasureCharacterRanges(text, font, displayRectangleF, stringFormat);
             RectangleF bounds = regions[0].GetBounds(graphics);
 
             return new RectangleF(bounds.X, bounds.Y, bounds.Width, bounds.Height);
+        }
+
+        public float GetTextHeight(string fontName, float fontSize)
+        {
+            Font font = new Font(fontName, fontSize);
+
+            return this.graphics.MeasureString("X", font).Height;
         }
 
         public float GetTextWidth(string text, string fontName, float fontSize, bool fontBold = false, bool fontItalic = false)
@@ -378,13 +388,6 @@ namespace Escher
 
                 return GetTextDimension(this.graphics, text, font).Width;
             }
-        }
-
-        public float GetTextHeight(string fontName, float fontSize, bool fontBold = false, bool fontItalic = false)
-        {
-            Font font = new Font(fontName, fontSize, (fontBold ? FontStyle.Bold : 0) | (fontItalic ? FontStyle.Italic : 0));
-
-            return GetTextDimension(this.graphics, "X", font).Height;
         }
     }
 }
