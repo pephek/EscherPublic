@@ -120,6 +120,7 @@
     <Compile Include="Enums\SheetNumber.cs" />
     <Compile Include="Enums\TitleStyle.cs" />
     <Compile Include="Experiments.cs" />
+    <Compile Include="Helpers\GraphicsHelper.cs" />
     <Compile Include="HtmlHelper.cs" />
     <Compile Include="ImageHelper.cs" />
     <Compile Include="Imaging.cs">

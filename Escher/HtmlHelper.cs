@@ -9,6 +9,15 @@ namespace Escher
 {
     public class HtmlHelper
     {
+        public const string cBreak = "%";
+
+        public const string cBold = "<b>";
+        public const string cBoldEnd = "</b>";
+        public const string cItalic = "<i>";
+        public const string cItalicEnd = "</i>";
+        public const string cSuperscript = "<s>";
+        public const string cSuperscriptEnd = "</s>";
+
         private static string GetTableOfContents(Design design, int i)
         {
             StringBuilder html = new StringBuilder();
@@ -34,7 +43,7 @@ namespace Escher
 
         private static string GetHeading(string heading, string text)
         {
-            text = text.Replace("!%", "").Replace("!", "").Replace("~", "").Replace("%", " &#9166; ");
+            text = text.Replace("!" + HtmlHelper.cBreak, "").Replace("!", "").Replace("~", "").Replace(HtmlHelper.cBreak, " &#9166; ");
 
             if (text == "")
             {
@@ -48,7 +57,7 @@ namespace Escher
 
         private static string GetText(string text)
         {
-            text = text.Replace("!%", "").Replace("!", "").Replace("~", "");
+            text = text.Replace("!" + HtmlHelper.cBreak, "").Replace("!", "").Replace("~", "");
 
             if (text == "")
             {
@@ -74,7 +83,7 @@ namespace Escher
 
         private static string GetStampDescription(string text)
         {
-            text = text.Replace("!", "").Replace("%", " &#9166; ");
+            text = text.Replace("!", "").Replace(HtmlHelper.cBreak, " &#9166; ");
 
             if (text == "")
             {

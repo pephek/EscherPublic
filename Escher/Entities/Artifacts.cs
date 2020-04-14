@@ -237,14 +237,9 @@ namespace Escher
 
         public SizeF AddText(float x, float y, float width, string text, string fontName, float fontSize, bool fontBold = false, bool fontItalic = false, Color? foreColor = null, Alignment alignment = Alignment.Left, bool screenOnly = false)
         {
-            //!TODO
-            //switch (fontSize)
-            //{
-            //    case 7: fontSize = 7.2F; break;
-            //}
             Font font = new Font(fontName, fontSize, (fontBold ? FontStyle.Bold : 0) | (fontItalic ? FontStyle.Italic : 0));
 
-            text = text.Trim();
+            //text = text.Trim();
 
             if (text == "~")
             {
@@ -260,65 +255,124 @@ namespace Escher
                 return new SizeF(0, graphics.MeasureString("X", font).Height);
             }
 
-            int linefeed = text.IndexOf('%');
-
-            if (linefeed >= 0)
+            if (text.Contains(HtmlHelper.cBreak))
             {
-                string[] texts = new string[] { text.Substring(0, linefeed), text.Substring(linefeed + 1)};
+                string[] texts = text.Split(HtmlHelper.cBreak, joinAgainExceptFirstOne: true);
 
-                SizeF first = AddText(x, y, width, texts[0], fontName, fontSize, fontBold, fontItalic, foreColor, alignment, screenOnly);
+                SizeF _1st = AddText(x, y, width, texts[0], fontName, fontSize, fontBold, fontItalic, foreColor, alignment, screenOnly);
+                SizeF _2nd = AddText(x, y + _1st.Height, width, texts[1], fontName, fontSize, fontBold, fontItalic, foreColor, alignment, screenOnly);
 
-                SizeF second = AddText(x, y + first.Height, width, texts[1], fontName, fontSize, fontBold, fontItalic, foreColor, alignment, screenOnly);
-
-                SizeF size = new SizeF(Math.Max(first.Width, second.Width), first.Height + second.Height);
+                SizeF size = new SizeF(Math.Max(_1st.Width, _2nd.Width), _1st.Height + _2nd.Height);
 
                 return size;
             }
-            else if (width != 0 && GetTextDimension(graphics, text, font).Width > width)
+            else
             {
-                text = text.Replace("  ", " ");
+                RectangleF textSize = this.graphics.MeasureText(text, fontName, fontSize, fontBold, fontItalic);
 
-                for (int i = text.Length - 1; i >= 0; i--)
+                if (width != 0 && textSize.Width > width)
                 {
-                    if (text[i] == ' ' && GetTextDimension(graphics, text.Substring(0, i), font).Width <= width)
+                    text = text.Replace("  ", " ");
+
+                    for (int i = text.Length - 1; i >= 0; i--)
                     {
-                        return AddText(x, y, width, text.Substring(0, i) + "%" + text.Substring(i + 1), fontName, fontSize, fontBold, fontItalic, foreColor, alignment, screenOnly);
+                        if (text[i] == ' ' && this.graphics.MeasureText(text.Substring(0, i), fontName, fontSize, fontBold, fontItalic).Width <= width)
+                        {
+                            return AddText(x, y, width, text.Substring(0, i) + HtmlHelper.cBreak + text.Substring(i + 1), fontName, fontSize, fontBold, fontItalic, foreColor, alignment, screenOnly);
+                        }
+                    }
+
+                    return AddText(x, y, 4096, text, fontName, fontSize, fontBold, fontItalic, foreColor, alignment, screenOnly);
+                }
+                else
+                {
+                    float xNew = x - textSize.Left;
+
+                    switch (alignment)
+                    {
+                        case Alignment.Left:
+                            break;
+                        case Alignment.Centered:
+                            xNew += (width - textSize.Width) / 2;
+                            break;
+                        case Alignment.Right:
+                            xNew += width - textSize.Width;
+                            break;
+                    }
+
+                    List<string> texts = GraphicsHelper.SplitText(text, fontSize, out float newFontSize, fontBold, out bool newFontBold, fontItalic, out bool newFontItalic);
+
+                    if (texts != null)
+                    {
+                        SizeF _1st = AddText(xNew, y, width, texts[0], fontName, fontSize, fontBold, fontItalic, foreColor, Alignment.Left, screenOnly);
+                        SizeF _2nd = AddText(xNew + _1st.Width, y, width, texts[1], fontName, newFontSize, newFontBold, newFontItalic, foreColor, Alignment.Left, screenOnly);
+
+                        SizeF size = new SizeF(_1st.Width + _2nd.Width, _1st.Height);
+
+                        return size;
+                    }
+                    else
+                    {
+                        Artifact artifact = new Artifact(ArtifactType.Text);
+
+                        artifact.X = xNew;
+                        artifact.Y = y;
+                        artifact.Text = text;
+                        artifact.TextColor = foreColor == null ? new SolidBrush(Color.Black) : new SolidBrush((Color)foreColor);
+                        artifact.Font = font;
+                        artifact.screenOnly = screenOnly;
+
+                        artifact.Width = textSize.Width;
+                        artifact.Height = textSize.Height;
+
+                        artifacts.Add(artifact);
+
+                        if (!screenOnly)
+                        {
+                            Debug.WriteLine(string.Format("\t'{0}',x={1},y={2},[{3},{4},{5}] w={6} h={7}", text, Math.Round(artifact.X, 2), Math.Round(artifact.Y, 2), fontName, fontSize, fontBold, Math.Round(artifact.Width, 2), Math.Round(artifact.Height, 2)));
+                        }
+
+                        return new SizeF(artifact.Width, artifact.Height);
                     }
                 }
-
-                return AddText(x, y, 4096, text, fontName, fontSize, fontBold, fontItalic, foreColor, alignment, screenOnly);
             }
-            else if (text.Contains("<b>"))
+
+
+
+
+
+
+            if (text.Contains(HtmlHelper.cBold))
             {
-                string[] texts = text.Split("<b>", joinAgainExceptFirstOne: true);
+                string[] texts = text.Split(HtmlHelper.cBold, joinAgainExceptFirstOne: true);
 
                 x += AddText(x, y, width, texts[0], fontName, fontSize, false, fontItalic, foreColor, alignment, screenOnly).Width;
 
-                texts = texts[1].Split("</b>", joinAgainExceptFirstOne: true);
+                texts = texts[1].Split(HtmlHelper.cBoldEnd, joinAgainExceptFirstOne: true);
 
                 x += AddText(x, y, width, texts[0], fontName, fontSize, true, fontItalic, foreColor, alignment, screenOnly).Width;
 
                 return AddText(x, y, width, texts[1], fontName, fontSize, false, fontItalic, foreColor, alignment, screenOnly);
             }
-            else if (text.Contains("<i>"))
+            else if (text.Contains(HtmlHelper.cItalic))
             {
-                string[] texts = text.Split("<i>", joinAgainExceptFirstOne: true);
+                string[] texts = text.Split(HtmlHelper.cItalic, joinAgainExceptFirstOne: true);
 
                 x += AddText(x, y, width, texts[0], fontName, fontSize, fontBold, false, foreColor, alignment, screenOnly).Width;
 
-                texts = texts[1].Split("</i>", joinAgainExceptFirstOne: true);
+                texts = texts[1].Split(HtmlHelper.cItalicEnd, joinAgainExceptFirstOne: true);
 
                 x += AddText(x, y, width, texts[0], fontName, fontSize, fontBold, true, foreColor, alignment, screenOnly).Width;
 
                 return AddText(x, y, width, texts[1], fontName, fontSize, fontBold, false, foreColor, alignment, screenOnly);
             }
-            else if (text.Contains("<s>"))
+            else if (text.Contains(HtmlHelper.cSuperscript))
             {
-                string[] texts = text.Split("<s>", joinAgainExceptFirstOne: true);
+                string[] texts = text.Split(HtmlHelper.cSuperscript, joinAgainExceptFirstOne: true);
 
                 x += AddText(x, y, width, texts[0], fontName, fontSize, fontBold, fontItalic, foreColor, alignment, screenOnly).Width;
 
-                texts = texts[1].Split("</s>", joinAgainExceptFirstOne: true);
+                texts = texts[1].Split(HtmlHelper.cSuperscriptEnd, joinAgainExceptFirstOne: true);
 
                 x += AddText(x, y - 0.5F, width, texts[0], fontName, fontSize - 1, fontBold, fontItalic, foreColor, alignment, screenOnly).Width;
 
@@ -326,73 +380,7 @@ namespace Escher
             }
             else
             {
-                Artifact artifact = new Artifact(ArtifactType.Text);
-
-                artifact.X = x;
-                artifact.Y = y;
-                artifact.Text = text;
-                artifact.TextColor = foreColor == null ? new SolidBrush(Color.Black) : new SolidBrush((Color)foreColor);
-                artifact.Font = font;
-                artifact.screenOnly = screenOnly;
-
-                RectangleF dimension = GetTextDimension(this.graphics, artifact.Text, artifact.Font);
-
-                artifact.Width = dimension.Width;
-                artifact.Height = this.graphics.MeasureString("X", font).Height; // fonts.GetTextHeight(graphics, fontName, fontSize); // font.GetHeight(graphics); // dimension.Height;
-
-                artifact.X -= dimension.Left;
-                //artifact.Y -= dimension.Top;
-
-                switch (alignment)
-                {
-                    case Alignment.Left:
-                        break;
-                    case Alignment.Centered:
-                        artifact.X += (width - artifact.Width) / 2;
-                        break;
-                    case Alignment.Right:
-                        artifact.X += width - artifact.Width;
-                        break;
-
-                }
-
-                if (!screenOnly)
-                {
-                    string debug = string.Format("\t'{0}',x={1},y={2},[{3},{4},{5}] w={6} h={7}", text, Math.Round(artifact.X, 2), Math.Round(artifact.Y, 2), fontName, fontSize, fontBold, Math.Round(artifact.Width, 2), Math.Round(artifact.Height, 2));
-                    Debug.WriteLine(debug);
-                    debug = debug;
-                }
-
-                artifacts.Add(artifact);
-
-                return new SizeF(artifact.Width, artifact.Height);
             }
-        }
-
-        private RectangleF GetTextDimension(Graphics graphics, string text, Font font)
-        {
-            // http://csharphelper.com/blog/2015/02/measure-character-positions-when-drawing-long-strings-in-c/
-
-            CharacterRange[] ranges = new CharacterRange[] { new CharacterRange(0, text.Length) };
-
-            StringFormat stringFormat = new StringFormat();
-            stringFormat.Trimming = StringTrimming.None;
-            stringFormat.FormatFlags = StringFormatFlags.NoClip;
-            stringFormat.SetMeasurableCharacterRanges(ranges);
-
-            //StringFormat stringFormat = new StringFormat(StringFormat.GenericTypographic);
-            //StringFormat stringFormat = new StringFormat();
-            //stringFormat.Alignment = StringAlignment.Near;
-            //stringFormat.LineAlignment = StringAlignment.Near;
-            //stringFormat.Trimming = StringTrimming.None;
-            //stringFormat.FormatFlags = StringFormatFlags.MeasureTrailingSpaces;
-            //stringFormat.SetMeasurableCharacterRanges(ranges);
-
-            RectangleF displayRectangleF = new RectangleF(0, 0, 4096, 4096);
-            Region[] regions = graphics.MeasureCharacterRanges(text, font, displayRectangleF, stringFormat);
-            RectangleF bounds = regions[0].GetBounds(graphics);
-
-            return new RectangleF(bounds.X, bounds.Y, bounds.Width, bounds.Height);
         }
 
         public float GetTextHeight(string fontName, float fontSize)
@@ -402,20 +390,6 @@ namespace Escher
             SizeF size = this.graphics.MeasureString("X", font);
 
             return size.Height;
-        }
-
-        public float GetTextWidth(string text, string fontName, float fontSize, bool fontBold = false, bool fontItalic = false)
-        {
-            if (string.IsNullOrEmpty(text))
-            {
-                return 0;
-            }
-            else
-            {
-                Font font = new Font(fontName, fontSize, (fontBold ? FontStyle.Bold : 0) | (fontItalic ? FontStyle.Italic : 0));
-
-                return GetTextDimension(this.graphics, text, font).Width;
-            }
         }
     }
 }

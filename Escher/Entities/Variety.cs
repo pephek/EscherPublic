@@ -139,7 +139,7 @@ namespace Escher
 
             if (entry.Separate)
             {
-                valueAndColor = (value != "" ? value : "!") + "%" + (color != "" ? color : "!");
+                valueAndColor = (value != "" ? value : "!") + HtmlHelper.cBreak + (color != "" ? color : "!");
             }
             else if (value != "" && color == "")
             {

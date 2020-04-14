@@ -125,22 +125,25 @@ namespace Escher
 
                         DesignEntry stamp = series.GetStampFromSeries(artifact.Number);
 
-                        Imaging imaging = new Imaging();
-
-                        imaging.SetImage(
-                            series: series,
-                            stampNumber: stamp.Number,
-                            folder: App.GetSetting("ImagesFolder"),
-                            country: design.GetCountry(stamp.PageNumber).Text,
-                            section: design.GetSection(stamp.PageNumber).Text
-                        );
-
-                        if (imaging.ShowDialog() == DialogResult.OK)
+                        if (stamp != null)
                         {
-                            RefreshPreview(resizePreview: false);
-                        }
+                            Imaging imaging = new Imaging();
 
-                        return;
+                            imaging.SetImage(
+                                series: series,
+                                stampNumber: stamp.Number,
+                                folder: App.GetSetting("ImagesFolder"),
+                                country: design.GetCountry(stamp.PageNumber).Text,
+                                section: design.GetSection(stamp.PageNumber).Text
+                            );
+
+                            if (imaging.ShowDialog() == DialogResult.OK)
+                            {
+                                RefreshPreview(resizePreview: false);
+                            }
+
+                            return;
+                        }
                     }
                 }
             }
@@ -480,7 +483,7 @@ namespace Escher
                         {
                             if (page.Title != "")
                             {
-                                artifacts.AddText(format.Border.Left, format.Border.Top - artifacts.GetTextHeight("Darleston", 20) - 1F, format.Border.Width, page.Title.Split("<br>")[0].Replace("!%", "").Replace("%", ""), "Darleston", 20, alignment: Alignment.Right);
+                                artifacts.AddText(format.Border.Left, format.Border.Top - artifacts.GetTextHeight("Darleston", 20) - 1F, format.Border.Width, page.Title.Split("<br>")[0].Replace("!" + HtmlHelper.cBreak, "").Replace(HtmlHelper.cBreak, ""), "Darleston", 20, alignment: Alignment.Right);
                             }
                             else
                             {
@@ -583,7 +586,7 @@ namespace Escher
 
                     if (text != "")
                     {
-                        float textWidth = artifacts.GetTextWidth(text, format.TitleFont, fontSize);
+                        float textWidth = g.MeasureText(text, format.TitleFont, fontSize, fontBold: false, fontItalic: false).Width;
                         float rowWidth = page.RowWidth(v, 0);
                         float rowLeft = page.RowLeft(v, 0, format.Free.Left, format.Free.Width);
 
