@@ -95,6 +95,18 @@ namespace Escher
             }
         }
 
+        private void AddArea(float x, float y, float width, float height, Color foreColor)
+        {
+            AddCursor(x, y);
+
+            Artifact artifact = new Artifact(ArtifactType.Area);
+            artifact.Width = width;
+            artifact.Height = height;
+            artifact.ForeColor = foreColor;
+
+            artifacts.Add(artifact);
+        }
+
         public void AddHorizontalLine(float x, float y, float width, Color? foreColor = null, FrameStyle frameStyle = FrameStyle.ThinSolid, Appearance appearance = Appearance.Singular, bool screenOnly = false)
         {
             AddCursor(x, y);
@@ -137,7 +149,7 @@ namespace Escher
             artifacts.Add(artifact);
         }
 
-        public void AddImage(string path, string number, float left, float top, float width, float height, float extraWidth, float extraHeight, Shape shape, Appearance appearance, string picture, ColorStyle colorStyle)
+        public void AddImage(string path, string number, float left, float top, float width, float height, float extraWidth, float extraHeight, Shape shape, Appearance appearance, string picture, ColorStyle colorStyle, FrameStyle frameStyle)
         {
             number = !string.IsNullOrEmpty(picture) ? picture.Trim() : number.Trim();
 
@@ -226,9 +238,54 @@ namespace Escher
                                 w = w - 8;
                                 h = h - 8;
                                 break;
+                            case Appearance.ImperfTop:
+                                if (frameStyle == FrameStyle.Thick)
+                                {
+                                    AddArea(left + 4, top + 4, width - 8, height - 8, Color.Black);
+                                }
+                                h = (height + 4) / 2;
+                                x = left + 4;
+                                y = top + h;
+                                w = width - 8;
+                                h = h - 8;
+                                break;
+                            case Appearance.ImperfBottom:
+                                if (frameStyle == FrameStyle.Thick)
+                                {
+                                    AddArea(left + 4, top + 4, width - 8, height - 8, Color.Black);
+                                }
+                                h = (height + 4) / 2;
+                                x = left + 4;
+                                y = top + 4;
+                                w = width - 8;
+                                h = h - 8;
+                                break;
+                            case Appearance.ImperfLeft:
+                                if (frameStyle == FrameStyle.Thick)
+                                {
+                                    AddArea(left + 4, top + 4, width - 8, height - 8, Color.Black);
+                                }
+                                w = (width + 4) / 2;
+                                x = left + w;
+                                y = top + 4;
+                                w = w - 8;
+                                h = height - 8;
+                                break;
+                            case Appearance.ImperfRight:
+                                if (frameStyle == FrameStyle.Thick)
+                                {
+                                    AddArea(left + 4, top + 4, width - 8, height - 8, Color.Black);
+                                }
+                                w = (width + 4) / 2;
+                                x = left + 4;
+                                y = top + 4;
+                                w = w - 8;
+                                h = height - 8;
+                                break;
                             default:
                                 throw new Exception("todo");
                         }
+
                         AddImage(x, y, z * w, z * h, n, image);
                     }
                     break;

@@ -95,8 +95,6 @@ namespace Escher
     {
         public static RectangleF MeasureText(this Graphics graphics, string text, string fontName, float fontSize, bool fontBold, bool fontItalic)
         {
-            Debug.WriteLine(string.Format("MeasureText('{0}')", text));
-
             RectangleF _1st;
             RectangleF _2nd;
 

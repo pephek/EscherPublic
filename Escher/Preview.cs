@@ -241,6 +241,7 @@ namespace Escher
         private void PrintPreview(Graphics g, Artifacts artifacts, float pageScale, float transformScale, PrintMode printMode, ScreenMode screenMode)
         {
             Pen pen;
+            SolidBrush brush;
 
             if (printMode == PrintMode.ToScreen)
             {
@@ -288,6 +289,7 @@ namespace Escher
                         g.DrawLine(pen, currentX, currentY, currentX + artifact.Width, currentY + artifact.Height);
                         currentX += artifact.Width;
                         currentY += artifact.Height;
+                        pen.Dispose();
                         break;
 
                     case ArtifactType.MoveDotted:
@@ -296,12 +298,18 @@ namespace Escher
                         g.DrawLine(pen, currentX, currentY, currentX + artifact.Width, currentY + artifact.Height);
                         currentX += artifact.Width;
                         currentY += artifact.Height;
+                        pen.Dispose();
                         break;
 
                     case ArtifactType.Text:
                         g.DrawString(artifact.Text, artifact.Font, artifact.TextColor, artifact.X, artifact.Y);
-                        //TextRenderer.DrawText(g, artifact.Text, artifact.Font, new Point((int)artifact.X, (int)artifact.Y), artifact.TextColor.Color);
                         g.DrawRectangle(new Pen(Color.Red), artifact.X, artifact.Y, artifact.Width+1, artifact.Height);
+                        break;
+
+                    case ArtifactType.Area:
+                        brush = new SolidBrush(artifact.ForeColor);
+                        g.FillRectangle(brush, new Rectangle((int)currentX, (int)currentY, (int)artifact.Width, (int)artifact.Height));
+                        brush.Dispose();
                         break;
 
                     case ArtifactType.Image:
@@ -562,10 +570,10 @@ namespace Escher
                     int a = 0;
                     int b = 0;
 
-                    while (page.RowWidth(v, n, format.Free.Width, out a) > format.Free.Width && varieties.Rows[n].Count() > 1)
-                    {
-                        throw new Exception("TODO");
-                    }
+                    //while (page.RowWidth(v, n, format.Free.Width, out a) > format.Free.Width && varieties.Rows[n].Count() > 1)
+                    //{
+                    //    throw new Exception("TODO");
+                    //}
 
                     // Eg.A - Kamtanding 12¾ : 11¾.
                     float fontSize = varieties.FontOfDescription ? 5 : 7;
@@ -603,7 +611,7 @@ namespace Escher
                             y += artifacts.AddText(rowLeft + varieties.Horizontal - textWidth, y + varieties.Vertical, rowWidth + 2 * textWidth, text, format.TitleFont, fontSize, alignment: alignment).Height;
                         }
 
-                        y += 1 - varieties.Vertical;
+                        y += 1; // - varieties.Vertical;
                     }
 
                     Debug.WriteLine(string.Format("y after varieties = {0}", Math.Round(y, 2)));
@@ -676,7 +684,7 @@ namespace Escher
                             Variety stamp = row[s];
 
                             float x1 = stamp.FrameLeft;
-                            float y1 = y + stamp.FrameOffset + (rowHeight - stamp.Height) / 2;
+                            float y1 = y + stamp.FrameOffset + (rowHeight - stamp.Height) / 2 + stamp.Vertical;
 
                             Debug.Print(string.Format("Location[{0}]: x {1}, y {2}", s, Math.Round(x1, 2), Math.Round(y1, 2)));
 
@@ -689,7 +697,7 @@ namespace Escher
                                     // A page without album number is a title page, so do show the coat of arms
                                     if (setup.IncludeImage || page.AlbumNumber == "")
                                     {
-                                        artifacts.AddImage(page.ImagesPath, stamp.Number, x1, y1, stamp.Width, stamp.Height, stamp.ExtraWidth, stamp.ExtraHeight, stamp.Shape, stamp.Appearance, stamp.Picture, setup.ColorStyle);
+                                        artifacts.AddImage(page.ImagesPath, stamp.Number, x1, y1, stamp.Width, stamp.Height, stamp.ExtraWidth, stamp.ExtraHeight, stamp.Shape, stamp.Appearance, stamp.Picture, setup.ColorStyle, setup.FrameStyle);
                                     }
                                 }
                                 else
@@ -734,7 +742,7 @@ namespace Escher
                                 if (!stamp.Skip)
                                 {
                                     // Eg. 7 IA
-                                    float height = artifacts.AddText(stamp.FrameLeft, y + stamp.FrameOffset, stamp.Width, stamp.Number == "0" ? "" : stamp.Number, format.TitleFont, (float)setup.FontSize, fontBold: true, alignment: Alignment.Centered).Height;
+                                    float height = artifacts.AddText(stamp.FrameLeft, y + stamp.FrameOffset + stamp.Vertical, stamp.Width, stamp.Number == "0" ? "" : stamp.Number, format.TitleFont, (float)setup.FontSize, fontBold: true, alignment: Alignment.Centered).Height;
 
                                     maxHeight = Math.Max(maxHeight, height);
                                 }
@@ -760,7 +768,7 @@ namespace Escher
                                 if (!stamp.Skip)
                                 {
                                     // Eg. 5 ct. mat ultramarijn
-                                    float height = artifacts.AddText(stamp.FrameLeft - 1, y + stamp.FrameOffset, stamp.Width + 2, stamp.Description, format.TitleFont, (int)setup.FontSize, alignment: Alignment.Centered).Height;
+                                    float height = artifacts.AddText(stamp.FrameLeft - 1, y + stamp.FrameOffset + stamp.Vertical, stamp.Width + 2, stamp.Description, format.TitleFont, (int)setup.FontSize, alignment: Alignment.Centered).Height;
 
                                     maxHeight = Math.Max(maxHeight, height);
                                 }

@@ -209,13 +209,13 @@ namespace Escher
             return center;
         }
 
-        public float FrameLeft(int v, int r, int s, float freeLeft,float freeWidth)
+        public float FrameLeft(int v, int r, int s, float freeLeft, float freeWidth)
         {
             float frameLeft = RowLeft(v, r, freeLeft, freeWidth);
 
             for (int i = 0; i < s; i++)
             {
-                frameLeft += Varieties[v].Rows[r][s].Width;
+                frameLeft += Varieties[v].Rows[r][i].Width;
                 frameLeft += Varieties[v].Margin;
             }
 
