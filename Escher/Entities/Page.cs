@@ -9,16 +9,16 @@ namespace Escher
 {
     public class Page
     {
-        public string ImagesPath;
-        public string Country;
-        public string Section;
-        public string Copyright;
-        public string Title;
-        public string Series;
-        public string MainType;
+        public string ImagesPath = "";
+        public string Country = "";
+        public string Section = "";
+        public string Copyright = "";
+        public string Title = "";
+        public string Series = "";
+        public string MainType = "";
         public double OffsetVertical;
         public double Spacing;
-        public string AlbumNumber;
+        public string AlbumNumber = "";
         public bool IsSample;
         public float Margin;
 
@@ -179,6 +179,7 @@ namespace Escher
                     width += spacing + RowWidth(w, 0);
                     n++;
                 }
+                n++;
             }
 
             if (n == 0)

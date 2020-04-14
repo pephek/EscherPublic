@@ -115,7 +115,7 @@ namespace Escher
         {
             foreach (Artifact artifact in artifacts.Get())
             {
-                if (artifact.Type == ArtifactType.Image && !string.IsNullOrEmpty(artifact.Number))
+                if (artifact.Type == ArtifactType.Image && artifact.Number != "")
                 {
                     Artifact artefact = artifact.GetScaledCopy(this.pageScale * this.transformScale);
 
@@ -430,26 +430,26 @@ namespace Escher
             }
 
             // Border
-            if (setup.IncludeBorder && !string.IsNullOrEmpty(page.AlbumNumber))
+            if (setup.IncludeBorder && page.AlbumNumber != "")
             {
                 artifacts.AddHorizontalLine(format.Border.Left, format.Border.Top, format.Border.Width);
                 artifacts.AddHorizontalLine(format.Border.Left, format.Border.Bottom, format.Border.Width);
             }
 
             // Copyright statement
-            if (!string.IsNullOrEmpty(page.Copyright))
+            if (page.Copyright != "")
             {
                 artifacts.AddText(format.Border.Left, format.Border.Bottom + 2, 0, page.Copyright, format.TitleFont, 7, foreColor: Color.Gray);
             }
 
             // Album number
-            if (!string.IsNullOrEmpty(page.AlbumNumber))
+            if (page.AlbumNumber != "")
             {
                 artifacts.AddText(format.Border.Left, format.Border.Bottom + 2, format.Border.Width, page.AlbumNumber, format.TitleFont, 7, alignment: Alignment.Right);
             }
 
             // Country
-            if (!string.IsNullOrEmpty(page.Title) && string.IsNullOrEmpty(page.AlbumNumber)) // Must be the front page
+            if (page.Title != "" && page.AlbumNumber == "") // Must be the front page
             {
                 if (page.Title.Contains("<br>"))
                 {
@@ -478,7 +478,7 @@ namespace Escher
                     case TitleStyle.Importa:
                         if (setup.IncludeTitle)
                         {
-                            if (!string.IsNullOrEmpty(page.Title))
+                            if (page.Title != "")
                             {
                                 artifacts.AddText(format.Border.Left, format.Border.Top - artifacts.GetTextHeight("Darleston", 20) - 1F, format.Border.Width, page.Title.Split("<br>")[0].Replace("!%", "").Replace("%", ""), "Darleston", 20, alignment: Alignment.Right);
                             }
@@ -509,12 +509,12 @@ namespace Escher
                 Debug.WriteLine(string.Format("y at start = {0}", Math.Round(y, 2)));
 
                 // Eg. 1867-1869. Koning Willem III.
-                y += artifacts.AddText(format.Free.Left, y, format.Free.Width, string.IsNullOrEmpty(page.Series) ? "·" : page.Series, format.TitleFont, 7, foreColor: string.IsNullOrEmpty(page.Series) ? Color.White : Color.Black, alignment: Alignment.Centered).Height;
+                y += artifacts.AddText(format.Free.Left, y, format.Free.Width, page.Series == "" ? "·" : page.Series, format.TitleFont, 7, foreColor: page.Series == "" ? Color.White : Color.Black, alignment: Alignment.Centered).Height;
 
                 Debug.WriteLine(string.Format("y after series = {0}", Math.Round(y, 2)));
 
                 // Eg. Type I.
-                y += artifacts.AddText(format.Free.Left, y, format.Free.Width, string.IsNullOrEmpty(page.MainType) ? "" : page.MainType, format.TitleFont, 7, alignment: Alignment.Centered).Height;
+                y += artifacts.AddText(format.Free.Left, y, format.Free.Width, page.MainType, format.TitleFont, 7, alignment: Alignment.Centered).Height;
 
                 y += artifacts.AddText(format.Free.Left, y, format.Free.Width, "", format.TitleFont, 7, alignment: Alignment.Centered).Height;
 
@@ -538,14 +538,17 @@ namespace Escher
                     // When varieties are combined then remember this y position
                     yCombine = y;
 
-                    if (!string.IsNullOrEmpty(varieties.SubType))
+                    if (varieties.SubType != "")
                     {
                         // Eg. Type II
-                        y += artifacts.GetTextHeight(format.TitleFont, 9);
+                        //y += artifacts.GetTextHeight(format.TitleFont, 9 - 1); // -1 to compensate difference with VB6
+                        y += 1.6F;
 
                         Debug.WriteLine(string.Format("y after adding free space = {0}", Math.Round(y, 2)));
 
                         y += artifacts.AddText(format.Free.Left, y, format.Free.Width, varieties.SubType, format.TitleFont, 7, alignment: Alignment.Centered).Height;
+
+                        y += artifacts.GetTextHeight(format.TitleFont, 7);
 
                         Debug.WriteLine(string.Format("y after sub type = {0}", Math.Round(y, 2)));
 
@@ -567,7 +570,7 @@ namespace Escher
                     string text;
                     Alignment alignment;
 
-                    if (setup.IncludeNumber && !string.IsNullOrEmpty(varieties.PrivateDescription))
+                    if (setup.IncludeNumber && varieties.PrivateDescription != "")
                     {
                         text = varieties.PrivateDescription;
                         alignment = Alignment.Centered;
@@ -578,7 +581,7 @@ namespace Escher
                         alignment = varieties.Alignment;
                     }
 
-                    if (!string.IsNullOrEmpty(text))
+                    if (text != "")
                     {
                         float textWidth = artifacts.GetTextWidth(text, format.TitleFont, fontSize);
                         float rowWidth = page.RowWidth(v, 0);
@@ -631,7 +634,7 @@ namespace Escher
                         {
                             Variety stamp = row[s];
 
-                            if (!string.IsNullOrEmpty(stamp.Title))
+                            if (stamp.Title != "")
                             {
                                 if (!hasDescriptions)
                                 {
@@ -678,10 +681,10 @@ namespace Escher
 
                             if (!stamp.Skip)
                             {
-                                if (string.IsNullOrEmpty(stamp.Sheet))
+                                if (stamp.Sheet == "")
                                 {
                                     // A page without album number is a title page, so do show the coat of arms
-                                    if (setup.IncludeImage || string.IsNullOrEmpty(page.AlbumNumber))
+                                    if (setup.IncludeImage || page.AlbumNumber == "")
                                     {
                                         artifacts.AddImage(page.ImagesPath, stamp.Number, x1, y1, stamp.Width, stamp.Height, stamp.ExtraWidth, stamp.ExtraHeight, stamp.Shape, stamp.Appearance, stamp.Picture, setup.ColorStyle);
                                     }

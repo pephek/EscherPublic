@@ -137,7 +137,7 @@ namespace Escher
             artifacts.Add(artifact);
         }
 
-        public void AddImage(string path, string number, float x, float y, float width, float height, float extraWidth, float extraHeight, Shape shape, Appearance appearance, string picture, ColorStyle colorStyle)
+        public void AddImage(string path, string number, float left, float top, float width, float height, float extraWidth, float extraHeight, Shape shape, Appearance appearance, string picture, ColorStyle colorStyle)
         {
             number = !string.IsNullOrEmpty(picture) ? picture.Trim() : number.Trim();
 
@@ -176,19 +176,21 @@ namespace Escher
                 return; // No need to stay here if the image is not found, return immediately
             }
 
+            float x = 0, y = 0, w = 0, h = 0;
+
             switch (shape)
             {
                 case Shape.Triangle45:
-                    AddImage(x + 3 * 5 / (float) Math.Sqrt(2), y + 2 * 5 / (float) Math.Sqrt(2), width - 2 * 5 / (float) Math.Sqrt(2), height - 5 - 2 * 5 / (float) Math.Sqrt(2), n, image);
+                    AddImage(left + 3 * 5 / (float) Math.Sqrt(2), top + 2 * 5 / (float) Math.Sqrt(2), width - 2 * 5 / (float) Math.Sqrt(2), height - 5 - 2 * 5 / (float) Math.Sqrt(2), n, image);
                     break;
                 case Shape.Triangle60Inverted:
-                    AddImage(x + 5 + 5 / (float)Math.Sqrt(3), y + 5, width - 2 * (5 + 5 / (float)Math.Sqrt(3)), height - 2 * (5 + 5 / (float)Math.Sqrt(3)), n, image);
+                    AddImage(left + 5 + 5 / (float)Math.Sqrt(3), top + 5, width - 2 * (5 + 5 / (float)Math.Sqrt(3)), height - 2 * (5 + 5 / (float)Math.Sqrt(3)), n, image);
                     break;
                 case Shape.Triangle60:
-                    AddImage(x + 5 + 5 / (float)Math.Sqrt(3), y + 2 * 5, width - 2 * (5 + 5 / (float)Math.Sqrt(3)), height - 2 * (5 + 5 / (float)Math.Sqrt(3)), n, image);
+                    AddImage(left + 5 + 5 / (float)Math.Sqrt(3), top + 2 * 5, width - 2 * (5 + 5 / (float)Math.Sqrt(3)), height - 2 * (5 + 5 / (float)Math.Sqrt(3)), n, image);
                     break;
                 case Shape.RectangleRotated:
-                    AddImage(x + 5 * (float)Math.Sqrt(2), y + 5 * (float)Math.Sqrt(2), width - 2 * 5 * (float)Math.Sqrt(2), height - 2 * 5 * (float)Math.Sqrt(2), n, image);
+                    AddImage(left + 5 * (float)Math.Sqrt(2), top + 5 * (float)Math.Sqrt(2), width - 2 * 5 * (float)Math.Sqrt(2), height - 2 * 5 * (float)Math.Sqrt(2), n, image);
                     break;
                 default:
                     for (int i = 0; i < appearance.NumberOfStamps(); i++)
@@ -197,15 +199,37 @@ namespace Escher
                         switch (appearance)
                         {
                             case Appearance.Singular:
-                                x += 4;
-                                y += 4;
-                                width -= 8;
-                                height -= 8;
+                                x = left + 4;
+                                y = top + 4;
+                                w = width - 8;
+                                h = height - 8;
+                                break;
+                            case Appearance.PairHorizontal:
+                                w = (width + 4) / 2;
+                                x = left + i * (w - 4) + 4;
+                                y = top + 4;
+                                w = w - 8;
+                                h = height - 8;
+                                break;
+                            case Appearance.PairVertical:
+                                h = (height + 4) / 2;
+                                x = left + 4;
+                                y = top + i * (h - 4) + 4;
+                                w = width - 8;
+                                h = h - 8;
+                                break;
+                            case Appearance.Block:
+                                w = (width + 4) / 2;
+                                h = (height + 4) / 2;
+                                x = left + (i == 1 || i == 3 ? w : 4);
+                                y = top + (i == 2 || i == 3 ? h : 4);
+                                w = w - 8;
+                                h = h - 8;
                                 break;
                             default:
                                 throw new Exception("todo");
                         }
-                        AddImage(x, y, z * width, z * height, n, image);
+                        AddImage(x, y, z * w, z * h, n, image);
                     }
                     break;
             }
@@ -246,7 +270,9 @@ namespace Escher
 
                 SizeF second = AddText(x, y + first.Height, width, texts[1], fontName, fontSize, fontBold, fontItalic, foreColor, alignment, screenOnly);
 
-                return new SizeF(Math.Max(first.Width, second.Width), first.Height + second.Height);
+                SizeF size = new SizeF(Math.Max(first.Width, second.Width), first.Height + second.Height);
+
+                return size;
             }
             else if (width != 0 && GetTextDimension(graphics, text, font).Width > width)
             {
@@ -373,7 +399,9 @@ namespace Escher
         {
             Font font = new Font(fontName, fontSize);
 
-            return this.graphics.MeasureString("X", font).Height;
+            SizeF size = this.graphics.MeasureString("X", font);
+
+            return size.Height;
         }
 
         public float GetTextWidth(string text, string fontName, float fontSize, bool fontBold = false, bool fontItalic = false)
