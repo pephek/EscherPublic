@@ -317,10 +317,12 @@ namespace Escher
                         {
                             throw new Exception("todo");
                         }
-                        if (artifact.Width > 0 && artifact.Height > 0)
-                        {
-                            g.DrawImage(artifact.Picture, artifact.X, artifact.Y, artifact.Width, artifact.Height);
-                        }
+                        Bitmap bitmap = new Bitmap(artifact.Image);
+                        bitmap.RotateFlip(artifact.RotateFlipType);
+                        artifact.Image = bitmap;
+                        g.DrawImage(artifact.Image, artifact.X, artifact.Y, artifact.Width, artifact.Height);
+                        bitmap.Dispose();
+                        artifact.Image.Dispose();
                         break;
 
                     default:

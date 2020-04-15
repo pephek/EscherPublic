@@ -585,10 +585,15 @@ namespace Escher
                             entry.Appearance = Appearance.TeteBecheVertical;
                             entry.Height = 2 * entry.Height - 4;
                             break;
-                        case "tetebechehorizontal:utter":
+                        case "tetebechehorizontalgutter":
                         case "horizontaltetebechegutter":
                             entry.Appearance = Appearance.TeteBecheHorizontalGutter;
                             entry.Width = 3 * entry.Width - 2 * 4;
+                            break;
+                        case "tetebecheverticalgutter":
+                        case "verticaltetebechegutter":
+                            entry.Appearance = Appearance.TeteBecheVerticalGutter;
+                            entry.Height = 3 * entry.Height - 2 * 4;
                             break;
                         case "horizontalgutterpair":
                             entry.Appearance = Appearance.HorizontalGutterPair;
@@ -627,7 +632,7 @@ namespace Escher
                             entry.Width = 6 * entry.Width - (6 - 1) * 4;
                             break;
                         case "verticalstrip3":
-                                    entry.Appearance = Appearance.VerticalStrip3;
+                            entry.Appearance = Appearance.VerticalStrip3;
                             entry.Height = 3 * entry.Height - (3 - 1) * 4;
                             break;
                         case "verticalstrip4":

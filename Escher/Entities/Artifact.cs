@@ -18,10 +18,11 @@ namespace Escher
         public Color ForeColor;
         public SolidBrush TextColor;
         public string Text;
-        public Image Picture;
+        public Image Image;
         public Font Font;
         public Appearance Appearance;
         public string Number;
+        public RotateFlipType RotateFlipType;
         public bool screenOnly;
 
         public Artifact(ArtifactType type)

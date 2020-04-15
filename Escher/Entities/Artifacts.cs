@@ -135,7 +135,7 @@ namespace Escher
             }
         }
 
-        private void AddImage(float x, float y, float width, float height, string number, Image image)
+        private void AddImage(float x, float y, float width, float height, string number, Image image, RotateFlipType? rotateFlipType)
         {
             Artifact artifact = new Artifact(ArtifactType.Image);
 
@@ -144,7 +144,8 @@ namespace Escher
             artifact.Width = width;
             artifact.Height = height;
             artifact.Number = number;
-            artifact.Picture = image;
+            artifact.Image = image;
+            artifact.RotateFlipType = rotateFlipType ?? RotateFlipType.RotateNoneFlipNone;
 
             artifacts.Add(artifact);
         }
@@ -193,21 +194,26 @@ namespace Escher
             switch (shape)
             {
                 case Shape.Triangle45:
-                    AddImage(left + 3 * 5 / (float) Math.Sqrt(2), top + 2 * 5 / (float) Math.Sqrt(2), width - 2 * 5 / (float) Math.Sqrt(2), height - 5 - 2 * 5 / (float) Math.Sqrt(2), n, image);
+                    AddImage(left + 3 * 5 / (float) Math.Sqrt(2), top + 2 * 5 / (float) Math.Sqrt(2), width - 2 * 5 / (float) Math.Sqrt(2), height - 5 - 2 * 5 / (float) Math.Sqrt(2), n, image, RotateFlipType.RotateNoneFlipNone);
                     break;
                 case Shape.Triangle60Inverted:
-                    AddImage(left + 5 + 5 / (float)Math.Sqrt(3), top + 5, width - 2 * (5 + 5 / (float)Math.Sqrt(3)), height - 2 * (5 + 5 / (float)Math.Sqrt(3)), n, image);
+                    AddImage(left + 5 + 5 / (float)Math.Sqrt(3), top + 5, width - 2 * (5 + 5 / (float)Math.Sqrt(3)), height - 2 * (5 + 5 / (float)Math.Sqrt(3)), n, image, RotateFlipType.RotateNoneFlipNone);
                     break;
                 case Shape.Triangle60:
-                    AddImage(left + 5 + 5 / (float)Math.Sqrt(3), top + 2 * 5, width - 2 * (5 + 5 / (float)Math.Sqrt(3)), height - 2 * (5 + 5 / (float)Math.Sqrt(3)), n, image);
+                    AddImage(left + 5 + 5 / (float)Math.Sqrt(3), top + 2 * 5, width - 2 * (5 + 5 / (float)Math.Sqrt(3)), height - 2 * (5 + 5 / (float)Math.Sqrt(3)), n, image, RotateFlipType.RotateNoneFlipNone);
                     break;
                 case Shape.RectangleRotated:
-                    AddImage(left + 5 * (float)Math.Sqrt(2), top + 5 * (float)Math.Sqrt(2), width - 2 * 5 * (float)Math.Sqrt(2), height - 2 * 5 * (float)Math.Sqrt(2), n, image);
+                    AddImage(left + 5 * (float)Math.Sqrt(2), top + 5 * (float)Math.Sqrt(2), width - 2 * 5 * (float)Math.Sqrt(2), height - 2 * 5 * (float)Math.Sqrt(2), n, image, RotateFlipType.RotateNoneFlipNone);
                     break;
+
                 default:
-                    for (int i = 0; i < appearance.NumberOfStamps(); i++)
+
+                    int numberOfStamps = appearance.NumberOfStamps();
+
+                    for (int i = 0; i < numberOfStamps; i++)
                     {
-                        float z = 1;
+                        RotateFlipType? rotateFlipType = RotateFlipType.RotateNoneFlipNone;
+
                         switch (appearance)
                         {
                             case Appearance.Singular:
@@ -217,18 +223,60 @@ namespace Escher
                                 h = height - 8;
                                 break;
                             case Appearance.PairHorizontal:
-                                w = (width + 4) / 2;
+                            case Appearance.HorizontalStrip3:
+                            case Appearance.HorizontalStrip4:
+                            case Appearance.HorizontalStrip5:
+                            case Appearance.HorizontalStrip6:
+                            case Appearance.TeteBecheHorizontal:
+                            case Appearance.TeteBecheHorizontalGutter:
+                                w = (width + (numberOfStamps - 1) * 4) / numberOfStamps;
                                 x = left + i * (w - 4) + 4;
                                 y = top + 4;
                                 w = w - 8;
                                 h = height - 8;
+                                if (appearance == Appearance.TeteBecheHorizontal || appearance == Appearance.TeteBecheHorizontalGutter)
+                                {
+                                    if (w < h)
+                                    {
+                                        rotateFlipType = (i == 0 ? RotateFlipType.RotateNoneFlipNone : RotateFlipType.Rotate180FlipNone);
+                                    }
+                                    else
+                                    {
+                                        rotateFlipType = (i == 0 ? RotateFlipType.Rotate270FlipNone : RotateFlipType.Rotate90FlipNone);
+                                    }
+                                }
+                                if (appearance == Appearance.TeteBecheHorizontalGutter && i == 1)
+                                {
+                                    rotateFlipType = null;
+                                }
                                 break;
                             case Appearance.PairVertical:
-                                h = (height + 4) / 2;
+                            case Appearance.VerticalStrip3:
+                            case Appearance.VerticalStrip4:
+                            case Appearance.VerticalStrip5:
+                            case Appearance.VerticalStrip6:
+                            case Appearance.TeteBecheVertical:
+                            case Appearance.TeteBecheVerticalGutter:
+                                h = (height + (numberOfStamps - 1) * 4) / numberOfStamps;
                                 x = left + 4;
                                 y = top + i * (h - 4) + 4;
                                 w = width - 8;
                                 h = h - 8;
+                                if (appearance == Appearance.TeteBecheVertical || appearance == Appearance.TeteBecheVerticalGutter)
+                                {
+                                    if (w < h)
+                                    {
+                                        rotateFlipType = (i == 0 ? RotateFlipType.RotateNoneFlipNone : RotateFlipType.Rotate180FlipNone);
+                                    }
+                                    else
+                                    {
+                                        rotateFlipType = (i == 0 ? RotateFlipType.Rotate270FlipNone : RotateFlipType.Rotate90FlipNone);
+                                    }
+                                }
+                                if (appearance == Appearance.TeteBecheVerticalGutter && i == 1)
+                                {
+                                    rotateFlipType = null;
+                                }
                                 break;
                             case Appearance.Block:
                                 w = (width + 4) / 2;
@@ -286,7 +334,10 @@ namespace Escher
                                 throw new Exception("todo");
                         }
 
-                        AddImage(x, y, z * w, z * h, n, image);
+                        if (rotateFlipType != null)
+                        {
+                            AddImage(x, y, w, h, n, image, rotateFlipType);
+                        }
                     }
                     break;
             }
