@@ -279,7 +279,9 @@
   <ItemGroup>
     <None Include="Images\RulerMeasure_16x.png" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <None Include="Images\Frame.jpg" />
+  </ItemGroup>
   <ItemGroup>
     <COMReference Include="VB6GraphicsProject">
       <Guid>{90FB1F49-0FFF-4C30-B03E-FFD3E261EB68}</Guid>

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -92,6 +93,76 @@ namespace Escher
                     return 2;
                 case Appearance.BandePublicitaire:
                     return 1;
+
+                default:
+                    throw new ArgumentOutOfRangeException("appearance");
+            }
+        }
+
+        public static Size NumberOfHorizontalAndVerticalStamps(this Appearance appearance)
+        {
+            switch (appearance)
+            {
+                case Appearance.Singular:
+                case Appearance.Proof:
+                case Appearance.Rotated:
+                case Appearance.ImperfRight:
+                case Appearance.ImperfLeft:
+                case Appearance.ImperfTop:
+                case Appearance.ImperfBottom:
+                    return new Size(1, 1);
+
+                case Appearance.PairHorizontal:
+                case Appearance.TeteBecheHorizontal:
+                    return new Size(2, 1);
+
+                case Appearance.PairVertical:
+                case Appearance.TeteBecheVertical:
+                    return new Size(1, 2);
+
+                case Appearance.TeteBecheHorizontalGutter:
+                case Appearance.HorizontalGutterPair:
+                    return new Size(3, 1);
+
+                case Appearance.TeteBecheVerticalGutter:
+                case Appearance.VerticalGutterPair:
+                    return new Size(1, 3);
+
+                case Appearance.Block:
+                    return new Size(2, 2);
+
+                case Appearance.Sheet2x3:
+                    return new Size(3, 2);
+
+                case Appearance.HorizontalStrip3:
+                    return new Size(3, 1);
+
+                case Appearance.VerticalStrip3:
+                    return new Size(1, 3);
+
+                case Appearance.HorizontalStrip4:
+                    return new Size(4, 1);
+
+                case Appearance.VerticalStrip4:
+                    return new Size(1, 4);
+
+                case Appearance.HorizontalStrip5:
+                    return new Size(5, 1);
+
+                case Appearance.VerticalStrip5:
+                    return new Size(1, 5);
+
+                case Appearance.HorizontalStrip6:
+                    return new Size(6, 1);
+
+                case Appearance.VerticalStrip6:
+                    return new Size(1, 6);
+
+                case Appearance.BandePublicitaire:
+                    return new Size(1, 1);
+
+                case Appearance.PaireCarnet:
+                    return new Size(1, 2);
 
                 default:
                     throw new ArgumentOutOfRangeException("appearance");

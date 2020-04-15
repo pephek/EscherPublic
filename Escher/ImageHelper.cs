@@ -11,8 +11,12 @@ using System.Windows.Forms;
 
 namespace Escher
 {
-    public class ImageHelper
+    public static class ImageHelper
     {
+        static ImageHelper()
+        {
+        }
+
         public static Image LoadImageAndUnlock(string imagePath)
         {
             Bitmap bitmap = null;

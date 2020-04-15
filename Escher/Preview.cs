@@ -5,6 +5,7 @@ using System.Data;
 using System.Diagnostics;
 using System.Drawing;
 using System.Drawing.Drawing2D;
+using System.Drawing.Imaging;
 using System.Drawing.Text;
 using System.Linq;
 using System.Text;
@@ -238,6 +239,82 @@ namespace Escher
             g.DrawString(text, font, brush, 5, 30);
         }
 
+        private void FramePreview(Graphics g, float x, float y, Artifact artifact, float pageScale, float transformScale)
+        {
+            const int cFrameSize = 196; // Pixels
+            const int cBorderSize = 28; // = 28 + 2 Pixels
+
+            float fourMM = 4 * pageScale;
+
+            g.InterpolationMode = System.Drawing.Drawing2D.InterpolationMode.NearestNeighbor;
+            g.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.None;
+            g.PixelOffsetMode = System.Drawing.Drawing2D.PixelOffsetMode.Half;
+
+            Bitmap bitmap = Escher.Properties.Resources.Frame;
+
+            Rectangle topLeft = new Rectangle(0, 0, cBorderSize, cBorderSize);
+            Bitmap frameTopLeft = bitmap.Clone(topLeft, bitmap.PixelFormat);
+            g.DrawImage(frameTopLeft, new RectangleF(x, y, fourMM, fourMM));
+
+            Rectangle topRight = new Rectangle(cFrameSize - cBorderSize, 0, cBorderSize, cBorderSize);
+            Bitmap frameTopRight = bitmap.Clone(topRight, bitmap.PixelFormat);
+            g.DrawImage(frameTopRight, new RectangleF(x + artifact.Width - fourMM, y, fourMM, fourMM));
+
+            Rectangle bottomLeft = new Rectangle(0, cFrameSize - cBorderSize, cBorderSize, cBorderSize);
+            Bitmap frameBottomLeft = bitmap.Clone(bottomLeft, bitmap.PixelFormat);
+            g.DrawImage(frameBottomLeft, new RectangleF(x, y + artifact.Height - fourMM, fourMM, fourMM));
+
+            Rectangle bottomRight = new Rectangle(cFrameSize - cBorderSize, cFrameSize - cBorderSize, cBorderSize, cBorderSize);
+            Bitmap frameBottomRight = bitmap.Clone(bottomRight, bitmap.PixelFormat);
+            g.DrawImage(frameBottomRight, new RectangleF(x + artifact.Width - fourMM, y + artifact.Height - fourMM, fourMM, fourMM));
+
+            Rectangle top = new Rectangle(cBorderSize, 0, cBorderSize, cBorderSize);
+            Bitmap frameTop = bitmap.Clone(top, bitmap.PixelFormat);
+            g.DrawImage(frameTop, new RectangleF(x + fourMM, y, artifact.Width - 2 * fourMM, fourMM));
+
+            Rectangle bottom = new Rectangle(cBorderSize, cFrameSize - cBorderSize, cBorderSize, cBorderSize);
+            Bitmap frameBottom = bitmap.Clone(bottom, bitmap.PixelFormat);
+            g.DrawImage(frameBottom, new RectangleF(x + fourMM, y + artifact.Height - fourMM, artifact.Width - 2 * fourMM, fourMM));
+
+            Rectangle left = new Rectangle(0, cBorderSize, cBorderSize, cBorderSize);
+            Bitmap frameLeft = bitmap.Clone(left, bitmap.PixelFormat);
+            g.DrawImage(frameLeft, new RectangleF(x, y + fourMM, fourMM, artifact.Height - 2 * fourMM));
+
+            Rectangle right = new Rectangle(cFrameSize - cBorderSize, cBorderSize, cBorderSize, cBorderSize);
+            Bitmap frameRight = bitmap.Clone(right, bitmap.PixelFormat);
+            g.DrawImage(frameRight, new RectangleF(x + artifact.Width - fourMM, y + fourMM, fourMM, artifact.Height - 2 * fourMM));
+
+            Rectangle centerTop = new Rectangle(cFrameSize / 2 - 1 - cBorderSize / 2, 0, cBorderSize, 2 * cBorderSize);
+            Bitmap frameCenterTop = bitmap.Clone(centerTop, bitmap.PixelFormat);
+
+            Rectangle centerBottom = new Rectangle(cFrameSize / 2 - 1 - cBorderSize / 2, cFrameSize - 2 *cBorderSize, cBorderSize, 2 * cBorderSize);
+            Bitmap frameCenterBottom = bitmap.Clone(centerBottom, bitmap.PixelFormat);
+
+            Rectangle centerVertical = new Rectangle(cFrameSize / 2 - 1 - cBorderSize / 2, cBorderSize, cBorderSize, cBorderSize);
+            Bitmap frameCenterVertical = bitmap.Clone(centerVertical, bitmap.PixelFormat);
+
+            Size size = artifact.Appearance.NumberOfHorizontalAndVerticalStamps();
+
+            float width = (artifact.Width - fourMM) / size.Width;
+            float height = artifact.Height / size.Height;
+
+            float n;
+
+            if (size.Width > 1)
+            {
+                n = fourMM / 2 + width;
+
+                for (int c = 1; c < size.Width; c++)
+                {
+                    g.DrawImage(frameCenterTop, x + n - fourMM / 2, y, fourMM, 2 * fourMM);
+                    g.DrawImage(frameCenterBottom, x + n - fourMM / 2, y + artifact.Height - 2 * fourMM, fourMM, 2 * fourMM);
+                    g.DrawImage(frameCenterVertical, x + n - fourMM / 2, y + 2 * fourMM, fourMM, artifact.Height - 4 * fourMM);
+
+                    n += width;
+                }
+            }
+        }
+
         private void PrintPreview(Graphics g, Artifacts artifacts, float pageScale, float transformScale, PrintMode printMode, ScreenMode screenMode)
         {
             Pen pen;
@@ -323,6 +400,10 @@ namespace Escher
                         g.DrawImage(artifact.Image, artifact.X, artifact.Y, artifact.Width, artifact.Height);
                         bitmap.Dispose();
                         artifact.Image.Dispose();
+                        break;
+
+                    case ArtifactType.Rectangle:
+                        FramePreview(g, currentX, currentY, artifact, pageScale, transformScale);
                         break;
 
                     default:
