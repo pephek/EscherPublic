@@ -326,10 +326,6 @@ namespace Escher
                                 h = h - 8;
                                 break;
                             case Appearance.ImperfTop:
-                                if (frameStyle == FrameStyle.Thick)
-                                {
-                                    AddArea(left + 4, top + 4, width - 8, height - 8, Color.Black);
-                                }
                                 h = (height + 4) / 2;
                                 x = left + 4;
                                 y = top + h;
@@ -337,10 +333,6 @@ namespace Escher
                                 h = h - 8;
                                 break;
                             case Appearance.ImperfBottom:
-                                if (frameStyle == FrameStyle.Thick)
-                                {
-                                    AddArea(left + 4, top + 4, width - 8, height - 8, Color.Black);
-                                }
                                 h = (height + 4) / 2;
                                 x = left + 4;
                                 y = top + 4;
@@ -348,10 +340,6 @@ namespace Escher
                                 h = h - 8;
                                 break;
                             case Appearance.ImperfLeft:
-                                if (frameStyle == FrameStyle.Thick)
-                                {
-                                    AddArea(left + 4, top + 4, width - 8, height - 8, Color.Black);
-                                }
                                 w = (width + 4) / 2;
                                 x = left + w;
                                 y = top + 4;
@@ -359,10 +347,6 @@ namespace Escher
                                 h = height - 8;
                                 break;
                             case Appearance.ImperfRight:
-                                if (frameStyle == FrameStyle.Thick)
-                                {
-                                    AddArea(left + 4, top + 4, width - 8, height - 8, Color.Black);
-                                }
                                 w = (width + 4) / 2;
                                 x = left + 4;
                                 y = top + 4;
@@ -375,6 +359,25 @@ namespace Escher
 
                         if (rotateFlipType != null)
                         {
+                            switch (appearance)
+                            {
+                                case Appearance.ImperfTop:
+                                case Appearance.ImperfBottom:
+                                case Appearance.ImperfLeft:
+                                case Appearance.ImperfRight:
+                                case Appearance.HorizontalGutterPair:
+                                case Appearance.TeteBecheHorizontalGutter:
+                                case Appearance.VerticalGutterPair:
+                                case Appearance.TeteBecheVerticalGutter:
+                                case Appearance.Proof:
+                                case Appearance.BandePublicitaire:
+                                case Appearance.PaireCarnet:
+                                    if (frameStyle == FrameStyle.Thick)
+                                    {
+                                        AddArea(left + 4, top + 4, width - 8F + 0.25F, height - 8F + 0.25F, Color.Black);
+                                    }
+                                    break;
+                            }
                             AddImage(x, y, w, h, n, image, rotateFlipType);
                         }
                     }

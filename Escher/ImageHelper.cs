@@ -14,6 +14,24 @@ namespace Escher
     public static class ImageHelper
     {
         public static Bitmap FrameTopLeft;
+        public static Bitmap FrameTopRight;
+        public static Bitmap FrameBottomLeft;
+        public static Bitmap FrameBottomRight;
+
+        public static Bitmap FrameTop;
+        public static Bitmap FrameBottom;
+        public static Bitmap FrameLeft;
+        public static Bitmap FrameRight;
+
+        public static Bitmap FrameCenterTop;
+        public static Bitmap FrameCenterBottom;
+        public static Bitmap FrameCenterVertical;
+
+        public static Bitmap FrameCenterLeft;
+        public static Bitmap FrameCenterRight;
+        public static Bitmap FrameCenterHorizontal;
+
+        public static Bitmap FrameCenter;
 
         static ImageHelper()
         {
@@ -23,8 +41,49 @@ namespace Escher
             Bitmap bitmap = Escher.Properties.Resources.Frame;
 
             Rectangle topLeft = new Rectangle(0, 0, cBorderSize, cBorderSize);
-            ImageHelper.FrameTopLeft = bitmap.Clone(topLeft, bitmap.PixelFormat);
+            FrameTopLeft = bitmap.Clone(topLeft, bitmap.PixelFormat);
 
+            Rectangle topRight = new Rectangle(cFrameSize - cBorderSize, 0, cBorderSize, cBorderSize);
+            FrameTopRight = bitmap.Clone(topRight, bitmap.PixelFormat);
+
+            Rectangle bottomLeft = new Rectangle(0, cFrameSize - cBorderSize, cBorderSize, cBorderSize);
+            FrameBottomLeft = bitmap.Clone(bottomLeft, bitmap.PixelFormat);
+
+            Rectangle bottomRight = new Rectangle(cFrameSize - cBorderSize, cFrameSize - cBorderSize, cBorderSize, cBorderSize);
+            FrameBottomRight = bitmap.Clone(bottomRight, bitmap.PixelFormat);
+
+            Rectangle top = new Rectangle(cBorderSize, 0, cBorderSize, cBorderSize);
+            FrameTop = bitmap.Clone(top, bitmap.PixelFormat);
+
+            Rectangle bottom = new Rectangle(cBorderSize, cFrameSize - cBorderSize, cBorderSize, cBorderSize);
+            FrameBottom = bitmap.Clone(bottom, bitmap.PixelFormat);
+
+            Rectangle left = new Rectangle(0, cBorderSize, cBorderSize, cBorderSize);
+            FrameLeft = bitmap.Clone(left, bitmap.PixelFormat);
+
+            Rectangle right = new Rectangle(cFrameSize - cBorderSize, cBorderSize, cBorderSize, cBorderSize);
+            FrameRight = bitmap.Clone(right, bitmap.PixelFormat);
+
+            Rectangle centerTop = new Rectangle(cFrameSize / 2 - 1 - cBorderSize / 2, 0, cBorderSize, 2 * cBorderSize);
+            FrameCenterTop = bitmap.Clone(centerTop, bitmap.PixelFormat);
+
+            Rectangle centerBottom = new Rectangle(cFrameSize / 2 - 1 - cBorderSize / 2, cFrameSize - 2 * cBorderSize, cBorderSize, 2 * cBorderSize);
+            FrameCenterBottom = bitmap.Clone(centerBottom, bitmap.PixelFormat);
+
+            Rectangle centerVertical = new Rectangle(cFrameSize / 2 - 1 - cBorderSize / 2, cBorderSize, cBorderSize, cBorderSize);
+            FrameCenterVertical = bitmap.Clone(centerVertical, bitmap.PixelFormat);
+
+            Rectangle centerLeft = new Rectangle(0, cFrameSize / 2 - 1 - cBorderSize / 2, 2 * cBorderSize, cBorderSize);
+            FrameCenterLeft = bitmap.Clone(centerLeft, bitmap.PixelFormat);
+
+            Rectangle centerRight = new Rectangle(cFrameSize - 2 * cBorderSize, cFrameSize / 2 - 1 - cBorderSize / 2, 2 * cBorderSize, cBorderSize);
+            FrameCenterRight = bitmap.Clone(centerRight, bitmap.PixelFormat);
+
+            Rectangle centerHorizontal = new Rectangle(cBorderSize, cFrameSize / 2 - 1 - cBorderSize / 2, cBorderSize, cBorderSize);
+            FrameCenterHorizontal = bitmap.Clone(centerHorizontal, bitmap.PixelFormat);
+
+            Rectangle center = new Rectangle(cFrameSize / 2 - 1 - cBorderSize / 2, cFrameSize / 2 - 1 - cBorderSize / 2, cBorderSize, cBorderSize);
+            FrameCenter = bitmap.Clone(center, bitmap.PixelFormat);
         }
 
         public static Image LoadImageAndUnlock(string imagePath)
