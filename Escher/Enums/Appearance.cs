@@ -21,10 +21,10 @@ namespace Escher
         HorizontalStrip5,
         HorizontalStrip6,
         Rotated,
-        InterpanneauxHorizontal,
         TeteBecheHorizontalGutter,
         TeteBecheVerticalGutter,
         HorizontalGutterPair,
+        VerticalGutterPair,
         PaireCarnet,
         BandePublicitaire,
         VerticalStrip3,
@@ -44,59 +44,55 @@ namespace Escher
             switch (appearance)
             {
                 case Appearance.Singular:
-                    return (1);
-                case Appearance.PairHorizontal:
-                    return (2);
-                case Appearance.PairVertical:
-                    return (2);
-                case Appearance.Block:
-                    return (4);
-                case Appearance.TeteBecheHorizontal:
-                    return (2);
-                case Appearance.TeteBecheVertical:
-                    return (2);
-                case Appearance.Sheet2x3:
-                    return (6);
                 case Appearance.Proof:
-                    return (1);
-                case Appearance.HorizontalStrip3:
-                    return (3);
-                case Appearance.HorizontalStrip4:
-                    return (4);
-                case Appearance.HorizontalStrip5:
-                    return (5);
-                case Appearance.HorizontalStrip6:
-                    return (6);
                 case Appearance.Rotated:
-                    return (1);
-                case Appearance.InterpanneauxHorizontal:
-                    return (2);
-                case Appearance.TeteBecheHorizontalGutter:
-                    return (3);
-                case Appearance.TeteBecheVerticalGutter:
-                    return (3);
-                case Appearance.HorizontalGutterPair:
-                    return (3);
-                case Appearance.PaireCarnet:
-                    return (2);
-                case Appearance.BandePublicitaire:
-                    return (1);
-                case Appearance.VerticalStrip3:
-                    return (3);
-                case Appearance.VerticalStrip4:
-                    return (4);
-                case Appearance.VerticalStrip5:
-                    return (5);
-                case Appearance.VerticalStrip6:
-                    return (6);
+                    return 1;
+
                 case Appearance.ImperfRight:
-                    return (1);
                 case Appearance.ImperfLeft:
-                    return (1);
                 case Appearance.ImperfTop:
-                    return (1);
                 case Appearance.ImperfBottom:
-                    return (1);
+                    return 1;
+
+                case Appearance.PairHorizontal:
+                case Appearance.PairVertical:
+                case Appearance.TeteBecheHorizontal:
+                case Appearance.TeteBecheVertical:
+                    return 2;
+
+                case Appearance.TeteBecheHorizontalGutter:
+                case Appearance.TeteBecheVerticalGutter:
+                case Appearance.HorizontalGutterPair:
+                case Appearance.VerticalGutterPair:
+                    return 3;
+
+                case Appearance.Block:
+                    return 4;
+
+                case Appearance.Sheet2x3:
+                    return 6;
+
+                case Appearance.HorizontalStrip3:
+                case Appearance.VerticalStrip3:
+                    return 3;
+
+                case Appearance.HorizontalStrip4:
+                case Appearance.VerticalStrip4:
+                    return 4;
+
+                case Appearance.HorizontalStrip5:
+                case Appearance.VerticalStrip5:
+                    return 5;
+
+                case Appearance.HorizontalStrip6:
+                case Appearance.VerticalStrip6:
+                    return 6;
+
+                case Appearance.PaireCarnet:
+                    return 2;
+                case Appearance.BandePublicitaire:
+                    return 1;
+
                 default:
                     throw new ArgumentOutOfRangeException("appearance");
             }

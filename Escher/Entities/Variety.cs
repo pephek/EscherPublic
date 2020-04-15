@@ -14,8 +14,6 @@ namespace Escher
         public readonly Color FrameColor;
         public readonly float Width;
         public readonly float Height;
-        public readonly float ExtraWidth;
-        public readonly float ExtraHeight;
         public readonly float Horizontal;
         public readonly float Vertical;
         public readonly string Title;
@@ -40,8 +38,6 @@ namespace Escher
             Color frameColor,
             float width,
             float height,
-            float extraWidth,
-            float extraHeight,
             float horizontal,
             float vertical,
             string title,
@@ -60,8 +56,6 @@ namespace Escher
             FrameColor = frameColor;
             Width = width;
             Height = height;
-            ExtraWidth = extraWidth;
-            ExtraHeight = extraHeight;
             Horizontal = horizontal;
             Vertical = vertical;
             Title = title;

@@ -17,8 +17,6 @@ namespace Escher
         public FrameColor FrameColor;
         public float Width;
         public float Height;
-        public float ExtraWidth;
-        public float ExtraHeight;
         public float OffsetHorizontal;
         public float OffsetVertical;
         public int PageNumber;

@@ -41,9 +41,9 @@ namespace Escher
             Varieties.Add(varieties);
         }
 
-        public void AddVariety(string number, string description, string title, FrameColor frameColor, float width, float height, float extraWidth, float extraHeight, float horizontal, float vertical, bool skip, Appearance appearance, string picture, string overprint, Shape shape, Alignment alignment, string sheet)
+        public void AddVariety(string number, string description, string title, FrameColor frameColor, float width, float height, float horizontal, float vertical, bool skip, Appearance appearance, string picture, string overprint, Shape shape, Alignment alignment, string sheet)
         {
-            Variety variety = new Variety(number, description, frameColor.GetColor(), width, height, extraWidth, extraHeight, horizontal, vertical, title, shape, skip, "", appearance, picture, overprint, alignment, sheet);
+            Variety variety = new Variety(number, description, frameColor.GetColor(), width, height, horizontal, vertical, title, shape, skip, "", appearance, picture, overprint, alignment, sheet);
 
             Varieties varieties = Varieties[Varieties.Count() - 1];
 

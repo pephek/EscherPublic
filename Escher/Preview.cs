@@ -699,7 +699,7 @@ namespace Escher
                                     // A page without album number is a title page, so do show the coat of arms
                                     if (setup.IncludeImage || page.AlbumNumber == "")
                                     {
-                                        artifacts.AddImage(page.ImagesPath, stamp.Number, x1, y1, stamp.Width, stamp.Height, stamp.ExtraWidth, stamp.ExtraHeight, stamp.Shape, stamp.Appearance, stamp.Picture, setup.ColorStyle, setup.FrameStyle);
+                                        artifacts.AddImage(page.ImagesPath, stamp.Number, x1, y1, stamp.Width, stamp.Height, stamp.Shape, stamp.Appearance, stamp.Picture, setup.ColorStyle, setup.FrameStyle);
                                     }
                                 }
                                 else

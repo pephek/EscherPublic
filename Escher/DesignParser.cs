@@ -214,14 +214,6 @@ namespace Escher
                     entry.Height = GetSize(entry.Height, val);
                     break;
 
-                case "extrawidth":
-                    entry.ExtraWidth = GetSize(entry.ExtraWidth, val);
-                    break;
-
-                case "extraheight":
-                    entry.ExtraHeight = GetSize(entry.ExtraHeight, val);
-                    break;
-
                 case "horizontal":
                     entry.OffsetHorizontal = Convert.ToSingle(val);
                     break;
@@ -599,6 +591,10 @@ namespace Escher
                             entry.Appearance = Appearance.HorizontalGutterPair;
                             entry.Width = 3 * entry.Width - (3 - 1) * 4;
                             break;
+                        case "verticalgutterpair":
+                            entry.Appearance = Appearance.VerticalGutterPair;
+                            entry.Height = 3 * entry.Height - (3 - 1) * 4;
+                            break;
                         case "block":
                             entry.Appearance = Appearance.Block;
                             entry.Width = 2 * entry.Width - 4;
@@ -606,8 +602,8 @@ namespace Escher
                             break;
                         case "sheet2x3":
                             entry.Appearance = Appearance.Sheet2x3;
-                            entry.Width = 3 * entry.Width - 2 * 4 + entry.ExtraWidth;
-                            entry.Height = 2 * entry.Height - 1 * 4 + entry.ExtraHeight;
+                            entry.Width = 3 * entry.Width - 2 * 4;
+                            entry.Height = 2 * entry.Height - 1 * 4;
                             break;
                         case "proof":
                             entry.Appearance = Appearance.Proof;
@@ -646,11 +642,6 @@ namespace Escher
                         case "verticalstrip6":
                             entry.Appearance = Appearance.VerticalStrip6;
                             entry.Height = 6 * entry.Height - (6 - 1) * 4;
-                            break;
-                        case "interpanneauxhorizontal":
-                        case "horizontalinterpanneaux":
-                            entry.Appearance = Appearance.InterpanneauxHorizontal;
-                            entry.Width = 2 * entry.Width - 4 + 10;
                             break;
                         case "carnetpaire":
                         case "pairecarnet":

@@ -150,7 +150,7 @@ namespace Escher
             artifacts.Add(artifact);
         }
 
-        public void AddImage(string path, string number, float left, float top, float width, float height, float extraWidth, float extraHeight, Shape shape, Appearance appearance, string picture, ColorStyle colorStyle, FrameStyle frameStyle)
+        public void AddImage(string path, string number, float left, float top, float width, float height, Shape shape, Appearance appearance, string picture, ColorStyle colorStyle, FrameStyle frameStyle)
         {
             number = !string.IsNullOrEmpty(picture) ? picture.Trim() : number.Trim();
 
@@ -217,10 +217,39 @@ namespace Escher
                         switch (appearance)
                         {
                             case Appearance.Singular:
+                            case Appearance.Rotated:
                                 x = left + 4;
                                 y = top + 4;
                                 w = width - 8;
                                 h = height - 8;
+                                if (appearance == Appearance.Rotated)
+                                {
+                                    rotateFlipType = RotateFlipType.Rotate180FlipNone;
+                                }
+                                break;
+                            case Appearance.Proof:
+                                if (frameStyle == FrameStyle.Thick)
+                                {
+                                    AddArea(left + 4, top + 4, width - 8, height - 8, Color.Black);
+                                }
+                                x = left + 8;
+                                y = top + 8;
+                                w = width - 16;
+                                h = height - 16;
+                                break;
+                            case Appearance.BandePublicitaire:
+                                h = (height - 4) / 1.4F - 4;
+                                x = left + 4;
+                                y = top + height - 4 - h;
+                                w = width - 8;
+                                break;
+                            case Appearance.PaireCarnet:
+                                // H = 2 * {(h - 4) + 0.3 * (h - 4)} + 4 = 2 * 1.3 * (h - 4) + 4 = 2.6 * h - 10.4 + 4 = 2.6 * h - 6.4
+                                // h = (H + 6.4) / 2.6
+                                h = (height + 6.4F) / 2.6F - 8;
+                                x = left + 4;
+                                y = top + (i == 0 ? height / 2 - h - 2 : height / 2 + 2);
+                                w = width - 8;
                                 break;
                             case Appearance.PairHorizontal:
                             case Appearance.HorizontalStrip3:
@@ -229,6 +258,7 @@ namespace Escher
                             case Appearance.HorizontalStrip6:
                             case Appearance.TeteBecheHorizontal:
                             case Appearance.TeteBecheHorizontalGutter:
+                            case Appearance.HorizontalGutterPair:
                                 w = (width + (numberOfStamps - 1) * 4) / numberOfStamps;
                                 x = left + i * (w - 4) + 4;
                                 y = top + 4;
@@ -245,7 +275,7 @@ namespace Escher
                                         rotateFlipType = (i == 0 ? RotateFlipType.Rotate270FlipNone : RotateFlipType.Rotate90FlipNone);
                                     }
                                 }
-                                if (appearance == Appearance.TeteBecheHorizontalGutter && i == 1)
+                                if (i == 1 && (appearance == Appearance.TeteBecheHorizontalGutter || appearance == Appearance.HorizontalGutterPair))
                                 {
                                     rotateFlipType = null;
                                 }
@@ -257,6 +287,7 @@ namespace Escher
                             case Appearance.VerticalStrip6:
                             case Appearance.TeteBecheVertical:
                             case Appearance.TeteBecheVerticalGutter:
+                            case Appearance.VerticalGutterPair:
                                 h = (height + (numberOfStamps - 1) * 4) / numberOfStamps;
                                 x = left + 4;
                                 y = top + i * (h - 4) + 4;
@@ -273,7 +304,7 @@ namespace Escher
                                         rotateFlipType = (i == 0 ? RotateFlipType.Rotate270FlipNone : RotateFlipType.Rotate90FlipNone);
                                     }
                                 }
-                                if (appearance == Appearance.TeteBecheVerticalGutter && i == 1)
+                                if (i == 1 && (appearance == Appearance.TeteBecheVerticalGutter || appearance == Appearance.VerticalGutterPair ))
                                 {
                                     rotateFlipType = null;
                                 }
@@ -283,6 +314,14 @@ namespace Escher
                                 h = (height + 4) / 2;
                                 x = left + (i == 1 || i == 3 ? w : 4);
                                 y = top + (i == 2 || i == 3 ? h : 4);
+                                w = w - 8;
+                                h = h - 8;
+                                break;
+                            case Appearance.Sheet2x3:
+                                w = (width + 8) / 3;
+                                h = (height + 4) / 2;
+                                x = left + (i % 3) * (w - 4) + 4;
+                                y = top + (i / 3) * (h - 4) + 4;
                                 w = w - 8;
                                 h = h - 8;
                                 break;

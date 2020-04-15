@@ -121,8 +121,6 @@ namespace Escher
                             entry.FrameColor,
                             entry.Width,
                             entry.Height,
-                            entry.ExtraWidth,
-                            entry.ExtraHeight,
                             entry.OffsetHorizontal,
                             entry.OffsetVertical,
                             entry.Skip,

@@ -230,12 +230,11 @@ namespace Escher
                 "tetebechevertical", "verticaltetebeche",
                 "tetebechehorizontalgutter", "horizontaltetebechegutter",
                 "tetebecheverticalgutter", "verticaltetebechegutter",
-                "horizontalgutterpair",
+                "horizontalgutterpair", "verticalgutterpair",
                 "block", "sheet2x3",
                 "proof",
                 "horizontalstrip3", "horizontalstrip4", "horizontalstrip5", "horizontalstrip6",
                 "verticalstrip3", "verticalstrip4", "verticalstrip5", "verticalstrip6",
-                "interpanneauxhorizontal", "horizontalinterpanneaux",
                 "pairecarnet", "carnetpaire",
                 "bandepublicitaire", "publicitairebande",
                 "imperfright", "imperfleft", "imperftop", "imperfbottom"
@@ -698,8 +697,6 @@ namespace Escher
                     case "FrameColor":
                         if (!ParseColor(nextKeyWord)) return false;
                         break;
-                    case "ExtraHeight":
-                    case "ExtraWidth":
                     case "Horizontal":
                     case "Vertical":
                         if (!ParseNumber(nextKeyWord, Int32.MinValue, false)) return false;
