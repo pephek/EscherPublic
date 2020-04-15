@@ -242,7 +242,7 @@ namespace Escher
         private void FramePreview(Graphics g, float x, float y, Artifact artifact, float pageScale, float transformScale)
         {
             const int cFrameSize = 196; // Pixels
-            const int cBorderSize = 28; // = 28 + 2 Pixels
+            const int cBorderSize = 28; // Pixels
 
             float fourMM = 4 * pageScale;
 
@@ -254,63 +254,111 @@ namespace Escher
 
             Rectangle topLeft = new Rectangle(0, 0, cBorderSize, cBorderSize);
             Bitmap frameTopLeft = bitmap.Clone(topLeft, bitmap.PixelFormat);
-            g.DrawImage(frameTopLeft, new RectangleF(x, y, fourMM, fourMM));
 
             Rectangle topRight = new Rectangle(cFrameSize - cBorderSize, 0, cBorderSize, cBorderSize);
             Bitmap frameTopRight = bitmap.Clone(topRight, bitmap.PixelFormat);
-            g.DrawImage(frameTopRight, new RectangleF(x + artifact.Width - fourMM, y, fourMM, fourMM));
 
             Rectangle bottomLeft = new Rectangle(0, cFrameSize - cBorderSize, cBorderSize, cBorderSize);
             Bitmap frameBottomLeft = bitmap.Clone(bottomLeft, bitmap.PixelFormat);
-            g.DrawImage(frameBottomLeft, new RectangleF(x, y + artifact.Height - fourMM, fourMM, fourMM));
 
             Rectangle bottomRight = new Rectangle(cFrameSize - cBorderSize, cFrameSize - cBorderSize, cBorderSize, cBorderSize);
             Bitmap frameBottomRight = bitmap.Clone(bottomRight, bitmap.PixelFormat);
-            g.DrawImage(frameBottomRight, new RectangleF(x + artifact.Width - fourMM, y + artifact.Height - fourMM, fourMM, fourMM));
 
             Rectangle top = new Rectangle(cBorderSize, 0, cBorderSize, cBorderSize);
             Bitmap frameTop = bitmap.Clone(top, bitmap.PixelFormat);
-            g.DrawImage(frameTop, new RectangleF(x + fourMM, y, artifact.Width - 2 * fourMM, fourMM));
 
             Rectangle bottom = new Rectangle(cBorderSize, cFrameSize - cBorderSize, cBorderSize, cBorderSize);
             Bitmap frameBottom = bitmap.Clone(bottom, bitmap.PixelFormat);
-            g.DrawImage(frameBottom, new RectangleF(x + fourMM, y + artifact.Height - fourMM, artifact.Width - 2 * fourMM, fourMM));
 
             Rectangle left = new Rectangle(0, cBorderSize, cBorderSize, cBorderSize);
             Bitmap frameLeft = bitmap.Clone(left, bitmap.PixelFormat);
-            g.DrawImage(frameLeft, new RectangleF(x, y + fourMM, fourMM, artifact.Height - 2 * fourMM));
 
             Rectangle right = new Rectangle(cFrameSize - cBorderSize, cBorderSize, cBorderSize, cBorderSize);
             Bitmap frameRight = bitmap.Clone(right, bitmap.PixelFormat);
-            g.DrawImage(frameRight, new RectangleF(x + artifact.Width - fourMM, y + fourMM, fourMM, artifact.Height - 2 * fourMM));
-
             Rectangle centerTop = new Rectangle(cFrameSize / 2 - 1 - cBorderSize / 2, 0, cBorderSize, 2 * cBorderSize);
             Bitmap frameCenterTop = bitmap.Clone(centerTop, bitmap.PixelFormat);
 
-            Rectangle centerBottom = new Rectangle(cFrameSize / 2 - 1 - cBorderSize / 2, cFrameSize - 2 *cBorderSize, cBorderSize, 2 * cBorderSize);
+            Rectangle centerBottom = new Rectangle(cFrameSize / 2 - 1 - cBorderSize / 2, cFrameSize - 2 * cBorderSize, cBorderSize, 2 * cBorderSize);
             Bitmap frameCenterBottom = bitmap.Clone(centerBottom, bitmap.PixelFormat);
 
             Rectangle centerVertical = new Rectangle(cFrameSize / 2 - 1 - cBorderSize / 2, cBorderSize, cBorderSize, cBorderSize);
             Bitmap frameCenterVertical = bitmap.Clone(centerVertical, bitmap.PixelFormat);
 
+            Rectangle centerLeft = new Rectangle(0, cFrameSize / 2 - 1 - cBorderSize / 2, 2 * cBorderSize, cBorderSize);
+            Bitmap frameCenterLeft = bitmap.Clone(centerLeft, bitmap.PixelFormat);
+
+            Rectangle centerRight = new Rectangle(cFrameSize - 2 * cBorderSize, cFrameSize / 2 - 1 - cBorderSize / 2, 2 * cBorderSize, cBorderSize);
+            Bitmap frameCenterRight = bitmap.Clone(centerRight, bitmap.PixelFormat);
+
+            Rectangle centerHorizontal = new Rectangle(cBorderSize, cFrameSize / 2 - 1 - cBorderSize / 2, cBorderSize, cBorderSize);
+            Bitmap frameCenterHorizontal = bitmap.Clone(centerHorizontal, bitmap.PixelFormat);
+
+            Rectangle center = new Rectangle(cFrameSize / 2 - 1 - cBorderSize / 2, cFrameSize / 2 - 1 - cBorderSize / 2, cBorderSize, cBorderSize);
+            Bitmap frameCenter = bitmap.Clone(center, bitmap.PixelFormat);
+
+            g.DrawImage(ImageHelper.FrameTopLeft, new RectangleF(x, y, fourMM, fourMM));
+            g.DrawImage(frameTopRight, new RectangleF(x + artifact.Width - fourMM, y, fourMM, fourMM));
+            g.DrawImage(frameBottomLeft, new RectangleF(x, y + artifact.Height - fourMM, fourMM, fourMM));
+            g.DrawImage(frameBottomRight, new RectangleF(x + artifact.Width - fourMM, y + artifact.Height - fourMM, fourMM, fourMM));
+            g.DrawImage(frameTop, new RectangleF(x + fourMM, y, artifact.Width - 2 * fourMM, fourMM));
+            g.DrawImage(frameBottom, new RectangleF(x + fourMM, y + artifact.Height - fourMM, artifact.Width - 2 * fourMM, fourMM));
+            g.DrawImage(frameLeft, new RectangleF(x, y + fourMM, fourMM, artifact.Height - 2 * fourMM));
+            g.DrawImage(frameRight, new RectangleF(x + artifact.Width - fourMM, y + fourMM, fourMM, artifact.Height - 2 * fourMM));
+
             Size size = artifact.Appearance.NumberOfHorizontalAndVerticalStamps();
 
             float width = (artifact.Width - fourMM) / size.Width;
-            float height = artifact.Height / size.Height;
-
-            float n;
+            float height = (artifact.Height - fourMM) / size.Height;
 
             if (size.Width > 1)
             {
-                n = fourMM / 2 + width;
+                float lt = fourMM / 2 + width;
 
                 for (int c = 1; c < size.Width; c++)
                 {
-                    g.DrawImage(frameCenterTop, x + n - fourMM / 2, y, fourMM, 2 * fourMM);
-                    g.DrawImage(frameCenterBottom, x + n - fourMM / 2, y + artifact.Height - 2 * fourMM, fourMM, 2 * fourMM);
-                    g.DrawImage(frameCenterVertical, x + n - fourMM / 2, y + 2 * fourMM, fourMM, artifact.Height - 4 * fourMM);
+                    float xx = x + lt - fourMM / 2;
 
-                    n += width;
+                    g.DrawImage(frameCenterTop, xx, y, fourMM, 2 * fourMM);
+                    g.DrawImage(frameCenterBottom, xx, y + artifact.Height - 2 * fourMM, fourMM, 2 * fourMM);
+                    g.DrawImage(frameCenterVertical, xx, y + 2 * fourMM, fourMM, artifact.Height - 4 * fourMM);
+
+                    lt += width;
+                }
+            }
+
+            if (size.Height > 1)
+            {
+                float tp = fourMM / 2 + height;
+
+                for (int r = 1; r < size.Height; r++)
+                {
+                    float yy = y + tp - fourMM / 2;
+
+                    g.DrawImage(frameCenterLeft, x, yy, 2 * fourMM, fourMM);
+                    g.DrawImage(frameCenterRight, x + artifact.Width - 2 * fourMM, yy, 2 * fourMM, fourMM);
+                    g.DrawImage(frameCenterHorizontal, x + 2 * fourMM, yy, artifact.Width - 4 * fourMM, fourMM);
+
+                    tp += height;
+                }
+            }
+
+            if (size.Width > 1 && size.Height > 1)
+            {
+                float lt = fourMM / 2 + width;
+                float tp = fourMM / 2 + height;
+
+                for (int c = 1; c < size.Width; c++)
+                {
+                    for (int r = 1; r < size.Height; r++)
+                    {
+                        float xx = x + lt - fourMM / 2;
+                        float yy = y + tp - fourMM / 2;
+
+                        g.DrawImage(frameCenter, xx, yy, fourMM, fourMM);
+
+                        lt += width;
+                        tp += height;
+                    }
                 }
             }
         }

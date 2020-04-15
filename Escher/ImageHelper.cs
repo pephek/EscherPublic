@@ -13,8 +13,18 @@ namespace Escher
 {
     public static class ImageHelper
     {
+        public static Bitmap FrameTopLeft;
+
         static ImageHelper()
         {
+            const int cFrameSize = 196; // Pixels
+            const int cBorderSize = 28; // Pixels
+
+            Bitmap bitmap = Escher.Properties.Resources.Frame;
+
+            Rectangle topLeft = new Rectangle(0, 0, cBorderSize, cBorderSize);
+            ImageHelper.FrameTopLeft = bitmap.Clone(topLeft, bitmap.PixelFormat);
+
         }
 
         public static Image LoadImageAndUnlock(string imagePath)
