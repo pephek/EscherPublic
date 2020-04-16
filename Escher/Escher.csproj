@@ -100,8 +100,6 @@
     <Compile Include="Entities\PageFormat.cs" />
     <Compile Include="Entities\PageSetup.cs" />
     <Compile Include="Entities\LocklessBitmap.cs" />
-    <Compile Include="Entities\Sheet.cs" />
-    <Compile Include="Entities\SheetBlock.cs" />
     <Compile Include="Entities\SheetPosition.cs" />
     <Compile Include="Entities\Varieties.cs" />
     <Compile Include="Entities\Variety.cs" />
