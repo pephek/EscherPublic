@@ -257,6 +257,7 @@ namespace Escher
                 "verticalstrip3", "verticalstrip4", "verticalstrip5", "verticalstrip6",
                 "pairecarnet", "carnetpaire",
                 "bandepublicitaire", "publicitairebande",
+                "interpanneauxhorizontal", "horizontalinterpanneaux",
                 "imperfright", "imperfleft", "imperftop", "imperfbottom"
             };
 

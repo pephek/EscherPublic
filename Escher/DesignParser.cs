@@ -664,6 +664,11 @@ namespace Escher
                             entry.Appearance = Appearance.BandePublicitaire;
                             entry.Height = (entry.Height - 4) + 0.4F * (entry.Height - 4) + 4;
                             break;
+                        case "interpanneauxhorizontal":
+                        case "horizontalinterpanneaux":
+                            entry.Appearance = Appearance.HorizontalInterpanneaux;
+                            entry.Width = (entry.Width - 4) * 2.5F + 4;
+                            break;
                         case "imperfright":
                             entry.Appearance = Appearance.ImperfRight;
                             entry.Width = 2 * entry.Width - 4;

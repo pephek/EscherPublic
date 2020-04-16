@@ -135,7 +135,7 @@ namespace Escher
             }
         }
 
-        private void AddImage(float x, float y, float width, float height, string number, Image image, RotateFlipType? rotateFlipType)
+        private void AddImage(float x, float y, float width, float height, string number, Image image, RotateFlipType? rotateFlipType, Appearance appearance)
         {
             Artifact artifact = new Artifact(ArtifactType.Image);
 
@@ -146,6 +146,7 @@ namespace Escher
             artifact.Number = number;
             artifact.Image = image;
             artifact.RotateFlipType = rotateFlipType ?? RotateFlipType.RotateNoneFlipNone;
+            artifact.Appearance = appearance;
 
             artifacts.Add(artifact);
         }
@@ -194,16 +195,16 @@ namespace Escher
             switch (shape)
             {
                 case Shape.Triangle45:
-                    AddImage(left + 3 * 5 / (float) Math.Sqrt(2), top + 2 * 5 / (float) Math.Sqrt(2), width - 2 * 5 / (float) Math.Sqrt(2), height - 5 - 2 * 5 / (float) Math.Sqrt(2), n, image, RotateFlipType.RotateNoneFlipNone);
+                    AddImage(left + 3 * 5 / (float) Math.Sqrt(2), top + 2 * 5 / (float) Math.Sqrt(2), width - 2 * 5 / (float) Math.Sqrt(2), height - 5 - 2 * 5 / (float) Math.Sqrt(2), n, image, RotateFlipType.RotateNoneFlipNone, appearance);
                     break;
                 case Shape.Triangle60Inverted:
-                    AddImage(left + 5 + 5 / (float)Math.Sqrt(3), top + 5, width - 2 * (5 + 5 / (float)Math.Sqrt(3)), height - 2 * (5 + 5 / (float)Math.Sqrt(3)), n, image, RotateFlipType.RotateNoneFlipNone);
+                    AddImage(left + 5 + 5 / (float)Math.Sqrt(3), top + 5, width - 2 * (5 + 5 / (float)Math.Sqrt(3)), height - 2 * (5 + 5 / (float)Math.Sqrt(3)), n, image, RotateFlipType.RotateNoneFlipNone, appearance);
                     break;
                 case Shape.Triangle60:
-                    AddImage(left + 5 + 5 / (float)Math.Sqrt(3), top + 2 * 5, width - 2 * (5 + 5 / (float)Math.Sqrt(3)), height - 2 * (5 + 5 / (float)Math.Sqrt(3)), n, image, RotateFlipType.RotateNoneFlipNone);
+                    AddImage(left + 5 + 5 / (float)Math.Sqrt(3), top + 2 * 5, width - 2 * (5 + 5 / (float)Math.Sqrt(3)), height - 2 * (5 + 5 / (float)Math.Sqrt(3)), n, image, RotateFlipType.RotateNoneFlipNone, appearance);
                     break;
                 case Shape.RectangleRotated:
-                    AddImage(left + 5 * (float)Math.Sqrt(2), top + 5 * (float)Math.Sqrt(2), width - 2 * 5 * (float)Math.Sqrt(2), height - 2 * 5 * (float)Math.Sqrt(2), n, image, RotateFlipType.RotateNoneFlipNone);
+                    AddImage(left + 5 * (float)Math.Sqrt(2), top + 5 * (float)Math.Sqrt(2), width - 2 * 5 * (float)Math.Sqrt(2), height - 2 * 5 * (float)Math.Sqrt(2), n, image, RotateFlipType.RotateNoneFlipNone, appearance);
                     break;
 
                 default:
@@ -250,6 +251,13 @@ namespace Escher
                                 x = left + 4;
                                 y = top + (i == 0 ? height / 2 - h - 2 : height / 2 + 2);
                                 w = width - 8;
+                                break;
+                            case Appearance.HorizontalInterpanneaux:
+                                w = (width - 4) / 2.5F;
+                                x = left + (i == 0 ? 4 : w * 1.5F + 4);
+                                y = top + 4;
+                                w = w - 4;
+                                h = height - 8;
                                 break;
                             case Appearance.PairHorizontal:
                             case Appearance.HorizontalStrip3:
@@ -391,11 +399,11 @@ namespace Escher
 
                             if (positions == "")
                             {
-                                AddImage(x, y, w, h, n, image, rotateFlipType);
+                                AddImage(x, y, w, h, n, image, rotateFlipType, appearance);
                             }
                             else
                             {
-                                AddImage(x, y, w, h, n, image, rotateFlipType);
+                                AddImage(x, y, w, h, n, image, rotateFlipType, appearance);
 
                                 SheetPosition sheetPosition = SheetHelper.GetSheetPosition(positions, i);
 

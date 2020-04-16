@@ -29,6 +29,7 @@ namespace Escher
         VerticalGutterPair,
         PaireCarnet,
         BandePublicitaire,
+        HorizontalInterpanneaux,
         VerticalStrip3,
         VerticalStrip4,
         VerticalStrip5,
@@ -97,6 +98,8 @@ namespace Escher
                     return 2;
                 case Appearance.BandePublicitaire:
                     return 1;
+                case Appearance.HorizontalInterpanneaux:
+                    return 2;
 
                 default:
                     throw new ArgumentOutOfRangeException("appearance");
@@ -170,6 +173,9 @@ namespace Escher
 
                 case Appearance.PaireCarnet:
                     return new Size(1, 2);
+
+                case Appearance.HorizontalInterpanneaux:
+                    return new Size(3, 1);
 
                 default:
                     throw new ArgumentOutOfRangeException("appearance");

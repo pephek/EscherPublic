@@ -269,6 +269,18 @@ namespace Escher
                 {
                     float xx = x + lt - fourMM / 2;
 
+                    if (artifact.Appearance == Appearance.HorizontalInterpanneaux)
+                    {
+                        if (c == 1)
+                        {
+                            xx = x + artifact.Width * 0.37F;
+                        }
+                        else
+                        {
+                            xx = x + artifact.Width * 0.555F;
+                        }
+                    }
+
                     g.DrawImage(ImageHelper.FrameCenterTop, xx, y, fourMM, 2 * fourMM);
                     g.DrawImage(ImageHelper.FrameCenterBottom, xx, y + artifact.Height - 2 * fourMM, fourMM, 2 * fourMM);
                     g.DrawImage(ImageHelper.FrameCenterVertical, xx, y + 2 * fourMM, fourMM, artifact.Height - 4 * fourMM);
