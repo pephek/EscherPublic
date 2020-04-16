@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Configuration;
+using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -15,20 +16,17 @@ namespace Escher
         public float StampHeight;
         public float SheetWidth;
         public float SheetHeight;
-        public float MarginLeft;
-        public float MarginRight;
-        public float MarginTop;
-        public float MarginBottom;
         public SheetBlock[] Blocks;
         public bool Gutter;
+        public Color? Color;
+        public string FontName;
+        public int FontSize;
+        public bool FontBold;
 
         public Sheet()
         {
-            MarginLeft = 0;
-            MarginRight = 0;
-            MarginTop = 0;
-            MarginBottom = 0;
             Gutter = false;
+            Color = null;
         }
 
         public void SetNumberfOfBlocksAndPictures(int blocks, int pictures)

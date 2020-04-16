@@ -150,6 +150,38 @@ namespace Escher
             artifacts.Add(artifact);
         }
 
+        public void AddSheet(string path, string number, float x, float y, float width, float height)
+        {
+            Sheet sheet = SheetHelper.GetSheet(number, out SheetBlock block);
+
+            if (sheet.Color != null)
+            {
+                AddArea(x, y, width, height, (Color)sheet.Color);
+            }
+
+            for (int v = 0; v < sheet.VerticalCount; v++)
+            {
+                for (int h = 0; h < sheet.HorizontalCount; h++)
+                {
+                    Image image = ImageHelper.GetDisplayImage(path, block.Picture[block.Type[v, h] - 1], ColorStyle.Greyscale);
+
+                    float xx = x + 2 + h * sheet.StampWidth;
+                    float yy = y + 2 + v * sheet.StampHeight;
+
+                    if (image != null)
+                    {
+                        AddImage(xx + 4, yy + 4, sheet.StampWidth - 8, sheet.StampHeight - 8, number, image, null);
+                    }
+
+                    string position = block.Position[v, h];
+
+                    RectangleF textSize = graphics.MeasureText(position, sheet.FontName, sheet.FontSize, sheet.FontBold, false);
+
+                    AddText(xx, yy + sheet.StampHeight / 2 - textSize.Height / 2, sheet.StampWidth, position, sheet.FontName, sheet.FontSize, sheet.FontBold, false, Color.Black, Alignment.Centered);
+                }
+            }
+        }
+
         public void AddImage(string path, string number, float left, float top, float width, float height, Shape shape, Appearance appearance, string picture, ColorStyle colorStyle, FrameStyle frameStyle)
         {
             number = !string.IsNullOrEmpty(picture) ? picture.Trim() : number.Trim();
@@ -309,6 +341,16 @@ namespace Escher
                                     rotateFlipType = null;
                                 }
                                 break;
+
+                            case Appearance.Block5x5:
+                                w = (width - 4) / 5;
+                                h = (height - 4) / 5;
+                                x = left + 4 + (i % 5) * w;
+                                y = top + 4 + (i / 5) * h;
+                                w = w - 4;
+                                h = h - 4;
+                                break;
+
                             case Appearance.Block:
                                 w = (width + 4) / 2;
                                 h = (height + 4) / 2;
@@ -372,12 +414,13 @@ namespace Escher
                                 case Appearance.Proof:
                                 case Appearance.BandePublicitaire:
                                 case Appearance.PaireCarnet:
-                                    if (frameStyle == FrameStyle.Thick)
+                                    if (frameStyle == FrameStyle.Thick && i == 0)
                                     {
                                         AddArea(left + 4, top + 4, width - 8F + 0.25F, height - 8F + 0.25F, Color.Black);
                                     }
                                     break;
                             }
+
                             AddImage(x, y, w, h, n, image, rotateFlipType);
                         }
                     }
@@ -485,51 +528,6 @@ namespace Escher
                         return new SizeF(artifact.Width, artifact.Height);
                     }
                 }
-            }
-
-
-
-
-
-
-            if (text.Contains(HtmlHelper.cBold))
-            {
-                string[] texts = text.Split(HtmlHelper.cBold, joinAgainExceptFirstOne: true);
-
-                x += AddText(x, y, width, texts[0], fontName, fontSize, false, fontItalic, foreColor, alignment, screenOnly).Width;
-
-                texts = texts[1].Split(HtmlHelper.cBoldEnd, joinAgainExceptFirstOne: true);
-
-                x += AddText(x, y, width, texts[0], fontName, fontSize, true, fontItalic, foreColor, alignment, screenOnly).Width;
-
-                return AddText(x, y, width, texts[1], fontName, fontSize, false, fontItalic, foreColor, alignment, screenOnly);
-            }
-            else if (text.Contains(HtmlHelper.cItalic))
-            {
-                string[] texts = text.Split(HtmlHelper.cItalic, joinAgainExceptFirstOne: true);
-
-                x += AddText(x, y, width, texts[0], fontName, fontSize, fontBold, false, foreColor, alignment, screenOnly).Width;
-
-                texts = texts[1].Split(HtmlHelper.cItalicEnd, joinAgainExceptFirstOne: true);
-
-                x += AddText(x, y, width, texts[0], fontName, fontSize, fontBold, true, foreColor, alignment, screenOnly).Width;
-
-                return AddText(x, y, width, texts[1], fontName, fontSize, fontBold, false, foreColor, alignment, screenOnly);
-            }
-            else if (text.Contains(HtmlHelper.cSuperscript))
-            {
-                string[] texts = text.Split(HtmlHelper.cSuperscript, joinAgainExceptFirstOne: true);
-
-                x += AddText(x, y, width, texts[0], fontName, fontSize, fontBold, fontItalic, foreColor, alignment, screenOnly).Width;
-
-                texts = texts[1].Split(HtmlHelper.cSuperscriptEnd, joinAgainExceptFirstOne: true);
-
-                x += AddText(x, y - 0.5F, width, texts[0], fontName, fontSize - 1, fontBold, fontItalic, foreColor, alignment, screenOnly).Width;
-
-                return AddText(x, y, width, texts[1], fontName, fontSize, fontBold, fontItalic, foreColor, alignment, screenOnly);
-            }
-            else
-            {
             }
         }
 

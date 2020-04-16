@@ -1,19 +1,18 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Configuration;
+using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
 namespace Escher
 {
-    public class StampSheet
+    public static class SheetHelper
     {
-        private const float cFrameMargin = 2;
-
         private static Dictionary<SheetNumber, Sheet> sheets;
 
-        private static void Initialize()
+        static SheetHelper()
         {
             sheets = new Dictionary<SheetNumber, Sheet>();
 
@@ -31,6 +30,10 @@ namespace Escher
             sheet.VerticalCount = 5;
             sheet.StampWidth = 20;
             sheet.StampHeight = 23;
+            sheet.Color = Color.Black;
+            sheet.FontName = "Darleston";
+            sheet.FontSize = 10;
+            sheet.FontBold = true;
 
             sheet.SetNumberfOfBlocksAndPictures(4, 1);
 
@@ -40,7 +43,7 @@ namespace Escher
 
                 for (int p = 0; p < block.Picture.Length; p++)
                 {
-                    block.Picture[p] = App.GetSetting("ImagesFolder") + "\\Nederland\\Platen\\print\\n.Jpg";
+                    block.Picture[p] = "n";
                 }
 
                 switch (b + 1)
@@ -55,7 +58,7 @@ namespace Escher
                 {
                     for (int h = 0; h < sheet.HorizontalCount; h++)
                     {
-                        block.Type[v, h] = "1";
+                        block.Type[v, h] = 1;
                         block.Position[v, h] = n.ToString();
                         n++;
                     }
@@ -74,6 +77,10 @@ namespace Escher
             sheet.VerticalCount = 5;
             sheet.StampWidth = 20;
             sheet.StampHeight = 24;
+            sheet.Color = Color.Black;
+            sheet.FontName = "Darleston";
+            sheet.FontSize = 7;
+            sheet.FontBold = true;
 
             sheet.SetNumberfOfBlocksAndPictures(4, 1);
 
@@ -83,7 +90,7 @@ namespace Escher
 
                 for (int p = 0; p < block.Picture.Length; p++)
                 {
-                    block.Picture[p] = App.GetSetting("ImagesFolder") + "\\Nederland\\Platen\\print\\n1864.Jpg";
+                    block.Picture[p] = "n1864";
                 }
 
                 switch (b + 1)
@@ -98,7 +105,7 @@ namespace Escher
                 {
                     for (int h = 0; h < sheet.HorizontalCount; h++)
                     {
-                        block.Type[v, h] = "1";
+                        block.Type[v, h] = 1;
                         block.Position[v, h] = n.ToString();
                         n++;
                     }
@@ -112,41 +119,11 @@ namespace Escher
 
             foreach (var s in sheets)
             {
-                s.Value.SheetWidth = cFrameMargin + s.Value.MarginLeft + s.Value.HorizontalCount * s.Value.StampWidth + cFrameMargin + s.Value.MarginRight + (s.Value.Gutter ? s.Value.MarginLeft : 0);
-                s.Value.SheetHeight = cFrameMargin + s.Value.MarginTop + s.Value.VerticalCount * s.Value.StampHeight + cFrameMargin + s.Value.MarginBottom;
-
-                if (s.Key == SheetNumber.Nederland1852)
-                {
-                    s.Value.SheetWidth += 20;
-                    s.Value.SheetHeight += 20;
-                }
+                s.Value.SheetWidth = s.Value.HorizontalCount * s.Value.StampWidth;
+                s.Value.SheetHeight =s.Value.VerticalCount * s.Value.StampHeight;
             }
 
         }
-
-        public static void GetSize(string sheetNumber, out float width, out float height)
-        {
-            SheetNumber sheet;
-            int block;
-
-            if (sheets == null)
-            {
-                Initialize();
-            }
-
-            GetSheetAndBlockNumber(sheetNumber, out sheet, out block);
-
-            if (sheets.ContainsKey(sheet))
-            {
-                width = sheets[sheet].SheetWidth;
-                height = sheets[sheet].SheetHeight;
-            }
-            else
-            {
-                throw new Exception(string.Format("Stamp sheet '{0}' not initialized", sheetNumber));
-            }
-        }
-
         private static void GetSheetAndBlockNumber(string sheetNumber, out SheetNumber sheet, out int block)
         {
             if (!sheetNumber.Contains("#"))
@@ -155,7 +132,7 @@ namespace Escher
             }
             else
             {
-                block = Convert.ToInt32(sheetNumber.Substring(sheetNumber.Length - 1));
+                block = Convert.ToInt32(sheetNumber.Substring(sheetNumber.Length - 1)) - 1;
 
                 sheetNumber = sheetNumber.Substring(0, sheetNumber.Length - 2);
             }
@@ -192,6 +169,43 @@ namespace Escher
                 default:
                     throw new Exception(string.Format("Unknown sheet number '{0}'", sheetNumber));
             }
+        }
+
+        public static void GetSize(string sheetNumber, out float width, out float height)
+        {
+            SheetNumber sheet;
+            int block;
+
+            GetSheetAndBlockNumber(sheetNumber, out sheet, out block);
+
+            if (sheets.ContainsKey(sheet))
+            {
+                width = sheets[sheet].SheetWidth;
+                height = sheets[sheet].SheetHeight;
+            }
+            else
+            {
+                throw new Exception(string.Format("Stamp sheet '{0}' not initialized", sheetNumber));
+            }
+        }
+
+        public static Sheet GetSheet(string number, out SheetBlock block)
+        {
+            SheetNumber sheetNumber;
+            int blockNumber;
+
+            GetSheetAndBlockNumber(number, out sheetNumber, out blockNumber);
+
+            if (!sheets.ContainsKey(sheetNumber))
+            {
+                throw new Exception(string.Format("Stamp sheet '{0}' not initialized", sheetNumber));
+            }
+
+            Sheet sheet = sheets[sheetNumber];
+
+            block = sheet.Blocks[blockNumber];
+
+            return sheet;
         }
     }
 }

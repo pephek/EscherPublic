@@ -69,9 +69,12 @@ namespace Escher
                     case Class.PageFeed:
 
                         page.OffsetVertical = entry.OffsetVertical;
-                        page.Spacing = entry.Width;
                         page.AlbumNumber = entry.AlbumNumber;
                         page.IsSample = entry.Sample;
+                        if (entry.Width != 0)
+                        {
+                            page.Margin = entry.Width;
+                        }
 
                         break;
 
@@ -114,25 +117,28 @@ namespace Escher
 
                     case Class.Variety:
 
-                        page.AddVariety(
-                            Variety.GetNumber(entry),
-                            Variety.GetValueAndColor(entry),
-                            description,
-                            entry.FrameColor,
-                            entry.Width,
-                            entry.Height,
-                            entry.OffsetHorizontal,
-                            entry.OffsetVertical,
-                            entry.Skip,
-                            entry.Appearance,
-                            string.IsNullOrEmpty(entry.Picture) ? entry.Number : entry.Picture,
-                            entry.Overprint,
-                            entry.Shape,
-                            entry.Alignment,
-                            entry.Sheet
-                        );
+                        if (entry.Target.ToUpper() != "VB")
+                        {
+                            page.AddVariety(
+                                Variety.GetNumber(entry),
+                                Variety.GetValueAndColor(entry),
+                                description,
+                                entry.FrameColor,
+                                entry.Width,
+                                entry.Height,
+                                entry.OffsetHorizontal,
+                                entry.OffsetVertical,
+                                entry.Skip,
+                                entry.Appearance,
+                                string.IsNullOrEmpty(entry.Picture) ? entry.Number : entry.Picture,
+                                entry.Overprint,
+                                entry.Shape,
+                                entry.Alignment,
+                                entry.Sheet
+                            );
 
-                        description = "";
+                            description = "";
+                        }
 
                         break;
                 }

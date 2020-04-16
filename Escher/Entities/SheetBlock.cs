@@ -8,7 +8,7 @@ namespace Escher
 {
     public class SheetBlock
     {
-        public string[,] Type;
+        public int[,] Type;
         public string[,] Position;
         public string[,] Description;
         public string[,] Variety;
@@ -16,7 +16,7 @@ namespace Escher
 
         public SheetBlock(int vertical, int horizontal, int pictures)
         {
-            Type = new string[vertical, horizontal];
+            Type = new int[vertical, horizontal];
             Position = new string[vertical, horizontal];
             Description = new string[vertical, horizontal];
             Variety = new string[vertical, horizontal];

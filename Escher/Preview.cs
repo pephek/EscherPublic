@@ -295,17 +295,18 @@ namespace Escher
 
             if (size.Width > 1 && size.Height > 1)
             {
-                float lt = fourMM / 2 + width; // lt = left
-                float tp = fourMM / 2 + height; // tp = top
-
                 for (int c = 1; c < size.Width; c++)
                 {
+                    float lt = fourMM / 2 + width; // lt = left
+                    float tp = fourMM / 2 + height; // tp = top
+
                     for (int r = 1; r < size.Height; r++)
                     {
                         float xx = x + lt - fourMM / 2;
                         float yy = y + tp - fourMM / 2;
 
-                        g.DrawImage(ImageHelper.FrameCenter, xx, yy, fourMM, fourMM);
+                        //g.DrawImage(ImageHelper.FrameCenter, xx, yy, fourMM, fourMM);
+                        g.DrawImage(ImageHelper.FrameCenter, x + fourMM / 2 + c * width - fourMM /2, y + fourMM /2 + r * height - fourMM / 2, fourMM, fourMM);
 
                         lt += width;
                         tp += height;
@@ -397,8 +398,8 @@ namespace Escher
                         bitmap.RotateFlip(artifact.RotateFlipType);
                         artifact.Image = bitmap;
                         g.DrawImage(artifact.Image, artifact.X, artifact.Y, artifact.Width, artifact.Height);
-                        bitmap.Dispose();
                         artifact.Image.Dispose();
+                        bitmap.Dispose();
                         break;
 
                     case ArtifactType.Rectangle:
@@ -613,7 +614,6 @@ namespace Escher
 
                 Debug.WriteLine(string.Format("y after main type = {0}", Math.Round(y, 2)));
 
-                float pageMargin = page.Margin;
                 float yCombine;
 
                 Debug.WriteLine(string.Format("Iterating {0} varieties", page.Varieties.Count()));
@@ -649,8 +649,6 @@ namespace Escher
                     }
 
                     int n = varieties.Rows.Count() - 1;
-                    int a = 0;
-                    int b = 0;
 
                     //while (page.RowWidth(v, n, format.Free.Width, out a) > format.Free.Width && varieties.Rows[n].Count() > 1)
                     //{
@@ -784,7 +782,7 @@ namespace Escher
                                 }
                                 else
                                 {
-                                    throw new Exception(("todo print sheet"));
+                                    artifacts.AddSheet(page.ImagesPath, stamp.Sheet, x1, y1, stamp.Width, stamp.Height);
                                 }
                             }
 

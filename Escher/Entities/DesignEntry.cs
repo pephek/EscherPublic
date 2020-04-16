@@ -60,6 +60,7 @@ namespace Escher
         public string Printed = "";
         public string Perfs = "";
         public bool Sample;
+        public string Target = "";
 
         public DesignEntry(Class Class, int Page)
         {

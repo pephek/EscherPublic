@@ -114,13 +114,13 @@ namespace Escher
             return number;
         }
 
-        public static string GetDisplayImage(string path, string number, ColorStyle colorStyle)
+        public static Image GetDisplayImage(string path, string number, ColorStyle colorStyle)
         {
             number = NormalizeNumber(number);
 
             path = string.Format("{0}\\{1}\\{2}.jpg", path, colorStyle == ColorStyle.Color ? "xlcolor" : "xlprint", number);
 
-            return File.Exists(path) ? path : null;
+            return ImageHelper.LoadImageAndUnlock(path);
         }
 
         public static string GetThumbnailImage(string imagesFolder, string country, string section, string number, float width, float height, out bool existsDisplayImage)

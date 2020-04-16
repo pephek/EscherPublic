@@ -214,6 +214,26 @@ namespace Escher
 
         /// <summary>
         /// </summary>
+        private bool ParseTarget(string keyWord)
+        {
+            if (!GetKeyWord(keyWord)) return false;
+
+            if (!GetSeparator(":=")) return false;
+
+            if (!ReadKeyWordValue(keyWord, true)) return false;
+
+            string[] values = new string[] { "vb", "c#" };
+
+            if (!values.Contains(eCode.ToLower()))
+            {
+                return SetInvalidValue(eCode, keyWord);
+            }
+
+            return true;
+        }
+
+        /// <summary>
+        /// </summary>
         private bool ParseAppearance(string keyWord)
         {
             if (!GetKeyWord(keyWord)) return false;
@@ -231,7 +251,7 @@ namespace Escher
                 "tetebechehorizontalgutter", "horizontaltetebechegutter",
                 "tetebecheverticalgutter", "verticaltetebechegutter",
                 "horizontalgutterpair", "verticalgutterpair",
-                "block", "sheet2x3",
+                "block", "block5x5", "sheet2x3",
                 "proof",
                 "horizontalstrip3", "horizontalstrip4", "horizontalstrip5", "horizontalstrip6",
                 "verticalstrip3", "verticalstrip4", "verticalstrip5", "verticalstrip6",
@@ -650,7 +670,6 @@ namespace Escher
             bool sizeFound;
             bool widthFound;
             bool heightFound;
-            bool ofFound;
             int varietyFound;
 
             sizeFound = false;
@@ -736,6 +755,9 @@ namespace Escher
                         break;
                     case "Alignment":
                         if (!ParseAlignment(nextKeyWord)) return false;
+                        break;
+                    case "Target":
+                        if (!ParseTarget(nextKeyWord)) return false;
                         break;
                     default:
                         return SetInvalidAttribute(nextKeyWord);

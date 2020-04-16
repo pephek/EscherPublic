@@ -17,7 +17,6 @@ namespace Escher
         public string Series = "";
         public string MainType = "";
         public double OffsetVertical;
-        public double Spacing;
         public string AlbumNumber = "";
         public bool IsSample;
         public float Margin;

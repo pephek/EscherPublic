@@ -256,6 +256,10 @@ namespace Escher
                     }
                     break;
 
+                case "target":
+                    entry.Target = val;
+                    break;
+
                 case "framecolor":
                     switch (val.ToLower())
                     {
@@ -544,7 +548,9 @@ namespace Escher
 
                 case "sheet":
                     entry.Sheet = val;
-                    StampSheet.GetSize(entry.Sheet, out entry.Width, out entry.Height);
+                    SheetHelper.GetSize(entry.Sheet, out entry.Width, out entry.Height);
+                    entry.Width += 4;
+                    entry.Height += 4;
                     break;
 
                 case "appearance":
@@ -600,6 +606,11 @@ namespace Escher
                             entry.Width = 2 * entry.Width - 4;
                             entry.Height = 2 * entry.Height - 4;
                             break;
+                        case "block5x5":
+                            entry.Appearance = Appearance.Block5x5;
+                            entry.Width = 5 * entry.Width - (5 - 1) * 4;
+                            entry.Height = 5 * entry.Height - (5 - 1) * 4;
+                            break;
                         case "sheet2x3":
                             entry.Appearance = Appearance.Sheet2x3;
                             entry.Width = 3 * entry.Width - 2 * 4;
@@ -611,7 +622,6 @@ namespace Escher
                             entry.Height = entry.Height + 8;
                             break;
                         case "horizontalstrip3":
-                            ;
                             entry.Appearance = Appearance.HorizontalStrip3;
                             entry.Width = 3 * entry.Width - (3 - 1) * 4;
                             break;
