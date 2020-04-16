@@ -15,7 +15,9 @@ namespace Escher
             string subTypeToPass = "";
             string description = "";
 
-            Page page = new Page();
+            DesignEntry pagefeed = design.GetPagefeed(pageNumber);
+
+            Page page = new Page(pagefeed.Html, pagefeed.Comment);
 
             // Look up the title
             // a) NEDERLAND

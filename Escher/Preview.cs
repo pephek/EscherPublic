@@ -41,6 +41,7 @@ namespace Escher
             this.MouseMove += new MouseEventHandler((sender, e) => HandleMouseMove(e.X, e.Y));
             this.MouseUp += new MouseEventHandler((sender, e) => HandleMouseUp());
             this.MouseDoubleClick += new MouseEventHandler((sender, e) => this.Location = new Point(0, 0));
+            this.FormClosing += new FormClosingEventHandler((sender, e) => { e.Cancel = true; this.Hide(); });
 
             vScrollBar.KeyDown += new KeyEventHandler((sender, e) => HandleKeyDown(e.KeyCode, e.Modifiers));
             vScrollBar.ValueChanged += new EventHandler((sender, e) => RefreshPreview(resizePreview: false));
@@ -501,10 +502,10 @@ namespace Escher
             artifacts.AddText(1, 1, 0, string.Format("Escher · Preview · Paper:<b>{0}</b> · Page Number:<b>{1}</b>", format.FormatName, pageNumber), "Microsoft Sans Serif", 7, foreColor: Color.Gray, screenOnly: true);
 
             // Legenda
-            artifacts.AddText(1, artifacts.Last().Bottom(2), 0, "c: ± color · n: ± number · v: ± value · f: ± frame · t: ± title · s: ± font", "Microsoft Sans Serif", 7, foreColor: Color.Gray, screenOnly: true);
-            artifacts.AddText(1, artifacts.Last().Bottom(2), 0, "+: next match · -: previous match · =: pin", "Microsoft Sans Serif", 7, foreColor: Color.Gray, screenOnly: true);
-            artifacts.AddText(1, artifacts.Last().Bottom(2), 0, char.ConvertFromUtf32(0x2190) + ": previous page · " + char.ConvertFromUtf32(0x2192) + ": next page" + " · p: page setup", "Microsoft Sans Serif", 7, foreColor: Color.Gray, screenOnly: true);
-            artifacts.AddText(1, artifacts.Last().Bottom(2), 0, "esc: close", "Microsoft Sans Serif", 7, foreColor: Color.Gray, screenOnly: true);
+            artifacts.AddText(1, artifacts.Last().Bottom(1), 0, "c: ± color · n: ± number · v: ± value · f: ± frame · t: ± title · s: ± font", "Microsoft Sans Serif", 7, foreColor: Color.Gray, screenOnly: true);
+            artifacts.AddText(1, artifacts.Last().Bottom(1), 0, "+: next match · -: previous match · =: pin", "Microsoft Sans Serif", 7, foreColor: Color.Gray, screenOnly: true);
+            artifacts.AddText(1, artifacts.Last().Bottom(1), 0, char.ConvertFromUtf32(0x2190) + ": previous page · " + char.ConvertFromUtf32(0x2192) + ": next page" + " · p: page setup", "Microsoft Sans Serif", 7, foreColor: Color.Gray, screenOnly: true);
+            artifacts.AddText(1, artifacts.Last().Bottom(1), 0, "esc: close", "Microsoft Sans Serif", 7, foreColor: Color.Gray, screenOnly: true);
 
             // Form border
             artifacts.AddRectangle(0, 0, (this.Width - 1) / pageScale, (this.Height - 1) / pageScale, Color.Gray, screenOnly: true);
@@ -512,10 +513,13 @@ namespace Escher
             // Page border
             artifacts.AddRectangle(format.Border.Left, format.Border.Top, format.Border.Width, format.Border.Height, Color.Gray, frameStyle: FrameStyle.ThinDotted, screenOnly: true);
 
+            // Html + Comment
+            artifacts.AddText(format.Border.Left, format.Border.Top / 2, format.Border.Width, page.GetPageTitle(), "Microsoft Sans Serif", 7, alignment: Alignment.Centered, foreColor: Color.Gray, screenOnly: true);
+
             // Free space
             artifacts.AddRectangle(format.Free.Left, format.Free.Top, format.Free.Width, format.Free.Height, Color.Gray, frameStyle: FrameStyle.ThinDotted, screenOnly: true);
 
-            // Mids of the free space
+            // Centers of the free space
             artifacts.AddHorizontalLine(format.Free.Left, format.Free.Top + format.Free.Height / 2, format.Free.Width, foreColor: Color.Gray, frameStyle: FrameStyle.ThinDotted, screenOnly: true);
             artifacts.AddVerticalLine(format.Free.Left + format.Free.Width / 2, format.Free.Top, format.Free.Height, foreColor: Color.Gray, frameStyle: FrameStyle.ThinDotted, screenOnly: true);
 

@@ -19,7 +19,9 @@ namespace Escher
     {
         private Editor editor = new Editor();
 
-        Design design;
+        private Preview preview = new Preview();
+
+        private Design design;
 
         public Main()
         {
@@ -326,9 +328,10 @@ namespace Escher
 
                 int pageNumber = Int32.Parse(e.Url.AbsolutePath.Replace("page(", "").Replace(")", ""));
 
-                Preview preview = new Preview();
                 preview.SetPreview(design, pageNumber: pageNumber, printMode: PrintMode.ToScreen, screenMode: ScreenMode.MatchScreenHeight);
+                preview.Invalidate();
                 preview.Show();
+                preview.Activate();
             }
             else if (e.Url.AbsolutePath.StartsWith("stamp("))
             {

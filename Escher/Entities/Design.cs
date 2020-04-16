@@ -32,6 +32,11 @@ namespace Escher
             return design[design.Count() - 2].PageNumber;
         }
 
+        public static DesignEntry GetPagefeed(this Design design, int pageNumber)
+        {
+            return design.FirstOrDefault(entry => entry.Class == Class.PageFeed && entry.PageNumber == pageNumber);
+        }
+
         public static DesignEntry GetCountry(this Design design, int pageNumber)
         {
             return design.LastOrDefault(entry => entry.Class == Class.Country && entry.PageNumber <= pageNumber);

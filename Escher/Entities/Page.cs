@@ -9,6 +9,8 @@ namespace Escher
 {
     public class Page
     {
+        public string Html;
+        public string Comment;
         public string ImagesPath = "";
         public string Country = "";
         public string Section = "";
@@ -23,9 +25,28 @@ namespace Escher
 
         public List<Varieties> Varieties = new List<Varieties>();
 
-        public Page()
+        public Page(string html, string comment)
         {
+            this.Html = html;
+            this.Comment = comment;
+
             this.Margin = 2.5F;
+        }
+
+        public string GetPageTitle()
+        {
+            string pageTitle;
+
+            if (this.Html != "")
+            {
+                pageTitle = this.Html + " · (" + this.Comment + ")";
+            }
+            else
+            {
+                pageTitle = this.Comment;
+            }
+
+            return pageTitle.Replace("&#8470;", char.ConvertFromUtf32(0x2116));
         }
 
         public void AddVarieties(string publicDescription, string privateDescription, string subType, float horizontal, float vertical, bool combine, Alignment alignment, bool fontOfType, bool fontOfDescritpion, float margin)
