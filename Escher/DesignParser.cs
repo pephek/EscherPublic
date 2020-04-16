@@ -547,10 +547,11 @@ namespace Escher
                     break;
 
                 case "sheet":
-                    entry.Sheet = val;
-                    SheetHelper.GetSize(entry.Sheet, out entry.Width, out entry.Height);
-                    entry.Width += 4;
-                    entry.Height += 4;
+                    // Do nothing here, this is for VB
+                    break;
+
+                case "positions":
+                    entry.Positions = val;
                     break;
 
                 case "appearance":

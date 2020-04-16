@@ -150,39 +150,7 @@ namespace Escher
             artifacts.Add(artifact);
         }
 
-        public void AddSheet(string path, string number, float x, float y, float width, float height)
-        {
-            Sheet sheet = SheetHelper.GetSheet(number, out SheetBlock block);
-
-            if (sheet.Color != null)
-            {
-                AddArea(x, y, width, height, (Color)sheet.Color);
-            }
-
-            for (int v = 0; v < sheet.VerticalCount; v++)
-            {
-                for (int h = 0; h < sheet.HorizontalCount; h++)
-                {
-                    Image image = ImageHelper.GetDisplayImage(path, block.Picture[block.Type[v, h] - 1], ColorStyle.Greyscale);
-
-                    float xx = x + 2 + h * sheet.StampWidth;
-                    float yy = y + 2 + v * sheet.StampHeight;
-
-                    if (image != null)
-                    {
-                        AddImage(xx + 4, yy + 4, sheet.StampWidth - 8, sheet.StampHeight - 8, number, image, null);
-                    }
-
-                    string position = block.Position[v, h];
-
-                    RectangleF textSize = graphics.MeasureText(position, sheet.FontName, sheet.FontSize, sheet.FontBold, false);
-
-                    AddText(xx, yy + sheet.StampHeight / 2 - textSize.Height / 2, sheet.StampWidth, position, sheet.FontName, sheet.FontSize, sheet.FontBold, false, Color.Black, Alignment.Centered);
-                }
-            }
-        }
-
-        public void AddImage(string path, string number, float left, float top, float width, float height, Shape shape, Appearance appearance, string picture, ColorStyle colorStyle, FrameStyle frameStyle)
+        public void AddImage(string path, string number, string positions, float left, float top, float width, float height, Shape shape, Appearance appearance, string picture, ColorStyle colorStyle, FrameStyle frameStyle)
         {
             number = !string.IsNullOrEmpty(picture) ? picture.Trim() : number.Trim();
 
@@ -421,7 +389,24 @@ namespace Escher
                                     break;
                             }
 
-                            AddImage(x, y, w, h, n, image, rotateFlipType);
+                            if (positions == "")
+                            {
+                                AddImage(x, y, w, h, n, image, rotateFlipType);
+                            }
+                            else
+                            {
+                                AddImage(x, y, w, h, n, image, rotateFlipType);
+
+                                SheetPosition sheetPosition = SheetHelper.GetSheetPosition(positions, i);
+
+                                if (sheetPosition != null)
+                                {
+                                    if (sheetPosition.Position != null)
+                                    {
+                                        AddText(x + 0.5F, y + 0.5F, 0, sheetPosition.Position, "Arial", 7, true);
+                                    }
+                                }
+                            }
                         }
                     }
                     break;

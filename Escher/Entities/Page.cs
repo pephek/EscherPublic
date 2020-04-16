@@ -16,7 +16,7 @@ namespace Escher
         public string Title = "";
         public string Series = "";
         public string MainType = "";
-        public double OffsetVertical;
+        public float OffsetVertical;
         public string AlbumNumber = "";
         public bool IsSample;
         public float Margin;
@@ -40,9 +40,9 @@ namespace Escher
             Varieties.Add(varieties);
         }
 
-        public void AddVariety(string number, string description, string title, FrameColor frameColor, float width, float height, float horizontal, float vertical, bool skip, Appearance appearance, string picture, string overprint, Shape shape, Alignment alignment, string sheet)
+        public void AddVariety(string number, string description, string title, FrameColor frameColor, float width, float height, float horizontal, float vertical, bool skip, Appearance appearance, string picture, string overprint, Shape shape, Alignment alignment, string positions)
         {
-            Variety variety = new Variety(number, description, frameColor.GetColor(), width, height, horizontal, vertical, title, shape, skip, "", appearance, picture, overprint, alignment, sheet);
+            Variety variety = new Variety(number, description, frameColor.GetColor(), width, height, horizontal, vertical, title, shape, skip, "", appearance, picture, overprint, alignment, positions);
 
             Varieties varieties = Varieties[Varieties.Count() - 1];
 

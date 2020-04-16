@@ -733,6 +733,7 @@ namespace Escher
                         if (!ParseString(nextKeyWord, false)) return false;
                         break;
                     case "Sheet":
+                    case "Positions":
                         if (!ParseString(nextKeyWord, true)) return false;
                         break;
                     case "Size":

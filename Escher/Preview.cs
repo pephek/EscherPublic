@@ -297,19 +297,9 @@ namespace Escher
             {
                 for (int c = 1; c < size.Width; c++)
                 {
-                    float lt = fourMM / 2 + width; // lt = left
-                    float tp = fourMM / 2 + height; // tp = top
-
                     for (int r = 1; r < size.Height; r++)
                     {
-                        float xx = x + lt - fourMM / 2;
-                        float yy = y + tp - fourMM / 2;
-
-                        //g.DrawImage(ImageHelper.FrameCenter, xx, yy, fourMM, fourMM);
                         g.DrawImage(ImageHelper.FrameCenter, x + fourMM / 2 + c * width - fourMM /2, y + fourMM /2 + r * height - fourMM / 2, fourMM, fourMM);
-
-                        lt += width;
-                        tp += height;
                     }
                 }
             }
@@ -380,7 +370,7 @@ namespace Escher
 
                     case ArtifactType.Text:
                         g.DrawString(artifact.Text, artifact.Font, artifact.TextColor, artifact.X, artifact.Y);
-                        g.DrawRectangle(new Pen(Color.Red), artifact.X, artifact.Y, artifact.Width+1, artifact.Height);
+                        //g.DrawRectangle(new Pen(Color.Red), artifact.X, artifact.Y, artifact.Width+1, artifact.Height);
                         break;
 
                     case ArtifactType.Area:
@@ -616,6 +606,8 @@ namespace Escher
 
                 float yCombine;
 
+                y += page.OffsetVertical;
+
                 Debug.WriteLine(string.Format("Iterating {0} varieties", page.Varieties.Count()));
 
                 for (int v = 0; v < page.Varieties.Count(); v++)
@@ -772,17 +764,10 @@ namespace Escher
 
                             if (!stamp.Skip)
                             {
-                                if (stamp.Sheet == "")
+                                // A page without album number is a title page, so do show the coat of arms
+                                if (setup.IncludeImage || page.AlbumNumber == "")
                                 {
-                                    // A page without album number is a title page, so do show the coat of arms
-                                    if (setup.IncludeImage || page.AlbumNumber == "")
-                                    {
-                                        artifacts.AddImage(page.ImagesPath, stamp.Number, x1, y1, stamp.Width, stamp.Height, stamp.Shape, stamp.Appearance, stamp.Picture, setup.ColorStyle, setup.FrameStyle);
-                                    }
-                                }
-                                else
-                                {
-                                    artifacts.AddSheet(page.ImagesPath, stamp.Sheet, x1, y1, stamp.Width, stamp.Height);
+                                    artifacts.AddImage(page.ImagesPath, stamp.Number, stamp.Positions, x1, y1, stamp.Width, stamp.Height, stamp.Shape, stamp.Appearance, stamp.Picture, setup.ColorStyle, setup.FrameStyle);
                                 }
                             }
 

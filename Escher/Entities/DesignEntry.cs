@@ -43,7 +43,7 @@ namespace Escher
         public string Afa = "";
         public string Fac = "";
         public Alignment Alignment;
-        public string Sheet = "";
+        public string Positions = "";
         public bool Landscape;
         public bool Unlisted;
         public string Html = "";

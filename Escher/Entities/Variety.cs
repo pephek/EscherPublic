@@ -24,7 +24,7 @@ namespace Escher
         public readonly string Picture;
         public readonly string Overprint;
         public readonly Alignment Alignment;
-        public readonly string Sheet;
+        public readonly string Positions;
 
         // Not static data, but computed in target's scale mode while drawing the album page
 
@@ -48,7 +48,7 @@ namespace Escher
             string picture,
             string overprint,
             Alignment alignment,
-            string sheet
+            string positions
         )
         {
             Number = number;
@@ -66,7 +66,7 @@ namespace Escher
             Picture = picture;
             Overprint = overprint;
             Alignment = alignment;
-            Sheet = sheet;
+            Positions = positions;
         }
 
         public static string GetNumber(DesignEntry entry)

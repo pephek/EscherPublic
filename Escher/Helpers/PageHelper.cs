@@ -134,7 +134,7 @@ namespace Escher
                                 entry.Overprint,
                                 entry.Shape,
                                 entry.Alignment,
-                                entry.Sheet
+                                entry.Positions
                             );
 
                             description = "";
