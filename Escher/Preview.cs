@@ -525,6 +525,8 @@ namespace Escher
                 format = new PageFormat(format.FormatName, format.TitleStyle, format.TitleFont, format.PageWidth, format.PageHeight, format.MarginLeft + additionalMarginLeft, format.MarginRight, format.MarginTop, format.MarginBottom, format.FreeLeft, format.FreeRight, format.FreeTop, format.FreeBottom, format.PrePrintedBorder, format.PrePrintedTitle);
             }
 
+            float yMax = 0;
+
             float y = format.Free.Top;
 
             artifacts = new Artifacts(g, this.pageScale);
@@ -804,7 +806,7 @@ namespace Escher
                             Variety stamp = row[s];
 
                             float x1 = stamp.FrameLeft;
-                            float y1 = y + stamp.FrameOffset + (rowHeight - stamp.Height) / 2 + stamp.Vertical;
+                            float y1 = y + stamp.FrameOffset + (rowHeight - stamp.Height) / 2;
 
                             Debug.Print(string.Format("Location[{0}]: x {1}, y {2}", s, Math.Round(x1, 2), Math.Round(y1, 2)));
 
@@ -865,7 +867,7 @@ namespace Escher
                                 if (!stamp.Skip)
                                 {
                                     // Eg. 7 IA
-                                    float height = artifacts.AddText(stamp.FrameLeft, y + stamp.FrameOffset + stamp.Vertical, stamp.Width, stamp.Number == "0" ? "" : stamp.Number, format.TitleFont, (float)setup.FontSize, fontBold: true, alignment: Alignment.Centered).Height;
+                                    float height = artifacts.AddText(stamp.FrameLeft, y + stamp.FrameOffset, stamp.Width, stamp.Number == "0" ? "" : stamp.Number, format.TitleFont, (float)setup.FontSize, fontBold: true, alignment: Alignment.Centered).Height;
 
                                     maxHeight = Math.Max(maxHeight, height);
                                 }
@@ -875,6 +877,11 @@ namespace Escher
                         }
 
                         Debug.WriteLine(string.Format("y after numbers = {0}", Math.Round(y, 2)));
+
+                        if (!varieties.Combine)
+                        {
+                            yMax = y;
+                        }
 
                         // Colors & Values
 
@@ -888,20 +895,29 @@ namespace Escher
                             {
                                 Variety stamp = row[s];
 
+                                float height = 0;
+
                                 if (!stamp.Skip)
                                 {
                                     // Eg. 5 ct. mat ultramarijn
-                                    float height = artifacts.AddText(stamp.FrameLeft - 1, y + stamp.FrameOffset + stamp.Vertical, stamp.Width + 2, stamp.Description, format.TitleFont, (int)setup.FontSize, alignment: Alignment.Centered).Height;
+                                    height = artifacts.AddText(stamp.FrameLeft - 1, y + stamp.FrameOffset, stamp.Width + 2, stamp.Description, format.TitleFont, (int)setup.FontSize, alignment: Alignment.Centered).Height;
 
                                     maxHeight = Math.Max(maxHeight, height);
                                 }
-                            } // for (int s = 0; s < row.Count(); s++)
 
-                            y += maxHeight;
+                                if (y + height > yMax)
+                                {
+                                    yMax = y + height;
+
+                                    Debug.WriteLine(string.Format("A new maximum y is found: yMax = {0}", Math.Round(yMax, 2)));
+                                }
+                            } // for (int s = 0; s < row.Count(); s++)
                         }
 
-                        // Add 2 mm. spacing
-                        y += 2;
+                        Debug.WriteLine(string.Format("Using maximum yMax = {0}", Math.Round(yMax, 2)));
+
+                        // Set y to the maximum found
+                        y = yMax; // + 2;
 
                         Debug.WriteLine(string.Format("y after values & colors = {0}", Math.Round(y, 2)));
 
