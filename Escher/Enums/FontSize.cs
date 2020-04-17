@@ -12,4 +12,22 @@ namespace Escher
         Medium = 6,
         Large = 7
     }
+
+    public static class FontSizeExtensions
+    {
+        public static FontSize Next(this FontSize fontSize)
+        {
+            switch (fontSize)
+            {
+                case FontSize.Small:
+                    return FontSize.Medium;
+                case FontSize.Medium:
+                    return FontSize.Large;
+                case FontSize.Large:
+                    return FontSize.Small;
+                default:
+                    throw new ArgumentOutOfRangeException("fontSize");
+            }
+        }
+    }
 }

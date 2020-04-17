@@ -18,6 +18,7 @@ namespace Escher
     {
         private Design design;
         private Page page;
+        private PageSetup setup;
         private PrintMode printMode;
         private ScreenMode screenMode;
         private int pageNumber;
@@ -51,7 +52,9 @@ namespace Escher
         {
             this.design = design;
 
-            this.page = PageHelper.Get(design, pageNumber);
+            this.setup = PageSetup.Get();
+
+            this.page = PageHelper.Get(design, pageNumber, setup.FrameStyle);
 
             this.pageNumber = pageNumber;
             this.printMode = printMode;
@@ -77,7 +80,7 @@ namespace Escher
                     if (this.pageNumber > 1)
                     {
                         this.pageNumber--;
-                        this.page = PageHelper.Get(design, pageNumber);
+                        this.page = PageHelper.Get(design, pageNumber, setup.FrameStyle);
                         RefreshPreview(resizePreview: false);
                     }
                     break;
@@ -85,12 +88,33 @@ namespace Escher
                     if (this.pageNumber < this.design.NumberOfPages())
                     {
                         this.pageNumber++;
-                        this.page = PageHelper.Get(design, pageNumber);
+                        this.page = PageHelper.Get(design, pageNumber, setup.FrameStyle);
                         RefreshPreview(resizePreview: false);
                     }
                     break;
                 case Keys.P:
                     ShowPageSetup();
+                    break;
+                case Keys.C:
+                    setup.ColorStyle = setup.ColorStyle.Toggle();
+                    RefreshPreview(resizePreview: false);
+                    break;
+                case Keys.N:
+                    setup.IncludeNumber = !setup.IncludeNumber;
+                    RefreshPreview(resizePreview: false);
+                    break;
+                case Keys.V:
+                    setup.IncludeValueAndColor = !setup.IncludeValueAndColor;
+                    RefreshPreview(resizePreview: false);
+                    break;
+                case Keys.F:
+                    setup.FrameStyle = setup.FrameStyle.Next();
+                    this.page = PageHelper.Get(design, pageNumber, setup.FrameStyle);
+                    RefreshPreview(resizePreview: false);
+                    break;
+                case Keys.S:
+                    setup.FontSize = setup.FontSize.Next();
+                    RefreshPreview(resizePreview: false);
                     break;
                 case Keys.Oemplus:
                     switch (modifiers)
@@ -193,6 +217,7 @@ namespace Escher
                 {
                     vScrollBar.Value = 0;
                 }
+
                 ResizePreview(PageSetup.Get().PageFormat, this.printMode, this.screenMode, out this.pageScale, out this.transformScale);
             }
 
@@ -440,6 +465,11 @@ namespace Escher
                     height = pageHeightInPixels;
                     break;
 
+                case ScreenMode.MatchRealLife:
+                    width = (int)((float)setup.RealLifePageScale * (float)pageWidthInPixels);
+                    height = (int)((float)setup.RealLifePageScale * (float)pageHeightInPixels);
+                    break;
+
                 case ScreenMode.MatchScreenHeight:
                     height = screenHeightInPixels;
                     width = (int)(pageFormat.PageWidth * screenHeightInPixels / pageFormat.PageHeight);
@@ -458,6 +488,9 @@ namespace Escher
             {
                 case ScreenMode.MatchPaper:
                     transformScale = 1;
+                    break;
+                case ScreenMode.MatchRealLife:
+                    transformScale = (float)setup.RealLifePageScale;
                     break;
                 case ScreenMode.MatchScreenHeight:
                 case ScreenMode.MatchScreenWidth:
@@ -482,8 +515,6 @@ namespace Escher
         {
             // Determines smoothness for text
             g.TextRenderingHint = TextRenderingHint.AntiAlias;
-
-            PageSetup setup = PageSetup.Get();
 
             PageFormat format = setup.PageFormat;
 
@@ -513,8 +544,9 @@ namespace Escher
             // Page border
             artifacts.AddRectangle(format.Border.Left, format.Border.Top, format.Border.Width, format.Border.Height, Color.Gray, frameStyle: FrameStyle.ThinDotted, screenOnly: true);
 
-            // Html + Comment
+            // Html + Comment & Screen Mode
             artifacts.AddText(format.Border.Left, format.Border.Top / 2, format.Border.Width, page.GetPageTitle(), "Microsoft Sans Serif", 7, alignment: Alignment.Centered, foreColor: Color.Gray, screenOnly: true);
+            artifacts.AddText(format.Border.Left, artifacts.Last().Bottom(1), format.Border.Width, string.Format("(Screen Mode = {0})", screenMode.ToText()), "Microsoft Sans Serif", 7, alignment: Alignment.Centered, foreColor: Color.Gray, screenOnly: true);
 
             // Free space
             artifacts.AddRectangle(format.Free.Left, format.Free.Top, format.Free.Width, format.Free.Height, Color.Gray, frameStyle: FrameStyle.ThinDotted, screenOnly: true);
@@ -783,7 +815,7 @@ namespace Escher
                                 // A page without album number is a title page, so do show the coat of arms
                                 if (setup.IncludeImage || page.AlbumNumber == "")
                                 {
-                                    artifacts.AddImage(page.ImagesPath, stamp.Number, stamp.Positions, x1, y1, stamp.Width, stamp.Height, stamp.Shape, stamp.Appearance, stamp.Picture, setup.ColorStyle, setup.FrameStyle);
+                                    artifacts.AddImage(page.ImagesPath, stamp.Number, stamp.Positions, x1, y1, stamp.Width, stamp.Height, stamp.Shape, stamp.Appearance, stamp.Picture, stamp.FrameColor, setup.ColorStyle, setup.FrameStyle);
                                 }
                             }
 
@@ -791,14 +823,24 @@ namespace Escher
 
                             if (!stamp.Skip && stamp.FrameColor != Color.White)
                             {
-                                switch (stamp.Shape)
+                                if (stamp.Shape == Shape.Rectangle)
                                 {
-                                    case Shape.Rectangle:
-                                        artifacts.AddRectangle(x1, y1, stamp.Width, stamp.Height, stamp.FrameColor, frameStyle: setup.FrameStyle, appearance: stamp.Appearance);
-                                        break;
+                                    artifacts.AddRectangle(x1, y1, stamp.Width, stamp.Height, stamp.FrameColor, frameStyle: setup.FrameStyle, appearance: stamp.Appearance);
+                                }
+                                else if (setup.FrameStyle != FrameStyle.Thick)
+                                {
+                                    switch (stamp.Shape)
+                                    {
+                                        case Shape.Triangle45:
+                                            artifacts.AddCursor(x1, y1 + stamp.Height);
+                                            artifacts.AddMove(stamp.Width, 0, stamp.FrameColor, setup.FrameStyle);
+                                            artifacts.AddMove(-stamp.Width / 2, -stamp.Height, stamp.FrameColor, setup.FrameStyle);
+                                            artifacts.AddMove(-stamp.Width / 2, stamp.Height, stamp.FrameColor, setup.FrameStyle);
+                                            break;
 
-                                    default:
-                                        throw new Exception("todo");
+                                        default:
+                                            throw new Exception("todo");
+                                    }
                                 }
                             }
 

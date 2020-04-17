@@ -238,5 +238,17 @@ namespace Escher.Properties {
                 this["IncludePdfBookmarks"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("1")]
+        public decimal RealLifePageScale {
+            get {
+                return ((decimal)(this["RealLifePageScale"]));
+            }
+            set {
+                this["RealLifePageScale"] = value;
+            }
+        }
     }
 }

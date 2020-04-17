@@ -40,7 +40,7 @@ namespace Escher
             return artifacts[artifacts.Count() - 1];
         }
 
-        private void AddCursor(float x, float y)
+        public void AddCursor(float x, float y)
         {
             Artifact artifact = new Artifact(ArtifactType.Cursor);
 
@@ -151,7 +151,7 @@ namespace Escher
             artifacts.Add(artifact);
         }
 
-        public void AddImage(string path, string number, string positions, float left, float top, float width, float height, Shape shape, Appearance appearance, string picture, ColorStyle colorStyle, FrameStyle frameStyle)
+        public void AddImage(string path, string number, string positions, float left, float top, float width, float height, Shape shape, Appearance appearance, string picture, Color frameColor, ColorStyle colorStyle, FrameStyle frameStyle)
         {
             number = !string.IsNullOrEmpty(picture) ? picture.Trim() : number.Trim();
 
@@ -190,12 +190,15 @@ namespace Escher
                 return; // No need to stay here if the image is not found, return immediately
             }
 
-            float x = 0, y = 0, w = 0, h = 0;
+            float x = left;
+            float y = top;
+            float w = width;
+            float h = height;
 
             switch (shape)
             {
                 case Shape.Triangle45:
-                    AddImage(left + 3 * 5 / (float) Math.Sqrt(2), top + 2 * 5 / (float) Math.Sqrt(2), width - 2 * 5 / (float) Math.Sqrt(2), height - 5 - 2 * 5 / (float) Math.Sqrt(2), n, image, RotateFlipType.RotateNoneFlipNone, appearance);
+                    AddImage(left + 3 * 5 / (float) Math.Sqrt(2), top + 2 * 5 / (float) Math.Sqrt(2), width - 2 * 3 * 5 / (float) Math.Sqrt(2), height - 5 - 2 * 5 / (float) Math.Sqrt(2), n, image, RotateFlipType.RotateNoneFlipNone, appearance);
                     break;
                 case Shape.Triangle60Inverted:
                     AddImage(left + 5 + 5 / (float)Math.Sqrt(3), top + 5, width - 2 * (5 + 5 / (float)Math.Sqrt(3)), height - 2 * (5 + 5 / (float)Math.Sqrt(3)), n, image, RotateFlipType.RotateNoneFlipNone, appearance);
@@ -219,13 +222,16 @@ namespace Escher
                         {
                             case Appearance.Singular:
                             case Appearance.Rotated:
-                                x = left + 4;
-                                y = top + 4;
-                                w = width - 8;
-                                h = height - 8;
-                                if (appearance == Appearance.Rotated)
+                                if (frameColor != Color.White)
                                 {
-                                    rotateFlipType = RotateFlipType.Rotate180FlipNone;
+                                    x = left + 4;
+                                    y = top + 4;
+                                    w = width - 8;
+                                    h = height - 8;
+                                    if (appearance == Appearance.Rotated)
+                                    {
+                                        rotateFlipType = RotateFlipType.Rotate180FlipNone;
+                                    }
                                 }
                                 break;
                             case Appearance.Proof:

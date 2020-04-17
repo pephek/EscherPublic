@@ -214,7 +214,7 @@ namespace Escher
 
         /// <summary>
         /// </summary>
-        private bool ParseTarget(string keyWord)
+        private bool ParseApplyTo(string keyWord)
         {
             if (!GetKeyWord(keyWord)) return false;
 
@@ -223,6 +223,26 @@ namespace Escher
             if (!ReadKeyWordValue(keyWord, true)) return false;
 
             string[] values = new string[] { "vb", "c#" };
+
+            if (!values.Contains(eCode.ToLower()))
+            {
+                return SetInvalidValue(eCode, keyWord);
+            }
+
+            return true;
+        }
+
+        /// <summary>
+        /// </summary>
+        private bool ParseApplyToFrameStyle(string keyWord)
+        {
+            if (!GetKeyWord(keyWord)) return false;
+
+            if (!GetSeparator(":=")) return false;
+
+            if (!ReadKeyWordValue(keyWord, true)) return false;
+
+            string[] values = new string[] { "thin", "thick" };
 
             if (!values.Contains(eCode.ToLower()))
             {
@@ -758,8 +778,11 @@ namespace Escher
                     case "Alignment":
                         if (!ParseAlignment(nextKeyWord)) return false;
                         break;
-                    case "Target":
-                        if (!ParseTarget(nextKeyWord)) return false;
+                    case "ApplyTo":
+                        if (!ParseApplyTo(nextKeyWord)) return false;
+                        break;
+                    case "ApplyToFrameStyle":
+                        if (!ParseApplyToFrameStyle(nextKeyWord)) return false;
                         break;
                     default:
                         return SetInvalidAttribute(nextKeyWord);

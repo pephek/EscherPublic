@@ -104,6 +104,10 @@ namespace Escher
             checkBoxIncludeSamplePagesOnly.Checked = pageSetup.IncludeSamplePagesOnly;
             checkBoxIncludeHtmlScans.Checked = pageSetup.IncludeHtmlScans;
             checkBoxIncludePdfBookmarks.Checked = pageSetup.IncludePdfBookmarks;
+
+            // Real life page scale
+
+            numericRealLifePageScale.Value = pageSetup.RealLifePageScale;
         }
 
         private void SaveAndClose()
@@ -147,9 +151,14 @@ namespace Escher
             Properties.Settings.Default.IncludeHtmlScans = checkBoxIncludeHtmlScans.Checked;
             Properties.Settings.Default.IncludePdfBookmarks = checkBoxIncludePdfBookmarks.Checked;
 
+            // Real life page scale
+
+            Properties.Settings.Default.RealLifePageScale = numericRealLifePageScale.Value;
+
             // Save settings
 
             Properties.Settings.Default.Save();
+            Properties.Settings.Default.Reload();
 
             // Reload
 

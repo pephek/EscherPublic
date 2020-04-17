@@ -8,8 +8,26 @@ namespace Escher
 {
     public enum FrameStyle
     {
-        ThinSolid, // 0
-        Thick, // 1
-        ThinDotted // 2
+        Thick,
+        ThinSolid,
+        ThinDotted
+    }
+
+    public static class FrameStyleExtensions
+    {
+        public static FrameStyle Next(this FrameStyle frameStyle)
+        {
+            switch (frameStyle)
+            {
+                case FrameStyle.Thick:
+                    return FrameStyle.ThinSolid;
+                case FrameStyle.ThinSolid:
+                    return FrameStyle.ThinDotted;
+                case FrameStyle.ThinDotted:
+                    return FrameStyle.Thick;
+                default:
+                    throw new ArgumentOutOfRangeException("frameStyle");
+            }
+        }
     }
 }

@@ -256,8 +256,12 @@ namespace Escher
                     }
                     break;
 
-                case "target":
-                    entry.Target = val;
+                case "applyto":
+                    entry.ApplyTo = val;
+                    break;
+
+                case "applytoframestyle":
+                    entry.ApplyToFrameStyle = val;
                     break;
 
                 case "framecolor":

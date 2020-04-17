@@ -59,6 +59,8 @@
             this.checkBoxIncludeSamplePagesOnly = new System.Windows.Forms.CheckBox();
             this.buttonOk = new System.Windows.Forms.Button();
             this.buttonCancel = new System.Windows.Forms.Button();
+            this.groupBoxRealLifePageScale = new System.Windows.Forms.GroupBox();
+            this.numericRealLifePageScale = new System.Windows.Forms.NumericUpDown();
             this.groupBoxFormat.SuspendLayout();
             this.groupBoxStampOptions.SuspendLayout();
             this.groupBoxFrameOptions.SuspendLayout();
@@ -67,6 +69,8 @@
             this.groupBoxCatalogOptions.SuspendLayout();
             this.groupBoxFontOptions.SuspendLayout();
             this.groupBoxAlbumOptions.SuspendLayout();
+            this.groupBoxRealLifePageScale.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.numericRealLifePageScale)).BeginInit();
             this.SuspendLayout();
             // 
             // groupBoxFormat
@@ -363,7 +367,7 @@
             this.groupBoxAlbumOptions.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.groupBoxAlbumOptions.Name = "groupBoxAlbumOptions";
             this.groupBoxAlbumOptions.Padding = new System.Windows.Forms.Padding(3, 2, 3, 2);
-            this.groupBoxAlbumOptions.Size = new System.Drawing.Size(251, 121);
+            this.groupBoxAlbumOptions.Size = new System.Drawing.Size(234, 121);
             this.groupBoxAlbumOptions.TabIndex = 7;
             this.groupBoxAlbumOptions.TabStop = false;
             this.groupBoxAlbumOptions.Text = "Album Options";
@@ -403,10 +407,10 @@
             // 
             // buttonOk
             // 
-            this.buttonOk.Location = new System.Drawing.Point(959, 242);
+            this.buttonOk.Location = new System.Drawing.Point(968, 242);
             this.buttonOk.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.buttonOk.Name = "buttonOk";
-            this.buttonOk.Size = new System.Drawing.Size(113, 50);
+            this.buttonOk.Size = new System.Drawing.Size(104, 50);
             this.buttonOk.TabIndex = 8;
             this.buttonOk.Text = "OK";
             this.buttonOk.UseVisualStyleBackColor = true;
@@ -414,13 +418,51 @@
             // buttonCancel
             // 
             this.buttonCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            this.buttonCancel.Location = new System.Drawing.Point(840, 242);
+            this.buttonCancel.Location = new System.Drawing.Point(860, 242);
             this.buttonCancel.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.buttonCancel.Name = "buttonCancel";
-            this.buttonCancel.Size = new System.Drawing.Size(113, 50);
+            this.buttonCancel.Size = new System.Drawing.Size(102, 50);
             this.buttonCancel.TabIndex = 9;
             this.buttonCancel.Text = "Cancel";
             this.buttonCancel.UseVisualStyleBackColor = true;
+            // 
+            // groupBoxRealLifePageScale
+            // 
+            this.groupBoxRealLifePageScale.Controls.Add(this.numericRealLifePageScale);
+            this.groupBoxRealLifePageScale.Location = new System.Drawing.Point(693, 174);
+            this.groupBoxRealLifePageScale.Name = "groupBoxRealLifePageScale";
+            this.groupBoxRealLifePageScale.Size = new System.Drawing.Size(140, 118);
+            this.groupBoxRealLifePageScale.TabIndex = 10;
+            this.groupBoxRealLifePageScale.TabStop = false;
+            this.groupBoxRealLifePageScale.Text = "Real Life Page Scale";
+            // 
+            // numericRealLifePageScale
+            // 
+            this.numericRealLifePageScale.DecimalPlaces = 2;
+            this.numericRealLifePageScale.Increment = new decimal(new int[] {
+            1,
+            0,
+            0,
+            131072});
+            this.numericRealLifePageScale.Location = new System.Drawing.Point(29, 57);
+            this.numericRealLifePageScale.Maximum = new decimal(new int[] {
+            4,
+            0,
+            0,
+            0});
+            this.numericRealLifePageScale.Minimum = new decimal(new int[] {
+            25,
+            0,
+            0,
+            131072});
+            this.numericRealLifePageScale.Name = "numericRealLifePageScale";
+            this.numericRealLifePageScale.Size = new System.Drawing.Size(65, 22);
+            this.numericRealLifePageScale.TabIndex = 1;
+            this.numericRealLifePageScale.Value = new decimal(new int[] {
+            100,
+            0,
+            0,
+            131072});
             // 
             // Print
             // 
@@ -430,6 +472,7 @@
             this.BackColor = System.Drawing.Color.White;
             this.CancelButton = this.buttonCancel;
             this.ClientSize = new System.Drawing.Size(1093, 321);
+            this.Controls.Add(this.groupBoxRealLifePageScale);
             this.Controls.Add(this.buttonCancel);
             this.Controls.Add(this.buttonOk);
             this.Controls.Add(this.groupBoxAlbumOptions);
@@ -463,6 +506,8 @@
             this.groupBoxFontOptions.PerformLayout();
             this.groupBoxAlbumOptions.ResumeLayout(false);
             this.groupBoxAlbumOptions.PerformLayout();
+            this.groupBoxRealLifePageScale.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.numericRealLifePageScale)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -499,5 +544,7 @@
         private System.Windows.Forms.CheckBox checkBoxIncludeSamplePagesOnly;
         private System.Windows.Forms.Button buttonOk;
         private System.Windows.Forms.Button buttonCancel;
+        private System.Windows.Forms.GroupBox groupBoxRealLifePageScale;
+        private System.Windows.Forms.NumericUpDown numericRealLifePageScale;
     }
 }

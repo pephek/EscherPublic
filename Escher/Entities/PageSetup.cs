@@ -23,6 +23,7 @@ namespace Escher
         public bool IncludeSamplePagesOnly;
         public bool IncludeHtmlScans;
         public bool IncludePdfBookmarks;
+        public decimal RealLifePageScale;
 
         private static PageSetup pageSetup = new PageSetup();
 
@@ -43,6 +44,7 @@ namespace Escher
             pageSetup.IncludeSamplePagesOnly = Properties.Settings.Default.IncludeSamplePagesOnly;
             pageSetup.IncludeHtmlScans = Properties.Settings.Default.IncludeHtmlScans;
             pageSetup.IncludePdfBookmarks = Properties.Settings.Default.IncludePdfBookmarks;
+            pageSetup.RealLifePageScale = Properties.Settings.Default.RealLifePageScale;
         }
 
         public static PageSetup Get()

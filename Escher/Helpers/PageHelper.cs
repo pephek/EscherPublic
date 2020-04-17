@@ -9,7 +9,7 @@ namespace Escher
 {
     public class PageHelper
     {
-        public static Page Get(Design design, int pageNumber)
+        public static Page Get(Design design, int pageNumber, FrameStyle frameStyle)
         {
             string subType = "";
             string subTypeToPass = "";
@@ -119,7 +119,7 @@ namespace Escher
 
                     case Class.Variety:
 
-                        if (entry.Target.ToUpper() != "VB")
+                        if (entry.ApplyTo.ToUpper() != "VB" && PassFrameStyle(entry.ApplyToFrameStyle, frameStyle))
                         {
                             page.AddVariety(
                                 Variety.GetNumber(entry),
@@ -149,6 +149,27 @@ namespace Escher
             }
 
             return page;
+        }
+
+        private static bool PassFrameStyle(string applyToFrameStyle, FrameStyle frameStyle)
+        {
+            bool pass = true;
+
+            if (applyToFrameStyle != "")
+            {
+                switch (frameStyle)
+                {
+                    case FrameStyle.ThinSolid:
+                    case FrameStyle.ThinDotted:
+                        pass = (applyToFrameStyle.ToLower() == "thin");
+                        break;
+                    case FrameStyle.Thick:
+                        pass = (applyToFrameStyle.ToLower() == "thick");
+                        break;
+                }
+            }
+
+            return pass;
         }
     }
 }
