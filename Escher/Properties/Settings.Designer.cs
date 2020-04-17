@@ -8,22 +8,234 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace Escher.Properties
-{
-
-
+namespace Escher.Properties {
+    
+    
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.VisualStudio.Editors.SettingsDesigner.SettingsSingleFileGenerator", "11.0.0.0")]
-    internal sealed partial class Settings : global::System.Configuration.ApplicationSettingsBase
-    {
-
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.VisualStudio.Editors.SettingsDesigner.SettingsSingleFileGenerator", "16.5.0.0")]
+    internal sealed partial class Settings : global::System.Configuration.ApplicationSettingsBase {
+        
         private static Settings defaultInstance = ((Settings)(global::System.Configuration.ApplicationSettingsBase.Synchronized(new Settings())));
-
-        public static Settings Default
-        {
-            get
-            {
+        
+        public static Settings Default {
+            get {
                 return defaultInstance;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("Normal")]
+        public global::System.Windows.Forms.FormWindowState MainState {
+            get {
+                return ((global::System.Windows.Forms.FormWindowState)(this["MainState"]));
+            }
+            set {
+                this["MainState"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("0, 0")]
+        public global::System.Drawing.Point MainLocation {
+            get {
+                return ((global::System.Drawing.Point)(this["MainLocation"]));
+            }
+            set {
+                this["MainLocation"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("0, 0")]
+        public global::System.Drawing.Size MainSize {
+            get {
+                return ((global::System.Drawing.Size)(this["MainSize"]));
+            }
+            set {
+                this["MainSize"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("A4")]
+        public string Paper {
+            get {
+                return ((string)(this["Paper"]));
+            }
+            set {
+                this["Paper"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool IncludeMarginForPunchHoles {
+            get {
+                return ((bool)(this["IncludeMarginForPunchHoles"]));
+            }
+            set {
+                this["IncludeMarginForPunchHoles"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        public bool IncludeImage {
+            get {
+                return ((bool)(this["IncludeImage"]));
+            }
+            set {
+                this["IncludeImage"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        public bool IncludeNumber {
+            get {
+                return ((bool)(this["IncludeNumber"]));
+            }
+            set {
+                this["IncludeNumber"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        public bool IncludeValueAndColor {
+            get {
+                return ((bool)(this["IncludeValueAndColor"]));
+            }
+            set {
+                this["IncludeValueAndColor"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("Thick")]
+        public global::Escher.FrameStyle FrameStyle {
+            get {
+                return ((global::Escher.FrameStyle)(this["FrameStyle"]));
+            }
+            set {
+                this["FrameStyle"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("Color")]
+        public global::Escher.ColorStyle ColorStyle {
+            get {
+                return ((global::Escher.ColorStyle)(this["ColorStyle"]));
+            }
+            set {
+                this["ColorStyle"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("Small")]
+        public global::Escher.FontSize FontSize {
+            get {
+                return ((global::Escher.FontSize)(this["FontSize"]));
+            }
+            set {
+                this["FontSize"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        public bool IncludeBorder {
+            get {
+                return ((bool)(this["IncludeBorder"]));
+            }
+            set {
+                this["IncludeBorder"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        public bool IncludeTitle {
+            get {
+                return ((bool)(this["IncludeTitle"]));
+            }
+            set {
+                this["IncludeTitle"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("None")]
+        public global::Escher.Catalog Catalog {
+            get {
+                return ((global::Escher.Catalog)(this["Catalog"]));
+            }
+            set {
+                this["Catalog"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool AppendCatalog {
+            get {
+                return ((bool)(this["AppendCatalog"]));
+            }
+            set {
+                this["AppendCatalog"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool IncludeSamplePagesOnly {
+            get {
+                return ((bool)(this["IncludeSamplePagesOnly"]));
+            }
+            set {
+                this["IncludeSamplePagesOnly"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool IncludeHtmlScans {
+            get {
+                return ((bool)(this["IncludeHtmlScans"]));
+            }
+            set {
+                this["IncludeHtmlScans"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        public bool IncludePdfBookmarks {
+            get {
+                return ((bool)(this["IncludePdfBookmarks"]));
+            }
+            set {
+                this["IncludePdfBookmarks"] = value;
             }
         }
     }

@@ -26,6 +26,10 @@ namespace Escher
         public Main()
         {
             InitializeComponent();
+
+            this.FormClosing += new FormClosingEventHandler((sender, e) => MainClosing());
+
+            this.editToolStripMenuItem.Click += new EventHandler((sender, e) => Edit());
         }
 
         private void Main_Load(object sender, EventArgs e)
@@ -35,42 +39,98 @@ namespace Escher
 
         private void Main_Load()
         {
-            bool exists = System.Diagnostics.Process.GetProcessesByName(System.IO.Path.GetFileNameWithoutExtension(System.Reflection.Assembly.GetEntryAssembly().Location)).Count() > 1;
-
-            if (exists)
+            try
             {
-                App.SetException(string.Format("The {0} application is already running and can not run more than once at the same time.", App.GetName()));
+                #region Restore Window State
+                if (Properties.Settings.Default.MainSize.Width == 0)
+                {
+                    Properties.Settings.Default.Upgrade();
+                }
+                if (Properties.Settings.Default.MainSize.Width == 0 || Properties.Settings.Default.MainSize.Height == 0)
+                {
+                    this.Location = new Point(10, 10);
+                    this.Size = new Size(512, 512);
+                }
+                else
+                {
+                    this.WindowState = Properties.Settings.Default.MainState;
+
+                    if (this.WindowState == FormWindowState.Minimized)
+                    {
+                        this.WindowState = FormWindowState.Normal;
+                    }
+
+                    this.Location = Properties.Settings.Default.MainLocation;
+                    this.Size = Properties.Settings.Default.MainSize;
+                }
+                #endregion
+
+                bool exists = System.Diagnostics.Process.GetProcessesByName(System.IO.Path.GetFileNameWithoutExtension(System.Reflection.Assembly.GetEntryAssembly().Location)).Count() > 1;
+
+                if (exists)
+                {
+                    App.SetException(string.Format("The {0} application is already running and can not run more than once at the same time.", App.GetName()));
+                }
+
+                string designsFolder = App.GetSetting("DesignsFolder");
+
+                if (!Directory.Exists(designsFolder))
+                {
+                    Directory.CreateDirectory(designsFolder);
+                }
+
+                string designsRollbackFolder = App.GetSetting("DesignsRollbackFolder");
+
+                if (!Directory.Exists(designsRollbackFolder))
+                {
+                    Directory.CreateDirectory(designsRollbackFolder);
+                }
+
+                refreshPageFormatsToolStripMenuItem_Click(null, null);
+
+                SetMenus(enabled: false);
+
+                designsToolStripMenuItem.Visible = false;
+
+                refreshDesignsToolStripMenuItem_Click(null, null);
+
+                webBrowser.Navigating += WebBrowser_Navigating;
+                webBrowser.IsWebBrowserContextMenuEnabled = false;
+                webBrowser.AllowWebBrowserDrop = false;
+
+                PageSetup.Load();
+
+                LoadDesign("_ Test");
             }
-
-            string designsFolder = App.GetSetting("DesignsFolder");
-
-            if (!Directory.Exists(designsFolder))
+            catch (Exception exception)
             {
-                Directory.CreateDirectory(designsFolder);
+                App.SetException(exception.Message);
             }
+        }
 
-            string designsRollbackFolder = App.GetSetting("DesignsRollbackFolder");
-
-            if (!Directory.Exists(designsRollbackFolder))
+        private void MainClosing()
+        {
+            #region Save Window State
+            Properties.Settings.Default.MainState = this.WindowState;
+            if (this.WindowState == FormWindowState.Normal)
             {
-                Directory.CreateDirectory(designsRollbackFolder);
+                Properties.Settings.Default.MainLocation = this.Location;
+                Properties.Settings.Default.MainSize = this.Size;
             }
+            else
+            {
+                Properties.Settings.Default.MainLocation = this.RestoreBounds.Location;
+                Properties.Settings.Default.MainSize = this.RestoreBounds.Size;
+            }
+            Properties.Settings.Default.Save();
+            #endregion
+        }
 
-            refreshPageFormatsToolStripMenuItem_Click(null, null);
-
-            SetMenus(enabled: false);
-
-            designsToolStripMenuItem.Visible = false;
-
-            refreshDesignsToolStripMenuItem_Click(null, null);
-
-            webBrowser.Navigating += WebBrowser_Navigating;
-            webBrowser.IsWebBrowserContextMenuEnabled = false;
-            webBrowser.AllowWebBrowserDrop = false;
-
-            PageSetup.Load();
-
-            LoadDesign("_ Test");
+        private void Edit()
+        {
+            editor.Show();
+            editor.Invalidate();
+            editor.Activate();
         }
 
         private void refreshDesignsToolStripMenuItem_Click(object sender, EventArgs eventArgs)

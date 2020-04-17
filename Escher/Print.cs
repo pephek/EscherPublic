@@ -17,19 +17,14 @@ namespace Escher
         public Print()
         {
             InitializeComponent();
+
+            this.Load += new EventHandler((sender, e) => PrintLoad());
+            this.Shown += new EventHandler((sender, e) => buttonOk.Focus());
+
+            buttonOk.Click += new EventHandler((sender, e) => SaveAndClose());
         }
 
-        private void Print_Load(object sender, EventArgs e)
-        {
-            Print_Load();
-        }
-
-        private void Print_Shown(object sender, EventArgs e)
-        {
-            buttonOk.Focus();
-        }
-
-        private void Print_Load()
+        private void PrintLoad()
         {
             this.Text = App.GetName() + " · Print " + (printMode == PrintMode.ToScreen ? "Preview" : "Document");
 
@@ -111,46 +106,50 @@ namespace Escher
             checkBoxIncludePdfBookmarks.Checked = pageSetup.IncludePdfBookmarks;
         }
 
-        private void buttonOk_Click(object sender, EventArgs e)
+        private void SaveAndClose()
         {
             // Format
 
-            App.SetSetting("Print.Format", comboBoxFormat.Text);
-            App.SetSetting("Print.IncludeMarginForPunchHoles", checkBoxIncludeMarginForPunchHoles.Checked);
+            Properties.Settings.Default.Paper = comboBoxFormat.Text;
+            Properties.Settings.Default.IncludeMarginForPunchHoles = checkBoxIncludeMarginForPunchHoles.Checked;
 
             // Stamps Options
 
-            App.SetSetting("Print.IncludeImage", checkBoxIncludeImage.Checked);
-            App.SetSetting("Print.IncludeNumber", checkBoxIncludeNumber.Checked);
-            App.SetSetting("Print.IncludeValue", checkBoxIncludeValue.Checked);
+            Properties.Settings.Default.IncludeImage = checkBoxIncludeImage.Checked;
+            Properties.Settings.Default.IncludeNumber = checkBoxIncludeNumber.Checked;
+            Properties.Settings.Default.IncludeValueAndColor = checkBoxIncludeValue.Checked;
 
             // Frame Options
 
-            App.SetSetting("Print.FrameStyle", (radioButtonThinSolid.Checked ? FrameStyle.ThinSolid : (radioButtonThick.Checked ? FrameStyle.Thick : FrameStyle.ThinDotted)).ToString());
+            Properties.Settings.Default.FrameStyle = (radioButtonThinSolid.Checked ? FrameStyle.ThinSolid : (radioButtonThick.Checked ? FrameStyle.Thick : FrameStyle.ThinDotted));
 
             // Color Options
 
-            App.SetSetting("Print.ColorStyle", (radioButtonGreyscale.Checked ? ColorStyle.Greyscale  : ColorStyle.Color).ToString());
+            Properties.Settings.Default.ColorStyle = (radioButtonGreyscale.Checked ? ColorStyle.Greyscale : ColorStyle.Color);
 
             // Font Options
 
-            App.SetSetting("Print.FontSize", (radioButtonSmall.Checked ? FontSize.Small : (radioButtonMedium.Checked ? FontSize.Medium : FontSize.Large)).ToString());
+            Properties.Settings.Default.FontSize = (radioButtonSmall.Checked ? FontSize.Small : (radioButtonMedium.Checked ? FontSize.Medium : FontSize.Large));
 
             // Page Options
 
-            App.SetSetting("Print.IncludeBorder", checkBoxIncludeBorder.Checked);
-            App.SetSetting("Print.IncludeTitle", checkBoxIncludeTitle.Checked);
+            Properties.Settings.Default.IncludeBorder = checkBoxIncludeBorder.Checked;
+            Properties.Settings.Default.IncludeTitle = checkBoxIncludeTitle.Checked;
 
             // Catalog Options
 
-            App.SetSetting("Print.Catalog", comboBoxCatalog.Text);
-            App.SetSetting("Print.AppendCatalog", checkBoxAppendCatalog.Checked);
+            Properties.Settings.Default.Catalog = Catalogs.Convert(comboBoxCatalog.Text);
+            Properties.Settings.Default.AppendCatalog = checkBoxAppendCatalog.Checked;
 
             // Album Options
 
-            App.SetSetting("Print.IncludeSamplePagesOnly", checkBoxIncludeSamplePagesOnly.Checked);
-            App.SetSetting("Print.IncludeHtmlScans", checkBoxIncludeHtmlScans.Checked);
-            App.SetSetting("Print.IncludePdfBookmarks", checkBoxIncludePdfBookmarks.Checked);
+            Properties.Settings.Default.IncludeSamplePagesOnly = checkBoxIncludeSamplePagesOnly.Checked;
+            Properties.Settings.Default.IncludeHtmlScans = checkBoxIncludeHtmlScans.Checked;
+            Properties.Settings.Default.IncludePdfBookmarks = checkBoxIncludePdfBookmarks.Checked;
+
+            // Save settings
+
+            Properties.Settings.Default.Save();
 
             // Reload
 

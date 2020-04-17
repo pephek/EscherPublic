@@ -410,7 +410,6 @@
             this.buttonOk.TabIndex = 8;
             this.buttonOk.Text = "OK";
             this.buttonOk.UseVisualStyleBackColor = true;
-            this.buttonOk.Click += new System.EventHandler(this.buttonOk_Click);
             // 
             // buttonCancel
             // 
@@ -448,8 +447,6 @@
             this.MinimizeBox = false;
             this.Name = "Print";
             this.Text = "Escher - Preview";
-            this.Load += new System.EventHandler(this.Print_Load);
-            this.Shown += new System.EventHandler(this.Print_Shown);
             this.groupBoxFormat.ResumeLayout(false);
             this.groupBoxFormat.PerformLayout();
             this.groupBoxStampOptions.ResumeLayout(false);

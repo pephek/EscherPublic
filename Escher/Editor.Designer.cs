@@ -29,32 +29,47 @@
         private void InitializeComponent()
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Editor));
-            this.rtfEditor = new System.Windows.Forms.RichTextBox();
+            this.design = new System.Windows.Forms.RichTextBox();
+            this.error = new System.Windows.Forms.StatusStrip();
             this.SuspendLayout();
             // 
-            // rtfEditor
+            // design
             // 
-            this.rtfEditor.Location = new System.Drawing.Point(28, 121);
-            this.rtfEditor.Name = "rtfEditor";
-            this.rtfEditor.Size = new System.Drawing.Size(534, 243);
-            this.rtfEditor.TabIndex = 0;
-            this.rtfEditor.Text = "";
+            this.design.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.design.Font = new System.Drawing.Font("Courier New", 7.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.design.Location = new System.Drawing.Point(0, 0);
+            this.design.Name = "design";
+            this.design.Size = new System.Drawing.Size(800, 450);
+            this.design.TabIndex = 0;
+            this.design.Text = "";
+            // 
+            // error
+            // 
+            this.error.ImageScalingSize = new System.Drawing.Size(20, 20);
+            this.error.Location = new System.Drawing.Point(0, 428);
+            this.error.Name = "error";
+            this.error.Size = new System.Drawing.Size(800, 22);
+            this.error.TabIndex = 1;
+            this.error.Text = "statusStrip1";
             // 
             // Editor
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(800, 450);
-            this.Controls.Add(this.rtfEditor);
+            this.Controls.Add(this.error);
+            this.Controls.Add(this.design);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "Editor";
             this.Text = "Editor";
             this.ResumeLayout(false);
+            this.PerformLayout();
 
         }
 
         #endregion
 
-        private System.Windows.Forms.RichTextBox rtfEditor;
+        private System.Windows.Forms.RichTextBox design;
+        private System.Windows.Forms.StatusStrip error;
     }
 }

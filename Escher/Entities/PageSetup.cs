@@ -28,21 +28,21 @@ namespace Escher
 
         public static void Load()
         {
-            pageSetup.PageFormat = PageFormats.Get(App.GetSetting("Print.Format", "A4"));
-            pageSetup.IncludeMarginForPunchHoles = App.GetSetting("Print.IncludeMarginForPunchHoles", false);
-            pageSetup.IncludeImage = App.GetSetting("Print.IncludeImage", true);
-            pageSetup.IncludeNumber = App.GetSetting("Print.IncludeNumber", true);
-            pageSetup.IncludeValueAndColor = App.GetSetting("Print.IncludeValueAndColor", true);
-            pageSetup.FrameStyle = App.GetSetting("Print.FrameStyle", FrameStyle.Thick);
-            pageSetup.ColorStyle = App.GetSetting("Print.ColorStyle", ColorStyle.Color);
-            pageSetup.FontSize = App.GetSetting("Print.FontSize", FontSize.Small);
-            pageSetup.IncludeBorder = App.GetSetting("Print.IncludeBorder", true);
-            pageSetup.IncludeTitle = App.GetSetting("Print.IncludeTitle", true);
-            pageSetup.Catalog = Catalogs.Convert(App.GetSetting("Print.Catalog", Catalogs.Get()[0]));
-            pageSetup.AppendCatalog = App.GetSetting("Print.AppendCatalog", false);
-            pageSetup.IncludeSamplePagesOnly = App.GetSetting("Print.IncludeSamplePagesOnly", false);
-            pageSetup.IncludeHtmlScans = App.GetSetting("Print.IncludeHtmlScans", false);
-            pageSetup.IncludePdfBookmarks = App.GetSetting("Print.IncludePdfBookmarks", true);
+            pageSetup.PageFormat = PageFormats.Get(Properties.Settings.Default.Paper);
+            pageSetup.IncludeMarginForPunchHoles = Properties.Settings.Default.IncludeMarginForPunchHoles;
+            pageSetup.IncludeImage = Properties.Settings.Default.IncludeImage;
+            pageSetup.IncludeNumber = Properties.Settings.Default.IncludeNumber;
+            pageSetup.IncludeValueAndColor = Properties.Settings.Default.IncludeValueAndColor;
+            pageSetup.FrameStyle = Properties.Settings.Default.FrameStyle;
+            pageSetup.ColorStyle = Properties.Settings.Default.ColorStyle;
+            pageSetup.FontSize = Properties.Settings.Default.FontSize;
+            pageSetup.IncludeBorder = Properties.Settings.Default.IncludeBorder;
+            pageSetup.IncludeTitle = Properties.Settings.Default.IncludeTitle;
+            pageSetup.Catalog = Properties.Settings.Default.Catalog;
+            pageSetup.AppendCatalog = Properties.Settings.Default.AppendCatalog;
+            pageSetup.IncludeSamplePagesOnly = Properties.Settings.Default.IncludeSamplePagesOnly;
+            pageSetup.IncludeHtmlScans = Properties.Settings.Default.IncludeHtmlScans;
+            pageSetup.IncludePdfBookmarks = Properties.Settings.Default.IncludePdfBookmarks;
         }
 
         public static PageSetup Get()

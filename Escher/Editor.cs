@@ -15,16 +15,18 @@ namespace Escher
         public Editor()
         {
             InitializeComponent();
+
+            this.FormClosing += new FormClosingEventHandler((sender, e) => { e.Cancel = true; this.Hide(); });
         }
 
         public void SetDesign(string design)
         {
-            rtfEditor.LoadFile(design, RichTextBoxStreamType.PlainText);
+            this.design.LoadFile(design, RichTextBoxStreamType.PlainText);
         }
 
         public string GetDesign()
         {
-            return rtfEditor.Text;
+            return design.Text;
         }
     }
 }
