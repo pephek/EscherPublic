@@ -39,7 +39,14 @@ namespace Escher
 
             if (this.Html != "")
             {
-                pageTitle = this.Html + " · (" + this.Comment + ")";
+                if (this.Comment == "&nbsp;")
+                {
+                    pageTitle = this.Html;
+                }
+                else
+                {
+                    pageTitle = this.Html + " · (" + this.Comment + ")";
+                }
             }
             else
             {

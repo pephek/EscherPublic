@@ -272,7 +272,7 @@ namespace Escher
                                 y = top + 4;
                                 w = w - 8;
                                 h = height - 8;
-                                if (appearance == Appearance.TeteBecheHorizontal || appearance == Appearance.TeteBecheHorizontalGutter)
+                                if (appearance == Appearance.TeteBecheHorizontal)
                                 {
                                     if (w < h)
                                     {
@@ -281,6 +281,17 @@ namespace Escher
                                     else
                                     {
                                         rotateFlipType = (i == 0 ? RotateFlipType.Rotate270FlipNone : RotateFlipType.Rotate90FlipNone);
+                                    }
+                                }
+                                if (appearance == Appearance.TeteBecheHorizontalGutter)
+                                {
+                                    if (w < h)
+                                    {
+                                        rotateFlipType = (i == 0 ? RotateFlipType.RotateNoneFlipNone : RotateFlipType.Rotate180FlipNone);
+                                    }
+                                    else
+                                    {
+                                        rotateFlipType = (i == 0 ? RotateFlipType.Rotate90FlipNone : RotateFlipType.Rotate270FlipNone);
                                     }
                                 }
                                 if (i == 1 && (appearance == Appearance.TeteBecheHorizontalGutter || appearance == Appearance.HorizontalGutterPair))
