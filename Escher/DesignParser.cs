@@ -85,6 +85,19 @@ namespace Escher
                 error = e.Message;
             }
 
+            // The page number for Country, Section and Series is too low, increment them with 1
+            for (int i = 0; i < design.Count(); i++)
+            {
+                if (design[i].Class == Class.Country)
+                {
+                    int j = i;
+                    while (design[j].Class != Class.PageFeed)
+                    {
+                        design[j++].PageNumber++;
+                    }
+                }
+            }
+
             return design;
         }
 

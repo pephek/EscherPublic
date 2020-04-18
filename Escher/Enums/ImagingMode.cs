@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -22,12 +23,19 @@ namespace Escher
 
     public static class ImagingModeExtensions
     {
-        public static string Text(this ImagingMode imagingMode, string number = "", float scale = 1)
+        public static string Text(this ImagingMode imagingMode, string number = "", Image image = null, float scale = 1)
         {
             switch (imagingMode)
             {
                 case ImagingMode.None:
-                    return string.Format("Stamp Number = {0} · Scale = {1}%", number, (int)(100 * scale));
+                    if (image == null)
+                    {
+                        return string.Format("Stamp Number = {0} · Scale = {1}%", number, (int)(100 * scale));
+                    }
+                    else
+                    {
+                        return string.Format("Stamp Number = {0} ({1}×{2}) · Scale = {3}%", number, image.Width, image.Height, (int)(100 * scale));
+                    }
                 case ImagingMode.Rotate:
                     return "Rotate Image";
                 case ImagingMode.Crop:

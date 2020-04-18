@@ -210,7 +210,7 @@ namespace Escher
 
             this.mode = ImagingMode.None;
 
-            labelMode.Text = this.mode.Text(this.stamp.Number);
+            labelMode.Text = this.mode.Text(this.stamp.Number, pImage.Image);
 
             Repaint();
         }
@@ -562,7 +562,7 @@ namespace Escher
 
             this.mode = ImagingMode.None;
 
-            labelMode.Text = this.mode.Text(this.stamp.Number);
+            labelMode.Text = this.mode.Text(this.stamp.Number, pImage.Image);
 
             panelButtons.Visible = true;
             panelImaging.Visible = false;
