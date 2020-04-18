@@ -790,7 +790,7 @@ namespace Escher
                         if (hasDescriptions)
                         {
                             // Now move the y-position 1 millimeter down
-                            y += maxHeight + 1 - row[0].Vertical;
+                            y += maxHeight + 1; // - row[0].Vertical;
                         }
 
                         Debug.WriteLine(string.Format("y after descriptions = {0}", Math.Round(y, 2)));
@@ -834,6 +834,7 @@ namespace Escher
                                     switch (stamp.Shape)
                                     {
                                         case Shape.Triangle45:
+                                        case Shape.Triangle60:
                                             artifacts.AddCursor(x1, y1 + stamp.Height);
                                             artifacts.AddMove(stamp.Width, 0, stamp.FrameColor, setup.FrameStyle);
                                             artifacts.AddMove(-stamp.Width / 2, -stamp.Height, stamp.FrameColor, setup.FrameStyle);
@@ -917,7 +918,7 @@ namespace Escher
                         Debug.WriteLine(string.Format("Using maximum yMax = {0}", Math.Round(yMax, 2)));
 
                         // Set y to the maximum found
-                        y = yMax; // + 2;
+                        y = yMax + 2;
 
                         Debug.WriteLine(string.Format("y after values & colors = {0}", Math.Round(y, 2)));
 

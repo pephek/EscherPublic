@@ -400,10 +400,6 @@ namespace Escher
                                 case Appearance.ImperfBottom:
                                 case Appearance.ImperfLeft:
                                 case Appearance.ImperfRight:
-                                case Appearance.HorizontalGutterPair:
-                                case Appearance.TeteBecheHorizontalGutter:
-                                case Appearance.VerticalGutterPair:
-                                case Appearance.TeteBecheVerticalGutter:
                                 case Appearance.Proof:
                                 case Appearance.BandePublicitaire:
                                 case Appearance.PaireCarnet:
