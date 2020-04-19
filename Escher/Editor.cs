@@ -36,7 +36,7 @@ namespace Escher
         {
             InitializeComponent();
 
-            this.Load += new EventHandler((sender, e) => EditorLoad());
+            this.Load += new EventHandler((sender, e) => Initialize());
 
             this.menuPreview.Click += new EventHandler((sender, e) => PreviewDesign());
             this.menuValidate.Click += new EventHandler((sender, e) => ValidateDesign());
@@ -47,6 +47,8 @@ namespace Escher
             this.preview = preview;
 
             design.TextChanged += new EventHandler<TextChangedEventArgs>((sender, e) => Recolor(e));
+            design.KeyUp += new KeyEventHandler((sender, e) => Parse());
+            design.MouseUp += new MouseEventHandler((sender, e) => Parse());
         }
 
         public void SetDesign(string designName, Action<string> reopen)
@@ -93,7 +95,7 @@ namespace Escher
             status.Refresh();
         }
 
-        private void EditorLoad()
+        private void Initialize()
         {
             #region Restore Window State
             if (Properties.Settings.Default.EditorSize.Width == 0)
@@ -118,6 +120,23 @@ namespace Escher
                 this.Size = Properties.Settings.Default.EditorSize;
             }
             #endregion
+        }
+
+        private void Parse()
+        {
+            if (design.SelectionStart != 0)
+            {
+                string line = design.GetLineText(design.PositionToPlace(design.SelectionStart).iLine);
+
+                if (!validator.Parse(line, out string error))
+                {
+                    SetStatus(error, failure: true);
+                }
+                else
+                {
+                    SetStatus();
+                }
+            }
         }
 
         private void Recolor(TextChangedEventArgs e)

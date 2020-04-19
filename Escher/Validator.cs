@@ -99,6 +99,73 @@ namespace Escher
             return parsed;
         }
 
+        public bool Parse(string design, out string error)
+        {
+            bool parsed;
+
+            sCode = (design + cEndOfFile).ToCharArray();
+            pCode = 0;
+            nCode = 0;
+            eCode = "";
+            bCode = false;
+            lCode = sCode.Length;
+
+            ReadBlanks();
+
+            if (NextChar() == cEndOfFile || NextChar() == cSingleQuote)
+            {
+                parsed = true;
+            }
+            else
+            {
+                switch (NextKeyWord())
+                {
+                    case "Country":
+                        parsed = ParseCountry();
+                        break;
+                    case "Design":
+                        parsed = ParseDesign();
+                        break;
+                    case "Part":
+                        parsed = ParsePart();
+                        break;
+                    case "Series":
+                        parsed = ParseSeries();
+                        break;
+                    case "Type":
+                        parsed = ParseType();
+                        break;
+                    case "PageFeed":
+                        parsed = ParsePageFeed();
+                        break;
+                    case "Varieties":
+                        parsed = ParseVarieties();
+                        break;
+                    case "Variety":
+                        parsed = ParseVariety();
+                        break;
+                    case "Description":
+                        parsed = ParseDescription();
+                        break;
+                    case "LineFeed":
+                        parsed = ParseLineFeed();
+                        break;
+                    case "End":
+                        parsed = ParseEnd();
+                        break;
+                    case "Stamp":
+                        parsed = ParseStamp();
+                        break;
+                    default:
+                        parsed = SetInvalidAttribute(NextKeyWord());
+                        break;
+                }
+            }
+
+            error = eCode;
+
+            return parsed;
+        }
         private void SetProgress()
         {
             if (progress != null)
@@ -922,6 +989,24 @@ namespace Escher
         private bool ParseLineFeed()
         {
             if (!GetKeyWord("LineFeed")) return false;
+
+            if (NextSeparator() == "|")
+            {
+                GetSeparator("|");
+
+                string nextKeyWord = NextKeyWord();
+
+                return SetInvalidAttribute(nextKeyWord);
+            }
+
+            return true;
+        }
+
+        /// <summary>
+        /// </summary>
+        private bool ParseEnd()
+        {
+            if (!GetKeyWord("End")) return false;
 
             if (NextSeparator() == "|")
             {
