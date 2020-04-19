@@ -66,7 +66,7 @@
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
             this.menuStrip1.Padding = new System.Windows.Forms.Padding(5, 2, 0, 2);
-            this.menuStrip1.Size = new System.Drawing.Size(837, 28);
+            this.menuStrip1.Size = new System.Drawing.Size(837, 30);
             this.menuStrip1.TabIndex = 0;
             this.menuStrip1.Text = "menuStrip1";
             // 
@@ -92,13 +92,13 @@
             this.experimentToolStripMenuItem});
             this.designToolStripMenuItem.Name = "designToolStripMenuItem";
             this.designToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Alt | System.Windows.Forms.Keys.D)));
-            this.designToolStripMenuItem.Size = new System.Drawing.Size(69, 24);
+            this.designToolStripMenuItem.Size = new System.Drawing.Size(69, 26);
             this.designToolStripMenuItem.Text = "Design";
             // 
             // editToolStripMenuItem
             // 
             this.editToolStripMenuItem.Name = "editToolStripMenuItem";
-            this.editToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.E)));
+            this.editToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Alt | System.Windows.Forms.Keys.E)));
             this.editToolStripMenuItem.Size = new System.Drawing.Size(283, 26);
             this.editToolStripMenuItem.Text = "Edit";
             // 
@@ -208,8 +208,8 @@
             // designsToolStripMenuItem
             // 
             this.designsToolStripMenuItem.Name = "designsToolStripMenuItem";
-            this.designsToolStripMenuItem.Size = new System.Drawing.Size(75, 24);
-            this.designsToolStripMenuItem.Text = "Designs";
+            this.designsToolStripMenuItem.Size = new System.Drawing.Size(59, 26);
+            this.designsToolStripMenuItem.Text = "Open";
             // 
             // helpToolStripMenuItem
             // 
@@ -217,7 +217,7 @@
             this.aboutToolStripMenuItem});
             this.helpToolStripMenuItem.Name = "helpToolStripMenuItem";
             this.helpToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Alt | System.Windows.Forms.Keys.H)));
-            this.helpToolStripMenuItem.Size = new System.Drawing.Size(55, 24);
+            this.helpToolStripMenuItem.Size = new System.Drawing.Size(55, 26);
             this.helpToolStripMenuItem.Text = "Help";
             // 
             // aboutToolStripMenuItem
@@ -230,11 +230,11 @@
             // webBrowser
             // 
             this.webBrowser.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.webBrowser.Location = new System.Drawing.Point(0, 28);
+            this.webBrowser.Location = new System.Drawing.Point(0, 30);
             this.webBrowser.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.webBrowser.MinimumSize = new System.Drawing.Size(20, 20);
             this.webBrowser.Name = "webBrowser";
-            this.webBrowser.Size = new System.Drawing.Size(837, 1271);
+            this.webBrowser.Size = new System.Drawing.Size(837, 1269);
             this.webBrowser.TabIndex = 1;
             this.webBrowser.PreviewKeyDown += new System.Windows.Forms.PreviewKeyDownEventHandler(this.webBrowser_PreviewKeyDown);
             // 

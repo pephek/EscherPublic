@@ -17,9 +17,9 @@ namespace Escher
 {
     public partial class Main : Form
     {
-        private readonly Validator validator = new Validator();
-        private readonly Editor editor = new Editor();
-        private readonly Preview preview = new Preview();
+        private readonly static Validator validator = new Validator();
+        private readonly static Preview preview = new Preview();
+        private readonly Editor editor = new Editor(validator, preview);
 
         private Design design;
 
@@ -100,9 +100,7 @@ namespace Escher
 
                 PageSetup.Load();
 
-                editor.SetValidator(validator);
-
-                LoadDesign("_ Test");
+                OpenDesign("_ Test");
             }
             catch (Exception exception)
             {
@@ -133,6 +131,7 @@ namespace Escher
             editor.Show();
             editor.Invalidate();
             editor.Activate();
+            editor.SetError();
         }
 
         private void refreshDesignsToolStripMenuItem_Click(object sender, EventArgs eventArgs)
@@ -176,7 +175,7 @@ namespace Escher
 
                         item.DropDownItems.Add(itemDesign);
 
-                        itemDesign.Click += (s, e) => LoadDesign(design);
+                        itemDesign.Click += (s, e) => OpenDesign(design);
                     }
                 }
             }
@@ -337,7 +336,18 @@ namespace Escher
             findAlbumNumberToolStripMenuItem.Enabled = enabled;
         }
 
-        private void LoadDesign(string designName)
+        private void Reopen(string designText)
+        {
+            DesignParser designParser = new DesignParser();
+
+            this.design = designParser.Parse(designText, SetProgress, out string error);
+
+            webBrowser.DocumentText = HtmlHelper.GetDesignInHtml(design);
+
+            SetMenus(enabled: true);
+        }
+
+        private void OpenDesign(string designName)
         {
             bool retry = true;
 
@@ -353,9 +363,9 @@ namespace Escher
 
                     // webBrowser.Navigate("about:blank");
 
-                    editor.SetDesign(designName);
+                    editor.SetDesign(designName, Reopen);
 
-                    if (this.validator.Parse(editor.GetDesign(), SetProgress, out error))
+                    if (validator.Parse(editor.GetDesign(), SetProgress, out error))
                     {
                         DesignParser designParser = new DesignParser();
 

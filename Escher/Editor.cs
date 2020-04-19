@@ -24,12 +24,15 @@ namespace Escher
         private readonly TextStyle enumStyle = new TextStyle(Brushes.SteelBlue, null, FontStyle.Regular);
 
         private Validator validator;
+        private Preview preview;
+
+        private Action<string> reopen;
 
         private string designName;
 
         private bool isDirty;
 
-        public Editor()
+        public Editor(Validator validator, Preview preview)
         {
             InitializeComponent();
 
@@ -40,28 +43,30 @@ namespace Escher
             this.menuSave.Click += new EventHandler((sender, e) => SaveDesign());
             this.menuExit.Click += new EventHandler((sender, e) => ExitDesign());
 
+            this.validator = validator;
+            this.preview = preview;
+
             design.TextChanged += new EventHandler<TextChangedEventArgs>((sender, e) => Recolor(e));
         }
 
-        public void SetValidator(Validator validator)
-        {
-            this.validator = validator;
-        }
-
-        public void SetDesign(string designName)
+        public void SetDesign(string designName, Action<string> reopen)
         {
             this.designName = designName;
 
-            this.Text = string.Format("Editing {0}", designName);
+            this.reopen = reopen;
 
-            string designPath = string.Format("{0}\\{1}.cdb", App.GetSetting("DesignsFolder"), designName);
+            string designPath = string.Format("{0}\\{1}.cdb", App.GetSetting("DesignsFolder"), this.designName);
 
             design.Text = File.ReadAllText(designPath, Encoding.GetEncoding("iso-8859-1"));
 
             this.isDirty = false;
+
+            menuSave.Enabled = false;
+
+            this.Text = string.Format("Editing {0}", designName);
         }
 
-        public void SetError(string error)
+        public void SetError(string error = null)
         {
             if (!string.IsNullOrEmpty(error))
             {
@@ -70,11 +75,10 @@ namespace Escher
                 design.DoSelectionVisible();
                 SetStatus(error, failure: true);
             }
-        }
-
-        public string GetDesignName()
-        {
-            return this.designName;
+            else
+            {
+                SetStatus();
+            }
         }
 
         public string GetDesign()
@@ -82,7 +86,7 @@ namespace Escher
             return design.Text;
         }
 
-        private void SetStatus(string text, bool success = false, bool failure = false)
+        private void SetStatus(string text = "", bool success = false, bool failure = false)
         {
             status.ForeColor = (success ? Color.Green : (failure ? Color.Red : Color.Black));
             status.Text = text;
@@ -135,6 +139,13 @@ namespace Escher
             e.ChangedRange.SetStyle(veryImportantStyle, @":=VB|:=C#");
 
             this.isDirty = true;
+
+            menuSave.Enabled = true;
+
+            if (!this.Text.EndsWith("*"))
+            {
+                this.Text += "*";
+            }
         }
 
         private void PreviewDesign()
@@ -148,23 +159,57 @@ namespace Escher
 
             Thread.Sleep(100);
 
-            if (validator.Parse(design.Text, null, out string error))
+            if (!validator.Parse(design.Text, null, out string error))
             {
-                SetStatus("Valid design", success: true);
+                SetError(error);
             }
             else
             {
-                SetStatus(error, failure: true);
+                SetStatus("Valid design", success: true);
             }
         }
 
         private void SaveDesign()
         {
+            SetStatus("Validating design...");
 
+            Thread.Sleep(100);
+
+            if (!validator.Parse(design.Text, null, out string error))
+            {
+                SetError(error);
+            }
+            else
+            {
+                SetStatus();
+
+                string designPath = string.Format("{0}\\{1}.cdb", App.GetSetting("DesignsFolder"), this.designName);
+                string desigRollbackPath = string.Format("{0}\\{1}.cdb", App.GetSetting("DesignsRollbackFolder"), this.designName);
+
+                File.Copy(designPath, desigRollbackPath, overwrite: true);
+
+                File.WriteAllText(designPath, design.Text, Encoding.GetEncoding("iso-8859-1"));
+
+                this.isDirty = false;
+
+                menuSave.Enabled = false;
+
+                this.Text = string.Format("Editing {0}", designName);
+
+                this.reopen(design.Text);
+            }
         }
 
         private void ExitDesign()
         {
+            if (this.isDirty)
+            {
+                if (MessageBox.Show("The design has unsaved changed, do you want to discard the changes?", App.GetName() + " · Discard changes", MessageBoxButtons.YesNo, MessageBoxIcon.Question, MessageBoxDefaultButton.Button2) == DialogResult.No)
+                {
+                    return;
+                }
+            }
+
             #region Save Window State
             Properties.Settings.Default.EditorState = this.WindowState;
             if (this.WindowState == FormWindowState.Normal)
