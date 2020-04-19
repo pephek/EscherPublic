@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Escher
 {
-    public class DesignValidator
+    public class Validator
     {
         private const char cEndOfFile = '\0';
         private const char cSemiColon = ':';
@@ -35,13 +35,26 @@ namespace Escher
         private Action<int> progress;
         private int previousProgress;
 
+        public int SelectionStart()
+        {
+            return this.pCode;
+        }
+
+        public int SelectionLength()
+        {
+            return this.nCode;
+        }
+
         public bool Parse(string design, Action<int> setProgress, out string error)
         {
             bool parsed;
 
             progress = setProgress;
             previousProgress = 0;
-            setProgress(0);
+            if (progress != null)
+            {
+                setProgress(0);
+            }
 
             sCode = (design + cEndOfFile).ToCharArray();
             pCode = 0;

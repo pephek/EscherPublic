@@ -17,14 +17,11 @@ namespace Escher
 {
     public partial class Main : Form
     {
-        private Editor editor = new Editor();
-
-        private Preview preview = new Preview();
+        private readonly Validator validator = new Validator();
+        private readonly Editor editor = new Editor();
+        private readonly Preview preview = new Preview();
 
         private Design design;
-
-        private string designFile;
-        private string designText;
 
         public Main()
         {
@@ -102,6 +99,8 @@ namespace Escher
                 webBrowser.AllowWebBrowserDrop = false;
 
                 PageSetup.Load();
+
+                editor.SetValidator(validator);
 
                 LoadDesign("_ Test");
             }
@@ -338,7 +337,7 @@ namespace Escher
             findAlbumNumberToolStripMenuItem.Enabled = enabled;
         }
 
-        private void LoadDesign(string designFile)
+        private void LoadDesign(string designName)
         {
             bool retry = true;
 
@@ -349,40 +348,30 @@ namespace Escher
                 try
                 {
                     string error = null;
-                    string designPath;
 
                     SetMenus(enabled: false);
 
                     // webBrowser.Navigate("about:blank");
 
-                    designPath = App.GetSetting("DesignsFolder") + "\\" + designFile + ".cdb";
+                    editor.SetDesign(designName);
 
-                    this.designText = File.ReadAllText(designPath, Encoding.GetEncoding("iso-8859-1"));
-
-                    DesignValidator designValidator = new DesignValidator();
-
-                    if (designValidator.Parse(this.designText, SetProgress, out error))
+                    if (this.validator.Parse(editor.GetDesign(), SetProgress, out error))
                     {
                         DesignParser designParser = new DesignParser();
 
-                        this.design = designParser.Parse(this.designText, SetProgress, out error);
+                        this.design = designParser.Parse(editor.GetDesign(), SetProgress, out error);
                     }
 
                     if (!string.IsNullOrEmpty(error))
                     {
-                        if (MessageBox.Show(string.Format("Invalid design '{0}': {1}\n\nDo you want to edit the design?", designFile, error), App.GetName() + " · Validating Design", MessageBoxButtons.YesNo, MessageBoxIcon.Question, MessageBoxDefaultButton.Button1) == DialogResult.Yes)
+                        if (MessageBox.Show(string.Format("Invalid design '{0}': {1}\n\nDo you want to edit the design?", designName, error), App.GetName() + " · Validating Design", MessageBoxButtons.YesNo, MessageBoxIcon.Question, MessageBoxDefaultButton.Button1) == DialogResult.Yes)
                         {
-                            editor.SetDesign(this.designText);
-
-                            Edit();
+                            editor.Show();
+                            editor.SetError(error);
                         }
                     }
                     else
                     {
-                        editor.SetDesign(this.designText);
-
-                        this.designFile = designPath;
-
                         webBrowser.DocumentText = HtmlHelper.GetDesignInHtml(design);
 
                         SetMenus(enabled: true);
@@ -390,7 +379,7 @@ namespace Escher
                 }
                 catch (Exception e)
                 {
-                    if (MessageBox.Show(string.Format("Exception reading design '{0}':\n\n{1}", designFile, e.Message), App.GetName() + " · Exception", MessageBoxButtons.RetryCancel, MessageBoxIcon.Exclamation, MessageBoxDefaultButton.Button1) == DialogResult.Cancel)
+                    if (MessageBox.Show(string.Format("Exception reading design '{0}':\n\n{1}", designName, e.Message), App.GetName() + " · Exception", MessageBoxButtons.RetryCancel, MessageBoxIcon.Exclamation, MessageBoxDefaultButton.Button1) == DialogResult.Cancel)
                     {
                         retry = false;
                     }

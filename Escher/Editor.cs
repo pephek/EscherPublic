@@ -4,9 +4,11 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Drawing;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
@@ -14,35 +16,77 @@ namespace Escher
 {
     public partial class Editor : Form
     {
-        readonly TextStyle keywordStyle = new TextStyle(Brushes.Blue, null, FontStyle.Regular);
-        readonly TextStyle separatorStyle = new TextStyle(Brushes.Gray, null, FontStyle.Regular);
-        readonly TextStyle commentStyle = new TextStyle(Brushes.Green, null, FontStyle.Italic);
-        readonly TextStyle feedStyle = new TextStyle(Brushes.Maroon, null, FontStyle.Bold);
-        readonly TextStyle veryImportantStyle = new TextStyle(Brushes.Red, null, FontStyle.Bold);
-        readonly TextStyle enumStyle = new TextStyle(Brushes.SteelBlue, null, FontStyle.Regular);
+        private readonly TextStyle keywordStyle = new TextStyle(Brushes.Blue, null, FontStyle.Regular);
+        private readonly TextStyle separatorStyle = new TextStyle(Brushes.Gray, null, FontStyle.Regular);
+        private readonly TextStyle commentStyle = new TextStyle(Brushes.Green, null, FontStyle.Italic);
+        private readonly TextStyle feedStyle = new TextStyle(Brushes.Maroon, null, FontStyle.Bold);
+        private readonly TextStyle veryImportantStyle = new TextStyle(Brushes.Red, null, FontStyle.Bold);
+        private readonly TextStyle enumStyle = new TextStyle(Brushes.SteelBlue, null, FontStyle.Regular);
 
-        bool isDirty;
+        private Validator validator;
+
+        private string designName;
+
+        private bool isDirty;
 
         public Editor()
         {
             InitializeComponent();
 
             this.Load += new EventHandler((sender, e) => EditorLoad());
-            this.FormClosing += new FormClosingEventHandler((sender, e) => EditorClose(e));
+
+            this.menuPreview.Click += new EventHandler((sender, e) => PreviewDesign());
+            this.menuValidate.Click += new EventHandler((sender, e) => ValidateDesign());
+            this.menuSave.Click += new EventHandler((sender, e) => SaveDesign());
+            this.menuExit.Click += new EventHandler((sender, e) => ExitDesign());
 
             design.TextChanged += new EventHandler<TextChangedEventArgs>((sender, e) => Recolor(e));
         }
 
-        public void SetDesign(string designText)
+        public void SetValidator(Validator validator)
         {
-            design.Text = designText;
+            this.validator = validator;
+        }
+
+        public void SetDesign(string designName)
+        {
+            this.designName = designName;
+
+            this.Text = string.Format("Editing {0}", designName);
+
+            string designPath = string.Format("{0}\\{1}.cdb", App.GetSetting("DesignsFolder"), designName);
+
+            design.Text = File.ReadAllText(designPath, Encoding.GetEncoding("iso-8859-1"));
 
             this.isDirty = false;
+        }
+
+        public void SetError(string error)
+        {
+            if (!string.IsNullOrEmpty(error))
+            {
+                design.SelectionStart = validator.SelectionStart();
+                design.SelectionLength = validator.SelectionLength();
+                design.DoSelectionVisible();
+                SetStatus(error, failure: true);
+            }
+        }
+
+        public string GetDesignName()
+        {
+            return this.designName;
         }
 
         public string GetDesign()
         {
             return design.Text;
+        }
+
+        private void SetStatus(string text, bool success = false, bool failure = false)
+        {
+            status.ForeColor = (success ? Color.Green : (failure ? Color.Red : Color.Black));
+            status.Text = text;
+            status.Refresh();
         }
 
         private void EditorLoad()
@@ -72,28 +116,6 @@ namespace Escher
             #endregion
         }
 
-        private void EditorClose(FormClosingEventArgs e)
-        {
-            #region Save Window State
-            Properties.Settings.Default.EditorState = this.WindowState;
-            if (this.WindowState == FormWindowState.Normal)
-            {
-                Properties.Settings.Default.EditorLocation = this.Location;
-                Properties.Settings.Default.EditorSize = this.Size;
-            }
-            else
-            {
-                Properties.Settings.Default.EditorLocation = this.RestoreBounds.Location;
-                Properties.Settings.Default.EditorSize = this.RestoreBounds.Size;
-            }
-            Properties.Settings.Default.Save();
-            #endregion
-
-            e.Cancel = true;
-
-            this.Hide();
-        }
-
         private void Recolor(TextChangedEventArgs e)
         {
             e.ChangedRange.ClearStyle(keywordStyle, separatorStyle, commentStyle, veryImportantStyle, enumStyle);
@@ -113,6 +135,52 @@ namespace Escher
             e.ChangedRange.SetStyle(veryImportantStyle, @":=VB|:=C#");
 
             this.isDirty = true;
+        }
+
+        private void PreviewDesign()
+        {
+
+        }
+
+        private void ValidateDesign()
+        {
+            SetStatus("Validating design...");
+
+            Thread.Sleep(100);
+
+            if (validator.Parse(design.Text, null, out string error))
+            {
+                SetStatus("Valid design", success: true);
+            }
+            else
+            {
+                SetStatus(error, failure: true);
+            }
+        }
+
+        private void SaveDesign()
+        {
+
+        }
+
+        private void ExitDesign()
+        {
+            #region Save Window State
+            Properties.Settings.Default.EditorState = this.WindowState;
+            if (this.WindowState == FormWindowState.Normal)
+            {
+                Properties.Settings.Default.EditorLocation = this.Location;
+                Properties.Settings.Default.EditorSize = this.Size;
+            }
+            else
+            {
+                Properties.Settings.Default.EditorLocation = this.RestoreBounds.Location;
+                Properties.Settings.Default.EditorSize = this.RestoreBounds.Size;
+            }
+            Properties.Settings.Default.Save();
+            #endregion
+
+            this.Hide();
         }
     }
 }
