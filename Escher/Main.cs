@@ -23,6 +23,9 @@ namespace Escher
 
         private Design design;
 
+        private string designFile;
+        private string designText;
+
         public Main()
         {
             InitializeComponent();
@@ -337,35 +340,60 @@ namespace Escher
 
         private void LoadDesign(string designFile)
         {
-            string error;
+            bool retry = true;
 
-            SetMenus(enabled: false);
-
-            designFile = App.GetSetting("DesignsFolder") + "\\" + designFile + ".cdb";
-
-            this.editor.SetDesign(designFile);
-
-            DesignValidator designValidator = new DesignValidator();
-
-            if (!designValidator.Parse(this.editor.GetDesign(), SetProgress, out error))
+            while (retry)
             {
-                MessageBox.Show(string.Format("Invalid design: {0}", error), App.GetName(), MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
-            }
-            else
-            {
-                DesignParser designParser = new DesignParser();
+                retry = false;
 
-                design = designParser.Parse(this.editor.GetDesign(), SetProgress, out error);
-
-                if (!string.IsNullOrEmpty(error))
+                try
                 {
-                    MessageBox.Show(string.Format("Invalid design: {0}", error), App.GetName(), MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                    string error = null;
+                    string designPath;
+
+                    SetMenus(enabled: false);
+
+                    // webBrowser.Navigate("about:blank");
+
+                    designPath = App.GetSetting("DesignsFolder") + "\\" + designFile + ".cdb";
+
+                    this.designText = File.ReadAllText(designPath, Encoding.GetEncoding("iso-8859-1"));
+
+                    DesignValidator designValidator = new DesignValidator();
+
+                    if (designValidator.Parse(this.designText, SetProgress, out error))
+                    {
+                        DesignParser designParser = new DesignParser();
+
+                        this.design = designParser.Parse(this.designText, SetProgress, out error);
+                    }
+
+                    if (!string.IsNullOrEmpty(error))
+                    {
+                        if (MessageBox.Show(string.Format("Invalid design '{0}': {1}\n\nDo you want to edit the design?", designFile, error), App.GetName() + " · Validating Design", MessageBoxButtons.YesNo, MessageBoxIcon.Question, MessageBoxDefaultButton.Button1) == DialogResult.Yes)
+                        {
+                            editor.SetDesign(this.designText);
+
+                            Edit();
+                        }
+                    }
+                    else
+                    {
+                        editor.SetDesign(this.designText);
+
+                        this.designFile = designPath;
+
+                        webBrowser.DocumentText = HtmlHelper.GetDesignInHtml(design);
+
+                        SetMenus(enabled: true);
+                    }
                 }
-                else
+                catch (Exception e)
                 {
-                    webBrowser.DocumentText = HtmlHelper.GetDesignInHtml(design);
-
-                    SetMenus(enabled: true);
+                    if (MessageBox.Show(string.Format("Exception reading design '{0}':\n\n{1}", designFile, e.Message), App.GetName() + " · Exception", MessageBoxButtons.RetryCancel, MessageBoxIcon.Exclamation, MessageBoxDefaultButton.Button1) == DialogResult.Cancel)
+                    {
+                        retry = false;
+                    }
                 }
             }
         }

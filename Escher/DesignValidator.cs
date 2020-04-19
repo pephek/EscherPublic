@@ -50,26 +50,34 @@ namespace Escher
             bCode = false;
             lCode = sCode.Length;
 
-            if (!ParseLists())
+            if (design.Trim().Length == 0)
             {
+                eCode = "Design is empty";
                 parsed = false;
             }
             else
             {
-                if (NextChar() == cEndOfFile)
+                if (!ParseLists())
                 {
-                    parsed = true;
-                }
-                else if (NextKeyWord() == "End")
-                {
-                    GetKeyWord("End");
-                    parsed = true;
+                    parsed = false;
                 }
                 else
                 {
-                    nCode = NextKeyWord().Length;
-                    eCode = string.Format("Invalid attribute '{0}'", NextKeyWord());
-                    parsed = false;
+                    if (NextChar() == cEndOfFile)
+                    {
+                        parsed = true;
+                    }
+                    else if (NextKeyWord() == "End")
+                    {
+                        GetKeyWord("End");
+                        parsed = true;
+                    }
+                    else
+                    {
+                        nCode = NextKeyWord().Length;
+                        eCode = string.Format("Invalid attribute '{0}'", NextKeyWord());
+                        parsed = false;
+                    }
                 }
             }
 
