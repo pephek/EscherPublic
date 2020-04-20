@@ -198,18 +198,20 @@ namespace Escher
 
         private void Parse()
         {
-            if (design.SelectionStart != 0)
+            if (design.SelectionStart <= 0)
             {
-                string line = design.GetLineText(design.PositionToPlace(design.SelectionStart).iLine);
+                return;
+            }
 
-                if (!validator.Parse(line, out string error))
-                {
-                    SetStatus(error, failure: true);
-                }
-                else
-                {
-                    SetStatus();
-                }
+            string line = design.GetLineText(design.PositionToPlace(design.SelectionStart).iLine);
+
+            if (!validator.Parse(line, out string error))
+            {
+                SetStatus(error, failure: true);
+            }
+            else
+            {
+                SetStatus();
             }
         }
 
@@ -243,7 +245,49 @@ namespace Escher
 
         private void PreviewDesign()
         {
+            if (design.SelectionStart <= 0)
+            {
+                return;
+            }
 
+            DesignParser designParser = new DesignParser();
+
+            Design d = designParser.Parse(design.Text, null, out string error);
+
+            if (!string.IsNullOrEmpty(error))
+            {
+                SetStatus(error, failure: true);
+            }    
+            else
+            {
+                int pageNumber = 1;
+
+                int pageFeedIndex = design.Text.LastIndexOf("PageFeed", design.SelectionStart);
+
+                if (pageFeedIndex >= 0)
+                {
+                    string pageFeed = design.GetLineText(design.PositionToPlace(pageFeedIndex).iLine);
+
+                    string[] split = pageFeed.Split("PageNumber:=");
+
+                    if (split.Length > 1)
+                    {
+                        string albumNumber = split[1].Split(' ')[0];
+
+                        DesignEntry entry = d.FindAlbumNumber(albumNumber);
+
+                        if (entry != null)
+                        {
+                            pageNumber = entry.PageNumber;
+                        }
+                    }
+                }
+
+                preview.SetPreview(d, pageNumber: pageNumber, printMode: PrintMode.ToScreen, screenMode: ScreenMode.MatchScreenHeight);
+                preview.Invalidate();
+                preview.Show();
+                preview.Activate();
+            }
         }
 
         private void ValidateDesign()
