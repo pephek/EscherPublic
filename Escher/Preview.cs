@@ -857,6 +857,16 @@ namespace Escher
                                             artifacts.AddMove(-stamp.Width / 2, -stamp.Height, stamp.FrameColor, setup.FrameStyle);
                                             break;
 
+                                        case Shape.HexagonVertical:
+                                            artifacts.AddCursor(x1 + stamp.Width / 2, y1);
+                                            artifacts.AddMove(stamp.Width / 2, stamp.Width / (2 * (float)Math.Sqrt(3)), stamp.FrameColor, setup.FrameStyle);
+                                            artifacts.AddMove(0, stamp.Height - stamp.Width / (float)Math.Sqrt(3), stamp.FrameColor, setup.FrameStyle);
+                                            artifacts.AddMove(-stamp.Width / 2, stamp.Width / (2 * (float)Math.Sqrt(3)), stamp.FrameColor, setup.FrameStyle);
+                                            artifacts.AddMove(-stamp.Width / 2, -stamp.Width / (2 * (float)Math.Sqrt(3)), stamp.FrameColor, setup.FrameStyle);
+                                            artifacts.AddMove(0, -stamp.Height + stamp.Width / (float)Math.Sqrt(3), stamp.FrameColor, setup.FrameStyle);
+                                            artifacts.AddMove(stamp.Width / 2, -stamp.Width / (2 * (float)Math.Sqrt(3)), stamp.FrameColor, setup.FrameStyle);
+                                            break;
+
                                         default:
                                             throw new Exception("todo");
                                     }
