@@ -23,6 +23,8 @@ namespace Escher
         private readonly TextStyle veryImportantStyle = new TextStyle(Brushes.Red, null, FontStyle.Bold);
         private readonly TextStyle enumStyle = new TextStyle(Brushes.SteelBlue, null, FontStyle.Regular);
 
+        private Dictionary<string, string> specials = new Dictionary<string, string>();
+
         private Validator validator;
         private Preview preview;
 
@@ -49,6 +51,7 @@ namespace Escher
             design.TextChanged += new EventHandler<TextChangedEventArgs>((sender, e) => Recolor(e));
             design.KeyUp += new KeyEventHandler((sender, e) => Parse());
             design.MouseUp += new MouseEventHandler((sender, e) => Parse());
+            design.KeyPressed += new KeyPressEventHandler((sender, e) => Replace(e));
         }
 
         public void SetDesign(string designName, Action<string> reopen)
@@ -120,6 +123,77 @@ namespace Escher
                 this.Size = Properties.Settings.Default.EditorSize;
             }
             #endregion
+
+            this.specials = new Dictionary<string, string>();
+
+            this.specials.Add("`a",  "à");
+            this.specials.Add("'a",  "á");
+            this.specials.Add("^a",  "â");
+            this.specials.Add("\"a", "ä");
+            this.specials.Add("`e",  "è");
+            this.specials.Add("'e",  "é");
+            this.specials.Add("^e",  "ê");
+            this.specials.Add("\"e", "ë");
+            this.specials.Add("`i",  "ì");
+            this.specials.Add("'i",  "í");
+            this.specials.Add("^i",  "î");
+            this.specials.Add("\"i", "ï");
+            this.specials.Add("`o",  "ò");
+            this.specials.Add("'o",  "ó");
+            this.specials.Add("^o",  "ô");
+            this.specials.Add("\"o", "ö");
+            this.specials.Add("`u",  "ù");
+            this.specials.Add("'u",  "ú");
+            this.specials.Add("^u",  "û");
+            this.specials.Add("\"u", "ü");
+            this.specials.Add("~a",  "ã");
+            this.specials.Add("~o",  "õ");
+            this.specials.Add("~n",  "ñ");
+            this.specials.Add(",c",  "ç");
+            this.specials.Add("/4",  "¼");
+            this.specials.Add("/2",  "½");
+            this.specials.Add("/3",  "¾");
+            this.specials.Add("<<",  "«");
+            this.specials.Add(">>",  "»");
+            this.specials.Add("SS",  "ß");
+            this.specials.Add("..",  "·");
+            this.specials.Add("xx",  "×");
+            this.specials.Add("^0",  "°");
+            this.specials.Add("^1",  "¹");
+            this.specials.Add("^2",  "²");
+            this.specials.Add("^3",  "³");
+            this.specials.Add("||",  "¦");
+
+            foreach (string special in specials.Values)
+            {
+                ToolStripMenuItem menuSpecial = new ToolStripMenuItem(special);
+
+                menuInsert.DropDownItems.Add(menuSpecial);
+
+                menuSpecial.Click += (s, e) => Insert(special);
+            }
+        }
+
+        private void Insert(string special)
+        {
+            design.InsertText(special);
+        }
+
+        private void Replace(KeyPressEventArgs e)
+        {
+            if (design.SelectionStart > 1)
+            {
+                string one = design.Text[design.SelectionStart - 2].ToString();
+                string two = e.KeyChar.ToString();
+
+                if (this.specials.TryGetValue(one + two, out string special))
+                {
+                    design.SelectionStart -= 2;
+                    design.SelectionLength = 2;
+                    design.ClearSelected();
+                    design.InsertText(special);
+                }
+            }
         }
 
         private void Parse()

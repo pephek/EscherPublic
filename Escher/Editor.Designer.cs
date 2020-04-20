@@ -32,7 +32,7 @@
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Editor));
             this.design = new FastColoredTextBoxNS.FastColoredTextBox();
             this.menuStrip = new System.Windows.Forms.MenuStrip();
-            this.editToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.menuEdit = new System.Windows.Forms.ToolStripMenuItem();
             this.menuPreview = new System.Windows.Forms.ToolStripMenuItem();
             this.menuValidate = new System.Windows.Forms.ToolStripMenuItem();
             this.menuSave = new System.Windows.Forms.ToolStripMenuItem();
@@ -40,6 +40,7 @@
             this.status = new System.Windows.Forms.Label();
             this.panelInfo = new System.Windows.Forms.Panel();
             this.panelDesign = new System.Windows.Forms.Panel();
+            this.menuInsert = new System.Windows.Forms.ToolStripMenuItem();
             ((System.ComponentModel.ISupportInitialize)(this.design)).BeginInit();
             this.menuStrip.SuspendLayout();
             this.panelInfo.SuspendLayout();
@@ -83,23 +84,24 @@
             this.menuStrip.BackColor = System.Drawing.Color.White;
             this.menuStrip.ImageScalingSize = new System.Drawing.Size(20, 20);
             this.menuStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.editToolStripMenuItem});
+            this.menuEdit,
+            this.menuInsert});
             this.menuStrip.Location = new System.Drawing.Point(0, 0);
             this.menuStrip.Name = "menuStrip";
             this.menuStrip.Size = new System.Drawing.Size(823, 28);
             this.menuStrip.TabIndex = 3;
             this.menuStrip.Text = "menuStrip1";
             // 
-            // editToolStripMenuItem
+            // menuEdit
             // 
-            this.editToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.menuEdit.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.menuPreview,
             this.menuValidate,
             this.menuSave,
             this.menuExit});
-            this.editToolStripMenuItem.Name = "editToolStripMenuItem";
-            this.editToolStripMenuItem.Size = new System.Drawing.Size(49, 24);
-            this.editToolStripMenuItem.Text = "Edit";
+            this.menuEdit.Name = "menuEdit";
+            this.menuEdit.Size = new System.Drawing.Size(49, 24);
+            this.menuEdit.Text = "Edit";
             // 
             // menuPreview
             // 
@@ -160,6 +162,12 @@
             this.panelDesign.Size = new System.Drawing.Size(823, 776);
             this.panelDesign.TabIndex = 6;
             // 
+            // menuInsert
+            // 
+            this.menuInsert.Name = "menuInsert";
+            this.menuInsert.Size = new System.Drawing.Size(59, 24);
+            this.menuInsert.Text = "Insert";
+            // 
             // Editor
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
@@ -186,7 +194,7 @@
         #endregion
         private FastColoredTextBoxNS.FastColoredTextBox design;
         private System.Windows.Forms.MenuStrip menuStrip;
-        private System.Windows.Forms.ToolStripMenuItem editToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem menuEdit;
         private System.Windows.Forms.ToolStripMenuItem menuPreview;
         private System.Windows.Forms.ToolStripMenuItem menuValidate;
         private System.Windows.Forms.ToolStripMenuItem menuSave;
@@ -194,5 +202,6 @@
         private System.Windows.Forms.Label status;
         private System.Windows.Forms.Panel panelInfo;
         private System.Windows.Forms.Panel panelDesign;
+        private System.Windows.Forms.ToolStripMenuItem menuInsert;
     }
 }
