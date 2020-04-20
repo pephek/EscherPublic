@@ -197,8 +197,8 @@ namespace Escher
         {
             string paper = PageSetup.Get().PageFormat.FormatName;
 
-            Print print = new Print();
-            print.printMode = PrintMode.ToScreen;
+            Print print = new Print(PrintMode.ToScreen);
+
             DialogResult result = print.ShowDialog();
 
             if (result == DialogResult.OK)

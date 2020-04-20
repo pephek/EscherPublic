@@ -75,7 +75,7 @@
             this.design.SelectionColor = System.Drawing.Color.FromArgb(((int)(((byte)(60)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(255)))));
             this.design.ServiceColors = ((FastColoredTextBoxNS.ServiceColors)(resources.GetObject("design.ServiceColors")));
             this.design.ShowLineNumbers = false;
-            this.design.Size = new System.Drawing.Size(821, 774);
+            this.design.Size = new System.Drawing.Size(821, 772);
             this.design.TabIndex = 2;
             this.design.Zoom = 100;
             // 
@@ -88,7 +88,7 @@
             this.menuInsert});
             this.menuStrip.Location = new System.Drawing.Point(0, 0);
             this.menuStrip.Name = "menuStrip";
-            this.menuStrip.Size = new System.Drawing.Size(823, 28);
+            this.menuStrip.Size = new System.Drawing.Size(823, 30);
             this.menuStrip.TabIndex = 3;
             this.menuStrip.Text = "menuStrip1";
             // 
@@ -100,7 +100,7 @@
             this.menuSave,
             this.menuExit});
             this.menuEdit.Name = "menuEdit";
-            this.menuEdit.Size = new System.Drawing.Size(49, 24);
+            this.menuEdit.Size = new System.Drawing.Size(49, 26);
             this.menuEdit.Text = "Edit";
             // 
             // menuPreview
@@ -147,7 +147,7 @@
             this.panelInfo.BackColor = System.Drawing.Color.White;
             this.panelInfo.Controls.Add(this.status);
             this.panelInfo.Dock = System.Windows.Forms.DockStyle.Top;
-            this.panelInfo.Location = new System.Drawing.Point(0, 28);
+            this.panelInfo.Location = new System.Drawing.Point(0, 30);
             this.panelInfo.Name = "panelInfo";
             this.panelInfo.Size = new System.Drawing.Size(823, 35);
             this.panelInfo.TabIndex = 5;
@@ -157,15 +157,15 @@
             this.panelDesign.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.panelDesign.Controls.Add(this.design);
             this.panelDesign.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.panelDesign.Location = new System.Drawing.Point(0, 63);
+            this.panelDesign.Location = new System.Drawing.Point(0, 65);
             this.panelDesign.Name = "panelDesign";
-            this.panelDesign.Size = new System.Drawing.Size(823, 776);
+            this.panelDesign.Size = new System.Drawing.Size(823, 774);
             this.panelDesign.TabIndex = 6;
             // 
             // menuInsert
             // 
             this.menuInsert.Name = "menuInsert";
-            this.menuInsert.Size = new System.Drawing.Size(59, 24);
+            this.menuInsert.Size = new System.Drawing.Size(59, 26);
             this.menuInsert.Text = "Insert";
             // 
             // Editor

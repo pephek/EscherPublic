@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Drawing;
+using System.Drawing.Printing;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -12,25 +13,46 @@ namespace Escher
 {
     public partial class Print : Form
     {
-        public PrintMode printMode;
+        private PrintMode printMode;
 
-        public Print()
+        private bool excludeNumber;
+        private bool excludeValueAndColor;
+
+        public Print(PrintMode printMode, bool excludeNumber = false, bool excludeValueAndColor = false)
         {
             InitializeComponent();
 
-            this.Load += new EventHandler((sender, e) => PrintLoad());
+            this.printMode = printMode;
+            this.excludeNumber = excludeNumber;
+            this.excludeValueAndColor = excludeValueAndColor;
+
+            this.Load += new EventHandler((sender, e) => Initialize());
             this.Shown += new EventHandler((sender, e) => buttonOk.Focus());
 
             buttonOk.Click += new EventHandler((sender, e) => SaveAndClose());
         }
 
-        private void PrintLoad()
+        private void Initialize()
         {
             this.Text = App.GetName() + " · Print " + (printMode == PrintMode.ToScreen ? "Preview" : "Document");
 
             buttonOk.Text = (printMode == PrintMode.ToScreen ? "Preview" : "Print");
 
             groupBoxAlbumOptions.Enabled = (printMode == PrintMode.ToDocument);
+            groupBoxPrinter.Enabled = groupBoxAlbumOptions.Enabled;
+
+            string printerName = App.GetSetting("PDFPrinter");
+
+            textPrinter.Text = printerName;
+
+            bool printerExists = PrinterSettings.InstalledPrinters.Cast<string>().Any(name => printerName.ToUpper().Trim() == name.ToUpper().Trim());
+
+            labelPrinter.Visible = !printerExists;
+
+            if (printMode == PrintMode.ToDocument)
+            {
+                buttonOk.Enabled = printerExists;
+            }
 
             PageSetup pageSetup = PageSetup.Get();
 
@@ -108,6 +130,18 @@ namespace Escher
             // Real life page scale
 
             numericRealLifePageScale.Value = pageSetup.RealLifePageScale;
+
+            if (this.excludeNumber)
+            {
+                checkBoxIncludeNumber.Checked = false;
+                checkBoxIncludeNumber.Enabled = false;
+            }
+
+            if (this.excludeValueAndColor)
+            {
+                checkBoxIncludeValue.Checked = false;
+                checkBoxIncludeValue.Enabled = false;
+            }
         }
 
         private void SaveAndClose()

@@ -61,6 +61,9 @@
             this.buttonCancel = new System.Windows.Forms.Button();
             this.groupBoxRealLifePageScale = new System.Windows.Forms.GroupBox();
             this.numericRealLifePageScale = new System.Windows.Forms.NumericUpDown();
+            this.groupBoxPrinter = new System.Windows.Forms.GroupBox();
+            this.textPrinter = new System.Windows.Forms.TextBox();
+            this.labelPrinter = new System.Windows.Forms.Label();
             this.groupBoxFormat.SuspendLayout();
             this.groupBoxStampOptions.SuspendLayout();
             this.groupBoxFrameOptions.SuspendLayout();
@@ -71,6 +74,7 @@
             this.groupBoxAlbumOptions.SuspendLayout();
             this.groupBoxRealLifePageScale.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numericRealLifePageScale)).BeginInit();
+            this.groupBoxPrinter.SuspendLayout();
             this.SuspendLayout();
             // 
             // groupBoxFormat
@@ -363,7 +367,7 @@
             this.groupBoxAlbumOptions.Controls.Add(this.checkBoxIncludePdfBookmarks);
             this.groupBoxAlbumOptions.Controls.Add(this.checkBoxIncludeHtmlScans);
             this.groupBoxAlbumOptions.Controls.Add(this.checkBoxIncludeSamplePagesOnly);
-            this.groupBoxAlbumOptions.Location = new System.Drawing.Point(440, 174);
+            this.groupBoxAlbumOptions.Location = new System.Drawing.Point(611, 174);
             this.groupBoxAlbumOptions.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.groupBoxAlbumOptions.Name = "groupBoxAlbumOptions";
             this.groupBoxAlbumOptions.Padding = new System.Windows.Forms.Padding(3, 2, 3, 2);
@@ -407,10 +411,10 @@
             // 
             // buttonOk
             // 
-            this.buttonOk.Location = new System.Drawing.Point(968, 242);
+            this.buttonOk.Location = new System.Drawing.Point(966, 313);
             this.buttonOk.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.buttonOk.Name = "buttonOk";
-            this.buttonOk.Size = new System.Drawing.Size(104, 50);
+            this.buttonOk.Size = new System.Drawing.Size(106, 50);
             this.buttonOk.TabIndex = 8;
             this.buttonOk.Text = "OK";
             this.buttonOk.UseVisualStyleBackColor = true;
@@ -418,10 +422,10 @@
             // buttonCancel
             // 
             this.buttonCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            this.buttonCancel.Location = new System.Drawing.Point(860, 242);
+            this.buttonCancel.Location = new System.Drawing.Point(861, 313);
             this.buttonCancel.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.buttonCancel.Name = "buttonCancel";
-            this.buttonCancel.Size = new System.Drawing.Size(102, 50);
+            this.buttonCancel.Size = new System.Drawing.Size(99, 50);
             this.buttonCancel.TabIndex = 9;
             this.buttonCancel.Text = "Cancel";
             this.buttonCancel.UseVisualStyleBackColor = true;
@@ -429,9 +433,9 @@
             // groupBoxRealLifePageScale
             // 
             this.groupBoxRealLifePageScale.Controls.Add(this.numericRealLifePageScale);
-            this.groupBoxRealLifePageScale.Location = new System.Drawing.Point(693, 174);
+            this.groupBoxRealLifePageScale.Location = new System.Drawing.Point(439, 178);
             this.groupBoxRealLifePageScale.Name = "groupBoxRealLifePageScale";
-            this.groupBoxRealLifePageScale.Size = new System.Drawing.Size(140, 118);
+            this.groupBoxRealLifePageScale.Size = new System.Drawing.Size(154, 118);
             this.groupBoxRealLifePageScale.TabIndex = 10;
             this.groupBoxRealLifePageScale.TabStop = false;
             this.groupBoxRealLifePageScale.Text = "Real Life Page Scale";
@@ -444,7 +448,7 @@
             0,
             0,
             131072});
-            this.numericRealLifePageScale.Location = new System.Drawing.Point(29, 57);
+            this.numericRealLifePageScale.Location = new System.Drawing.Point(44, 52);
             this.numericRealLifePageScale.Maximum = new decimal(new int[] {
             4,
             0,
@@ -464,6 +468,36 @@
             0,
             131072});
             // 
+            // groupBoxPrinter
+            // 
+            this.groupBoxPrinter.Controls.Add(this.labelPrinter);
+            this.groupBoxPrinter.Controls.Add(this.textPrinter);
+            this.groupBoxPrinter.Location = new System.Drawing.Point(861, 174);
+            this.groupBoxPrinter.Name = "groupBoxPrinter";
+            this.groupBoxPrinter.Size = new System.Drawing.Size(211, 121);
+            this.groupBoxPrinter.TabIndex = 11;
+            this.groupBoxPrinter.TabStop = false;
+            this.groupBoxPrinter.Text = "PDF Printer";
+            // 
+            // textPrinter
+            // 
+            this.textPrinter.Enabled = false;
+            this.textPrinter.Location = new System.Drawing.Point(21, 31);
+            this.textPrinter.Name = "textPrinter";
+            this.textPrinter.Size = new System.Drawing.Size(168, 22);
+            this.textPrinter.TabIndex = 0;
+            this.textPrinter.Text = "Printer";
+            // 
+            // labelPrinter
+            // 
+            this.labelPrinter.ForeColor = System.Drawing.Color.Red;
+            this.labelPrinter.Location = new System.Drawing.Point(21, 73);
+            this.labelPrinter.Name = "labelPrinter";
+            this.labelPrinter.Size = new System.Drawing.Size(168, 18);
+            this.labelPrinter.TabIndex = 1;
+            this.labelPrinter.Text = "Printer does not exist!";
+            this.labelPrinter.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
             // Print
             // 
             this.AcceptButton = this.buttonOk;
@@ -471,7 +505,8 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.White;
             this.CancelButton = this.buttonCancel;
-            this.ClientSize = new System.Drawing.Size(1093, 321);
+            this.ClientSize = new System.Drawing.Size(1093, 386);
+            this.Controls.Add(this.groupBoxPrinter);
             this.Controls.Add(this.groupBoxRealLifePageScale);
             this.Controls.Add(this.buttonCancel);
             this.Controls.Add(this.buttonOk);
@@ -508,6 +543,8 @@
             this.groupBoxAlbumOptions.PerformLayout();
             this.groupBoxRealLifePageScale.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.numericRealLifePageScale)).EndInit();
+            this.groupBoxPrinter.ResumeLayout(false);
+            this.groupBoxPrinter.PerformLayout();
             this.ResumeLayout(false);
 
         }
@@ -546,5 +583,8 @@
         private System.Windows.Forms.Button buttonCancel;
         private System.Windows.Forms.GroupBox groupBoxRealLifePageScale;
         private System.Windows.Forms.NumericUpDown numericRealLifePageScale;
+        private System.Windows.Forms.GroupBox groupBoxPrinter;
+        private System.Windows.Forms.Label labelPrinter;
+        private System.Windows.Forms.TextBox textPrinter;
     }
 }

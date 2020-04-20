@@ -27,7 +27,7 @@ namespace Escher
 
         private static PageSetup pageSetup = new PageSetup();
 
-        public static void Load()
+        public static PageSetup Load()
         {
             pageSetup.PageFormat = PageFormats.Get(Properties.Settings.Default.Paper);
             pageSetup.IncludeMarginForPunchHoles = Properties.Settings.Default.IncludeMarginForPunchHoles;
@@ -45,6 +45,8 @@ namespace Escher
             pageSetup.IncludeHtmlScans = Properties.Settings.Default.IncludeHtmlScans;
             pageSetup.IncludePdfBookmarks = Properties.Settings.Default.IncludePdfBookmarks;
             pageSetup.RealLifePageScale = Properties.Settings.Default.RealLifePageScale;
+
+            return pageSetup;
         }
 
         public static PageSetup Get()

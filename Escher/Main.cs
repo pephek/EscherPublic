@@ -27,17 +27,21 @@ namespace Escher
         {
             InitializeComponent();
 
+            this.Load += new EventHandler((sender, e) => Initialize());
             this.FormClosing += new FormClosingEventHandler((sender, e) => MainClosing());
 
-            this.editToolStripMenuItem.Click += new EventHandler((sender, e) => Edit());
+            this.menuEdit.Click += new EventHandler((sender, e) => EditDesign());
+            this.menuPrint.Click += new EventHandler((sender, e) => PrintDesign());
+            this.menuRefreshDesigns.Click += new EventHandler((sender, e) => RefreshDesigns());
+            this.menuRefreshFormats.Click += new EventHandler((sender, e) => RefreshFormats());
+            this.menuFindStampNumber.Click += new EventHandler((sender, e) => FindStampNumber());
+            this.menuFindPageNumber.Click += new EventHandler((sender, e) => FindPageNumber());
+            this.menuFindAlbumNumber.Click += new EventHandler((sender, e) => FindAlbumNumber());
+            this.menuExit.Click += new EventHandler((sender, e) => Exit());
+            this.menuAbout.Click += new EventHandler((sender, e) => About());
         }
 
-        private void Main_Load(object sender, EventArgs e)
-        {
-            Main_Load();
-        }
-
-        private void Main_Load()
+        private void Initialize()
         {
             try
             {
@@ -72,6 +76,13 @@ namespace Escher
                     App.SetException(string.Format("The {0} application is already running and can not run more than once at the same time.", App.GetName()));
                 }
 
+                string documentsFolder = App.GetSetting("DocumentsFolder");
+
+                if (!Directory.Exists(documentsFolder))
+                {
+                    Directory.CreateDirectory(documentsFolder);
+                }
+
                 string designsFolder = App.GetSetting("DesignsFolder");
 
                 if (!Directory.Exists(designsFolder))
@@ -86,13 +97,13 @@ namespace Escher
                     Directory.CreateDirectory(designsRollbackFolder);
                 }
 
-                refreshPageFormatsToolStripMenuItem_Click(null, null);
+                RefreshFormats();
 
                 SetMenus(enabled: false);
 
-                designsToolStripMenuItem.Visible = false;
+                menuOpen.Visible = false;
 
-                refreshDesignsToolStripMenuItem_Click(null, null);
+                RefreshDesigns();
 
                 webBrowser.Navigating += WebBrowser_Navigating;
                 webBrowser.IsWebBrowserContextMenuEnabled = false;
@@ -126,7 +137,54 @@ namespace Escher
             #endregion
         }
 
-        private void Edit()
+        private void PrintDesign()
+        {
+            DesignEntry country = this.design.GetCountry(1);
+
+            bool excludeNumber = country.Settings.ToLower().Contains("!includenumber");
+            bool excludeValueAndColor = country.Settings.ToLower().Contains("!includevalueandcolor");
+
+            Print print = new Print(PrintMode.ToDocument, excludeNumber, excludeValueAndColor);
+
+            DialogResult result = print.ShowDialog();
+
+            if (result == DialogResult.OK)
+            {
+                PageSetup setup = PageSetup.Load();
+
+                string pdfName = design.GetPdf();
+
+                if (setup.Catalog != Catalog.None)
+                {
+                    pdfName += "_" + setup.Catalog.ToString().ToLower();
+                }
+
+                pdfName += "_" + setup.PageFormat.FormatName;
+
+                if (setup.IncludeMarginForPunchHoles)
+                {
+                    pdfName += "_offcenter";
+                }
+
+                if (setup.IncludeSamplePagesOnly)
+                {
+                    pdfName += "_sample";
+                }
+
+                if (setup.FontSize == FontSize.Medium)
+                {
+                    pdfName += "_font6";
+                }
+                else if (setup.FontSize == FontSize.Large)
+                {
+                    pdfName += "_font7";
+                }
+
+                pdfName = pdfName.ToLower() + ".pdf";
+            }
+        }
+
+        private void EditDesign()
         {
             editor.Show();
             editor.Invalidate();
@@ -134,7 +192,7 @@ namespace Escher
             editor.SetError();
         }
 
-        private void refreshDesignsToolStripMenuItem_Click(object sender, EventArgs eventArgs)
+        private void RefreshDesigns()
         {
             string[] designFiles = Directory.GetFiles(App.GetSetting("DesignsFolder"), "*.cdb", SearchOption.TopDirectoryOnly);
 
@@ -150,7 +208,7 @@ namespace Escher
 
             designs.Sort();
 
-            designsToolStripMenuItem.DropDownItems.Clear();
+            menuOpen.DropDownItems.Clear();
 
             string letter = "";
 
@@ -160,12 +218,12 @@ namespace Escher
 
                 if (letter != firstLetter)
                 {
-                    designsToolStripMenuItem.DropDownItems.Add(new ToolStripMenuItem(firstLetter));
+                    menuOpen.DropDownItems.Add(new ToolStripMenuItem(firstLetter));
                     letter = firstLetter;
                 }
             }
 
-            foreach (ToolStripDropDownItem item in designsToolStripMenuItem.DropDownItems)
+            foreach (ToolStripDropDownItem item in menuOpen.DropDownItems)
             {
                 foreach (string design in designs)
                 {
@@ -180,15 +238,15 @@ namespace Escher
                 }
             }
 
-            designsToolStripMenuItem.Visible = (designsToolStripMenuItem.DropDownItems.Count != 0);
+            menuOpen.Visible = (menuOpen.DropDownItems.Count != 0);
         }
 
-        private void refreshPageFormatsToolStripMenuItem_Click(object sender, EventArgs e)
+        private void RefreshFormats()
         {
             PageFormats.Load(App.GetSetting("PageFormats"));
         }
 
-        private void findStampNumberToolStripMenuItem_Click(object sender, EventArgs e)
+        private void FindStampNumber()
         {
             bool found = true;
 
@@ -232,7 +290,7 @@ namespace Escher
             }
         }
 
-        private void findPageNumberToolStripMenuItem_Click(object sender, EventArgs e)
+        private void FindPageNumber()
         {
             bool found = true;
 
@@ -276,7 +334,7 @@ namespace Escher
             }
         }
 
-        private void findAlbumNumberToolStripMenuItem_Click(object sender, EventArgs e)
+        private void FindAlbumNumber()
         {
             bool found = true;
 
@@ -311,7 +369,7 @@ namespace Escher
             }
         }
 
-        private void exitToolStripMenuItem_Click(object sender, EventArgs e)
+        private void Exit()
         {
             if (MessageBox.Show(string.Format("Are you sure you want to exit from the {0} application?", App.GetName()), App.GetName() + " · Exit", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
             {
@@ -319,7 +377,7 @@ namespace Escher
             }
         }
 
-        private void aboutToolStripMenuItem_Click(object sender, EventArgs e)
+        private void About()
         {
             About about = new About();
             about.ShowDialog();
@@ -327,13 +385,13 @@ namespace Escher
 
         private void SetMenus(bool enabled)
         {
-            editToolStripMenuItem.Enabled = enabled;
-            reportToolStripMenuItem.Enabled = enabled;
-            printDocumentToolStripMenuItem.Enabled = enabled;
-            publishToolStripMenuItem.Enabled = enabled;
-            findStampNumberToolStripMenuItem.Enabled = enabled;
-            findPageNumberToolStripMenuItem.Enabled = enabled;
-            findAlbumNumberToolStripMenuItem.Enabled = enabled;
+            menuEdit.Enabled = enabled;
+            menuReport.Enabled = enabled;
+            menuPrint.Enabled = enabled;
+            menuPublish.Enabled = enabled;
+            menuFindStampNumber.Enabled = enabled;
+            menuFindPageNumber.Enabled = enabled;
+            menuFindAlbumNumber.Enabled = enabled;
         }
 
         private void Reopen(string designText)

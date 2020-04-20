@@ -31,26 +31,26 @@
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Main));
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
             this.designToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.editToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.menuEdit = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripMenuItem1 = new System.Windows.Forms.ToolStripSeparator();
-            this.reportToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.menuReport = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripMenuItem2 = new System.Windows.Forms.ToolStripSeparator();
-            this.printDocumentToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.menuPrint = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripMenuItem3 = new System.Windows.Forms.ToolStripSeparator();
-            this.publishToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.menuPublish = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripMenuItem4 = new System.Windows.Forms.ToolStripSeparator();
-            this.refreshDesignsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.refreshPageFormatsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.menuRefreshDesigns = new System.Windows.Forms.ToolStripMenuItem();
+            this.menuRefreshFormats = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripMenuItem5 = new System.Windows.Forms.ToolStripSeparator();
-            this.findStampNumberToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.findPageNumberToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.findAlbumNumberToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.menuFindStampNumber = new System.Windows.Forms.ToolStripMenuItem();
+            this.menuFindPageNumber = new System.Windows.Forms.ToolStripMenuItem();
+            this.menuFindAlbumNumber = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripMenuItem6 = new System.Windows.Forms.ToolStripSeparator();
-            this.exitToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.experimentToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.designsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.helpToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.aboutToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.menuExit = new System.Windows.Forms.ToolStripMenuItem();
+            this.menuExperiment = new System.Windows.Forms.ToolStripMenuItem();
+            this.menuOpen = new System.Windows.Forms.ToolStripMenuItem();
+            this.menuHelp = new System.Windows.Forms.ToolStripMenuItem();
+            this.menuAbout = new System.Windows.Forms.ToolStripMenuItem();
             this.webBrowser = new System.Windows.Forms.WebBrowser();
             this.menuStrip1.SuspendLayout();
             this.SuspendLayout();
@@ -61,181 +61,173 @@
             this.menuStrip1.ImageScalingSize = new System.Drawing.Size(20, 20);
             this.menuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.designToolStripMenuItem,
-            this.designsToolStripMenuItem,
-            this.helpToolStripMenuItem});
+            this.menuOpen,
+            this.menuHelp});
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
             this.menuStrip1.Padding = new System.Windows.Forms.Padding(5, 2, 0, 2);
-            this.menuStrip1.Size = new System.Drawing.Size(837, 30);
+            this.menuStrip1.Size = new System.Drawing.Size(837, 28);
             this.menuStrip1.TabIndex = 0;
             this.menuStrip1.Text = "menuStrip1";
             // 
             // designToolStripMenuItem
             // 
             this.designToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.editToolStripMenuItem,
+            this.menuEdit,
             this.toolStripMenuItem1,
-            this.reportToolStripMenuItem,
+            this.menuReport,
             this.toolStripMenuItem2,
-            this.printDocumentToolStripMenuItem,
+            this.menuPrint,
             this.toolStripMenuItem3,
-            this.publishToolStripMenuItem,
+            this.menuPublish,
             this.toolStripMenuItem4,
-            this.refreshDesignsToolStripMenuItem,
-            this.refreshPageFormatsToolStripMenuItem,
+            this.menuRefreshDesigns,
+            this.menuRefreshFormats,
             this.toolStripMenuItem5,
-            this.findStampNumberToolStripMenuItem,
-            this.findPageNumberToolStripMenuItem,
-            this.findAlbumNumberToolStripMenuItem,
+            this.menuFindStampNumber,
+            this.menuFindPageNumber,
+            this.menuFindAlbumNumber,
             this.toolStripMenuItem6,
-            this.exitToolStripMenuItem,
-            this.experimentToolStripMenuItem});
+            this.menuExit,
+            this.menuExperiment});
             this.designToolStripMenuItem.Name = "designToolStripMenuItem";
             this.designToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Alt | System.Windows.Forms.Keys.D)));
-            this.designToolStripMenuItem.Size = new System.Drawing.Size(69, 26);
+            this.designToolStripMenuItem.Size = new System.Drawing.Size(69, 24);
             this.designToolStripMenuItem.Text = "Design";
             // 
-            // editToolStripMenuItem
+            // menuEdit
             // 
-            this.editToolStripMenuItem.Name = "editToolStripMenuItem";
-            this.editToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Alt | System.Windows.Forms.Keys.E)));
-            this.editToolStripMenuItem.Size = new System.Drawing.Size(283, 26);
-            this.editToolStripMenuItem.Text = "Edit";
+            this.menuEdit.Name = "menuEdit";
+            this.menuEdit.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Alt | System.Windows.Forms.Keys.E)));
+            this.menuEdit.Size = new System.Drawing.Size(283, 26);
+            this.menuEdit.Text = "Edit";
             // 
             // toolStripMenuItem1
             // 
             this.toolStripMenuItem1.Name = "toolStripMenuItem1";
             this.toolStripMenuItem1.Size = new System.Drawing.Size(280, 6);
             // 
-            // reportToolStripMenuItem
+            // menuReport
             // 
-            this.reportToolStripMenuItem.Name = "reportToolStripMenuItem";
-            this.reportToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.R)));
-            this.reportToolStripMenuItem.Size = new System.Drawing.Size(283, 26);
-            this.reportToolStripMenuItem.Text = "Report";
+            this.menuReport.Name = "menuReport";
+            this.menuReport.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.R)));
+            this.menuReport.Size = new System.Drawing.Size(283, 26);
+            this.menuReport.Text = "Report";
             // 
             // toolStripMenuItem2
             // 
             this.toolStripMenuItem2.Name = "toolStripMenuItem2";
             this.toolStripMenuItem2.Size = new System.Drawing.Size(280, 6);
             // 
-            // printDocumentToolStripMenuItem
+            // menuPrint
             // 
-            this.printDocumentToolStripMenuItem.Name = "printDocumentToolStripMenuItem";
-            this.printDocumentToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.D)));
-            this.printDocumentToolStripMenuItem.Size = new System.Drawing.Size(283, 26);
-            this.printDocumentToolStripMenuItem.Text = "Print Document...";
+            this.menuPrint.Name = "menuPrint";
+            this.menuPrint.Size = new System.Drawing.Size(283, 26);
+            this.menuPrint.Text = "Print...";
             // 
             // toolStripMenuItem3
             // 
             this.toolStripMenuItem3.Name = "toolStripMenuItem3";
             this.toolStripMenuItem3.Size = new System.Drawing.Size(280, 6);
             // 
-            // publishToolStripMenuItem
+            // menuPublish
             // 
-            this.publishToolStripMenuItem.Name = "publishToolStripMenuItem";
-            this.publishToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.P)));
-            this.publishToolStripMenuItem.Size = new System.Drawing.Size(283, 26);
-            this.publishToolStripMenuItem.Text = "Publish";
+            this.menuPublish.Name = "menuPublish";
+            this.menuPublish.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.P)));
+            this.menuPublish.Size = new System.Drawing.Size(283, 26);
+            this.menuPublish.Text = "Publish";
             // 
             // toolStripMenuItem4
             // 
             this.toolStripMenuItem4.Name = "toolStripMenuItem4";
             this.toolStripMenuItem4.Size = new System.Drawing.Size(280, 6);
             // 
-            // refreshDesignsToolStripMenuItem
+            // menuRefreshDesigns
             // 
-            this.refreshDesignsToolStripMenuItem.Name = "refreshDesignsToolStripMenuItem";
-            this.refreshDesignsToolStripMenuItem.Size = new System.Drawing.Size(283, 26);
-            this.refreshDesignsToolStripMenuItem.Text = "Refresh Designs";
-            this.refreshDesignsToolStripMenuItem.Click += new System.EventHandler(this.refreshDesignsToolStripMenuItem_Click);
+            this.menuRefreshDesigns.Name = "menuRefreshDesigns";
+            this.menuRefreshDesigns.Size = new System.Drawing.Size(283, 26);
+            this.menuRefreshDesigns.Text = "Refresh Designs";
             // 
-            // refreshPageFormatsToolStripMenuItem
+            // menuRefreshFormats
             // 
-            this.refreshPageFormatsToolStripMenuItem.Name = "refreshPageFormatsToolStripMenuItem";
-            this.refreshPageFormatsToolStripMenuItem.Size = new System.Drawing.Size(283, 26);
-            this.refreshPageFormatsToolStripMenuItem.Text = "Refresh Page Formats";
-            this.refreshPageFormatsToolStripMenuItem.Click += new System.EventHandler(this.refreshPageFormatsToolStripMenuItem_Click);
+            this.menuRefreshFormats.Name = "menuRefreshFormats";
+            this.menuRefreshFormats.Size = new System.Drawing.Size(283, 26);
+            this.menuRefreshFormats.Text = "Refresh Page Formats";
             // 
             // toolStripMenuItem5
             // 
             this.toolStripMenuItem5.Name = "toolStripMenuItem5";
             this.toolStripMenuItem5.Size = new System.Drawing.Size(280, 6);
             // 
-            // findStampNumberToolStripMenuItem
+            // menuFindStampNumber
             // 
-            this.findStampNumberToolStripMenuItem.Name = "findStampNumberToolStripMenuItem";
-            this.findStampNumberToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Alt | System.Windows.Forms.Keys.F)));
-            this.findStampNumberToolStripMenuItem.Size = new System.Drawing.Size(283, 26);
-            this.findStampNumberToolStripMenuItem.Text = "Find Stamp Number...";
-            this.findStampNumberToolStripMenuItem.Click += new System.EventHandler(this.findStampNumberToolStripMenuItem_Click);
+            this.menuFindStampNumber.Name = "menuFindStampNumber";
+            this.menuFindStampNumber.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Alt | System.Windows.Forms.Keys.F)));
+            this.menuFindStampNumber.Size = new System.Drawing.Size(283, 26);
+            this.menuFindStampNumber.Text = "Find Stamp Number...";
             // 
-            // findPageNumberToolStripMenuItem
+            // menuFindPageNumber
             // 
-            this.findPageNumberToolStripMenuItem.Name = "findPageNumberToolStripMenuItem";
-            this.findPageNumberToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Alt | System.Windows.Forms.Keys.P)));
-            this.findPageNumberToolStripMenuItem.Size = new System.Drawing.Size(283, 26);
-            this.findPageNumberToolStripMenuItem.Text = "Find Page Number...";
-            this.findPageNumberToolStripMenuItem.Click += new System.EventHandler(this.findPageNumberToolStripMenuItem_Click);
+            this.menuFindPageNumber.Name = "menuFindPageNumber";
+            this.menuFindPageNumber.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Alt | System.Windows.Forms.Keys.P)));
+            this.menuFindPageNumber.Size = new System.Drawing.Size(283, 26);
+            this.menuFindPageNumber.Text = "Find Page Number...";
             // 
-            // findAlbumNumberToolStripMenuItem
+            // menuFindAlbumNumber
             // 
-            this.findAlbumNumberToolStripMenuItem.Name = "findAlbumNumberToolStripMenuItem";
-            this.findAlbumNumberToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Alt | System.Windows.Forms.Keys.A)));
-            this.findAlbumNumberToolStripMenuItem.Size = new System.Drawing.Size(283, 26);
-            this.findAlbumNumberToolStripMenuItem.Text = "Find Album Number...";
-            this.findAlbumNumberToolStripMenuItem.Click += new System.EventHandler(this.findAlbumNumberToolStripMenuItem_Click);
+            this.menuFindAlbumNumber.Name = "menuFindAlbumNumber";
+            this.menuFindAlbumNumber.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Alt | System.Windows.Forms.Keys.A)));
+            this.menuFindAlbumNumber.Size = new System.Drawing.Size(283, 26);
+            this.menuFindAlbumNumber.Text = "Find Album Number...";
             // 
             // toolStripMenuItem6
             // 
             this.toolStripMenuItem6.Name = "toolStripMenuItem6";
             this.toolStripMenuItem6.Size = new System.Drawing.Size(280, 6);
             // 
-            // exitToolStripMenuItem
+            // menuExit
             // 
-            this.exitToolStripMenuItem.Name = "exitToolStripMenuItem";
-            this.exitToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Alt | System.Windows.Forms.Keys.X)));
-            this.exitToolStripMenuItem.Size = new System.Drawing.Size(283, 26);
-            this.exitToolStripMenuItem.Text = "Exit";
-            this.exitToolStripMenuItem.Click += new System.EventHandler(this.exitToolStripMenuItem_Click);
+            this.menuExit.Name = "menuExit";
+            this.menuExit.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Alt | System.Windows.Forms.Keys.X)));
+            this.menuExit.Size = new System.Drawing.Size(283, 26);
+            this.menuExit.Text = "Exit";
             // 
-            // experimentToolStripMenuItem
+            // menuExperiment
             // 
-            this.experimentToolStripMenuItem.Name = "experimentToolStripMenuItem";
-            this.experimentToolStripMenuItem.Size = new System.Drawing.Size(283, 26);
-            this.experimentToolStripMenuItem.Text = "Experiment";
-            this.experimentToolStripMenuItem.Click += new System.EventHandler(this.experimentToolStripMenuItem_Click);
+            this.menuExperiment.Name = "menuExperiment";
+            this.menuExperiment.Size = new System.Drawing.Size(283, 26);
+            this.menuExperiment.Text = "Experiment";
+            this.menuExperiment.Click += new System.EventHandler(this.experimentToolStripMenuItem_Click);
             // 
-            // designsToolStripMenuItem
+            // menuOpen
             // 
-            this.designsToolStripMenuItem.Name = "designsToolStripMenuItem";
-            this.designsToolStripMenuItem.Size = new System.Drawing.Size(59, 26);
-            this.designsToolStripMenuItem.Text = "Open";
+            this.menuOpen.Name = "menuOpen";
+            this.menuOpen.Size = new System.Drawing.Size(59, 24);
+            this.menuOpen.Text = "Open";
             // 
-            // helpToolStripMenuItem
+            // menuHelp
             // 
-            this.helpToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.aboutToolStripMenuItem});
-            this.helpToolStripMenuItem.Name = "helpToolStripMenuItem";
-            this.helpToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Alt | System.Windows.Forms.Keys.H)));
-            this.helpToolStripMenuItem.Size = new System.Drawing.Size(55, 26);
-            this.helpToolStripMenuItem.Text = "Help";
+            this.menuHelp.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.menuAbout});
+            this.menuHelp.Name = "menuHelp";
+            this.menuHelp.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Alt | System.Windows.Forms.Keys.H)));
+            this.menuHelp.Size = new System.Drawing.Size(55, 24);
+            this.menuHelp.Text = "Help";
             // 
-            // aboutToolStripMenuItem
+            // menuAbout
             // 
-            this.aboutToolStripMenuItem.Name = "aboutToolStripMenuItem";
-            this.aboutToolStripMenuItem.Size = new System.Drawing.Size(142, 26);
-            this.aboutToolStripMenuItem.Text = "About...";
-            this.aboutToolStripMenuItem.Click += new System.EventHandler(this.aboutToolStripMenuItem_Click);
+            this.menuAbout.Name = "menuAbout";
+            this.menuAbout.Size = new System.Drawing.Size(142, 26);
+            this.menuAbout.Text = "About...";
             // 
             // webBrowser
             // 
             this.webBrowser.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.webBrowser.Location = new System.Drawing.Point(0, 30);
+            this.webBrowser.Location = new System.Drawing.Point(0, 28);
             this.webBrowser.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.webBrowser.MinimumSize = new System.Drawing.Size(20, 20);
             this.webBrowser.Name = "webBrowser";
-            this.webBrowser.Size = new System.Drawing.Size(837, 1269);
+            this.webBrowser.Size = new System.Drawing.Size(837, 1271);
             this.webBrowser.TabIndex = 1;
             this.webBrowser.PreviewKeyDown += new System.Windows.Forms.PreviewKeyDownEventHandler(this.webBrowser_PreviewKeyDown);
             // 
@@ -252,7 +244,6 @@
             this.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.Name = "Main";
             this.Text = "Escher";
-            this.Load += new System.EventHandler(this.Main_Load);
             this.menuStrip1.ResumeLayout(false);
             this.menuStrip1.PerformLayout();
             this.ResumeLayout(false);
@@ -264,27 +255,27 @@
 
         private System.Windows.Forms.MenuStrip menuStrip1;
         private System.Windows.Forms.ToolStripMenuItem designToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem editToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem menuEdit;
         private System.Windows.Forms.ToolStripSeparator toolStripMenuItem1;
-        private System.Windows.Forms.ToolStripMenuItem reportToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem menuReport;
         private System.Windows.Forms.ToolStripSeparator toolStripMenuItem2;
-        private System.Windows.Forms.ToolStripMenuItem printDocumentToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem menuPrint;
         private System.Windows.Forms.ToolStripSeparator toolStripMenuItem3;
-        private System.Windows.Forms.ToolStripMenuItem publishToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem menuPublish;
         private System.Windows.Forms.ToolStripSeparator toolStripMenuItem4;
-        private System.Windows.Forms.ToolStripMenuItem refreshPageFormatsToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem menuRefreshFormats;
         private System.Windows.Forms.ToolStripSeparator toolStripMenuItem5;
-        private System.Windows.Forms.ToolStripMenuItem findStampNumberToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem findPageNumberToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem findAlbumNumberToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem menuFindStampNumber;
+        private System.Windows.Forms.ToolStripMenuItem menuFindPageNumber;
+        private System.Windows.Forms.ToolStripMenuItem menuFindAlbumNumber;
         private System.Windows.Forms.ToolStripSeparator toolStripMenuItem6;
-        private System.Windows.Forms.ToolStripMenuItem exitToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem designsToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem helpToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem aboutToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem refreshDesignsToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem menuExit;
+        private System.Windows.Forms.ToolStripMenuItem menuOpen;
+        private System.Windows.Forms.ToolStripMenuItem menuHelp;
+        private System.Windows.Forms.ToolStripMenuItem menuAbout;
+        private System.Windows.Forms.ToolStripMenuItem menuRefreshDesigns;
         private System.Windows.Forms.WebBrowser webBrowser;
-        private System.Windows.Forms.ToolStripMenuItem experimentToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem menuExperiment;
     }
 }
 
