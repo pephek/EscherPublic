@@ -833,12 +833,28 @@ namespace Escher
                                 {
                                     switch (stamp.Shape)
                                     {
+                                        case Shape.RectangleRotated:
+                                            artifacts.AddCursor(x1 + stamp.Width / 2, y1);
+                                            artifacts.AddMove(stamp.Width / 2, stamp.Height / 2, stamp.FrameColor, setup.FrameStyle);
+                                            artifacts.AddMove(-stamp.Width / 2, stamp.Height / 2, stamp.FrameColor, setup.FrameStyle);
+                                            artifacts.AddMove(-stamp.Width / 2, -stamp.Height / 2, stamp.FrameColor, setup.FrameStyle);
+                                            artifacts.AddMove(stamp.Width / 2, -stamp.Height / 2, stamp.FrameColor, setup.FrameStyle);
+                                            break;
+
                                         case Shape.Triangle45:
                                         case Shape.Triangle60:
                                             artifacts.AddCursor(x1, y1 + stamp.Height);
                                             artifacts.AddMove(stamp.Width, 0, stamp.FrameColor, setup.FrameStyle);
                                             artifacts.AddMove(-stamp.Width / 2, -stamp.Height, stamp.FrameColor, setup.FrameStyle);
                                             artifacts.AddMove(-stamp.Width / 2, stamp.Height, stamp.FrameColor, setup.FrameStyle);
+                                            break;
+
+                                        case Shape.Triangle45Inverted:
+                                        case Shape.Triangle60Inverted:
+                                            artifacts.AddCursor(x1, y1);
+                                            artifacts.AddMove(stamp.Width, 0, stamp.FrameColor, setup.FrameStyle);
+                                            artifacts.AddMove(-stamp.Width / 2, stamp.Height, stamp.FrameColor, setup.FrameStyle);
+                                            artifacts.AddMove(-stamp.Width / 2, -stamp.Height, stamp.FrameColor, setup.FrameStyle);
                                             break;
 
                                         default:

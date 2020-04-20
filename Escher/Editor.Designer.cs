@@ -67,7 +67,7 @@
             this.design.Cursor = System.Windows.Forms.Cursors.IBeam;
             this.design.DisabledColor = System.Drawing.Color.FromArgb(((int)(((byte)(100)))), ((int)(((byte)(180)))), ((int)(((byte)(180)))), ((int)(((byte)(180)))));
             this.design.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.design.Font = new System.Drawing.Font("Consolas", 9F);
+            this.design.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.design.IsReplaceMode = false;
             this.design.Location = new System.Drawing.Point(0, 0);
             this.design.Name = "design";

@@ -17,7 +17,7 @@ namespace Escher
     public partial class Editor : Form
     {
         private readonly TextStyle keywordStyle = new TextStyle(Brushes.Blue, null, FontStyle.Regular);
-        private readonly TextStyle separatorStyle = new TextStyle(Brushes.Gray, null, FontStyle.Regular);
+        private readonly TextStyle separatorStyle = new TextStyle(Brushes.LightGray, null, FontStyle.Regular);
         private readonly TextStyle commentStyle = new TextStyle(Brushes.Green, null, FontStyle.Italic);
         private readonly TextStyle feedStyle = new TextStyle(Brushes.Maroon, null, FontStyle.Bold);
         private readonly TextStyle veryImportantStyle = new TextStyle(Brushes.Red, null, FontStyle.Bold);
@@ -163,6 +163,8 @@ namespace Escher
             this.specials.Add("^2",  "²");
             this.specials.Add("^3",  "³");
             this.specials.Add("||",  "¦");
+            this.specials.Add("==",  "≡");
+            this.specials.Add(",,",  "¸");
 
             foreach (string special in specials.Values)
             {
@@ -219,7 +221,7 @@ namespace Escher
         {
             e.ChangedRange.ClearStyle(keywordStyle, separatorStyle, commentStyle, veryImportantStyle, enumStyle);
 
-            e.ChangedRange.SetStyle(separatorStyle, @":=|\|");
+            e.ChangedRange.SetStyle(separatorStyle, @"≡|¦|:=|\|");
 
             //e.ChangedRange.SetStyle(CommentStyle, @"//.*$", RegexOptions.Multiline);
             e.ChangedRange.SetStyle(commentStyle, @"'.*$", RegexOptions.Multiline);
