@@ -53,6 +53,10 @@ namespace Escher
             {
                 buttonOk.Enabled = printerExists;
             }
+            else
+            {
+                buttonOk.Enabled = true;
+            }
 
             PageSetup pageSetup = PageSetup.Get();
 

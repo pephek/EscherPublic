@@ -127,6 +127,7 @@
     <Compile Include="Helpers\HtmlHelper.cs" />
     <Compile Include="Helpers\ImageHelper.cs" />
     <Compile Include="Helpers\PageHelper.cs" />
+    <Compile Include="Helpers\PDF995Helper.cs" />
     <Compile Include="Helpers\SizeHelper.cs" />
     <Compile Include="Imaging.cs">
       <SubType>Form</SubType>

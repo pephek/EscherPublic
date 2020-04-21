@@ -86,6 +86,11 @@ namespace Escher
             }
         }
 
+        public string GetDesignName()
+        {
+            return this.designName;
+        }
+
         public string GetDesign()
         {
             return design.Text;

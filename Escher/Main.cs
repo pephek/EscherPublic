@@ -150,37 +150,58 @@ namespace Escher
 
             if (result == DialogResult.OK)
             {
-                PageSetup setup = PageSetup.Load();
+                bool retry = true;
 
-                string pdfName = design.GetPdf();
-
-                if (setup.Catalog != Catalog.None)
+                while (retry)
                 {
-                    pdfName += "_" + setup.Catalog.ToString().ToLower();
-                }
+                    try
+                    {
+                        PageSetup setup = PageSetup.Load();
 
-                pdfName += "_" + setup.PageFormat.FormatName;
+                        string pdfName = design.GetPdf();
 
-                if (setup.IncludeMarginForPunchHoles)
-                {
-                    pdfName += "_offcenter";
-                }
+                        if (setup.Catalog != Catalog.None)
+                        {
+                            pdfName += "_" + setup.Catalog.ToString().ToLower();
+                        }
 
-                if (setup.IncludeSamplePagesOnly)
-                {
-                    pdfName += "_sample";
-                }
+                        pdfName += "_" + setup.PageFormat.FormatName;
 
-                if (setup.FontSize == FontSize.Medium)
-                {
-                    pdfName += "_font6";
-                }
-                else if (setup.FontSize == FontSize.Large)
-                {
-                    pdfName += "_font7";
-                }
+                        if (setup.IncludeMarginForPunchHoles)
+                        {
+                            pdfName += "_offcenter";
+                        }
 
-                pdfName = pdfName.ToLower() + ".pdf";
+                        if (setup.IncludeSamplePagesOnly)
+                        {
+                            pdfName += "_sample";
+                        }
+
+                        if (setup.FontSize == FontSize.Medium)
+                        {
+                            pdfName += "_font6";
+                        }
+                        else if (setup.FontSize == FontSize.Large)
+                        {
+                            pdfName += "_font7";
+                        }
+
+                        PDF995Helper pdfHelper = new PDF995Helper(pdfName);
+
+                        preview.PrintDocument(App.GetSetting("PDFPrinter"), setup.PageFormat.PageWidth, setup.PageFormat.PageHeight, this.design);
+
+                        pdfHelper.WaitForCompletion();
+
+                        retry = false;
+                    }
+                    catch (Exception e)
+                    {
+                        if (MessageBox.Show(string.Format("Exception printing design '{0}':\n\n{1}", editor.GetDesignName(), e.Message), App.GetName() + " · Exception", MessageBoxButtons.RetryCancel, MessageBoxIcon.Exclamation, MessageBoxDefaultButton.Button1) == DialogResult.Cancel)
+                        {
+                            retry = false;
+                        }
+                    }
+                }
             }
         }
 
@@ -411,8 +432,6 @@ namespace Escher
 
             while (retry)
             {
-                retry = false;
-
                 try
                 {
                     string error = null;
@@ -444,10 +463,12 @@ namespace Escher
 
                         SetMenus(enabled: true);
                     }
+
+                    retry = false;
                 }
                 catch (Exception e)
                 {
-                    if (MessageBox.Show(string.Format("Exception reading design '{0}':\n\n{1}", designName, e.Message), App.GetName() + " · Exception", MessageBoxButtons.RetryCancel, MessageBoxIcon.Exclamation, MessageBoxDefaultButton.Button1) == DialogResult.Cancel)
+                    if (MessageBox.Show(string.Format("Exception opening design '{0}':\n\n{1}", designName, e.Message), App.GetName() + " · Exception", MessageBoxButtons.RetryCancel, MessageBoxIcon.Exclamation, MessageBoxDefaultButton.Button1) == DialogResult.Cancel)
                     {
                         retry = false;
                     }

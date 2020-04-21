@@ -6,6 +6,7 @@ using System.Diagnostics;
 using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.Drawing.Imaging;
+using System.Drawing.Printing;
 using System.Drawing.Text;
 using System.Linq;
 using System.Text;
@@ -48,17 +49,65 @@ namespace Escher
             vScrollBar.ValueChanged += new EventHandler((sender, e) => RefreshPreview(resizePreview: false));
         }
 
-        public void SetPreview(Design design, int pageNumber, PrintMode printMode, ScreenMode screenMode)
+        public void PrintDocument(string printerName, float paperWidth, float paperHeight, Design design)
         {
-            this.design = design;
+            const int cCustomPaperSize = 119;
 
+            PrintDocument printDocument = new PrintDocument();
+
+            printDocument.PrintController = new StandardPrintController();
+
+            printDocument.DefaultPageSettings.PrinterSettings.PrinterName = printerName;
+            printDocument.PrinterSettings.PrinterName = printerName;
+
+            printDocument.DefaultPageSettings.PaperSize = new PaperSize("Custom", (int)(paperWidth / 25.4 * 100), (int)(paperHeight / 25.4 * 100));
+
+            printDocument.DefaultPageSettings.PaperSize.RawKind = cCustomPaperSize;
+            printDocument.PrinterSettings.DefaultPageSettings.PaperSize.RawKind = cCustomPaperSize;
+
+            printDocument.DefaultPageSettings.Landscape = false;
+
+            this.pageNumber = 1;
+            this.printMode = PrintMode.ToDocument;
+            this.screenMode = ScreenMode.MatchScreenHeight;
+            this.design = design;
             this.setup = PageSetup.Get();
 
-            this.page = PageHelper.Get(design, pageNumber, setup.FrameStyle);
+            this.pageScale = 1;
+            this.transformScale = 1;
 
+            printDocument.PrintPage += new PrintPageEventHandler((sender, e) => PrintPage(e));
+
+            printDocument.Print();
+        }
+
+        private void PrintPage(PrintPageEventArgs e)
+        {
+            this.page = PageHelper.Get(this.design, this.pageNumber, this.setup.FrameStyle);
+
+            GraphicsUnit pageUnit = e.Graphics.PageUnit;
+
+            e.Graphics.PageUnit = GraphicsUnit.Millimeter;
+
+            AssemblePreview(e.Graphics, this.page, this.pageNumber, this.printMode, this.screenMode);
+
+            //e.Graphics.PageUnit = pageUnit;
+
+            PrintPreview(e.Graphics, this.artifacts, this.pageScale, this.transformScale, this.printMode, this.screenMode);
+
+            this.pageNumber++;
+
+            e.HasMorePages = (this.pageNumber <= this.design.NumberOfPages());
+        }
+
+        public void SetPreview(Design design, int pageNumber, PrintMode printMode, ScreenMode screenMode)
+        {
             this.pageNumber = pageNumber;
             this.printMode = printMode;
             this.screenMode = screenMode;
+            this.design = design;
+            this.setup = PageSetup.Get();
+            this.page = PageHelper.Get(this.design, this.pageNumber, this.setup.FrameStyle);
 
             using (Graphics graphics = this.CreateGraphics())
             {
@@ -390,7 +439,7 @@ namespace Escher
                         break;
 
                     case ArtifactType.MoveSolid:
-                        pen = new Pen(artifact.ForeColor);
+                        pen = new Pen(artifact.ForeColor, 0.1F);
                         g.DrawLine(pen, currentX, currentY, currentX + artifact.Width, currentY + artifact.Height);
                         currentX += artifact.Width;
                         currentY += artifact.Height;
@@ -398,8 +447,8 @@ namespace Escher
                         break;
 
                     case ArtifactType.MoveDotted:
-                        pen = new Pen(artifact.ForeColor);
-                        pen.DashPattern = new float[] { 1, 2};
+                        pen = new Pen(artifact.ForeColor, 0.1F);
+                        pen.DashPattern = new float[] { 1, 2 };
                         g.DrawLine(pen, currentX, currentY, currentX + artifact.Width, currentY + artifact.Height);
                         currentX += artifact.Width;
                         currentY += artifact.Height;
@@ -418,10 +467,6 @@ namespace Escher
                         break;
 
                     case ArtifactType.Image:
-                        if (printMode == PrintMode.ToDocument)
-                        {
-                            throw new Exception("todo");
-                        }
                         Bitmap bitmap = new Bitmap(artifact.Image);
                         bitmap.RotateFlip(artifact.RotateFlipType);
                         artifact.Image = bitmap;
