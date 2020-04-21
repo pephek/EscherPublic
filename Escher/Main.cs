@@ -188,9 +188,17 @@ namespace Escher
 
                         PDF995Helper pdfHelper = new PDF995Helper(pdfName);
 
-                        preview.PrintDocument(App.GetSetting("PDFPrinter"), setup.PageFormat.PageWidth, setup.PageFormat.PageHeight, this.design);
+                        Progress progress = new Progress(this.design.NumberOfPages());
+                        progress.Show();
+                        progress.Refresh();
+
+                        preview.PrintDocument(App.GetSetting("PDFPrinter"), setup.PageFormat.PageWidth, setup.PageFormat.PageHeight, this.design, progress.SetProgress);
+
+                        progress.SetWaiting();
 
                         pdfHelper.WaitForCompletion();
+
+                        progress.Close();
 
                         retry = false;
                     }

@@ -49,7 +49,7 @@ namespace Escher
             vScrollBar.ValueChanged += new EventHandler((sender, e) => RefreshPreview(resizePreview: false));
         }
 
-        public void PrintDocument(string printerName, float paperWidth, float paperHeight, Design design)
+        public void PrintDocument(string printerName, float paperWidth, float paperHeight, Design design, Action<int> setProgress)
         {
             const int cCustomPaperSize = 119;
 
@@ -76,12 +76,12 @@ namespace Escher
             this.pageScale = 1;
             this.transformScale = 1;
 
-            printDocument.PrintPage += new PrintPageEventHandler((sender, e) => PrintPage(e));
+            printDocument.PrintPage += new PrintPageEventHandler((sender, e) => PrintPage(e, setProgress));
 
             printDocument.Print();
         }
 
-        private void PrintPage(PrintPageEventArgs e)
+        private void PrintPage(PrintPageEventArgs e, Action<int> setProgress)
         {
             this.page = PageHelper.Get(this.design, this.pageNumber, this.setup.FrameStyle);
 
@@ -98,6 +98,11 @@ namespace Escher
             this.pageNumber++;
 
             e.HasMorePages = (this.pageNumber <= this.design.NumberOfPages());
+
+            if (e.HasMorePages)
+            {
+                setProgress(this.pageNumber);
+            }
         }
 
         public void SetPreview(Design design, int pageNumber, PrintMode printMode, ScreenMode screenMode)

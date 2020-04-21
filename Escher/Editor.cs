@@ -68,7 +68,7 @@ namespace Escher
 
             menuSave.Enabled = false;
 
-            this.Text = string.Format("Editing {0}", designName);
+            this.Text = string.Format("Escher ̣̤̤· Editing {0}", designName);
         }
 
         public void SetError(string error = null)
@@ -338,7 +338,7 @@ namespace Escher
 
                 menuSave.Enabled = false;
 
-                this.Text = string.Format("Editing {0}", designName);
+                this.Text = string.Format("Escher ̣̤̤· Editing {0}", designName);
 
                 this.reopen(design.Text);
             }

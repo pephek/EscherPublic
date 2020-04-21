@@ -7,6 +7,7 @@ using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using System.Windows.Forms;
 
 namespace Escher
 {
@@ -15,8 +16,14 @@ namespace Escher
         [DllImport("kernel32", CharSet = CharSet.Unicode)]
         static extern long WritePrivateProfileString(string Section, string Key, string Value, string FilePath);
 
+        [DllImport("kernel32", CharSet = CharSet.Unicode)]
+        static extern int GetPrivateProfileString(string Section, string Key, string Default, StringBuilder RetVal, int Size, string FilePath);
+
         private const string cWaitForCompletionFlag = "wait.for.completion.flag";
         private const string cDeleteWaitForCompletionFlag = "delete.wait.for.completion.flag.bat";
+
+        private string PDF995ini;
+        private string PDF995syncini;
 
         public PDF995Helper(string pdfName)
         {
@@ -29,10 +36,27 @@ namespace Escher
 
             RegistryKey registryKey = Registry.LocalMachine.OpenSubKey("Software\\PDF995");
 
-            string ini = string.Format("{0}PDF995\\res\\PDF995.ini", (string)registryKey.GetValue("Path", ""));
+            PDF995ini = string.Format("{0}PDF995\\res\\PDF995.ini", (string)registryKey.GetValue("Path", ""));
 
-            WritePrivateProfileString("Parameters", "Output File", pdfPath, ini);
-            WritePrivateProfileString("Parameters", "ProcessPDF", deleteFlagPath, ini);
+            WritePrivateProfileString("Parameters", "Output File", pdfPath, PDF995ini);
+            WritePrivateProfileString("Parameters", "ProcessPDF", deleteFlagPath, PDF995ini);
+            WritePrivateProfileString("Parameters", "TS Enabled", "0", PDF995ini);
+
+            PDF995syncini = string.Format("{0}PDF995\\res\\pdfsync.ini", (string)registryKey.GetValue("Path", ""));
+
+            if (!File.Exists(PDF995syncini))
+            {
+                PDF995syncini = "C:\\Documents and Settings\\All Users\\PDF995\\pdfsync.ini";
+            }
+
+            if (!File.Exists(PDF995syncini))
+            {
+                PDF995syncini = null;
+            }
+            else
+            {
+                WritePrivateProfileString("Parameters", "PS Creation Complete", "0", PDF995syncini);
+            }
 
             File.WriteAllText(flagPath, flagPath);
             File.WriteAllText(deleteFlagPath, string.Format("del \"{0}\"\n", flagPath));
@@ -45,6 +69,25 @@ namespace Escher
             while (File.Exists(flagPath))
             {
                 Thread.Sleep(100);
+
+                Application.DoEvents();
+            }
+
+            if (PDF995syncini != null)
+            {
+                string psCreationComplete = "0";
+
+                while (psCreationComplete == "0")
+                {
+                    Thread.Sleep(100);
+
+                    Application.DoEvents();
+
+                    StringBuilder setting = new StringBuilder(255);
+                    GetPrivateProfileString("Parameters", "PS Creation Complete", "", setting, setting.Capacity, PDF995syncini);
+
+                    psCreationComplete = setting.ToString();
+                }
             }
         }
     }
