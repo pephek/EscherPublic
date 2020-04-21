@@ -98,6 +98,7 @@
     </Compile>
     <Compile Include="Entities\Artifact.cs" />
     <Compile Include="Entities\Artifacts.cs" />
+    <Compile Include="Entities\Bookmark.cs" />
     <Compile Include="Entities\Design.cs" />
     <Compile Include="Entities\DesignEntry.cs" />
     <Compile Include="Entities\Page.cs" />
@@ -123,6 +124,7 @@
     <Compile Include="Enums\SheetNumber.cs" />
     <Compile Include="Enums\TitleStyle.cs" />
     <Compile Include="Experiments.cs" />
+    <Compile Include="Helpers\BookmarksHelper.cs" />
     <Compile Include="Helpers\GraphicsHelper.cs" />
     <Compile Include="Helpers\HtmlHelper.cs" />
     <Compile Include="Helpers\ImageHelper.cs" />

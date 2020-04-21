@@ -186,7 +186,7 @@ namespace Escher
                             pdfName += "_font7";
                         }
 
-                        PDF995Helper pdfHelper = new PDF995Helper(pdfName);
+                        PDF995Helper pdfHelper = new PDF995Helper(pdfName, setup.IncludePdfBookmarks ? BookmarksHelper.GetBookmarks(this.design, setup.IncludeSamplePagesOnly) : null);
 
                         Progress progress = new Progress(this.design.NumberOfPages());
                         progress.Show();

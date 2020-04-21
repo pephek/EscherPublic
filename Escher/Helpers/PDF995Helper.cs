@@ -24,8 +24,9 @@ namespace Escher
 
         private string PDF995ini;
         private string PDF995syncini;
+        private string PDF995bookmarks;
 
-        public PDF995Helper(string pdfName)
+        public PDF995Helper(string pdfName, string bookmarks)
         {
             string pdfPath = string.Format("{0}\\{1}.pdf", App.GetSetting("DocumentsFolder"), pdfName.ToLower());
 
@@ -41,6 +42,31 @@ namespace Escher
             WritePrivateProfileString("Parameters", "Output File", pdfPath, PDF995ini);
             WritePrivateProfileString("Parameters", "ProcessPDF", deleteFlagPath, PDF995ini);
             WritePrivateProfileString("Parameters", "TS Enabled", "0", PDF995ini);
+
+            string pdfEdit = string.Format("{0}PDF995\\res\\utilities\\PDFEdit995.exe", (string)registryKey.GetValue("Path", ""));
+
+            if (bookmarks != null)
+            {
+                WritePrivateProfileString("Parameters", "ProcessPS", string.Format("{0} InsertBookMarks", pdfEdit), PDF995ini);
+
+                string bookmarksFolder = "C:\\Documents and Settings\\All Users\\PDF995\\res\\utilities";
+
+                if (!Directory.Exists(bookmarksFolder))
+                {
+                    Directory.CreateDirectory(bookmarksFolder);
+                }
+
+                PDF995bookmarks = string.Format("{0}\\bookmarks.xml", bookmarksFolder);
+
+                File.WriteAllText(PDF995bookmarks, bookmarks, Encoding.GetEncoding("iso-8859-1"));
+            }
+            else
+            {
+                WritePrivateProfileString("Parameters", "ProcessPS", "", PDF995ini);
+            }
+
+
+            // Paste this in the address bar of the file explorer:C:\Documents and Settings\All Users\pdf995
 
             PDF995syncini = string.Format("{0}PDF995\\res\\pdfsync.ini", (string)registryKey.GetValue("Path", ""));
 
