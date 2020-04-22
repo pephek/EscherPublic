@@ -99,7 +99,7 @@ namespace Escher
 
                 //e.Graphics.PageUnit = pageUnit;
 
-                PrintPreview(e.Graphics, this.artifacts, this.pageScale, this.transformScale, this.printMode, this.screenMode);
+                DrawPreview(e.Graphics, this.artifacts, this.pageScale, this.transformScale, this.printMode, this.screenMode);
 
                 this.pageNumber++;
 
@@ -326,7 +326,7 @@ namespace Escher
 
             graphics.PageUnit = pageUnit;
 
-            PrintPreview(graphics, this.artifacts, this.pageScale, this.transformScale, this.printMode, this.screenMode);
+            DrawPreview(graphics, this.artifacts, this.pageScale, this.transformScale, this.printMode, this.screenMode);
         }
 
         private void PrintTest(Graphics g)
@@ -356,7 +356,7 @@ namespace Escher
             g.DrawString(text, font, brush, 5, 30);
         }
 
-        private void FramePreview(Graphics g, float x, float y, Artifact artifact, float pageScale, float transformScale)
+        private void DrawFrame(Graphics g, float x, float y, Artifact artifact, float pageScale, float transformScale)
         {
             float fourMM = 4 * pageScale;
 
@@ -434,19 +434,16 @@ namespace Escher
             }
         }
 
-        private void PrintPreview(Graphics g, Artifacts artifacts, float pageScale, float transformScale, PrintMode printMode, ScreenMode screenMode)
+        private void DrawPreview(Graphics g, Artifacts artifacts, float pageScale, float transformScale, PrintMode printMode, ScreenMode screenMode)
         {
             Pen pen;
             SolidBrush brush;
 
-            if (printMode == PrintMode.ToScreen)
-            {
-                g.ScaleTransform(transformScale, transformScale);
+            g.ScaleTransform(transformScale, transformScale);
 
-                if (screenMode == ScreenMode.MatchScreenWidth)
-                {
-                    g.TranslateTransform(0, -vScrollBar.Value);
-                }
+            if (printMode == PrintMode.ToScreen && screenMode == ScreenMode.MatchScreenWidth)
+            {
+                g.TranslateTransform(0, -vScrollBar.Value);
             }
 
             // Determines smoothness for shapes such as lines, ellipses, and polygons
@@ -490,7 +487,7 @@ namespace Escher
 
                     case ArtifactType.MoveDotted:
                         pen = new Pen(artifact.ForeColor, 0.1F);
-                        pen.DashPattern = new float[] { 1, 2 };
+                        pen.DashPattern = new float[] { 2, 4 };
                         g.DrawLine(pen, currentX, currentY, currentX + artifact.Width, currentY + artifact.Height);
                         currentX += artifact.Width;
                         currentY += artifact.Height;
@@ -518,7 +515,7 @@ namespace Escher
                         break;
 
                     case ArtifactType.Rectangle:
-                        FramePreview(g, currentX, currentY, artifact, pageScale, transformScale);
+                        DrawFrame(g, currentX, currentY, artifact, pageScale, transformScale);
                         break;
 
                     default:
