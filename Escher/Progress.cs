@@ -20,32 +20,47 @@ namespace Escher
 
             this.numberOfPages = numberOfPages;
 
-            labelProgress.Visible = false;
-            labelWaiting.Visible = false;
+            labelPrinting.Text = string.Format("1 · Printing page {0} of {1}", 0, numberOfPages);
+            labelCreating.Text = string.Format("2 · Creating image {0} of {1}", 0, numberOfPages);
+
+            labelPrinting.ForeColor = Color.Silver;
+            labelCreating.ForeColor = Color.Silver;
+            labelWaiting.ForeColor = Color.Silver;
         }
 
-        public void SetProgress(int pageNumber)
+        public void SetPrintingProgress(int pageNumber)
         {
-            labelProgress.ForeColor = Color.Black;
-            labelProgress.Text = string.Format("1 · Printing page {0} of {1}", pageNumber, numberOfPages);
+            labelPrinting.Text = string.Format("1 · Printing page {0} of {1}", pageNumber, numberOfPages);
 
+            labelPrinting.ForeColor = Color.Black;
+            labelCreating.ForeColor = Color.Silver;
             labelWaiting.ForeColor = Color.Silver;
 
-            labelProgress.Visible = true;
-            labelWaiting.Visible = true;
+            Refresh();
 
-            this.Refresh();
+            Application.DoEvents();
+        }
+
+        public void SetCreatingProgress(int pageNumber)
+        {
+            labelCreating.Text = string.Format("2 · Creating image {0} of {1}", pageNumber, numberOfPages);
+
+            labelPrinting.ForeColor = Color.Silver;
+            labelCreating.ForeColor = Color.Black;
+            labelWaiting.ForeColor = Color.Silver;
+
+            Refresh();
 
             Application.DoEvents();
         }
 
         public void SetWaiting()
         {
-            labelProgress.ForeColor = Color.Silver;
-
+            labelPrinting.ForeColor = Color.Silver;
+            labelCreating.ForeColor = Color.Silver;
             labelWaiting.ForeColor = Color.Black;
 
-            this.Refresh();
+            Refresh();
 
             Application.DoEvents();
         }

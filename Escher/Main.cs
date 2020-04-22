@@ -209,22 +209,24 @@ namespace Escher
                         progress.Show();
                         progress.Refresh();
 
-                        preview.PrintDocument(App.GetSetting("PDFPrinter"), setup.PageFormat.PageWidth, setup.PageFormat.PageHeight, this.design, progress.SetProgress);
-
-                        progress.SetWaiting();
-
-                        pdfHelper.WaitForCompletion();
+                        preview.PrintDocument(App.GetSetting("PDFPrinter"), setup.PageFormat.PageWidth, setup.PageFormat.PageHeight, this.design, progress.SetPrintingProgress);
 
                         if (setup.IncludePdfImages)
                         {
                             for (int pageNumber = 1; pageNumber <= this.design.NumberOfPages(); pageNumber++)
                             {
+                                progress.SetCreatingProgress(pageNumber);
+
                                 preview.ShowPreview(this.design, pageNumber, PrintMode.ToDocument, ScreenMode.MatchPaper);
 
                                 preview.CreateImage(string.Format("{0}\\{1}-large.jpg", App.GetSetting("PDFImagesFolder"), pageNumber), 0.75F);
                                 preview.CreateImage(string.Format("{0}\\{1}-small.jpg", App.GetSetting("PDFImagesFolder"), pageNumber), 0.25F);
                             }
                         }
+
+                        progress.SetWaiting();
+
+                        pdfHelper.WaitForCompletion();
 
                         progress.Close();
 
