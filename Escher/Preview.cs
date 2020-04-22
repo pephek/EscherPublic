@@ -85,25 +85,52 @@ namespace Escher
 
         private void PrintPage(PrintPageEventArgs e, Action<int> setProgress)
         {
-            this.page = PageHelper.Get(this.design, this.pageNumber, this.setup.FrameStyle);
-
-            GraphicsUnit pageUnit = e.Graphics.PageUnit;
-
-            e.Graphics.PageUnit = GraphicsUnit.Millimeter;
-
-            AssemblePreview(e.Graphics, this.page, this.pageNumber, this.printMode, this.screenMode);
-
-            //e.Graphics.PageUnit = pageUnit;
-
-            PrintPreview(e.Graphics, this.artifacts, this.pageScale, this.transformScale, this.printMode, this.screenMode);
-
-            this.pageNumber++;
-
-            e.HasMorePages = (this.pageNumber <= this.design.NumberOfPages());
-
-            if (e.HasMorePages)
+            if (this.pageNumber <= this.design.NumberOfPages())
             {
                 setProgress(this.pageNumber);
+
+                this.page = PageHelper.Get(this.design, this.pageNumber, this.setup.FrameStyle);
+
+                GraphicsUnit pageUnit = e.Graphics.PageUnit;
+
+                e.Graphics.PageUnit = GraphicsUnit.Millimeter;
+
+                AssemblePreview(e.Graphics, this.page, this.pageNumber, this.printMode, this.screenMode);
+
+                //e.Graphics.PageUnit = pageUnit;
+
+                PrintPreview(e.Graphics, this.artifacts, this.pageScale, this.transformScale, this.printMode, this.screenMode);
+
+                this.pageNumber++;
+
+                e.HasMorePages = true;
+            }
+            else
+            {
+                List<String> mounts = this.design.GetMountsOverview();
+
+                Font font = new Font("Lucida Console", 4);
+                Brush brush = new SolidBrush(Color.Black);
+
+                RectangleF size = e.Graphics.MeasureText(mounts[mounts.Count() - 1], "Lucida Console", 4, false, false);
+
+                float x = 25;
+                float y = 25;
+
+                for (int m = 0; m < mounts.Count(); m++)
+                {
+                    if (m > 0 && m % 175 == 0)
+                    {
+                        x += size.Width + 25F;
+                        y = 25;
+                    }
+
+                    e.Graphics.DrawString(mounts[m], font, brush, x, y);
+
+                    y += size.Height;
+                }
+
+                e.HasMorePages = false;
             }
         }
 

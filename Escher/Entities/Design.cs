@@ -96,5 +96,65 @@ namespace Escher
 
             return stamps;
         }
+
+        public static List<string> GetMountsOverview(this Design design)
+        {
+            List<string> overview = new List<string>();
+
+            Dictionary<string, SortedDictionary<string, int>> mounts = new Dictionary<string, SortedDictionary<string, int>>();
+
+            SortedDictionary<string, int> page = null;
+
+            foreach (DesignEntry entry in design)
+            {
+                switch (entry.Class)
+                {
+                    case Class.PageFeed:
+
+                        string albumNumber = entry.AlbumNumber;
+
+                        if (!mounts.ContainsKey(albumNumber))
+                        {
+                            mounts.Add(albumNumber, new SortedDictionary<string, int>());
+                        }
+
+                        page = mounts[entry.AlbumNumber];
+
+                        break;
+
+                    case Class.Variety:
+
+                        if (entry.FrameColor != FrameColor.White)
+                        {
+                            string size = string.Format("{0}̣×{1}", entry.Width, entry.Height);
+
+                            if (!page.ContainsKey(size))
+                            {
+                                page.Add(size, 1);
+                            }
+                            else
+                            {
+                                page[size]++;
+                            }
+                        }
+                        break;
+                }
+            }
+
+            foreach (KeyValuePair<string, SortedDictionary<string, int>> pageMounts in mounts)
+            {
+                if (pageMounts.Value.Count() != 0)
+                {
+                    overview.Add(string.Format("Page number {0}: ", pageMounts.Key));
+
+                    foreach (KeyValuePair<string, int> size in pageMounts.Value)
+                    {
+                        overview.Add(string.Format("{0,3} frames of {1} mm.", size.Value, size.Key));
+                    }
+                }
+            }
+
+            return overview;
+        }
     }
 }

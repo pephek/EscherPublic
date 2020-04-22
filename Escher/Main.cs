@@ -234,7 +234,7 @@ namespace Escher
                     }
                     catch (Exception e)
                     {
-                        if (MessageBox.Show(string.Format("Exception printing design '{0}':\n\n{1}", editor.GetDesignName(), e.Message), App.GetName() + " · Exception", MessageBoxButtons.RetryCancel, MessageBoxIcon.Exclamation, MessageBoxDefaultButton.Button1) == DialogResult.Cancel)
+                        if (MessageBox.Show(string.Format("Exception printing design '{0}':\n\n{1}\n\n{2}", editor.GetDesignName(), e.Message, e.StackTrace.ToString()), App.GetName() + " · Exception", MessageBoxButtons.RetryCancel, MessageBoxIcon.Exclamation, MessageBoxDefaultButton.Button1) == DialogResult.Cancel)
                         {
                             retry = false;
                         }
