@@ -163,6 +163,8 @@ namespace Escher
                 {
                     try
                     {
+                        preview.Hide();
+
                         PageSetup setup = PageSetup.Load();
 
                         string pdfName = design.GetPdf();
@@ -215,17 +217,12 @@ namespace Escher
 
                         if (setup.IncludePdfImages)
                         {
-                            preview.Show();
-
                             for (int pageNumber = 1; pageNumber <= this.design.NumberOfPages(); pageNumber++)
                             {
-                                preview.SetPreview(this.design, pageNumber, PrintMode.ToDocument, ScreenMode.MatchPaper);
+                                preview.ShowPreview(this.design, pageNumber, PrintMode.ToDocument, ScreenMode.MatchPaper);
 
-                                preview.Refresh();
-
-                                preview.CreateImage(string.Format("{0}\\{1}-large.jpg", App.GetSetting("PDFImagesFolder"), pageNumber), 1);
-
-                                Thread.Sleep(250);
+                                preview.CreateImage(string.Format("{0}\\{1}-large.jpg", App.GetSetting("PDFImagesFolder"), pageNumber), 0.75F);
+                                preview.CreateImage(string.Format("{0}\\{1}-small.jpg", App.GetSetting("PDFImagesFolder"), pageNumber), 0.25F);
                             }
                         }
 
@@ -533,8 +530,8 @@ namespace Escher
 
                 int pageNumber = Int32.Parse(e.Url.AbsolutePath.Replace("page(", "").Replace(")", ""));
 
-                preview.SetPreview(design, pageNumber, PrintMode.ToScreen, ScreenMode.MatchScreenHeight);
                 preview.Show();
+                preview.ShowPreview(design, pageNumber, PrintMode.ToScreen, ScreenMode.MatchScreenHeight);
                 preview.Activate();
             }
             else if (e.Url.AbsolutePath.StartsWith("stamp("))

@@ -290,9 +290,8 @@ namespace Escher
                     }
                 }
 
-                preview.SetPreview(d, pageNumber: pageNumber, printMode: PrintMode.ToScreen, screenMode: ScreenMode.MatchScreenHeight);
-                preview.Invalidate();
                 preview.Show();
+                preview.ShowPreview(d, pageNumber: pageNumber, printMode: PrintMode.ToScreen, screenMode: ScreenMode.MatchScreenHeight);
                 preview.Activate();
             }
         }

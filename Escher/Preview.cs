@@ -120,7 +120,7 @@ namespace Escher
             bitmap.SaveAsJpeg(file, 100);
         }
 
-        public void SetPreview(Design design, int pageNumber, PrintMode printMode, ScreenMode screenMode)
+        public void ShowPreview(Design design, int pageNumber, PrintMode printMode, ScreenMode screenMode)
         {
             this.pageNumber = pageNumber;
             this.printMode = printMode;
@@ -136,6 +136,8 @@ namespace Escher
             }
 
             ResizePreview(this.screenMode, out this.pageScale, out this.transformScale);
+
+            Refresh();
         }
 
         private void HandleKeyDown(Keys keyCode, Keys modifiers)
