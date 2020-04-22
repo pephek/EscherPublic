@@ -207,11 +207,11 @@ namespace Escher
                         progress.Show();
                         progress.Refresh();
 
-                        //preview.PrintPDFDocument(App.GetSetting("PDFPrinter"), setup.PageFormat.PageWidth, setup.PageFormat.PageHeight, this.design, progress.SetProgress);
+                        preview.PrintDocument(App.GetSetting("PDFPrinter"), setup.PageFormat.PageWidth, setup.PageFormat.PageHeight, this.design, progress.SetProgress);
 
-                        //progress.SetWaiting();
+                        progress.SetWaiting();
 
-                        //pdfHelper.WaitForCompletion();
+                        pdfHelper.WaitForCompletion();
 
                         if (setup.IncludePdfImages)
                         {
@@ -534,7 +534,6 @@ namespace Escher
                 int pageNumber = Int32.Parse(e.Url.AbsolutePath.Replace("page(", "").Replace(")", ""));
 
                 preview.SetPreview(design, pageNumber, PrintMode.ToScreen, ScreenMode.MatchScreenHeight);
-                //preview.Invalidate();
                 preview.Show();
                 preview.Activate();
             }
