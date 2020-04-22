@@ -21,7 +21,7 @@ namespace Escher
         public Catalog Catalog;
         public bool AppendCatalog;
         public bool IncludeSamplePagesOnly;
-        public bool IncludeHtmlScans;
+        public bool IncludePdfImages;
         public bool IncludePdfBookmarks;
         public decimal RealLifePageScale;
 
@@ -42,7 +42,7 @@ namespace Escher
             pageSetup.Catalog = Properties.Settings.Default.Catalog;
             pageSetup.AppendCatalog = Properties.Settings.Default.AppendCatalog;
             pageSetup.IncludeSamplePagesOnly = Properties.Settings.Default.IncludeSamplePagesOnly;
-            pageSetup.IncludeHtmlScans = Properties.Settings.Default.IncludeHtmlScans;
+            pageSetup.IncludePdfImages = Properties.Settings.Default.IncludePdfImages;
             pageSetup.IncludePdfBookmarks = Properties.Settings.Default.IncludePdfBookmarks;
             pageSetup.RealLifePageScale = Properties.Settings.Default.RealLifePageScale;
 

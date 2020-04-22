@@ -76,6 +76,8 @@ namespace Escher
             this.pageScale = 1;
             this.transformScale = 1;
 
+            setProgress(this.pageNumber);
+
             printDocument.PrintPage += new PrintPageEventHandler((sender, e) => PrintPage(e, setProgress));
 
             printDocument.Print();
@@ -103,6 +105,19 @@ namespace Escher
             {
                 setProgress(this.pageNumber);
             }
+        }
+
+        public void CreateImage(string file, float ratio)
+        {
+            Bitmap bitmap = new Bitmap(Width, Height);
+            DrawToBitmap(bitmap, new Rectangle(0, 0, Width, Height));
+
+            if (ratio != 1)
+            {
+                bitmap = bitmap.Resize(ratio);
+            }
+
+            bitmap.SaveAsJpeg(file, 100);
         }
 
         public void SetPreview(Design design, int pageNumber, PrintMode printMode, ScreenMode screenMode)

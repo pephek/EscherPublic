@@ -128,7 +128,7 @@ namespace Escher
             // Album Options
 
             checkBoxIncludeSamplePagesOnly.Checked = pageSetup.IncludeSamplePagesOnly;
-            checkBoxIncludeHtmlScans.Checked = pageSetup.IncludeHtmlScans;
+            checkBoxIncludePdfImage.Checked = pageSetup.IncludePdfImages;
             checkBoxIncludePdfBookmarks.Checked = pageSetup.IncludePdfBookmarks;
 
             // Real life page scale
@@ -186,7 +186,7 @@ namespace Escher
             // Album Options
 
             Properties.Settings.Default.IncludeSamplePagesOnly = checkBoxIncludeSamplePagesOnly.Checked;
-            Properties.Settings.Default.IncludeHtmlScans = checkBoxIncludeHtmlScans.Checked;
+            Properties.Settings.Default.IncludePdfImages = checkBoxIncludePdfImage.Checked;
             Properties.Settings.Default.IncludePdfBookmarks = checkBoxIncludePdfBookmarks.Checked;
 
             // Real life page scale

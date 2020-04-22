@@ -28,10 +28,10 @@ namespace Escher
 
         public PDF995Helper(string pdf, string pdfName, string bookmarksInXml, string bookmarksInHtm)
         {
-            string pdfPath = string.Format("{0}\\{1}.pdf", App.GetSetting("DocumentsFolder"), pdfName.ToLower());
+            string pdfPath = string.Format("{0}\\{1}.pdf", App.GetSetting("PDFDocumentsFolder"), pdfName.ToLower());
 
-            string flagPath = string.Format("{0}\\{1}", App.GetSetting("DocumentsFolder"), cWaitForCompletionFlag);
-            string deleteFlagPath = string.Format("{0}\\{1}", App.GetSetting("DocumentsFolder"), cDeleteWaitForCompletionFlag);
+            string flagPath = string.Format("{0}\\{1}", App.GetSetting("PDFDocumentsFolder"), cWaitForCompletionFlag);
+            string deleteFlagPath = string.Format("{0}\\{1}", App.GetSetting("PDFDocumentsFolder"), cDeleteWaitForCompletionFlag);
 
             File.Delete(pdfPath);
 
@@ -67,7 +67,7 @@ namespace Escher
 
             if (bookmarksInHtm != null)
             {
-                string htmPath = string.Format("{0}\\{1}.html", App.GetSetting("DocumentsFolder"), pdf.ToLower());
+                string htmPath = string.Format("{0}\\{1}.html", App.GetSetting("PDFDocumentsFolder"), pdf.ToLower());
 
                 File.WriteAllText(htmPath, bookmarksInHtm, Encoding.GetEncoding("iso-8859-1"));
             }
@@ -96,7 +96,8 @@ namespace Escher
 
         public void WaitForCompletion()
         {
-            string flagPath = string.Format("{0}\\{1}.pdf", App.GetSetting("DocumentsFolder"), cWaitForCompletionFlag);
+            string flagPath = string.Format("{0}\\{1}", App.GetSetting("PDFDocumentsFolder"), cWaitForCompletionFlag);
+            string deleteFlagPath = string.Format("{0}\\{1}", App.GetSetting("PDFDocumentsFolder"), cDeleteWaitForCompletionFlag);
 
             while (File.Exists(flagPath))
             {
@@ -105,22 +106,24 @@ namespace Escher
                 Application.DoEvents();
             }
 
-            if (PDF995synciniFile != null)
-            {
-                string psCreationComplete = "0";
+            File.Delete(deleteFlagPath);
 
-                while (psCreationComplete == "0")
-                {
-                    Thread.Sleep(100);
+            //if (PDF995synciniFile != null)
+            //{
+            //    string psCreationComplete = "0";
 
-                    Application.DoEvents();
+            //    while (psCreationComplete == "0")
+            //    {
+            //        Thread.Sleep(100);
 
-                    StringBuilder setting = new StringBuilder(255);
-                    GetPrivateProfileString("Parameters", "PS Creation Complete", "", setting, setting.Capacity, PDF995synciniFile);
+            //        Application.DoEvents();
 
-                    psCreationComplete = setting.ToString();
-                }
-            }
+            //        StringBuilder setting = new StringBuilder(255);
+            //        GetPrivateProfileString("Parameters", "PS Creation Complete", "", setting, setting.Capacity, PDF995synciniFile);
+
+            //        psCreationComplete = setting.ToString();
+            //    }
+            //}
         }
     }
 }

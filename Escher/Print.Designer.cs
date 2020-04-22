@@ -55,15 +55,15 @@
             this.radioButtonSmall = new System.Windows.Forms.RadioButton();
             this.groupBoxAlbumOptions = new System.Windows.Forms.GroupBox();
             this.checkBoxIncludePdfBookmarks = new System.Windows.Forms.CheckBox();
-            this.checkBoxIncludeHtmlScans = new System.Windows.Forms.CheckBox();
+            this.checkBoxIncludePdfImage = new System.Windows.Forms.CheckBox();
             this.checkBoxIncludeSamplePagesOnly = new System.Windows.Forms.CheckBox();
             this.buttonOk = new System.Windows.Forms.Button();
             this.buttonCancel = new System.Windows.Forms.Button();
             this.groupBoxRealLifePageScale = new System.Windows.Forms.GroupBox();
             this.numericRealLifePageScale = new System.Windows.Forms.NumericUpDown();
             this.groupBoxPrinter = new System.Windows.Forms.GroupBox();
-            this.textPrinter = new System.Windows.Forms.TextBox();
             this.labelPrinter = new System.Windows.Forms.Label();
+            this.textPrinter = new System.Windows.Forms.TextBox();
             this.groupBoxFormat.SuspendLayout();
             this.groupBoxStampOptions.SuspendLayout();
             this.groupBoxFrameOptions.SuspendLayout();
@@ -365,7 +365,7 @@
             // groupBoxAlbumOptions
             // 
             this.groupBoxAlbumOptions.Controls.Add(this.checkBoxIncludePdfBookmarks);
-            this.groupBoxAlbumOptions.Controls.Add(this.checkBoxIncludeHtmlScans);
+            this.groupBoxAlbumOptions.Controls.Add(this.checkBoxIncludePdfImage);
             this.groupBoxAlbumOptions.Controls.Add(this.checkBoxIncludeSamplePagesOnly);
             this.groupBoxAlbumOptions.Location = new System.Drawing.Point(611, 174);
             this.groupBoxAlbumOptions.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
@@ -379,24 +379,24 @@
             // checkBoxIncludePdfBookmarks
             // 
             this.checkBoxIncludePdfBookmarks.AutoSize = true;
-            this.checkBoxIncludePdfBookmarks.Location = new System.Drawing.Point(17, 85);
+            this.checkBoxIncludePdfBookmarks.Location = new System.Drawing.Point(17, 58);
             this.checkBoxIncludePdfBookmarks.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.checkBoxIncludePdfBookmarks.Name = "checkBoxIncludePdfBookmarks";
-            this.checkBoxIncludePdfBookmarks.Size = new System.Drawing.Size(174, 21);
+            this.checkBoxIncludePdfBookmarks.Size = new System.Drawing.Size(180, 21);
             this.checkBoxIncludePdfBookmarks.TabIndex = 2;
-            this.checkBoxIncludePdfBookmarks.Text = "Include Pdf Bookmarks";
+            this.checkBoxIncludePdfBookmarks.Text = "Include PDF Bookmarks";
             this.checkBoxIncludePdfBookmarks.UseVisualStyleBackColor = true;
             // 
-            // checkBoxIncludeHtmlScans
+            // checkBoxIncludePdfImage
             // 
-            this.checkBoxIncludeHtmlScans.AutoSize = true;
-            this.checkBoxIncludeHtmlScans.Location = new System.Drawing.Point(17, 58);
-            this.checkBoxIncludeHtmlScans.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
-            this.checkBoxIncludeHtmlScans.Name = "checkBoxIncludeHtmlScans";
-            this.checkBoxIncludeHtmlScans.Size = new System.Drawing.Size(150, 21);
-            this.checkBoxIncludeHtmlScans.TabIndex = 1;
-            this.checkBoxIncludeHtmlScans.Text = "Include Html Scans";
-            this.checkBoxIncludeHtmlScans.UseVisualStyleBackColor = true;
+            this.checkBoxIncludePdfImage.AutoSize = true;
+            this.checkBoxIncludePdfImage.Location = new System.Drawing.Point(17, 85);
+            this.checkBoxIncludePdfImage.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.checkBoxIncludePdfImage.Name = "checkBoxIncludePdfImage";
+            this.checkBoxIncludePdfImage.Size = new System.Drawing.Size(152, 21);
+            this.checkBoxIncludePdfImage.TabIndex = 1;
+            this.checkBoxIncludePdfImage.Text = "Create PDF Images";
+            this.checkBoxIncludePdfImage.UseVisualStyleBackColor = true;
             // 
             // checkBoxIncludeSamplePagesOnly
             // 
@@ -479,15 +479,6 @@
             this.groupBoxPrinter.TabStop = false;
             this.groupBoxPrinter.Text = "PDF Printer";
             // 
-            // textPrinter
-            // 
-            this.textPrinter.Enabled = false;
-            this.textPrinter.Location = new System.Drawing.Point(21, 31);
-            this.textPrinter.Name = "textPrinter";
-            this.textPrinter.Size = new System.Drawing.Size(168, 22);
-            this.textPrinter.TabIndex = 0;
-            this.textPrinter.Text = "Printer";
-            // 
             // labelPrinter
             // 
             this.labelPrinter.ForeColor = System.Drawing.Color.Red;
@@ -497,6 +488,15 @@
             this.labelPrinter.TabIndex = 1;
             this.labelPrinter.Text = "Printer does not exist!";
             this.labelPrinter.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
+            // textPrinter
+            // 
+            this.textPrinter.Enabled = false;
+            this.textPrinter.Location = new System.Drawing.Point(21, 31);
+            this.textPrinter.Name = "textPrinter";
+            this.textPrinter.Size = new System.Drawing.Size(168, 22);
+            this.textPrinter.TabIndex = 0;
+            this.textPrinter.Text = "Printer";
             // 
             // Print
             // 
@@ -577,7 +577,7 @@
         private System.Windows.Forms.RadioButton radioButtonSmall;
         private System.Windows.Forms.GroupBox groupBoxAlbumOptions;
         private System.Windows.Forms.CheckBox checkBoxIncludePdfBookmarks;
-        private System.Windows.Forms.CheckBox checkBoxIncludeHtmlScans;
+        private System.Windows.Forms.CheckBox checkBoxIncludePdfImage;
         private System.Windows.Forms.CheckBox checkBoxIncludeSamplePagesOnly;
         private System.Windows.Forms.Button buttonOk;
         private System.Windows.Forms.Button buttonCancel;

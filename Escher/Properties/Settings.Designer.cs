@@ -218,12 +218,12 @@ namespace Escher.Properties {
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("False")]
-        public bool IncludeHtmlScans {
+        public bool IncludePdfImages {
             get {
-                return ((bool)(this["IncludeHtmlScans"]));
+                return ((bool)(this["IncludePdfImages"]));
             }
             set {
-                this["IncludeHtmlScans"] = value;
+                this["IncludePdfImages"] = value;
             }
         }
         

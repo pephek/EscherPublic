@@ -244,6 +244,11 @@ namespace Escher
             return bitmap.Bitmap;
         }
 
+        public static void SaveAsJpeg(this Bitmap bitmap, string jpeg, long quality)
+        {
+            ((Image)bitmap).SaveAsJpeg(jpeg, quality);
+        }
+
         public static void SaveAsJpeg(this Image image, string jpeg, long quality)
         {
             ImageCodecInfo imageCodecInfo = ImageCodecInfo.GetImageEncoders().FirstOrDefault(e => e.MimeType == "image/jpeg");
@@ -328,6 +333,11 @@ namespace Escher
 
 
             return brightenedBitmap;
+        }
+
+        public static Bitmap Resize(this Bitmap bitmap, float ratio)
+        {
+            return ((Image)bitmap).Resize(ratio);
         }
 
         public static Bitmap Resize(this Image image, float ratio)

@@ -50,7 +50,7 @@
     <Setting Name="IncludeSamplePagesOnly" Type="System.Boolean" Scope="User">
       <Value Profile="(Default)">False</Value>
     </Setting>
-    <Setting Name="IncludeHtmlScans" Type="System.Boolean" Scope="User">
+    <Setting Name="IncludePdfImages" Type="System.Boolean" Scope="User">
       <Value Profile="(Default)">False</Value>
     </Setting>
     <Setting Name="IncludePdfBookmarks" Type="System.Boolean" Scope="User">

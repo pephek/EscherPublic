@@ -76,11 +76,18 @@ namespace Escher
                     App.SetException(string.Format("The {0} application is already running and can not run more than once at the same time.", App.GetName()));
                 }
 
-                string documentsFolder = App.GetSetting("DocumentsFolder");
+                string pdfDocumentsFolder = App.GetSetting("PDFDocumentsFolder");
 
-                if (!Directory.Exists(documentsFolder))
+                if (!Directory.Exists(pdfDocumentsFolder))
                 {
-                    Directory.CreateDirectory(documentsFolder);
+                    Directory.CreateDirectory(pdfDocumentsFolder);
+                }
+
+                string pdfImagesFolder = App.GetSetting("PDFImagesFolder");
+
+                if (!Directory.Exists(pdfImagesFolder))
+                {
+                    Directory.CreateDirectory(pdfImagesFolder);
                 }
 
                 string designsFolder = App.GetSetting("DesignsFolder");
@@ -200,11 +207,27 @@ namespace Escher
                         progress.Show();
                         progress.Refresh();
 
-                        preview.PrintDocument(App.GetSetting("PDFPrinter"), setup.PageFormat.PageWidth, setup.PageFormat.PageHeight, this.design, progress.SetProgress);
+                        //preview.PrintPDFDocument(App.GetSetting("PDFPrinter"), setup.PageFormat.PageWidth, setup.PageFormat.PageHeight, this.design, progress.SetProgress);
 
-                        progress.SetWaiting();
+                        //progress.SetWaiting();
 
-                        pdfHelper.WaitForCompletion();
+                        //pdfHelper.WaitForCompletion();
+
+                        if (setup.IncludePdfImages)
+                        {
+                            preview.Show();
+
+                            for (int pageNumber = 1; pageNumber <= this.design.NumberOfPages(); pageNumber++)
+                            {
+                                preview.SetPreview(this.design, pageNumber, PrintMode.ToDocument, ScreenMode.MatchPaper);
+
+                                preview.Refresh();
+
+                                preview.CreateImage(string.Format("{0}\\{1}-large.jpg", App.GetSetting("PDFImagesFolder"), pageNumber), 1);
+
+                                Thread.Sleep(250);
+                            }
+                        }
 
                         progress.Close();
 
@@ -431,7 +454,7 @@ namespace Escher
             menuFindAlbumNumber.Enabled = enabled;
         }
 
-        private void Reopen(string designText)
+        private void ReopenDesign(string designText)
         {
             DesignParser designParser = new DesignParser();
 
@@ -456,7 +479,7 @@ namespace Escher
 
                     // webBrowser.Navigate("about:blank");
 
-                    editor.SetDesign(designName, Reopen);
+                    editor.SetDesign(designName, ReopenDesign);
 
                     if (validator.Parse(editor.GetDesign(), SetProgress, out error))
                     {
@@ -510,8 +533,8 @@ namespace Escher
 
                 int pageNumber = Int32.Parse(e.Url.AbsolutePath.Replace("page(", "").Replace(")", ""));
 
-                preview.SetPreview(design, pageNumber: pageNumber, printMode: PrintMode.ToScreen, screenMode: ScreenMode.MatchScreenHeight);
-                preview.Invalidate();
+                preview.SetPreview(design, pageNumber, PrintMode.ToScreen, ScreenMode.MatchScreenHeight);
+                //preview.Invalidate();
                 preview.Show();
                 preview.Activate();
             }
