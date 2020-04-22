@@ -186,7 +186,15 @@ namespace Escher
                             pdfName += "_font7";
                         }
 
-                        PDF995Helper pdfHelper = new PDF995Helper(pdfName, setup.IncludePdfBookmarks ? BookmarksHelper.GetBookmarks(this.design, setup.IncludeSamplePagesOnly) : null);
+                        string bookmarksInXml = null;
+                        string bookmarksInHtm = null;
+
+                        if (setup.IncludePdfBookmarks)
+                        {
+                            BookmarksHelper.GetBookmarks(this.design, design.GetPdf(), setup.IncludeSamplePagesOnly, out bookmarksInXml, out bookmarksInHtm);
+                        }
+
+                        PDF995Helper pdfHelper = new PDF995Helper(design.GetPdf(), pdfName, bookmarksInXml, bookmarksInHtm);
 
                         Progress progress = new Progress(this.design.NumberOfPages());
                         progress.Show();
