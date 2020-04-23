@@ -9,10 +9,10 @@ namespace Escher
 {
     public class Validator
     {
+        public const char cKeywordSeparator = '|';
+        public const char cKeywordAssignment = '=';
+
         private const char cEndOfFile = '\0';
-        private const char cSemiColon = ':';
-        private const char cEqualSign = '=';
-        private const char cVerticalBar = '|';
         private const char cLowerCaseA = 'a';
         private const char cLowerCaseZ = 'z';
         private const char cUpperCaseA = 'A';
@@ -232,9 +232,9 @@ namespace Escher
         {
             if (!ParseString("Country", true)) return false;
 
-            while (NextSeparator() == "|")
+            while (NextSeparator() == cKeywordSeparator)
             {
-                GetSeparator("|");
+                GetSeparator(cKeywordSeparator);
 
                 string nextKeyWord = NextKeyWord();
 
@@ -266,7 +266,7 @@ namespace Escher
         {
             if (!GetKeyWord(keyWord)) return false;
 
-            if (!GetSeparator(":=")) return false;
+            if (!GetSeparator(cKeywordAssignment)) return false;
 
             if (!ReadKeyWordValue(keyWord, true)) return false;
 
@@ -286,7 +286,7 @@ namespace Escher
         {
             if (!GetKeyWord(keyWord)) return false;
 
-            if (!GetSeparator(":=")) return false;
+            if (!GetSeparator(cKeywordAssignment)) return false;
 
             if (!ReadKeyWordValue(keyWord, true)) return false;
 
@@ -306,7 +306,7 @@ namespace Escher
         {
             if (!GetKeyWord(keyWord)) return false;
 
-            if (!GetSeparator(":=")) return false;
+            if (!GetSeparator(cKeywordAssignment)) return false;
 
             if (!ReadKeyWordValue(keyWord, true)) return false;
 
@@ -326,7 +326,7 @@ namespace Escher
         {
             if (!GetKeyWord(keyWord)) return false;
 
-            if (!GetSeparator(":=")) return false;
+            if (!GetSeparator(cKeywordAssignment)) return false;
 
             if (!ReadKeyWordValue(keyWord, true)) return false;
 
@@ -346,7 +346,7 @@ namespace Escher
         {
             if (!GetKeyWord(keyWord)) return false;
 
-            if (!GetSeparator(":=")) return false;
+            if (!GetSeparator(cKeywordAssignment)) return false;
 
             if (!ReadKeyWordValue(keyWord, true)) return false;
 
@@ -383,7 +383,7 @@ namespace Escher
         {
             if (!GetKeyWord(keyWord)) return false;
 
-            if (!GetSeparator(":=")) return false;
+            if (!GetSeparator(cKeywordAssignment)) return false;
 
             if (!ReadKeyWordValue(keyWord, true)) return false;
 
@@ -403,7 +403,7 @@ namespace Escher
         {
             if (!GetKeyWord(keyWord)) return false;
 
-            if (!GetSeparator(":=")) return false;
+            if (!GetSeparator(cKeywordAssignment)) return false;
 
             if (!ReadKeyWordValue(keyWord, true)) return false;
 
@@ -440,9 +440,9 @@ namespace Escher
 
             if (!ParseString("Design", true)) return false;
 
-            while (NextSeparator() == "|")
+            while (NextSeparator() == cKeywordSeparator)
             {
-                GetSeparator("|");
+                GetSeparator(cKeywordSeparator);
 
                 string nextKeyWord = NextKeyWord();
 
@@ -522,9 +522,9 @@ namespace Escher
 
             stampFound = pCode;
 
-            while (NextSeparator() == "|")
+            while (NextSeparator() == cKeywordSeparator)
             {
-                GetSeparator("|");
+                GetSeparator(cKeywordSeparator);
 
                 string nextKeyWord = NextKeyWord();
 
@@ -604,9 +604,9 @@ namespace Escher
         {
             if (!ParseString("Part", true)) return false;
 
-            while (NextSeparator() == "|")
+            while (NextSeparator() == cKeywordSeparator)
             {
-                GetSeparator("|");
+                GetSeparator(cKeywordSeparator);
 
                 string nextKeyWord = NextKeyWord();
 
@@ -635,9 +635,9 @@ namespace Escher
         {
             bool parseSeries = ParseString("Series", false);
 
-            while (NextSeparator() == "|")
+            while (NextSeparator() == cKeywordSeparator)
             {
-                GetSeparator("|");
+                GetSeparator(cKeywordSeparator);
 
                 string nextKeyWord = NextKeyWord();
 
@@ -735,9 +735,9 @@ namespace Escher
         {
             if (!ParseString("Varieties", false)) return false;
 
-            while (NextSeparator() == "|")
+            while (NextSeparator() == cKeywordSeparator)
             {
-                GetSeparator("|");
+                GetSeparator(cKeywordSeparator);
 
                 string nextKeyWord = NextKeyWord();
 
@@ -791,9 +791,9 @@ namespace Escher
 
             varietyFound = pCode;
 
-            while (NextSeparator() == "|")
+            while (NextSeparator() == cKeywordSeparator)
             {
-                GetSeparator("|");
+                GetSeparator(cKeywordSeparator);
 
                 string nextKeyWord = NextKeyWord();
 
@@ -907,9 +907,9 @@ namespace Escher
         {
             if (!ParseString("Description", true)) return false;
 
-            while (NextSeparator() == "|")
+            while (NextSeparator() == cKeywordSeparator)
             { 
-                GetSeparator("|");
+                GetSeparator(cKeywordSeparator);
 
                 string nextKeyWord = NextKeyWord();
 
@@ -942,9 +942,9 @@ namespace Escher
                 }
             }
 
-            while (NextSeparator() == "|")
+            while (NextSeparator() == cKeywordSeparator)
             { 
-                GetSeparator("|");
+                GetSeparator(cKeywordSeparator);
 
                 string nextKeyWord = NextKeyWord();
 
@@ -990,9 +990,9 @@ namespace Escher
         {
             if (!GetKeyWord("LineFeed")) return false;
 
-            if (NextSeparator() == "|")
+            if (NextSeparator() == cKeywordSeparator)
             {
-                GetSeparator("|");
+                GetSeparator(cKeywordSeparator);
 
                 string nextKeyWord = NextKeyWord();
 
@@ -1008,9 +1008,9 @@ namespace Escher
         {
             if (!GetKeyWord("End")) return false;
 
-            if (NextSeparator() == "|")
+            if (NextSeparator() == cKeywordSeparator)
             {
-                GetSeparator("|");
+                GetSeparator(cKeywordSeparator);
 
                 string nextKeyWord = NextKeyWord();
 
@@ -1026,9 +1026,9 @@ namespace Escher
         {
             if (!ParseString("Type", false)) return false;
 
-            while (NextSeparator() == "|")
+            while (NextSeparator() == cKeywordSeparator)
             {
-                GetSeparator("|");
+                GetSeparator(cKeywordSeparator);
 
                 string nextKeyWord = NextKeyWord();
 
@@ -1056,7 +1056,7 @@ namespace Escher
         {
             if (!GetKeyWord(keyWord)) return false;
 
-            if (!GetSeparator(":=")) return false;
+            if (!GetSeparator(cKeywordAssignment)) return false;
 
             if (!ReadKeyWordValue(keyWord, required)) return false;
 
@@ -1069,7 +1069,7 @@ namespace Escher
         {
             if (!GetKeyWord(keyWord)) return false;
 
-            if (!GetSeparator(":=")) return false;
+            if (!GetSeparator(cKeywordAssignment)) return false;
 
             if (!ReadKeyWordValue(keyWord, true)) return false;
 
@@ -1112,7 +1112,7 @@ namespace Escher
         {
             if (!GetKeyWord(keyWord)) return false;
 
-            if (!GetSeparator(":=")) return false;
+            if (!GetSeparator(cKeywordAssignment)) return false;
 
             if (!ReadKeyWordValue(keyWord, true)) return false;
 
@@ -1125,7 +1125,7 @@ namespace Escher
         {
             if (!GetKeyWord(keyWord)) return false;
 
-            if (!GetSeparator(":=")) return false;
+            if (!GetSeparator(cKeywordAssignment)) return false;
 
             if (!ReadKeyWordValue(keyWord, true)) return false;
 
@@ -1152,7 +1152,7 @@ namespace Escher
             nextChar = NextChar();
 
             // The value ends when the next character is a vertical bar, double quote, new line, tab or end of file
-            while (nextChar != cVerticalBar && nextChar != cDoubleQuote && nextChar != cCarriageReturn && nextChar != cLineFeed && nextChar != cTabulate && nextChar != cEndOfFile)
+            while (nextChar != cKeywordSeparator && nextChar != cDoubleQuote && nextChar != cCarriageReturn && nextChar != cLineFeed && nextChar != cTabulate && nextChar != cEndOfFile)
             {
                 eCode = eCode + ReadChar(); // Read one character and append it to the value
                 nextChar = NextChar(); // Read ahead one character
@@ -1254,17 +1254,17 @@ namespace Escher
 
         /// <summary>
         /// </summary>
-        private string NextSeparator()
+        private char NextSeparator()
         {
             ReadBlanks();
 
             qCode = pCode;
 
-            string nextSeparator = "";
+            char nextSeparator = '\0';
 
-            while (IsSeparator(NextChar()))
+            if (IsSeparator(NextChar()))
             {
-                nextSeparator += ReadChar();
+                nextSeparator = ReadChar();
             }
 
             pCode = qCode;
@@ -1274,7 +1274,7 @@ namespace Escher
 
         /// <summary>
         /// </summary>
-        private bool GetSeparator(string separator)
+        private bool GetSeparator(char separator)
         {
             bool getSeparator;
 
@@ -1282,13 +1282,13 @@ namespace Escher
 
             if (NextSeparator() == separator)
             {
-                pCode += NextSeparator().Length;
+                pCode += 1; //  NextSeparator().Length;
 
                 getSeparator = true;
             }
             else
             {
-                nCode = NextSeparator().Length;
+                nCode = 1; // NextSeparator().Length;
 
                 eCode = string.Format("Expected '{0}'", separator);
 
@@ -1346,7 +1346,7 @@ namespace Escher
         /// </summary>
         private bool IsSeparator(char c)
         {
-            return (c == cSemiColon || c == cEqualSign || c == cVerticalBar);
+            return (c == cKeywordAssignment || c == cKeywordSeparator);
         }
     }
 }

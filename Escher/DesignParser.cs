@@ -112,7 +112,7 @@ namespace Escher
                 return null;
             }
 
-            string[] splitted = line.Split('|');
+            string[] splitted = line.Split(Validator.cKeywordSeparator);
 
             for (int i = 0; i < splitted.Length; i++)
             {
@@ -146,10 +146,12 @@ namespace Escher
             string key;
             string val;
 
-            if (keyValuePair.Contains(":="))
+            if (keyValuePair.Contains(Validator.cKeywordAssignment))
             {
-                key = keyValuePair.Split(new[] { ":=" }, StringSplitOptions.None)[0].Trim();
-                val = keyValuePair.Split(new[] { ":=" }, StringSplitOptions.None)[1].Trim();
+                string[] keyval = keyValuePair.Split(Validator.cKeywordAssignment, joinAgainExceptFirstOne: true);
+
+                key = keyval[0].Trim();
+                val = keyval[1].Trim();
             }
             else
             {
@@ -171,7 +173,7 @@ namespace Escher
                     entry.SetClass(Class.Type, val);
                     if (key.Contains("Comment:"))
                     {
-                        throw new Exception(string.Format("Line {0}: Comment: in Type:= is not yet implemented!", line));
+                        throw new Exception(string.Format("Line {0}: Comment: in Type= is not yet implemented!", line));
                     }
                     break;
 
@@ -183,7 +185,7 @@ namespace Escher
                     entry.SetClass(Class.Varieties, val);
                     if (key.Contains("Comment:"))
                     {
-                        throw new Exception(string.Format("Line {0}: Comment: in Type:= is not yet implemented!", line));
+                        throw new Exception(string.Format("Line {0}: Comment: in Type= is not yet implemented!", line));
                     }
                     entry.Alignment = Alignment.Centered;
                     break;

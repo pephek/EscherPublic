@@ -11,6 +11,11 @@ namespace Escher
 {
     public static class StringExtensions
     {
+        public static string[] Split(this string s, char separator, bool joinAgainExceptFirstOne = false)
+        {
+            return s.Split(separator.ToString(), joinAgainExceptFirstOne);
+        }
+
         public static string[] Split(this string s, string separator, bool joinAgainExceptFirstOne = false)
         {
             string[] split = s.Split(new[] { separator }, StringSplitOptions.None);

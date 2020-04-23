@@ -17,10 +17,10 @@ namespace Escher
     public partial class Editor : Form
     {
         private readonly TextStyle keywordStyle = new TextStyle(Brushes.Blue, null, FontStyle.Regular);
-        private readonly TextStyle separatorStyle = new TextStyle(Brushes.LightGray, null, FontStyle.Regular);
+        private readonly TextStyle separatorStyle = new TextStyle(Brushes.Silver, null, FontStyle.Regular);
         private readonly TextStyle commentStyle = new TextStyle(Brushes.Green, null, FontStyle.Italic);
         private readonly TextStyle feedStyle = new TextStyle(Brushes.Maroon, null, FontStyle.Bold);
-        private readonly TextStyle veryImportantStyle = new TextStyle(Brushes.Red, null, FontStyle.Bold);
+        private readonly TextStyle importantStyle = new TextStyle(Brushes.Red, null, FontStyle.Bold);
         private readonly TextStyle enumStyle = new TextStyle(Brushes.SteelBlue, null, FontStyle.Regular);
 
         private Dictionary<string, string> specials = new Dictionary<string, string>();
@@ -224,9 +224,9 @@ namespace Escher
 
         private void Recolor(TextChangedEventArgs e)
         {
-            e.ChangedRange.ClearStyle(keywordStyle, separatorStyle, commentStyle, veryImportantStyle, enumStyle);
+            e.ChangedRange.ClearStyle(keywordStyle, separatorStyle, commentStyle, importantStyle, enumStyle);
 
-            e.ChangedRange.SetStyle(separatorStyle, @"≡|¦|:=|\|");
+            e.ChangedRange.SetStyle(separatorStyle, @"=|\|");
 
             //e.ChangedRange.SetStyle(CommentStyle, @"//.*$", RegexOptions.Multiline);
             e.ChangedRange.SetStyle(commentStyle, @"'.*$", RegexOptions.Multiline);
@@ -237,8 +237,8 @@ namespace Escher
 
             e.ChangedRange.SetStyle(feedStyle, @"\b(Country|Part|PageFeed|End)\b");
 
-            e.ChangedRange.SetStyle(veryImportantStyle, @"\b(ApplyTo|ApplyToFrameStyle|Thin|Thick)\b");
-            e.ChangedRange.SetStyle(veryImportantStyle, @":=VB|:=C#");
+            e.ChangedRange.SetStyle(importantStyle, @"\b(ApplyTo|ApplyToFrameStyle|Thin|Thick)\b");
+            e.ChangedRange.SetStyle(importantStyle, @"=VB|=C#");
 
             this.isDirty = true;
 
@@ -275,7 +275,7 @@ namespace Escher
                 {
                     string pageFeed = design.GetLineText(design.PositionToPlace(pageFeedIndex).iLine);
 
-                    string[] split = pageFeed.Split("PageNumber:=");
+                    string[] split = pageFeed.Split("PageNumber=");
 
                     if (split.Length > 1)
                     {
@@ -329,7 +329,25 @@ namespace Escher
                 string designPath = string.Format("{0}\\{1}.cdb", App.GetSetting("DesignsFolder"), this.designName);
                 string desigRollbackPath = string.Format("{0}\\{1}.cdb", App.GetSetting("DesignsRollbackFolder"), this.designName);
 
-                File.Copy(designPath, desigRollbackPath, overwrite: true);
+                if (File.Exists(desigRollbackPath + ".-2"))
+                {
+                    File.Copy(desigRollbackPath + ".-2", desigRollbackPath + ".-3", overwrite: true);
+                }
+
+                if (File.Exists(desigRollbackPath + ".-1"))
+                {
+                    File.Copy(desigRollbackPath + ".-1", desigRollbackPath + ".-2", overwrite: true);
+                }
+
+                if (File.Exists(desigRollbackPath))
+                {
+                    File.Copy(desigRollbackPath, desigRollbackPath + ".-1", overwrite: true);
+                }
+
+                if (File.Exists(designPath))
+                {
+                    File.Copy(designPath, desigRollbackPath, overwrite: true);
+                }
 
                 File.WriteAllText(designPath, design.Text, Encoding.GetEncoding("iso-8859-1"));
 
