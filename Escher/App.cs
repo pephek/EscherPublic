@@ -57,6 +57,11 @@ namespace Escher
             return System.Reflection.Assembly.GetExecutingAssembly().GetName().Name;
         }
 
+        public static string GetSetting(string setting)
+        {
+            return ConfigurationManager.AppSettings[setting];
+        }
+
         public static void SetException(string exception)
         {
             MessageBox.Show(exception, App.GetName() + " · Exception", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
@@ -64,9 +69,45 @@ namespace Escher
             System.Environment.Exit(1);
         }
 
-        public static string GetSetting(string setting)
+        public static void TryRun(Action codeToRun, Editor editor = null)
         {
-            return ConfigurationManager.AppSettings[setting];
+            if (editor != null && editor.IsDirty)
+            {
+                MessageBox.Show("The editor has unsaved changes; cannot continue with this operation!", App.GetName() + " · Unsaved Changes", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+            }
+            else
+            {
+                bool retry = true;
+                bool retried = false;
+
+                while (retry)
+                {
+                    try
+                    {
+                        codeToRun();
+
+                        retry = false;
+                    }
+                    catch (Exception e)
+                    {
+                        string message = string.Format("The following exception occurred:\n\n{0}", e.Message);
+
+                        if (retried)
+                        {
+                            message += string.Format("\n\n{0}", e.StackTrace.ToString());
+                        }
+
+                        if (MessageBox.Show(message, App.GetName() + " · Exception", MessageBoxButtons.RetryCancel, MessageBoxIcon.Exclamation, MessageBoxDefaultButton.Button1) == DialogResult.Cancel)
+                        {
+                            retry = false;
+                        }
+                        else
+                        {
+                            retried = true;
+                        }
+                    }
+                }
+            }
         }
     }
 }

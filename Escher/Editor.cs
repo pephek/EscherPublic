@@ -32,7 +32,7 @@ namespace Escher
 
         private string designName;
 
-        private bool isDirty;
+        public bool IsDirty;
 
         public Editor(Validator validator, Preview preview)
         {
@@ -58,13 +58,16 @@ namespace Escher
         {
             this.designName = designName;
 
-            this.reopen = reopen;
+            if (reopen != null)
+            {
+                this.reopen = reopen;
+            }
 
             string designPath = string.Format("{0}\\{1}.cdb", App.GetSetting("DesignsFolder"), this.designName);
 
             design.Text = File.ReadAllText(designPath, Encoding.GetEncoding("iso-8859-1"));
 
-            this.isDirty = false;
+            this.IsDirty = false;
 
             menuSave.Enabled = false;
 
@@ -240,7 +243,7 @@ namespace Escher
             e.ChangedRange.SetStyle(importantStyle, @"\b(ApplyTo|ApplyToFrameStyle|Thin|Thick)\b");
             e.ChangedRange.SetStyle(importantStyle, @"=VB|=C#");
 
-            this.isDirty = true;
+            this.IsDirty = true;
 
             menuSave.Enabled = true;
 
@@ -351,7 +354,7 @@ namespace Escher
 
                 File.WriteAllText(designPath, design.Text, Encoding.GetEncoding("iso-8859-1"));
 
-                this.isDirty = false;
+                this.IsDirty = false;
 
                 menuSave.Enabled = false;
 
@@ -363,13 +366,15 @@ namespace Escher
 
         private void ExitDesign()
         {
-            if (this.isDirty)
+            if (this.IsDirty)
             {
                 if (MessageBox.Show("The design has unsaved changed, do you want to discard the changes?", App.GetName() + " · Discard changes", MessageBoxButtons.YesNo, MessageBoxIcon.Question, MessageBoxDefaultButton.Button2) == DialogResult.No)
                 {
                     return;
                 }
             }
+
+            SetDesign(this.designName, null);
 
             #region Save Window State
             Properties.Settings.Default.EditorState = this.WindowState;

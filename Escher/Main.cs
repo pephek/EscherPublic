@@ -27,121 +27,103 @@ namespace Escher
         {
             InitializeComponent();
 
-            this.Load += new EventHandler((sender, e) => Initialize());
-            this.FormClosing += new FormClosingEventHandler((sender, e) => MainClosing());
+            this.Load += new EventHandler((sender, e) => App.TryRun(Initialize));
 
-            this.menuEdit.Click += new EventHandler((sender, e) => EditDesign());
-            this.menuPrint.Click += new EventHandler((sender, e) => PrintDesign());
-            this.menuRefreshDesigns.Click += new EventHandler((sender, e) => RefreshDesigns());
-            this.menuRefreshFormats.Click += new EventHandler((sender, e) => RefreshFormats());
-            this.menuFindStampNumber.Click += new EventHandler((sender, e) => FindStampNumber());
-            this.menuFindPageNumber.Click += new EventHandler((sender, e) => FindPageNumber());
-            this.menuFindAlbumNumber.Click += new EventHandler((sender, e) => FindAlbumNumber());
-            this.menuExit.Click += new EventHandler((sender, e) => Exit());
-            this.menuAbout.Click += new EventHandler((sender, e) => About());
+            this.menuEdit.Click += new EventHandler((sender, e) => App.TryRun(EditDesign, editor));
+            this.menuPrint.Click += new EventHandler((sender, e) => App.TryRun(PrintDesign, editor));
+            this.menuRefreshDesigns.Click += new EventHandler((sender, e) => App.TryRun(RefreshDesigns));
+            this.menuRefreshFormats.Click += new EventHandler((sender, e) => App.TryRun(RefreshFormats));
+            this.menuFindStampNumber.Click += new EventHandler((sender, e) => App.TryRun(FindStampNumber));
+            this.menuFindPageNumber.Click += new EventHandler((sender, e) => App.TryRun(FindPageNumber));
+            this.menuFindAlbumNumber.Click += new EventHandler((sender, e) => App.TryRun(FindAlbumNumber));
+            this.menuExit.Click += new EventHandler((sender, e) => App.TryRun(Exit, editor));
+            this.menuAbout.Click += new EventHandler((sender, e) => App.TryRun(About));
         }
 
         private void Initialize()
         {
-            try
+            #region Restore Window State
+            if (Properties.Settings.Default.MainSize.Width == 0)
             {
-                #region Restore Window State
-                if (Properties.Settings.Default.MainSize.Width == 0)
-                {
-                    Properties.Settings.Default.Upgrade();
-                }
-                if (Properties.Settings.Default.MainSize.Width == 0 || Properties.Settings.Default.MainSize.Height == 0)
-                {
-                    this.Location = new Point(10, 10);
-                    this.Size = new Size(512, 512);
-                }
-                else
-                {
-                    this.WindowState = Properties.Settings.Default.MainState;
-
-                    if (this.WindowState == FormWindowState.Minimized)
-                    {
-                        this.WindowState = FormWindowState.Normal;
-                    }
-
-                    this.Location = Properties.Settings.Default.MainLocation;
-                    this.Size = Properties.Settings.Default.MainSize;
-                }
-                #endregion
-
-                bool exists = System.Diagnostics.Process.GetProcessesByName(System.IO.Path.GetFileNameWithoutExtension(System.Reflection.Assembly.GetEntryAssembly().Location)).Count() > 1;
-
-                if (exists)
-                {
-                    App.SetException(string.Format("The {0} application is already running and can not run more than once at the same time.", App.GetName()));
-                }
-
-                string pdfDocumentsFolder = App.GetSetting("PDFDocumentsFolder");
-
-                if (!Directory.Exists(pdfDocumentsFolder))
-                {
-                    Directory.CreateDirectory(pdfDocumentsFolder);
-                }
-
-                string pdfImagesFolder = App.GetSetting("PDFImagesFolder");
-
-                if (!Directory.Exists(pdfImagesFolder))
-                {
-                    Directory.CreateDirectory(pdfImagesFolder);
-                }
-
-                string designsFolder = App.GetSetting("DesignsFolder");
-
-                if (!Directory.Exists(designsFolder))
-                {
-                    Directory.CreateDirectory(designsFolder);
-                }
-
-                string designsRollbackFolder = App.GetSetting("DesignsRollbackFolder");
-
-                if (!Directory.Exists(designsRollbackFolder))
-                {
-                    Directory.CreateDirectory(designsRollbackFolder);
-                }
-
-                RefreshFormats();
-
-                SetMenus(enabled: false);
-
-                menuOpen.Visible = false;
-
-                RefreshDesigns();
-
-                webBrowser.Navigating += WebBrowser_Navigating;
-                webBrowser.IsWebBrowserContextMenuEnabled = false;
-                webBrowser.AllowWebBrowserDrop = false;
-
-                PageSetup.Load();
-
-                OpenDesign("_ Test");
+                Properties.Settings.Default.Upgrade();
             }
-            catch (Exception exception)
+            if (Properties.Settings.Default.MainSize.Width == 0 || Properties.Settings.Default.MainSize.Height == 0)
             {
-                App.SetException(exception.Message);
-            }
-        }
-
-        private void MainClosing()
-        {
-            #region Save Window State
-            Properties.Settings.Default.MainState = this.WindowState;
-            if (this.WindowState == FormWindowState.Normal)
-            {
-                Properties.Settings.Default.MainLocation = this.Location;
-                Properties.Settings.Default.MainSize = this.Size;
+                this.Location = new Point(10, 10);
+                this.Size = new Size(512, 512);
             }
             else
             {
-                Properties.Settings.Default.MainLocation = this.RestoreBounds.Location;
-                Properties.Settings.Default.MainSize = this.RestoreBounds.Size;
+                this.WindowState = Properties.Settings.Default.MainState;
+
+                if (this.WindowState == FormWindowState.Minimized)
+                {
+                    this.WindowState = FormWindowState.Normal;
+                }
+
+                this.Location = Properties.Settings.Default.MainLocation;
+                this.Size = Properties.Settings.Default.MainSize;
             }
-            Properties.Settings.Default.Save();
             #endregion
+
+            bool exists = System.Diagnostics.Process.GetProcessesByName(System.IO.Path.GetFileNameWithoutExtension(System.Reflection.Assembly.GetEntryAssembly().Location)).Count() > 1;
+
+            if (exists)
+            {
+                App.SetException(string.Format("The {0} application is already running and can not run more than once at the same time.", App.GetName()));
+            }
+
+            string pdfDocumentsFolder = App.GetSetting("PDFDocumentsFolder");
+
+            if (!Directory.Exists(pdfDocumentsFolder))
+            {
+                Directory.CreateDirectory(pdfDocumentsFolder);
+            }
+
+            string pdfImagesFolder = App.GetSetting("PDFImagesFolder");
+
+            if (!Directory.Exists(pdfImagesFolder))
+            {
+                Directory.CreateDirectory(pdfImagesFolder);
+            }
+
+            string designsFolder = App.GetSetting("DesignsFolder");
+
+            if (!Directory.Exists(designsFolder))
+            {
+                Directory.CreateDirectory(designsFolder);
+            }
+
+            string designsRollbackFolder = App.GetSetting("DesignsRollbackFolder");
+
+            if (!Directory.Exists(designsRollbackFolder))
+            {
+                Directory.CreateDirectory(designsRollbackFolder);
+            }
+
+            RefreshFormats();
+
+            SetMenus(enabled: false);
+
+            menuOpen.Visible = false;
+
+            RefreshDesigns();
+
+            webBrowser.Navigating += WebBrowser_Navigating;
+            webBrowser.IsWebBrowserContextMenuEnabled = false;
+            webBrowser.AllowWebBrowserDrop = false;
+
+            PageSetup.Load();
+
+            OpenDesign("_ Test");
+        }
+
+        private void EditDesign()
+        {
+            editor.Show();
+            editor.Invalidate();
+            editor.Activate();
+            editor.SetError();
         }
 
         private void PrintDesign()
@@ -157,98 +139,73 @@ namespace Escher
 
             if (result == DialogResult.OK)
             {
-                bool retry = true;
+                preview.Hide();
 
-                while (retry)
+                PageSetup setup = PageSetup.Load();
+
+                string pdfName = design.GetPdf();
+
+                if (setup.Catalog != Catalog.None)
                 {
-                    try
+                    pdfName += "_" + setup.Catalog.ToString().ToLower();
+                }
+
+                pdfName += "_" + setup.PageFormat.FormatName;
+
+                if (setup.IncludeMarginForPunchHoles)
+                {
+                    pdfName += "_offcenter";
+                }
+
+                if (setup.IncludeSamplePagesOnly)
+                {
+                    pdfName += "_sample";
+                }
+
+                if (setup.FontSize == FontSize.Medium)
+                {
+                    pdfName += "_font6";
+                }
+                else if (setup.FontSize == FontSize.Large)
+                {
+                    pdfName += "_font7";
+                }
+
+                string bookmarksInXml = null;
+                string bookmarksInHtm = null;
+
+                if (setup.IncludePdfBookmarks)
+                {
+                    BookmarksHelper.GetBookmarks(this.design, design.GetPdf(), setup.IncludeSamplePagesOnly, out bookmarksInXml, out bookmarksInHtm);
+                }
+
+                PDF995Helper pdfHelper = new PDF995Helper(design.GetPdf(), pdfName, bookmarksInXml, bookmarksInHtm);
+
+                Progress progress = new Progress(this.design.NumberOfPages());
+                progress.Show();
+                progress.Refresh();
+
+                preview.PrintDocument(App.GetSetting("PDFPrinter"), setup.PageFormat.PageWidth, setup.PageFormat.PageHeight, this.design, progress.SetPrintingProgress);
+
+                if (setup.IncludePdfImages)
+                {
+                    for (int pageNumber = 1; pageNumber <= this.design.NumberOfPages(); pageNumber++)
                     {
-                        preview.Hide();
+                        progress.SetCreatingProgress(pageNumber);
 
-                        PageSetup setup = PageSetup.Load();
+                        preview.ShowPreview(this.design, pageNumber, PrintMode.ToDocument, ScreenMode.MatchPaper);
 
-                        string pdfName = design.GetPdf();
-
-                        if (setup.Catalog != Catalog.None)
-                        {
-                            pdfName += "_" + setup.Catalog.ToString().ToLower();
-                        }
-
-                        pdfName += "_" + setup.PageFormat.FormatName;
-
-                        if (setup.IncludeMarginForPunchHoles)
-                        {
-                            pdfName += "_offcenter";
-                        }
-
-                        if (setup.IncludeSamplePagesOnly)
-                        {
-                            pdfName += "_sample";
-                        }
-
-                        if (setup.FontSize == FontSize.Medium)
-                        {
-                            pdfName += "_font6";
-                        }
-                        else if (setup.FontSize == FontSize.Large)
-                        {
-                            pdfName += "_font7";
-                        }
-
-                        string bookmarksInXml = null;
-                        string bookmarksInHtm = null;
-
-                        if (setup.IncludePdfBookmarks)
-                        {
-                            BookmarksHelper.GetBookmarks(this.design, design.GetPdf(), setup.IncludeSamplePagesOnly, out bookmarksInXml, out bookmarksInHtm);
-                        }
-
-                        PDF995Helper pdfHelper = new PDF995Helper(design.GetPdf(), pdfName, bookmarksInXml, bookmarksInHtm);
-
-                        Progress progress = new Progress(this.design.NumberOfPages());
-                        progress.Show();
-                        progress.Refresh();
-
-                        preview.PrintDocument(App.GetSetting("PDFPrinter"), setup.PageFormat.PageWidth, setup.PageFormat.PageHeight, this.design, progress.SetPrintingProgress);
-
-                        if (setup.IncludePdfImages)
-                        {
-                            for (int pageNumber = 1; pageNumber <= this.design.NumberOfPages(); pageNumber++)
-                            {
-                                progress.SetCreatingProgress(pageNumber);
-
-                                preview.ShowPreview(this.design, pageNumber, PrintMode.ToDocument, ScreenMode.MatchPaper);
-
-                                preview.CreateImage(string.Format("{0}\\{1}-large.jpg", App.GetSetting("PDFImagesFolder"), pageNumber), 0.75F);
-                                preview.CreateImage(string.Format("{0}\\{1}-small.jpg", App.GetSetting("PDFImagesFolder"), pageNumber), 0.25F);
-                            }
-                        }
-
-                        progress.SetWaiting();
-
-                        pdfHelper.WaitForCompletion();
-
-                        progress.Close();
-
-                        retry = false;
-                    }
-                    catch (Exception e)
-                    {
-                        if (MessageBox.Show(string.Format("Exception printing design '{0}':\n\n{1}\n\n{2}", editor.GetDesignName(), e.Message, e.StackTrace.ToString()), App.GetName() + " · Exception", MessageBoxButtons.RetryCancel, MessageBoxIcon.Exclamation, MessageBoxDefaultButton.Button1) == DialogResult.Cancel)
-                        {
-                            retry = false;
-                        }
+                        preview.CreateImage(string.Format("{0}\\{1}-large.jpg", App.GetSetting("PDFImagesFolder"), pageNumber), 0.75F);
+                        preview.CreateImage(string.Format("{0}\\{1}-small.jpg", App.GetSetting("PDFImagesFolder"), pageNumber), 0.25F);
                     }
                 }
-            }
-        }
 
-        private void EditDesign()
-        {
-            editor.Show();
-            editor.Invalidate();
-            editor.Activate();
-            editor.SetError();
+                progress.SetWaiting();
+
+                pdfHelper.WaitForCompletion();
+
+                progress.Close();
+            }
         }
 
         private void RefreshDesigns()
@@ -432,7 +389,22 @@ namespace Escher
         {
             if (MessageBox.Show(string.Format("Are you sure you want to exit from the {0} application?", App.GetName()), App.GetName() + " · Exit", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
             {
-                System.Environment.Exit(1);
+                #region Save Window State
+                Properties.Settings.Default.MainState = this.WindowState;
+                if (this.WindowState == FormWindowState.Normal)
+                {
+                    Properties.Settings.Default.MainLocation = this.Location;
+                    Properties.Settings.Default.MainSize = this.Size;
+                }
+                else
+                {
+                    Properties.Settings.Default.MainLocation = this.RestoreBounds.Location;
+                    Properties.Settings.Default.MainSize = this.RestoreBounds.Size;
+                }
+                Properties.Settings.Default.Save();
+                #endregion
+
+                System.Environment.Exit(0);
             }
         }
 
@@ -566,11 +538,6 @@ namespace Escher
         private void SetProgress(int progress)
         {
 
-        }
-
-        private void experimentToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            Experiments.ExperimentWithSomething();
         }
     }
 }

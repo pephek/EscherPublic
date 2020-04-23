@@ -47,7 +47,6 @@
             this.menuFindAlbumNumber = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripMenuItem6 = new System.Windows.Forms.ToolStripSeparator();
             this.menuExit = new System.Windows.Forms.ToolStripMenuItem();
-            this.menuExperiment = new System.Windows.Forms.ToolStripMenuItem();
             this.menuOpen = new System.Windows.Forms.ToolStripMenuItem();
             this.menuHelp = new System.Windows.Forms.ToolStripMenuItem();
             this.menuAbout = new System.Windows.Forms.ToolStripMenuItem();
@@ -88,8 +87,7 @@
             this.menuFindPageNumber,
             this.menuFindAlbumNumber,
             this.toolStripMenuItem6,
-            this.menuExit,
-            this.menuExperiment});
+            this.menuExit});
             this.designToolStripMenuItem.Name = "designToolStripMenuItem";
             this.designToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Alt | System.Windows.Forms.Keys.D)));
             this.designToolStripMenuItem.Size = new System.Drawing.Size(69, 24);
@@ -192,13 +190,6 @@
             this.menuExit.Size = new System.Drawing.Size(283, 26);
             this.menuExit.Text = "Exit";
             // 
-            // menuExperiment
-            // 
-            this.menuExperiment.Name = "menuExperiment";
-            this.menuExperiment.Size = new System.Drawing.Size(283, 26);
-            this.menuExperiment.Text = "Experiment";
-            this.menuExperiment.Click += new System.EventHandler(this.experimentToolStripMenuItem_Click);
-            // 
             // menuOpen
             // 
             this.menuOpen.Name = "menuOpen";
@@ -275,7 +266,6 @@
         private System.Windows.Forms.ToolStripMenuItem menuAbout;
         private System.Windows.Forms.ToolStripMenuItem menuRefreshDesigns;
         private System.Windows.Forms.WebBrowser webBrowser;
-        private System.Windows.Forms.ToolStripMenuItem menuExperiment;
     }
 }
 
