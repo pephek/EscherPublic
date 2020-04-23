@@ -69,7 +69,27 @@ namespace Escher
             System.Environment.Exit(1);
         }
 
-        public static void TryRun(Action codeToRun, Editor editor = null)
+        public static void TryRun(Action code)
+        {
+            TryRun(code: code, codeWithArgument: null, argument: null, editor: null);
+        }
+
+        public static void TryRun(Action code, Editor editor)
+        {
+            TryRun(code: code, codeWithArgument: null, argument: null, editor: editor);
+        }
+
+        public static void TryRun(Action<string> code, string argument)
+        {
+            TryRun(code: null, codeWithArgument: code, argument: argument, editor: null);
+        }
+
+        public static void TryRun(Action<string> code, string argument, Editor editor)
+        {
+            TryRun(code: null, codeWithArgument: code, argument: argument, editor: editor);
+        }
+
+        private static void TryRun(Action code, Action<string> codeWithArgument, string argument, Editor editor)
         {
             if (editor != null && editor.IsDirty)
             {
@@ -84,7 +104,14 @@ namespace Escher
                 {
                     try
                     {
-                        codeToRun();
+                        if (argument == null)
+                        {
+                            code();
+                        }
+                        else
+                        {
+                            codeWithArgument(argument);
+                        }
 
                         retry = false;
                     }

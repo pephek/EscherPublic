@@ -249,7 +249,8 @@ namespace Escher
 
                         item.DropDownItems.Add(itemDesign);
 
-                        itemDesign.Click += (s, e) => OpenDesign(design);
+                        //itemDesign.Click += (s, e) => OpenDesign(design);
+                        itemDesign.Click += (s, e) => App.TryRun(OpenDesign, design, editor);
                     }
                 }
             }
@@ -425,11 +426,11 @@ namespace Escher
             menuFindAlbumNumber.Enabled = enabled;
         }
 
-        private void ReopenDesign(string designText)
+        private void ReloadBrowser()
         {
             DesignParser designParser = new DesignParser();
 
-            this.design = designParser.Parse(designText, SetProgress, out string error);
+            this.design = designParser.Parse(editor.GetDesignText(), SetProgress, out string error);
 
             webBrowser.DocumentText = HtmlHelper.GetDesignInHtml(design);
 
@@ -438,51 +439,34 @@ namespace Escher
 
         private void OpenDesign(string designName)
         {
-            bool retry = true;
+            string error = null;
 
-            while (retry)
+            SetMenus(enabled: false);
+
+            // webBrowser.Navigate("about:blank");
+
+            editor.SetDesign(designName, ReloadBrowser);
+
+            if (validator.Parse(editor.GetDesignText(), SetProgress, out error))
             {
-                try
+                DesignParser designParser = new DesignParser();
+
+                this.design = designParser.Parse(editor.GetDesignText(), SetProgress, out error);
+            }
+
+            if (!string.IsNullOrEmpty(error))
+            {
+                if (MessageBox.Show(string.Format("Invalid design '{0}': {1}\n\nDo you want to edit the design?", designName, error), App.GetName() + " · Validating Design", MessageBoxButtons.YesNo, MessageBoxIcon.Question, MessageBoxDefaultButton.Button1) == DialogResult.Yes)
                 {
-                    string error = null;
-
-                    SetMenus(enabled: false);
-
-                    // webBrowser.Navigate("about:blank");
-
-                    editor.SetDesign(designName, ReopenDesign);
-
-                    if (validator.Parse(editor.GetDesign(), SetProgress, out error))
-                    {
-                        DesignParser designParser = new DesignParser();
-
-                        this.design = designParser.Parse(editor.GetDesign(), SetProgress, out error);
-                    }
-
-                    if (!string.IsNullOrEmpty(error))
-                    {
-                        if (MessageBox.Show(string.Format("Invalid design '{0}': {1}\n\nDo you want to edit the design?", designName, error), App.GetName() + " · Validating Design", MessageBoxButtons.YesNo, MessageBoxIcon.Question, MessageBoxDefaultButton.Button1) == DialogResult.Yes)
-                        {
-                            editor.Show();
-                            editor.SetError(error);
-                        }
-                    }
-                    else
-                    {
-                        webBrowser.DocumentText = HtmlHelper.GetDesignInHtml(design);
-
-                        SetMenus(enabled: true);
-                    }
-
-                    retry = false;
+                    editor.Show();
+                    editor.SetError(error);
                 }
-                catch (Exception e)
-                {
-                    if (MessageBox.Show(string.Format("Exception opening design '{0}':\n\n{1}", designName, e.Message), App.GetName() + " · Exception", MessageBoxButtons.RetryCancel, MessageBoxIcon.Exclamation, MessageBoxDefaultButton.Button1) == DialogResult.Cancel)
-                    {
-                        retry = false;
-                    }
-                }
+            }
+            else
+            {
+                webBrowser.DocumentText = HtmlHelper.GetDesignInHtml(design);
+
+                SetMenus(enabled: true);
             }
         }
 

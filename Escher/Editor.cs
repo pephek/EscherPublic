@@ -28,7 +28,7 @@ namespace Escher
         private Validator validator;
         private Preview preview;
 
-        private Action<string> reopen;
+        private Action reload;
 
         private string designName;
 
@@ -40,28 +40,103 @@ namespace Escher
 
             this.Load += new EventHandler((sender, e) => Initialize());
 
-            this.menuPreview.Click += new EventHandler((sender, e) => PreviewDesign());
-            this.menuValidate.Click += new EventHandler((sender, e) => ValidateDesign());
-            this.menuSave.Click += new EventHandler((sender, e) => SaveDesign());
-            this.menuExit.Click += new EventHandler((sender, e) => ExitDesign());
+            this.menuPreview.Click += new EventHandler((sender, e) => App.TryRun(PreviewDesign));
+            this.menuValidate.Click += new EventHandler((sender, e) => App.TryRun(ValidateDesign));
+            this.menuSave.Click += new EventHandler((sender, e) => App.TryRun(SaveDesign));
+            this.menuExit.Click += new EventHandler((sender, e) => App.TryRun(ExitDesign));
 
             this.validator = validator;
             this.preview = preview;
 
             design.TextChanged += new EventHandler<TextChangedEventArgs>((sender, e) => Recolor(e));
-            design.KeyUp += new KeyEventHandler((sender, e) => Parse());
-            design.MouseUp += new MouseEventHandler((sender, e) => Parse());
+            design.KeyUp += new KeyEventHandler((sender, e) => Parse(e));
+            design.MouseUp += new MouseEventHandler((sender, e) => Parse(null));
             design.KeyPressed += new KeyPressEventHandler((sender, e) => Replace(e));
         }
 
-        public void SetDesign(string designName, Action<string> reopen)
+        private void Initialize()
+        {
+            #region Restore Window State
+            if (Properties.Settings.Default.EditorSize.Width == 0)
+            {
+                Properties.Settings.Default.Upgrade();
+            }
+            if (Properties.Settings.Default.EditorSize.Width == 0 || Properties.Settings.Default.EditorSize.Height == 0)
+            {
+                this.Location = new Point(10, 10);
+                this.Size = new Size(512, 512);
+            }
+            else
+            {
+                this.WindowState = Properties.Settings.Default.EditorState;
+
+                if (this.WindowState == FormWindowState.Minimized)
+                {
+                    this.WindowState = FormWindowState.Normal;
+                }
+
+                this.Location = Properties.Settings.Default.EditorLocation;
+                this.Size = Properties.Settings.Default.EditorSize;
+            }
+            #endregion
+
+            this.specials = new Dictionary<string, string>();
+
+            this.specials.Add("`a", "à");
+            this.specials.Add("'a", "á");
+            this.specials.Add("^a", "â");
+            this.specials.Add("\"a", "ä");
+            this.specials.Add("`e", "è");
+            this.specials.Add("'e", "é");
+            this.specials.Add("^e", "ê");
+            this.specials.Add("\"e", "ë");
+            this.specials.Add("`i", "ì");
+            this.specials.Add("'i", "í");
+            this.specials.Add("^i", "î");
+            this.specials.Add("\"i", "ï");
+            this.specials.Add("`o", "ò");
+            this.specials.Add("'o", "ó");
+            this.specials.Add("^o", "ô");
+            this.specials.Add("\"o", "ö");
+            this.specials.Add("`u", "ù");
+            this.specials.Add("'u", "ú");
+            this.specials.Add("^u", "û");
+            this.specials.Add("\"u", "ü");
+            this.specials.Add("~a", "ã");
+            this.specials.Add("~o", "õ");
+            this.specials.Add("~n", "ñ");
+            this.specials.Add(",c", "ç");
+            this.specials.Add("/4", "¼");
+            this.specials.Add("/2", "½");
+            this.specials.Add("/3", "¾");
+            this.specials.Add("<<", "«");
+            this.specials.Add(">>", "»");
+            this.specials.Add("SS", "ß");
+            this.specials.Add("..", "·");
+            this.specials.Add("xx", "×");
+            this.specials.Add("^0", "°");
+            this.specials.Add("^1", "¹");
+            this.specials.Add("^2", "²");
+            this.specials.Add("^3", "³");
+            this.specials.Add("||", "¦");
+            this.specials.Add("==", "≡");
+            this.specials.Add(",,", "¸");
+
+            foreach (string special in specials.Values)
+            {
+                ToolStripMenuItem menuSpecial = new ToolStripMenuItem(special);
+
+                menuInsert.DropDownItems.Add(menuSpecial);
+
+                menuSpecial.Click += (s, e) => Insert(special);
+            }
+        }
+
+        public void SetDesign(string designName, Action reload)
         {
             this.designName = designName;
 
-            if (reopen != null)
-            {
-                this.reopen = reopen;
-            }
+            this.reload = reload;
 
             string designPath = string.Format("{0}\\{1}.cdb", App.GetSetting("DesignsFolder"), this.designName);
 
@@ -94,7 +169,7 @@ namespace Escher
             return this.designName;
         }
 
-        public string GetDesign()
+        public string GetDesignText()
         {
             return design.Text;
         }
@@ -104,84 +179,6 @@ namespace Escher
             status.ForeColor = (success ? Color.Green : (failure ? Color.Red : Color.Black));
             status.Text = text;
             status.Refresh();
-        }
-
-        private void Initialize()
-        {
-            #region Restore Window State
-            if (Properties.Settings.Default.EditorSize.Width == 0)
-            {
-                Properties.Settings.Default.Upgrade();
-            }
-            if (Properties.Settings.Default.EditorSize.Width == 0 || Properties.Settings.Default.EditorSize.Height == 0)
-            {
-                this.Location = new Point(10, 10);
-                this.Size = new Size(512, 512);
-            }
-            else
-            {
-                this.WindowState = Properties.Settings.Default.EditorState;
-
-                if (this.WindowState == FormWindowState.Minimized)
-                {
-                    this.WindowState = FormWindowState.Normal;
-                }
-
-                this.Location = Properties.Settings.Default.EditorLocation;
-                this.Size = Properties.Settings.Default.EditorSize;
-            }
-            #endregion
-
-            this.specials = new Dictionary<string, string>();
-
-            this.specials.Add("`a",  "à");
-            this.specials.Add("'a",  "á");
-            this.specials.Add("^a",  "â");
-            this.specials.Add("\"a", "ä");
-            this.specials.Add("`e",  "è");
-            this.specials.Add("'e",  "é");
-            this.specials.Add("^e",  "ê");
-            this.specials.Add("\"e", "ë");
-            this.specials.Add("`i",  "ì");
-            this.specials.Add("'i",  "í");
-            this.specials.Add("^i",  "î");
-            this.specials.Add("\"i", "ï");
-            this.specials.Add("`o",  "ò");
-            this.specials.Add("'o",  "ó");
-            this.specials.Add("^o",  "ô");
-            this.specials.Add("\"o", "ö");
-            this.specials.Add("`u",  "ù");
-            this.specials.Add("'u",  "ú");
-            this.specials.Add("^u",  "û");
-            this.specials.Add("\"u", "ü");
-            this.specials.Add("~a",  "ã");
-            this.specials.Add("~o",  "õ");
-            this.specials.Add("~n",  "ñ");
-            this.specials.Add(",c",  "ç");
-            this.specials.Add("/4",  "¼");
-            this.specials.Add("/2",  "½");
-            this.specials.Add("/3",  "¾");
-            this.specials.Add("<<",  "«");
-            this.specials.Add(">>",  "»");
-            this.specials.Add("SS",  "ß");
-            this.specials.Add("..",  "·");
-            this.specials.Add("xx",  "×");
-            this.specials.Add("^0",  "°");
-            this.specials.Add("^1",  "¹");
-            this.specials.Add("^2",  "²");
-            this.specials.Add("^3",  "³");
-            this.specials.Add("||",  "¦");
-            this.specials.Add("==",  "≡");
-            this.specials.Add(",,",  "¸");
-
-            foreach (string special in specials.Values)
-            {
-                ToolStripMenuItem menuSpecial = new ToolStripMenuItem(special);
-
-                menuInsert.DropDownItems.Add(menuSpecial);
-
-                menuSpecial.Click += (s, e) => Insert(special);
-            }
         }
 
         private void Insert(string special)
@@ -206,8 +203,19 @@ namespace Escher
             }
         }
 
-        private void Parse()
+        private void Parse(KeyEventArgs e)
         {
+            if (e != null)
+            {
+                if (e.Modifiers == Keys.Alt)
+                {
+                    if (e.KeyCode == Keys.P || e.KeyCode == Keys.V || e.KeyCode == Keys.S || e.KeyCode == Keys.X)
+                    {
+                        return;
+                    }
+                }
+            }
+
             if (design.SelectionStart <= 0)
             {
                 return;
@@ -360,7 +368,7 @@ namespace Escher
 
                 this.Text = string.Format("Escher ̣̤̤· Editing {0}", designName);
 
-                this.reopen(design.Text);
+                App.TryRun(this.reload);
             }
         }
 
