@@ -416,16 +416,26 @@ namespace Escher
                             }
                             else
                             {
-                                AddImage(x, y, w, h, n, image, rotateFlipType, appearance);
-
                                 SheetPosition sheetPosition = SheetHelper.GetSheetPosition(positions, i);
 
                                 if (sheetPosition != null)
                                 {
-                                    if (sheetPosition.Position != null)
+                                    if (sheetPosition.Type == "")
                                     {
-                                        AddText(x + 0.5F, y + 0.5F, 0, sheetPosition.Position, "Arial", 7, true);
+                                        AddImage(x, y, w, h, n, image, rotateFlipType, appearance);
                                     }
+                                    else
+                                    {
+                                        AddImage(x, y, w, h, n, ImageHelper.GetDisplayImage(path, n + sheetPosition.Type, colorStyle), rotateFlipType, appearance);
+                                    }
+
+                                    AddText(x + 0.5F, y + 0.5F, w - 1, sheetPosition.Position, "Times New Roman", 7, fontBold: true, alignment: Alignment.Left);
+                                    AddText(x + 0.5F, y + 0.5F, w - 1, sheetPosition.Type, "Times New Roman", 7, fontBold: true, alignment: Alignment.Right);
+                                    AddText(x + 0.5F, y + h - 2.5F, w - 1, sheetPosition.Description, "Times New Roman", 7, fontBold: true, alignment: Alignment.Centered);
+                                }
+                                else
+                                {
+                                    AddImage(x, y, w, h, n, image, rotateFlipType, appearance);
                                 }
                             }
                         }

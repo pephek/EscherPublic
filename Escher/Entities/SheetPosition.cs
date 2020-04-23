@@ -8,8 +8,8 @@ namespace Escher
 {
     public class SheetPosition
     {
-        public string Position;
-        public string Type;
-        public string Description;
+        public string Position = "";
+        public string Type = "";
+        public string Description = "";
     }
 }

@@ -141,6 +141,25 @@ namespace Escher
             return entry;
         }
 
+        private string GetTextByComment(Design design, string comment)
+        {
+            string text = "";
+
+            DesignEntry entry = design.LastOrDefault(e => (e.Class == Class.Series || e.Class == Class.Type || e.Class == Class.Varieties) && e.Comment == comment);
+
+            if (entry != null)
+            {
+                text = entry.Text;
+
+                while (text.StartsWith("!") || text.StartsWith("%"))
+                {
+                    text = text.Substring(1);
+                }
+            }
+
+            return text;
+        }
+
         private void Parse(Design design, DesignEntry entry, string keyValuePair, int line)
         {
             string key;
@@ -171,9 +190,11 @@ namespace Escher
 
                 case "type": // Eg. Type:=Type I
                     entry.SetClass(Class.Type, val);
-                    if (key.Contains("Comment:"))
+                    if (entry.Text.Contains("Comment:"))
                     {
-                        throw new Exception(string.Format("Line {0}: Comment: in Type= is not yet implemented!", line));
+                        string comment = entry.Text.Split("Comment:")[1];
+                        string text = GetTextByComment(design, comment);
+                        entry.Text = entry.Text.Substring(0, entry.Text.IndexOf("Comment:")) + text;
                     }
                     break;
 
@@ -183,9 +204,11 @@ namespace Escher
 
                 case "varieties": // Eg. Varieties:=1946-'47.</b> Frankeerzegels.
                     entry.SetClass(Class.Varieties, val);
-                    if (key.Contains("Comment:"))
+                    if (entry.Text.Contains("Comment:"))
                     {
-                        throw new Exception(string.Format("Line {0}: Comment: in Type= is not yet implemented!", line));
+                        string comment = entry.Text.Split("Comment:")[1];
+                        string text = GetTextByComment(design, comment);
+                        entry.Text = entry.Text.Substring(0, entry.Text.IndexOf("Comment:")) + text;
                     }
                     entry.Alignment = Alignment.Centered;
                     break;

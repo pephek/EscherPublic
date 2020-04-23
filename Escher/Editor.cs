@@ -20,7 +20,7 @@ namespace Escher
         private readonly TextStyle separatorStyle = new TextStyle(Brushes.Silver, null, FontStyle.Regular);
         private readonly TextStyle commentStyle = new TextStyle(Brushes.Green, null, FontStyle.Italic);
         private readonly TextStyle feedStyle = new TextStyle(Brushes.Maroon, null, FontStyle.Bold);
-        private readonly TextStyle importantStyle = new TextStyle(Brushes.Red, null, FontStyle.Bold);
+        private readonly TextStyle importantStyle = new TextStyle(Brushes.Red, null, FontStyle.Regular);
         private readonly TextStyle enumStyle = new TextStyle(Brushes.SteelBlue, null, FontStyle.Regular);
 
         private Dictionary<string, string> specials = new Dictionary<string, string>();
@@ -235,11 +235,12 @@ namespace Escher
 
         private void Recolor(TextChangedEventArgs e)
         {
-            e.ChangedRange.ClearStyle(keywordStyle, separatorStyle, commentStyle, importantStyle, enumStyle);
+            e.ChangedRange.ClearStyle(StyleIndex.All);
 
             e.ChangedRange.SetStyle(separatorStyle, @"=|\|");
 
             //e.ChangedRange.SetStyle(CommentStyle, @"//.*$", RegexOptions.Multiline);
+
             e.ChangedRange.SetStyle(commentStyle, @"'.*$", RegexOptions.Multiline);
 
             e.ChangedRange.SetStyle(keywordStyle, @"\b(Alignment|Appearance|Catalogue|Color|Combine|Comment|Copyright|Description|Design|FontOfDescription|FontOfType|FrameColor|Height|Html|Horizontal|Issued|LineFeed|Menu|Overprint|PageNumber|Pdf|Perforation|Perfs|Picture|Positions|Printed|Private|Sample|Separate|Series|Settings|Size|Skip|Stamp|Type|Unlisted|Value|Varieties|Variety|Version|Vertical|Width)\b");
