@@ -43,6 +43,8 @@ namespace Escher
         private Size baseSizeLandscape = new Size();
         private Size baseSize;
 
+        private float scale;
+
         public Imaging()
         {
             InitializeComponent();
@@ -87,6 +89,8 @@ namespace Escher
             pTrial.Paint += new PaintEventHandler((sender, e) => PaintSelection(e.Graphics));
 
             this.KeyPreview = true;
+
+            this.scale = 1;
         }
 
         private void GetPortraitAndLandscapeBaseSizes(string rootPath)
@@ -210,15 +214,15 @@ namespace Escher
 
             this.mode = ImagingMode.None;
 
-            labelMode.Text = this.mode.Text(this.stamp.Number, pImage.Image);
+            labelMode.Text = this.mode.Text(this.stamp.Number, pImage.Image, this.scale);
 
             Repaint();
         }
 
         private void Repaint()
         {
-            int width = 2 * this.baseSize.Width;
-            int height = 2 * this.baseSize.Height;
+            int width = (int)(this.scale * 2 * this.baseSize.Width);
+            int height = (int)(this.scale * 2 * this.baseSize.Height);
 
             if (panelButtons.Width > width)
             {
@@ -261,6 +265,40 @@ namespace Escher
             pColor.Location = new Point(w * 3 / 2 - pColor.Width / 2, h / 2 - pColor.Height / 2);
             pPrint.Location = new Point(w * 3 / 2 - pPrint.Width / 2, h * 3 / 2 - pPrint.Height / 2);
             pTrial.Location = new Point(w - pTrial.Width / 2, h - pTrial.Height / 2);
+
+            if (this.scale != 1)
+            {
+
+                pThumb.Location = new Point((int)(this.scale * pThumb.Left), (int)(this.scale * pThumb.Top));
+                pImage.Location = new Point((int)(this.scale * pImage.Left), (int)(this.scale * pImage.Top));
+                pColor.Location = new Point((int)(this.scale * pColor.Left), (int)(this.scale * pColor.Top));
+                pPrint.Location = new Point((int)(this.scale * pPrint.Left), (int)(this.scale * pPrint.Top));
+                pTrial.Location = new Point((int)(this.scale * pTrial.Left), (int)(this.scale * pTrial.Top));
+
+                pThumb.Size = new Size((int)(this.scale * pThumb.Width), (int)(this.scale * pThumb.Height));
+                pImage.Size = new Size((int)(this.scale * pImage.Width), (int)(this.scale * pImage.Height));
+                pColor.Size = new Size((int)(this.scale * pColor.Width), (int)(this.scale * pColor.Height));
+                pPrint.Size = new Size((int)(this.scale * pPrint.Width), (int)(this.scale * pPrint.Height));
+                pTrial.Size = new Size((int)(this.scale * pTrial.Width), (int)(this.scale * pTrial.Height));
+
+                pThumb.SizeMode = PictureBoxSizeMode.StretchImage;
+                pImage.SizeMode = PictureBoxSizeMode.StretchImage;
+                pColor.SizeMode = PictureBoxSizeMode.StretchImage;
+                pPrint.SizeMode = PictureBoxSizeMode.StretchImage;
+                pTrial.SizeMode = PictureBoxSizeMode.StretchImage;
+            }
+
+            if (this.Width > screenWidthInPixels || this.Height > screenHeightInPixels)
+            {
+                if (this.scale == 1)
+                {
+                    this.scale /= 2;
+
+                    labelMode.Text = this.mode.Text(this.stamp.Number, pImage.Image, this.scale);
+
+                    Repaint();
+                }
+            }
         }
 
         protected override void OnKeyUp(KeyEventArgs e)
@@ -364,7 +402,7 @@ namespace Escher
         {
             this.mode = mode;
 
-            labelMode.Text = this.mode.Text();
+            labelMode.Text = this.mode.Text(scale: this.scale);
 
             panelButtons.Visible = false;
             panelImaging.Visible = true;
@@ -562,7 +600,7 @@ namespace Escher
 
             this.mode = ImagingMode.None;
 
-            labelMode.Text = this.mode.Text(this.stamp.Number, pImage.Image);
+            labelMode.Text = this.mode.Text(this.stamp.Number, pImage.Image, this.scale);
 
             panelButtons.Visible = true;
             panelImaging.Visible = false;
@@ -629,7 +667,7 @@ namespace Escher
 
                 this.UseWaitCursor = false;
 
-                labelMode.Text = string.Format("{0} : {1}", this.mode.Text(), size);
+                labelMode.Text = string.Format("{0} : {1}", this.mode.Text(scale: this.scale), size);
             }
         }
 
