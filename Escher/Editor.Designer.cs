@@ -37,10 +37,12 @@
             this.menuValidate = new System.Windows.Forms.ToolStripMenuItem();
             this.menuSave = new System.Windows.Forms.ToolStripMenuItem();
             this.menuExit = new System.Windows.Forms.ToolStripMenuItem();
+            this.menuInsert = new System.Windows.Forms.ToolStripMenuItem();
             this.status = new System.Windows.Forms.Label();
             this.panelInfo = new System.Windows.Forms.Panel();
             this.panelDesign = new System.Windows.Forms.Panel();
-            this.menuInsert = new System.Windows.Forms.ToolStripMenuItem();
+            this.menuFind = new System.Windows.Forms.ToolStripMenuItem();
+            this.menuReplace = new System.Windows.Forms.ToolStripMenuItem();
             ((System.ComponentModel.ISupportInitialize)(this.design)).BeginInit();
             this.menuStrip.SuspendLayout();
             this.panelInfo.SuspendLayout();
@@ -67,7 +69,7 @@
             this.design.Cursor = System.Windows.Forms.Cursors.IBeam;
             this.design.DisabledColor = System.Drawing.Color.FromArgb(((int)(((byte)(100)))), ((int)(((byte)(180)))), ((int)(((byte)(180)))), ((int)(((byte)(180)))));
             this.design.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.design.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.design.Font = new System.Drawing.Font("Consolas", 9F);
             this.design.IsReplaceMode = false;
             this.design.Location = new System.Drawing.Point(0, 0);
             this.design.Name = "design";
@@ -75,7 +77,7 @@
             this.design.SelectionColor = System.Drawing.Color.FromArgb(((int)(((byte)(60)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(255)))));
             this.design.ServiceColors = ((FastColoredTextBoxNS.ServiceColors)(resources.GetObject("design.ServiceColors")));
             this.design.ShowLineNumbers = false;
-            this.design.Size = new System.Drawing.Size(821, 772);
+            this.design.Size = new System.Drawing.Size(821, 774);
             this.design.TabIndex = 2;
             this.design.Zoom = 100;
             // 
@@ -88,19 +90,21 @@
             this.menuInsert});
             this.menuStrip.Location = new System.Drawing.Point(0, 0);
             this.menuStrip.Name = "menuStrip";
-            this.menuStrip.Size = new System.Drawing.Size(823, 30);
+            this.menuStrip.Size = new System.Drawing.Size(823, 28);
             this.menuStrip.TabIndex = 3;
             this.menuStrip.Text = "menuStrip1";
             // 
             // menuEdit
             // 
             this.menuEdit.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.menuFind,
+            this.menuReplace,
             this.menuPreview,
             this.menuValidate,
             this.menuSave,
             this.menuExit});
             this.menuEdit.Name = "menuEdit";
-            this.menuEdit.Size = new System.Drawing.Size(49, 26);
+            this.menuEdit.Size = new System.Drawing.Size(49, 24);
             this.menuEdit.Text = "Edit";
             // 
             // menuPreview
@@ -131,6 +135,12 @@
             this.menuExit.Size = new System.Drawing.Size(224, 26);
             this.menuExit.Text = "Exit";
             // 
+            // menuInsert
+            // 
+            this.menuInsert.Name = "menuInsert";
+            this.menuInsert.Size = new System.Drawing.Size(59, 24);
+            this.menuInsert.Text = "Insert";
+            // 
             // status
             // 
             this.status.AutoSize = true;
@@ -147,7 +157,7 @@
             this.panelInfo.BackColor = System.Drawing.Color.White;
             this.panelInfo.Controls.Add(this.status);
             this.panelInfo.Dock = System.Windows.Forms.DockStyle.Top;
-            this.panelInfo.Location = new System.Drawing.Point(0, 30);
+            this.panelInfo.Location = new System.Drawing.Point(0, 28);
             this.panelInfo.Name = "panelInfo";
             this.panelInfo.Size = new System.Drawing.Size(823, 35);
             this.panelInfo.TabIndex = 5;
@@ -157,16 +167,24 @@
             this.panelDesign.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.panelDesign.Controls.Add(this.design);
             this.panelDesign.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.panelDesign.Location = new System.Drawing.Point(0, 65);
+            this.panelDesign.Location = new System.Drawing.Point(0, 63);
             this.panelDesign.Name = "panelDesign";
-            this.panelDesign.Size = new System.Drawing.Size(823, 774);
+            this.panelDesign.Size = new System.Drawing.Size(823, 776);
             this.panelDesign.TabIndex = 6;
             // 
-            // menuInsert
+            // menuFind
             // 
-            this.menuInsert.Name = "menuInsert";
-            this.menuInsert.Size = new System.Drawing.Size(59, 26);
-            this.menuInsert.Text = "Insert";
+            this.menuFind.Name = "menuFind";
+            this.menuFind.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Alt | System.Windows.Forms.Keys.F)));
+            this.menuFind.Size = new System.Drawing.Size(224, 26);
+            this.menuFind.Text = "Find";
+            // 
+            // menuReplace
+            // 
+            this.menuReplace.Name = "menuReplace";
+            this.menuReplace.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Alt | System.Windows.Forms.Keys.H)));
+            this.menuReplace.Size = new System.Drawing.Size(224, 26);
+            this.menuReplace.Text = "Replace";
             // 
             // Editor
             // 
@@ -203,5 +221,7 @@
         private System.Windows.Forms.Panel panelInfo;
         private System.Windows.Forms.Panel panelDesign;
         private System.Windows.Forms.ToolStripMenuItem menuInsert;
+        private System.Windows.Forms.ToolStripMenuItem menuFind;
+        private System.Windows.Forms.ToolStripMenuItem menuReplace;
     }
 }

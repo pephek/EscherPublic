@@ -40,6 +40,8 @@ namespace Escher
 
             this.Load += new EventHandler((sender, e) => Initialize());
 
+            this.menuFind.Click += new EventHandler((sender, e) => design.ShowFindDialog());
+            this.menuReplace.Click += new EventHandler((sender, e) => design.ShowReplaceDialog());
             this.menuPreview.Click += new EventHandler((sender, e) => App.TryRun(PreviewDesign));
             this.menuValidate.Click += new EventHandler((sender, e) => App.TryRun(ValidateDesign));
             this.menuSave.Click += new EventHandler((sender, e) => App.TryRun(SaveDesign));
@@ -209,7 +211,7 @@ namespace Escher
             {
                 if (e.Modifiers == Keys.Alt)
                 {
-                    if (e.KeyCode == Keys.P || e.KeyCode == Keys.V || e.KeyCode == Keys.S || e.KeyCode == Keys.X)
+                    if (e.KeyCode == Keys.F || e.KeyCode == Keys.H || e.KeyCode == Keys.P || e.KeyCode == Keys.V || e.KeyCode == Keys.S || e.KeyCode == Keys.X)
                     {
                         return;
                     }

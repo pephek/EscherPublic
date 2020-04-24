@@ -344,6 +344,22 @@ namespace Escher
                                 h = h - 4;
                                 break;
 
+                            case Appearance.Block2x5:
+                            case Appearance.Block2x5Rotated:
+                                int rows = appearance.NumberOfHorizontalAndVerticalStamps().Width;
+                                int cols = appearance.NumberOfHorizontalAndVerticalStamps().Height;
+                                w = (width - 4) / rows;
+                                h = (height - 4) / cols;
+                                x = left + 4 + (i % rows) * w;
+                                y = top + 4 + ((i / rows) % cols) * h;
+                                w = w - 4;
+                                h = h - 4;
+                                if (appearance == Appearance.Block2x5Rotated)
+                                {
+                                    rotateFlipType = RotateFlipType.Rotate270FlipNone;
+                                }
+                                break;
+
                             case Appearance.Block:
                                 w = (width + 4) / 2;
                                 h = (height + 4) / 2;

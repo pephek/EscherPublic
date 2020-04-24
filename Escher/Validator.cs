@@ -359,7 +359,7 @@ namespace Escher
                 "tetebechehorizontalgutter", "horizontaltetebechegutter",
                 "tetebecheverticalgutter", "verticaltetebechegutter",
                 "horizontalgutterpair", "verticalgutterpair",
-                "block", "block5x5", "sheet2x3",
+                "block", "block5x5", "block2x5", "block2x5rotated", "sheet2x3",
                 "proof",
                 "horizontalstrip3", "horizontalstrip4", "horizontalstrip5", "horizontalstrip6",
                 "verticalstrip3", "verticalstrip4", "verticalstrip5", "verticalstrip6",

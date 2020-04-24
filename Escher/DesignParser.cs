@@ -321,7 +321,7 @@ namespace Escher
                     entry.Picture = val;
                     if (entry.Picture == "bw:")
                     {
-                        entry.Picture = "..\\print\\" + entry.Number;
+                        entry.Picture = "..\\xlprint\\" + entry.Number;
                         while (entry.Picture != "" && (entry.Picture[entry.Picture.Length - 1] < '0' || entry.Picture[entry.Picture.Length - 1] > '9'))
                         {
                             entry.Picture = entry.Picture.Substring(0, entry.Picture.Length - 1);
@@ -329,7 +329,7 @@ namespace Escher
                     }
                     else if (entry.Picture.StartsWith("bw:"))
                     {
-                        entry.Picture = entry.Picture.Replace("bw:", "..\\print\\");
+                        entry.Picture = entry.Picture.Replace("bw:", "..\\xlprint\\");
                     }
                     break;
 
@@ -652,6 +652,16 @@ namespace Escher
                         case "block5x5":
                             entry.Appearance = Appearance.Block5x5;
                             entry.Width = 5 * entry.Width - (5 - 1) * 4;
+                            entry.Height = 5 * entry.Height - (5 - 1) * 4;
+                            break;
+                        case "block2x5":
+                            entry.Appearance = Appearance.Block2x5;
+                            entry.Width = 2 * entry.Width - (2 - 1) * 4;
+                            entry.Height = 5 * entry.Height - (5 - 1) * 4;
+                            break;
+                        case "block2x5rotated":
+                            entry.Appearance = Appearance.Block2x5Rotated;
+                            entry.Width = 2 * entry.Width - (2 - 1) * 4;
                             entry.Height = 5 * entry.Height - (5 - 1) * 4;
                             break;
                         case "sheet2x3":

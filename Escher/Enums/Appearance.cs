@@ -14,6 +14,8 @@ namespace Escher
         PairVertical,
         Block,
         Block5x5,
+        Block2x5,
+        Block2x5Rotated,
         TeteBecheHorizontal,
         TeteBecheVertical,
         Sheet2x3,
@@ -74,6 +76,10 @@ namespace Escher
 
                 case Appearance.Block5x5:
                     return 25;
+
+                case Appearance.Block2x5:
+                case Appearance.Block2x5Rotated:
+                    return 10;
 
                 case Appearance.Sheet2x3:
                     return 6;
@@ -140,6 +146,10 @@ namespace Escher
 
                 case Appearance.Block5x5:
                     return new Size(5, 5);
+
+                case Appearance.Block2x5:
+                case Appearance.Block2x5Rotated:
+                    return new Size(2, 5);
 
                 case Appearance.Sheet2x3:
                     return new Size(3, 2);
