@@ -214,6 +214,14 @@ namespace Escher
                     setup.FontSize = setup.FontSize.Next();
                     Refresh();
                     break;
+                case Keys.T:
+                    setup.PageFormat.TitleStyle = setup.PageFormat.TitleStyle.Toggle();
+                    Refresh();
+                    break;
+                case Keys.I:
+                    setup.IncludeImage = !setup.IncludeImage;
+                    Refresh();
+                    break;
                 case Keys.Oemplus:
                     switch (modifiers)
                     {
@@ -619,8 +627,8 @@ namespace Escher
             artifacts.AddText(1, 1, 0, string.Format("Escher · Preview · Paper:<b>{0}</b> · Page Number:<b>{1}</b>", format.FormatName, pageNumber), "Microsoft Sans Serif", 7, foreColor: Color.Gray, screenOnly: true);
 
             // Legenda
-            artifacts.AddText(1, artifacts.Last().Bottom(1), 0, "c: ± color · n: ± number · v: ± value · f: ± frame · t: ± title · s: ± font", "Microsoft Sans Serif", 7, foreColor: Color.Gray, screenOnly: true);
-            artifacts.AddText(1, artifacts.Last().Bottom(1), 0, "+: next match · -: previous match · =: pin", "Microsoft Sans Serif", 7, foreColor: Color.Gray, screenOnly: true);
+            artifacts.AddText(1, artifacts.Last().Bottom(1), 0, "c: ± color · n: ± number · v: ± value · f: ± frame · t: ± title · s: ± font · i: ± image", "Microsoft Sans Serif", 7, foreColor: Color.Gray, screenOnly: true);
+            artifacts.AddText(1, artifacts.Last().Bottom(1), 0, "+: next paper match · -: previous paper match · =: pin top-left", "Microsoft Sans Serif", 7, foreColor: Color.Gray, screenOnly: true);
             artifacts.AddText(1, artifacts.Last().Bottom(1), 0, char.ConvertFromUtf32(0x2190) + ": previous page · " + char.ConvertFromUtf32(0x2192) + ": next page" + " · p: page setup", "Microsoft Sans Serif", 7, foreColor: Color.Gray, screenOnly: true);
             artifacts.AddText(1, artifacts.Last().Bottom(1), 0, "esc: close", "Microsoft Sans Serif", 7, foreColor: Color.Gray, screenOnly: true);
 

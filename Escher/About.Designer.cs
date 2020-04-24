@@ -29,22 +29,25 @@
         private void InitializeComponent()
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(About));
-            this.label1Version = new System.Windows.Forms.Label();
+            this.labelVersion = new System.Windows.Forms.Label();
             this.buttonClose = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
-            // label1Version
+            // labelVersion
             // 
-            this.label1Version.AutoSize = true;
-            this.label1Version.Location = new System.Drawing.Point(20, 24);
-            this.label1Version.Name = "label1Version";
-            this.label1Version.Size = new System.Drawing.Size(309, 17);
-            this.label1Version.TabIndex = 2;
-            this.label1Version.Text = "Escher V1 · Copyright © 2005-2020 by Pep Hek";
+            this.labelVersion.AutoSize = true;
+            this.labelVersion.BackColor = System.Drawing.Color.White;
+            this.labelVersion.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.labelVersion.ForeColor = System.Drawing.Color.DimGray;
+            this.labelVersion.Location = new System.Drawing.Point(12, 9);
+            this.labelVersion.Name = "labelVersion";
+            this.labelVersion.Size = new System.Drawing.Size(363, 20);
+            this.labelVersion.TabIndex = 2;
+            this.labelVersion.Text = "Escher V1 · Copyright © 2005-2020 by Pep Hek";
             // 
             // buttonClose
             // 
-            this.buttonClose.Location = new System.Drawing.Point(248, 69);
+            this.buttonClose.Location = new System.Drawing.Point(926, 715);
             this.buttonClose.Name = "buttonClose";
             this.buttonClose.Size = new System.Drawing.Size(84, 38);
             this.buttonClose.TabIndex = 3;
@@ -57,9 +60,10 @@
             this.AcceptButton = this.buttonClose;
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(348, 125);
+            this.BackgroundImage = global::Escher.Properties.Resources.Escher;
+            this.ClientSize = new System.Drawing.Size(1022, 765);
             this.Controls.Add(this.buttonClose);
-            this.Controls.Add(this.label1Version);
+            this.Controls.Add(this.labelVersion);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MaximizeBox = false;
@@ -72,7 +76,7 @@
         }
 
         #endregion
-        private System.Windows.Forms.Label label1Version;
+        private System.Windows.Forms.Label labelVersion;
         private System.Windows.Forms.Button buttonClose;
     }
 }

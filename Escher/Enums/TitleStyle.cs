@@ -11,4 +11,20 @@ namespace Escher
         Davo,
         Importa
     }
+
+    public static class TitleStyleExtensions
+    {
+        public static TitleStyle Toggle(this TitleStyle titleStyle)
+        {
+            switch (titleStyle)
+            {
+                case TitleStyle.Davo:
+                    return TitleStyle.Importa;
+                case TitleStyle.Importa:
+                    return TitleStyle.Davo;
+                default:
+                    throw new ArgumentOutOfRangeException("titleStyle");
+            }
+        }
+    }
 }

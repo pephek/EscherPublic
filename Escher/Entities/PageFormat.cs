@@ -14,7 +14,7 @@ namespace Escher
     public class PageFormat
     {
         public readonly string FormatName;
-        public readonly TitleStyle TitleStyle;
+        public TitleStyle TitleStyle;
         public readonly string TitleFont;
         public readonly float PageWidth;
         public readonly float PageHeight;
