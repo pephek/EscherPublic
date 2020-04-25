@@ -138,7 +138,10 @@ namespace Escher
         {
             this.designName = designName;
 
-            this.reload = reload;
+            if (reload != null)
+            {
+                this.reload = reload;
+            }
 
             string designPath = string.Format("{0}\\{1}.cdb", App.GetSetting("DesignsFolder"), this.designName);
 

@@ -41,7 +41,7 @@ namespace Escher
 
         private Size baseSizePortrait = new Size();
         private Size baseSizeLandscape = new Size();
-        private Size baseSize;
+        private Size baseSize = new Size();
 
         private float scale;
 
@@ -88,63 +88,100 @@ namespace Escher
             pTrial.MouseUp += new MouseEventHandler((sender, e) => MouseIsUp());
             pTrial.Paint += new PaintEventHandler((sender, e) => PaintSelection(e.Graphics));
 
-            this.KeyPreview = true;
-
-            this.scale = 1;
-        }
-
-        private void GetPortraitAndLandscapeBaseSizes(string rootPath)
-        {
             this.baseSizePortrait = new Size();
             this.baseSizeLandscape = new Size();
+            this.baseSize = new Size();
 
-            foreach (DesignEntry stamp in this.series)
+            this.scale =0;
+
+            this.KeyPreview = true;
+        }
+
+        private Size GetBaseSize(string rootPath, int width, int height)
+        {
+            if (this.scale == 0)
             {
-                string imagePath = string.Format("{0}\\image\\{1}.jpg", rootPath, stamp.Number);
+                this.baseSizePortrait = new Size();
+                this.baseSizeLandscape = new Size();
 
-                if (File.Exists(imagePath))
+                foreach (DesignEntry stamp in this.series)
                 {
-                    using (Image image = Image.FromFile(imagePath))
+                    string imagePath = string.Format("{0}\\image\\{1}.jpg", rootPath, stamp.Number);
+
+                    if (File.Exists(imagePath))
                     {
-                        if (image.Width < image.Height) // Portrait
+                        using (Image image = Image.FromFile(imagePath))
                         {
-                            if (image.Width > this.baseSizePortrait.Width)
+                            if (image.Width < image.Height) // Portrait
                             {
-                                this.baseSizePortrait.Width = image.Width;
+                                if (image.Width > this.baseSizePortrait.Width)
+                                {
+                                    this.baseSizePortrait.Width = image.Width;
+                                }
+                                if (image.Height > this.baseSizePortrait.Height)
+                                {
+                                    this.baseSizePortrait.Height = image.Height;
+                                }
                             }
-                            if (image.Height > this.baseSizePortrait.Height)
+                            else // Landscape
                             {
-                                this.baseSizePortrait.Height = image.Height;
-                            }
-                        }
-                        else // Landscape
-                        {
-                            if (image.Width > this.baseSizeLandscape.Width)
-                            {
-                                this.baseSizeLandscape.Width = image.Width;
-                            }
-                            if (image.Height > this.baseSizeLandscape.Height)
-                            {
-                                this.baseSizeLandscape.Height = image.Height;
+                                if (image.Width > this.baseSizeLandscape.Width)
+                                {
+                                    this.baseSizeLandscape.Width = image.Width;
+                                }
+                                if (image.Height > this.baseSizeLandscape.Height)
+                                {
+                                    this.baseSizeLandscape.Height = image.Height;
+                                }
                             }
                         }
                     }
                 }
+
+                if (this.baseSizePortrait.IsEmpty)
+                {
+                    this.baseSizePortrait = Escher.Properties.Resources.ImageNotFound.Size;
+                }
+                if (this.baseSizeLandscape.IsEmpty)
+                {
+                    this.baseSizeLandscape = Escher.Properties.Resources.ImageNotFound.Size;
+                }
+
+                this.baseSizePortrait = new Size((int)(1.1F * this.baseSizePortrait.Width), (int)(1.1F * this.baseSizePortrait.Height));
+                this.baseSizeLandscape = new Size((int)(1.1F * this.baseSizeLandscape.Width), (int)(1.1F * this.baseSizeLandscape.Height));
+
+                int maxWidth = Screen.FromControl(this).WorkingArea.Width / 2;
+                int maxHeight = (Screen.FromControl(this).WorkingArea.Height - panelButtons.Height) / 2;
+
+                this.scale = 1;
+
+                if (this.scale * this.baseSizeLandscape.Width >= maxWidth)
+                {
+                    this.scale *= (float)maxWidth / this.baseSizeLandscape.Width;
+                }
+                if (this.scale * this.baseSizePortrait.Height >= maxHeight)
+                {
+                    this.scale *= (float)maxHeight / this.baseSizePortrait.Height;
+                }
+
+                if (this.scale != 1)
+                {
+                    this.scale = (float)Math.Floor(100 * this.scale) / 100;
+                }
+
+                this.baseSizePortrait = new Size((int)(this.scale * this.baseSizePortrait.Width), (int)(this.scale * this.baseSizePortrait.Height));
+                this.baseSizeLandscape = new Size((int)(this.scale * this.baseSizeLandscape.Width), (int)(this.scale * this.baseSizeLandscape.Height));
+
+                pImage.SizeMode = this.scale == 1 ? PictureBoxSizeMode.AutoSize : PictureBoxSizeMode.StretchImage;
+
+                pThumb.SizeMode = pImage.SizeMode;
+                pColor.SizeMode = pImage.SizeMode;
+                pPrint.SizeMode = pImage.SizeMode;
+
+                pTrial.SizeMode = PictureBoxSizeMode.AutoSize;
             }
 
-            if (this.baseSizePortrait.IsEmpty)
-            {
-                this.baseSizePortrait = Escher.Properties.Resources.ImageNotFound.Size;
-            }
-            if (this.baseSizeLandscape.IsEmpty)
-            {
-                this.baseSizeLandscape = Escher.Properties.Resources.ImageNotFound.Size;
-            }
-
-            this.baseSizePortrait.Width = (int)(1.1 * this.baseSizePortrait.Width);
-            this.baseSizePortrait.Height = (int)(1.1 * this.baseSizePortrait.Height);
-            this.baseSizeLandscape.Width = (int)(1.1 * this.baseSizeLandscape.Width);
-            this.baseSizeLandscape.Height = (int)(1.1 * this.baseSizeLandscape.Height);
+            return (width < height ? this.baseSizePortrait : this.baseSizeLandscape);
         }
 
         public void SetImage(Design series, string stampNumber, string folder, string country, string section)
@@ -157,8 +194,6 @@ namespace Escher
             this.stamp = series.GetStampFromSeries(stampNumber);
 
             string path = string.Format("{0}\\{1}\\{2}", folder, country, section);
-
-            GetPortraitAndLandscapeBaseSizes(path);
 
             this.thumb = string.Format("{0}\\{1}.jpg", path, stamp.Number);
             this.image = string.Format("{0}\\image\\{1}.jpg", path, stamp.Number);
@@ -181,13 +216,7 @@ namespace Escher
             pPrint.LoadImageAndUnlock(cPrint);
             pTrial.LoadImageAndUnlock(cTrial);
 
-            pImage.SizeMode = PictureBoxSizeMode.AutoSize;
-            pThumb.SizeMode = PictureBoxSizeMode.AutoSize;
-            pColor.SizeMode = PictureBoxSizeMode.AutoSize;
-            pPrint.SizeMode = PictureBoxSizeMode.AutoSize;
-            pTrial.SizeMode = PictureBoxSizeMode.AutoSize;
-
-            this.baseSize = (pImage.Width < pImage.Height ? this.baseSizePortrait : this.baseSizeLandscape);
+            this.baseSize = GetBaseSize(path, pImage.Image.Width, pImage.Image.Height);
 
             buttonPrevious.Enabled = this.series.FindIndex(s => s.Number == this.stamp.Number) > 0;
             buttonNext.Enabled = this.series.FindIndex(s => s.Number == this.stamp.Number) < this.series.Count() - 1;
@@ -221,84 +250,58 @@ namespace Escher
 
         private void Repaint()
         {
-            int width = (int)(this.scale * 2 * this.baseSize.Width);
-            int height = (int)(this.scale * 2 * this.baseSize.Height);
+            int formWidth = 2 * this.baseSize.Width;
+            int formHeight = 2 * this.baseSize.Height;
 
-            if (panelButtons.Width > width)
+            if (panelButtons.Width > formWidth)
             {
-                width = panelButtons.Width;
+                formWidth = panelButtons.Width;
             }
 
             if (panelButtons.Width > this.baseSize.Width)
             {
-                panelButtons.Location = new Point(width / 2 - panelButtons.Width / 2, height);
+                panelButtons.Location = new Point(formWidth / 2 - panelButtons.Width / 2, formHeight);
             }
             else
             {
-                panelButtons.Location = new Point(baseSize.Width / 2 - panelButtons.Width / 2, height);
+                panelButtons.Location = new Point(baseSize.Width / 2 - panelButtons.Width / 2, formHeight);
             }
 
-            panelImaging.Location = new Point(width / 2 - panelImaging.Width / 2, height);
+            panelImaging.Location = new Point(formWidth / 2 - panelImaging.Width / 2, formHeight);
 
-            panelRecolor.Location = new Point(5, height - panelRecolor.Height);
-            panelRecolor.Width = width - 2 * panelRecolor.Left;
+            panelRecolor.Location = new Point(5, formHeight - panelRecolor.Height);
+            panelRecolor.Width = formWidth - 2 * panelRecolor.Left;
             r.Width = panelRecolor.Width - r.Left;
             g.Width = r.Width;
             b.Width = r.Width;
 
-            height += panelButtons.Height;
+            formHeight += panelButtons.Height;
 
-            int screenWidthInPixels = Screen.FromControl(this).WorkingArea.Width;
-            int screenHeightInPixels = Screen.FromControl(this).WorkingArea.Height;
-
-            if (width != this.Width || height != this.Height)
+            if (formWidth != this.Width || formHeight != this.Height)
             {
-                this.Size = new Size(width, height);
-                this.Location = new Point((screenWidthInPixels - width) / 2, (screenHeightInPixels - height) / 2);
+                int screenWidthInPixels = Screen.FromControl(this).WorkingArea.Width;
+                int screenHeightInPixels = Screen.FromControl(this).WorkingArea.Height;
+
+                this.Size = new Size(formWidth, formHeight);
+                this.Location = new Point((screenWidthInPixels - formWidth) / 2, (screenHeightInPixels - formHeight) / 2);
             }
 
             int w = baseSize.Width;
             int h = baseSize.Height;
+
+            if (this.scale != 1)
+            {
+                pImage.Size = new Size((int)(this.scale * pImage.Image.Width), (int)(this.scale * pImage.Image.Height));
+                pThumb.Size = new Size((int)(this.scale * pThumb.Image.Width), (int)(this.scale * pThumb.Image.Height));
+                pColor.Size = new Size((int)(this.scale * pColor.Image.Width), (int)(this.scale * pColor.Image.Height));
+                pPrint.Size = new Size((int)(this.scale * pPrint.Image.Width), (int)(this.scale * pPrint.Image.Height));
+            }
 
             pThumb.Location = new Point(w / 2 - pThumb.Width / 2, h / 2 - pThumb.Height / 2);
             pImage.Location = new Point(w / 2 - pImage.Width / 2, h * 3 / 2 - pImage.Height / 2);
             pColor.Location = new Point(w * 3 / 2 - pColor.Width / 2, h / 2 - pColor.Height / 2);
             pPrint.Location = new Point(w * 3 / 2 - pPrint.Width / 2, h * 3 / 2 - pPrint.Height / 2);
             pTrial.Location = new Point(w - pTrial.Width / 2, h - pTrial.Height / 2);
-
-            if (this.scale != 1)
-            {
-
-                pThumb.Location = new Point((int)(this.scale * pThumb.Left), (int)(this.scale * pThumb.Top));
-                pImage.Location = new Point((int)(this.scale * pImage.Left), (int)(this.scale * pImage.Top));
-                pColor.Location = new Point((int)(this.scale * pColor.Left), (int)(this.scale * pColor.Top));
-                pPrint.Location = new Point((int)(this.scale * pPrint.Left), (int)(this.scale * pPrint.Top));
-                pTrial.Location = new Point((int)(this.scale * pTrial.Left), (int)(this.scale * pTrial.Top));
-
-                pThumb.Size = new Size((int)(this.scale * pThumb.Width), (int)(this.scale * pThumb.Height));
-                pImage.Size = new Size((int)(this.scale * pImage.Width), (int)(this.scale * pImage.Height));
-                pColor.Size = new Size((int)(this.scale * pColor.Width), (int)(this.scale * pColor.Height));
-                pPrint.Size = new Size((int)(this.scale * pPrint.Width), (int)(this.scale * pPrint.Height));
-                pTrial.Size = new Size((int)(this.scale * pTrial.Width), (int)(this.scale * pTrial.Height));
-
-                pThumb.SizeMode = PictureBoxSizeMode.StretchImage;
-                pImage.SizeMode = PictureBoxSizeMode.StretchImage;
-                pColor.SizeMode = PictureBoxSizeMode.StretchImage;
-                pPrint.SizeMode = PictureBoxSizeMode.StretchImage;
-                pTrial.SizeMode = PictureBoxSizeMode.StretchImage;
-            }
-
-            if (this.Width > screenWidthInPixels || this.Height > screenHeightInPixels)
-            {
-                if (this.scale == 1)
-                {
-                    this.scale /= 2;
-
-                    labelMode.Text = this.mode.Text(this.stamp.Number, pImage.Image, this.scale);
-
-                    Repaint();
-                }
-            }
         }
 
         protected override void OnKeyUp(KeyEventArgs e)
