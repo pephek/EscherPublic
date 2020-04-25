@@ -143,7 +143,7 @@ namespace Escher
                 this.reload = reload;
             }
 
-            string designPath = string.Format("{0}\\{1}.cdb", App.GetSetting("DesignsFolder"), this.designName);
+            string designPath = string.Format("{0}\\{1}.album", App.GetSetting("AlbumsFolder"), this.designName);
 
             design.Text = File.ReadAllText(designPath, Encoding.GetEncoding("iso-8859-1"));
 
@@ -343,27 +343,20 @@ namespace Escher
             {
                 SetStatus();
 
-                string designPath = string.Format("{0}\\{1}.cdb", App.GetSetting("DesignsFolder"), this.designName);
-                string desigRollbackPath = string.Format("{0}\\{1}.cdb", App.GetSetting("DesignsRollbackFolder"), this.designName);
+                string designPath = string.Format("{0}\\{1}.album", App.GetSetting("AlbumsFolder"), this.designName);
+                string archivePath = string.Format("{0}\\{1}.album", App.GetSetting("ArchiveFolder"), this.designName);
 
-                if (File.Exists(desigRollbackPath + ".-2"))
+                for (int archive = 5; archive >= 0; archive--)
                 {
-                    File.Copy(desigRollbackPath + ".-2", desigRollbackPath + ".-3", overwrite: true);
-                }
-
-                if (File.Exists(desigRollbackPath + ".-1"))
-                {
-                    File.Copy(desigRollbackPath + ".-1", desigRollbackPath + ".-2", overwrite: true);
-                }
-
-                if (File.Exists(desigRollbackPath))
-                {
-                    File.Copy(desigRollbackPath, desigRollbackPath + ".-1", overwrite: true);
+                    if (File.Exists(archivePath + "." + archive.ToString()))
+                    {
+                        File.Copy(archivePath + "." + archive.ToString(), archivePath + "." + (archive + 1).ToString(), overwrite: true);
+                    }
                 }
 
                 if (File.Exists(designPath))
                 {
-                    File.Copy(designPath, desigRollbackPath, overwrite: true);
+                    File.Copy(designPath, archivePath + ".0", overwrite: true);
                 }
 
                 File.WriteAllText(designPath, design.Text, Encoding.GetEncoding("iso-8859-1"));

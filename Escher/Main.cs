@@ -87,18 +87,18 @@ namespace Escher
                 Directory.CreateDirectory(pdfImagesFolder);
             }
 
-            string designsFolder = App.GetSetting("DesignsFolder");
+            string albumsFolder = App.GetSetting("AlbumsFolder");
 
-            if (!Directory.Exists(designsFolder))
+            if (!Directory.Exists(albumsFolder))
             {
-                Directory.CreateDirectory(designsFolder);
+                Directory.CreateDirectory(albumsFolder);
             }
 
-            string designsRollbackFolder = App.GetSetting("DesignsRollbackFolder");
+            string archiveFolder = App.GetSetting("ArchiveFolder");
 
-            if (!Directory.Exists(designsRollbackFolder))
+            if (!Directory.Exists(archiveFolder))
             {
-                Directory.CreateDirectory(designsRollbackFolder);
+                Directory.CreateDirectory(archiveFolder);
             }
 
             RefreshFormats();
@@ -210,7 +210,7 @@ namespace Escher
 
         private void RefreshDesigns()
         {
-            string[] designFiles = Directory.GetFiles(App.GetSetting("DesignsFolder"), "*.cdb", SearchOption.TopDirectoryOnly);
+            string[] designFiles = Directory.GetFiles(App.GetSetting("AlbumsFolder"), "*.album", SearchOption.TopDirectoryOnly);
 
             List<string> designs = new List<string>();
 
@@ -249,7 +249,6 @@ namespace Escher
 
                         item.DropDownItems.Add(itemDesign);
 
-                        //itemDesign.Click += (s, e) => OpenDesign(design);
                         itemDesign.Click += (s, e) => App.TryRun(OpenDesign, design, editor);
                     }
                 }
