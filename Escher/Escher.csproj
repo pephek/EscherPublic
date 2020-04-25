@@ -51,6 +51,10 @@
     <StartupObject />
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="ColorSlider, Version=1.0.0.4, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>References\ColorSlider.dll</HintPath>
+    </Reference>
     <Reference Include="CsvHelper, Version=15.0.0.0, Culture=neutral, PublicKeyToken=8c4959082be5c823, processorArchitecture=MSIL">
       <HintPath>..\packages\CsvHelper.15.0.2\lib\net47\CsvHelper.dll</HintPath>
     </Reference>
@@ -276,12 +280,6 @@
     <None Include="Images\Resize_16x.png" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\ColorSlider\ColorSlider.csproj">
-      <Project>{16e224dc-7ff0-4908-8318-d6a3ac2e797a}</Project>
-      <Name>ColorSlider</Name>
-    </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
     <None Include="Images\ColorPalette_16x.png" />
   </ItemGroup>
   <ItemGroup>
@@ -297,18 +295,10 @@
     <None Include="Images\Frame.jpg" />
   </ItemGroup>
   <ItemGroup>
-    <COMReference Include="VB6GraphicsProject">
-      <Guid>{90FB1F49-0FFF-4C30-B03E-FFD3E261EB68}</Guid>
-      <VersionMajor>2</VersionMajor>
-      <VersionMinor>0</VersionMinor>
-      <Lcid>0</Lcid>
-      <WrapperTool>tlbimp</WrapperTool>
-      <Isolated>False</Isolated>
-      <EmbedInteropTypes>True</EmbedInteropTypes>
-    </COMReference>
+    <None Include="Images\Escher.jpg" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Images\Escher.jpg" />
+    <Folder Include="References\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
