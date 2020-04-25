@@ -475,6 +475,27 @@ namespace Escher
             {
                 e.IsInputKey = true;
             }
+            else if (e.Modifiers == Keys.Control)
+            {
+                switch (e.KeyCode)
+                {
+                    case Keys.E:
+                        App.TryRun(EditDesign, editor);
+                        break;
+                    case Keys.F:
+                        App.TryRun(FindStampNumber);
+                        break;
+                    case Keys.P:
+                        App.TryRun(FindPageNumber);
+                        break;
+                    case Keys.A:
+                        App.TryRun(FindAlbumNumber);
+                        break;
+                    case Keys.X:
+                        App.TryRun(Exit, editor);
+                        break;
+                }
+            }
         }
 
         private void WebBrowser_Navigating(object sender, WebBrowserNavigatingEventArgs e)

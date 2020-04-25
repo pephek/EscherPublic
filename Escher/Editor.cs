@@ -40,8 +40,6 @@ namespace Escher
 
             this.Load += new EventHandler((sender, e) => Initialize());
 
-            this.menuFind.Click += new EventHandler((sender, e) => design.ShowFindDialog());
-            this.menuReplace.Click += new EventHandler((sender, e) => design.ShowReplaceDialog());
             this.menuPreview.Click += new EventHandler((sender, e) => App.TryRun(PreviewDesign));
             this.menuValidate.Click += new EventHandler((sender, e) => App.TryRun(ValidateDesign));
             this.menuSave.Click += new EventHandler((sender, e) => App.TryRun(SaveDesign));
@@ -346,7 +344,7 @@ namespace Escher
                 string designPath = string.Format("{0}\\{1}.album", App.GetSetting("AlbumsFolder"), this.designName);
                 string archivePath = string.Format("{0}\\{1}.album", App.GetSetting("ArchiveFolder"), this.designName);
 
-                for (int archive = 5; archive >= 0; archive--)
+                for (int archive = 4; archive >= 0; archive--)
                 {
                     if (File.Exists(archivePath + "." + archive.ToString()))
                     {

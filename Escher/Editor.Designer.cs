@@ -41,8 +41,6 @@
             this.status = new System.Windows.Forms.Label();
             this.panelInfo = new System.Windows.Forms.Panel();
             this.panelDesign = new System.Windows.Forms.Panel();
-            this.menuFind = new System.Windows.Forms.ToolStripMenuItem();
-            this.menuReplace = new System.Windows.Forms.ToolStripMenuItem();
             ((System.ComponentModel.ISupportInitialize)(this.design)).BeginInit();
             this.menuStrip.SuspendLayout();
             this.panelInfo.SuspendLayout();
@@ -97,8 +95,6 @@
             // menuEdit
             // 
             this.menuEdit.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.menuFind,
-            this.menuReplace,
             this.menuPreview,
             this.menuValidate,
             this.menuSave,
@@ -110,28 +106,28 @@
             // menuPreview
             // 
             this.menuPreview.Name = "menuPreview";
-            this.menuPreview.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Alt | System.Windows.Forms.Keys.P)));
+            this.menuPreview.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.P)));
             this.menuPreview.Size = new System.Drawing.Size(224, 26);
             this.menuPreview.Text = "Preview";
             // 
             // menuValidate
             // 
             this.menuValidate.Name = "menuValidate";
-            this.menuValidate.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Alt | System.Windows.Forms.Keys.V)));
+            this.menuValidate.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.V)));
             this.menuValidate.Size = new System.Drawing.Size(224, 26);
             this.menuValidate.Text = "Validate";
             // 
             // menuSave
             // 
             this.menuSave.Name = "menuSave";
-            this.menuSave.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Alt | System.Windows.Forms.Keys.S)));
+            this.menuSave.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.S)));
             this.menuSave.Size = new System.Drawing.Size(224, 26);
             this.menuSave.Text = "Save";
             // 
             // menuExit
             // 
             this.menuExit.Name = "menuExit";
-            this.menuExit.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Alt | System.Windows.Forms.Keys.X)));
+            this.menuExit.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.X)));
             this.menuExit.Size = new System.Drawing.Size(224, 26);
             this.menuExit.Text = "Exit";
             // 
@@ -172,20 +168,6 @@
             this.panelDesign.Size = new System.Drawing.Size(823, 776);
             this.panelDesign.TabIndex = 6;
             // 
-            // menuFind
-            // 
-            this.menuFind.Name = "menuFind";
-            this.menuFind.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Alt | System.Windows.Forms.Keys.F)));
-            this.menuFind.Size = new System.Drawing.Size(224, 26);
-            this.menuFind.Text = "Find";
-            // 
-            // menuReplace
-            // 
-            this.menuReplace.Name = "menuReplace";
-            this.menuReplace.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Alt | System.Windows.Forms.Keys.H)));
-            this.menuReplace.Size = new System.Drawing.Size(224, 26);
-            this.menuReplace.Text = "Replace";
-            // 
             // Editor
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
@@ -221,7 +203,5 @@
         private System.Windows.Forms.Panel panelInfo;
         private System.Windows.Forms.Panel panelDesign;
         private System.Windows.Forms.ToolStripMenuItem menuInsert;
-        private System.Windows.Forms.ToolStripMenuItem menuFind;
-        private System.Windows.Forms.ToolStripMenuItem menuReplace;
     }
 }
