@@ -143,14 +143,18 @@ namespace Escher
 
                 PageSetup setup = PageSetup.Load();
 
-                string pdfName = design.GetPdf();
+                DesignEntry album = design.GetAlbum();
+
+                string pdfName = album.Pdf;
 
                 if (setup.Catalog != Catalog.None)
                 {
-                    pdfName += "_" + setup.Catalog.ToString().ToLower();
+                    pdfName += "_" + setup.Catalog;
                 }
 
                 pdfName += "_" + setup.PageFormat.FormatName;
+
+                pdfName += "_v" + album.Version;
 
                 if (setup.IncludeMarginForPunchHoles)
                 {
@@ -176,10 +180,10 @@ namespace Escher
 
                 if (setup.IncludePdfBookmarks)
                 {
-                    BookmarksHelper.GetBookmarks(this.design, design.GetPdf(), setup.IncludeSamplePagesOnly, out bookmarksInXml, out bookmarksInHtm);
+                    BookmarksHelper.GetBookmarks(this.design, album.Pdf, setup.IncludeSamplePagesOnly, out bookmarksInXml, out bookmarksInHtm);
                 }
 
-                PDF995Helper pdfHelper = new PDF995Helper(design.GetPdf(), pdfName, bookmarksInXml, bookmarksInHtm);
+                PDF995Helper pdfHelper = new PDF995Helper(album.Pdf, pdfName, bookmarksInXml, bookmarksInHtm);
 
                 Progress progress = new Progress(this.design.NumberOfPages());
                 progress.Show();
@@ -442,7 +446,7 @@ namespace Escher
 
             SetMenus(enabled: false);
 
-            // webBrowser.Navigate("about:blank");
+            webBrowser.Visible = false;
 
             editor.SetDesign(designName, ReloadBrowser);
 
@@ -466,6 +470,8 @@ namespace Escher
                 webBrowser.DocumentText = HtmlHelper.GetDesignInHtml(design);
 
                 SetMenus(enabled: true);
+
+                webBrowser.Visible = true;
             }
         }
 
@@ -474,27 +480,6 @@ namespace Escher
             if (e.KeyCode == Keys.F5)
             {
                 e.IsInputKey = true;
-            }
-            else if (e.Modifiers == Keys.Control)
-            {
-                switch (e.KeyCode)
-                {
-                    case Keys.E:
-                        App.TryRun(EditDesign, editor);
-                        break;
-                    case Keys.F:
-                        App.TryRun(FindStampNumber);
-                        break;
-                    case Keys.P:
-                        App.TryRun(FindPageNumber);
-                        break;
-                    case Keys.A:
-                        App.TryRun(FindAlbumNumber);
-                        break;
-                    case Keys.X:
-                        App.TryRun(Exit, editor);
-                        break;
-                }
             }
         }
 

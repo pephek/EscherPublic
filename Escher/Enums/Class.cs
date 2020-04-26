@@ -9,6 +9,7 @@ namespace Escher
     public enum Class
     {
         None,
+        Album,
         Country,
         Section,
         Type,

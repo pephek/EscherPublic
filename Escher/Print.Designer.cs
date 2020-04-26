@@ -115,11 +115,11 @@
             this.groupBoxStampOptions.Controls.Add(this.checkBoxIncludeValue);
             this.groupBoxStampOptions.Controls.Add(this.checkBoxIncludeNumber);
             this.groupBoxStampOptions.Controls.Add(this.checkBoxIncludeImage);
-            this.groupBoxStampOptions.Location = new System.Drawing.Point(24, 26);
+            this.groupBoxStampOptions.Location = new System.Drawing.Point(24, 30);
             this.groupBoxStampOptions.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.groupBoxStampOptions.Name = "groupBoxStampOptions";
             this.groupBoxStampOptions.Padding = new System.Windows.Forms.Padding(3, 2, 3, 2);
-            this.groupBoxStampOptions.Size = new System.Drawing.Size(157, 127);
+            this.groupBoxStampOptions.Size = new System.Drawing.Size(157, 123);
             this.groupBoxStampOptions.TabIndex = 1;
             this.groupBoxStampOptions.TabStop = false;
             this.groupBoxStampOptions.Text = "Stamp Options";
@@ -260,7 +260,7 @@
             // checkBoxIncludeTitle
             // 
             this.checkBoxIncludeTitle.AutoSize = true;
-            this.checkBoxIncludeTitle.Location = new System.Drawing.Point(13, 58);
+            this.checkBoxIncludeTitle.Location = new System.Drawing.Point(19, 62);
             this.checkBoxIncludeTitle.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.checkBoxIncludeTitle.Name = "checkBoxIncludeTitle";
             this.checkBoxIncludeTitle.Size = new System.Drawing.Size(106, 21);
@@ -271,7 +271,7 @@
             // checkBoxIncludeBorder
             // 
             this.checkBoxIncludeBorder.AutoSize = true;
-            this.checkBoxIncludeBorder.Location = new System.Drawing.Point(13, 31);
+            this.checkBoxIncludeBorder.Location = new System.Drawing.Point(19, 34);
             this.checkBoxIncludeBorder.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.checkBoxIncludeBorder.Name = "checkBoxIncludeBorder";
             this.checkBoxIncludeBorder.Size = new System.Drawing.Size(122, 21);

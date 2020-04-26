@@ -120,6 +120,9 @@ namespace Escher
 
                 switch (s.ToLower())
                 {
+                    case "album":
+                        entry.Class = Class.Album;
+                        break;
                     case "end":
                         entry.Class = Class.None;
                         entry.PageNumber = -1;
@@ -1068,7 +1071,7 @@ namespace Escher
                     break;
 
                 default:
-                    throw new Exception(string.Format("Unknown key '{0}'", key));
+                    throw new Exception(string.Format("Unknown keyword '{0}'", key));
             }
         }
 

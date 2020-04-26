@@ -106,28 +106,28 @@
             // menuPreview
             // 
             this.menuPreview.Name = "menuPreview";
-            this.menuPreview.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.P)));
+            this.menuPreview.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Alt | System.Windows.Forms.Keys.P)));
             this.menuPreview.Size = new System.Drawing.Size(224, 26);
             this.menuPreview.Text = "Preview";
             // 
             // menuValidate
             // 
             this.menuValidate.Name = "menuValidate";
-            this.menuValidate.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.V)));
+            this.menuValidate.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Alt | System.Windows.Forms.Keys.V)));
             this.menuValidate.Size = new System.Drawing.Size(224, 26);
             this.menuValidate.Text = "Validate";
             // 
             // menuSave
             // 
             this.menuSave.Name = "menuSave";
-            this.menuSave.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.S)));
+            this.menuSave.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Alt | System.Windows.Forms.Keys.S)));
             this.menuSave.Size = new System.Drawing.Size(224, 26);
             this.menuSave.Text = "Save";
             // 
             // menuExit
             // 
             this.menuExit.Name = "menuExit";
-            this.menuExit.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.X)));
+            this.menuExit.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Alt | System.Windows.Forms.Keys.X)));
             this.menuExit.Size = new System.Drawing.Size(224, 26);
             this.menuExit.Text = "Exit";
             // 

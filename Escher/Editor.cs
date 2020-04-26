@@ -250,7 +250,7 @@ namespace Escher
 
             e.ChangedRange.SetStyle(enumStyle, @"\b(Black|Centered|False|HexagonVertical|Left|Rectangle|RectangleRotated|Right|Rotated|Triangle45|Triangle45Inverted|Triangle60|Triangle60Inverted|True|White)\b");
 
-            e.ChangedRange.SetStyle(feedStyle, @"\b(Country|Part|PageFeed|End)\b");
+            e.ChangedRange.SetStyle(feedStyle, @"\b(Album|Country|Part|PageFeed|End)\b");
 
             e.ChangedRange.SetStyle(importantStyle, @"\b(ApplyTo|ApplyToFrameStyle|Thin|Thick)\b");
             e.ChangedRange.SetStyle(importantStyle, @"=VB|=C#");

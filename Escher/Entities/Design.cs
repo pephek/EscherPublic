@@ -32,11 +32,9 @@ namespace Escher
             return design[design.Count() - 2].PageNumber;
         }
 
-        public static string GetPdf(this Design design)
+        public static DesignEntry GetAlbum(this Design design)
         {
-            DesignEntry country = design.GetCountry(1);
-
-            return country.Pdf;
+            return design.FirstOrDefault(entry => entry.Class == Class.Album);
         }
 
         public static DesignEntry GetPagefeed(this Design design, int pageNumber)

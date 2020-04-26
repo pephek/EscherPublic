@@ -70,26 +70,33 @@ namespace Escher
             }
             else
             {
-                if (!ParseLists())
+                if (!ParseAlbum())
                 {
                     parsed = false;
                 }
                 else
                 {
-                    if (NextChar() == cEndOfFile)
+                    if (!ParseLists())
                     {
-                        parsed = true;
-                    }
-                    else if (NextKeyWord() == "End")
-                    {
-                        GetKeyWord("End");
-                        parsed = true;
+                        parsed = false;
                     }
                     else
                     {
-                        nCode = NextKeyWord().Length;
-                        eCode = string.Format("Invalid attribute '{0}'", NextKeyWord());
-                        parsed = false;
+                        if (NextChar() == cEndOfFile)
+                        {
+                            parsed = true;
+                        }
+                        else if (NextKeyWord() == "End")
+                        {
+                            GetKeyWord("End");
+                            parsed = true;
+                        }
+                        else
+                        {
+                            nCode = NextKeyWord().Length;
+                            eCode = string.Format("Invalid attribute '{0}'", NextKeyWord());
+                            parsed = false;
+                        }
                     }
                 }
             }
@@ -120,6 +127,9 @@ namespace Escher
             {
                 switch (NextKeyWord())
                 {
+                    case "Album":
+                        parsed = ParseAlbum();
+                        break;
                     case "Country":
                         parsed = ParseCountry();
                         break;
@@ -157,7 +167,7 @@ namespace Escher
                         parsed = ParseStamp();
                         break;
                     default:
-                        parsed = SetInvalidAttribute(NextKeyWord());
+                        parsed = SetUnknownKeyword(NextKeyWord());
                         break;
                 }
             }
@@ -181,10 +191,10 @@ namespace Escher
             }
         }
 
-        private bool SetInvalidAttribute(string nextKeyWord)
+        private bool SetUnknownKeyword(string nextKeyWord)
         {
             nCode = nextKeyWord.Length;
-            eCode = string.Format("Invalid attribute '{0}'", nextKeyWord);
+            eCode = string.Format("Unknown keyword '{0}'", nextKeyWord);
 
             return false;
         }
@@ -193,7 +203,7 @@ namespace Escher
         {
             nCode = eCode.Length;
             pCode = pCode - nCode - 1;
-            eCode = string.Format("Invalid value '{0}' for attribute '{1}'", eCode, keyWord);
+            eCode = string.Format("Invalid value '{0}' for keyword '{1}'", eCode, keyWord);
 
             return false;
         }
@@ -228,6 +238,55 @@ namespace Escher
 
         /// <summary>
         /// </summary>
+        private bool ParseAlbum()
+        {
+            bool pdfFound = false;
+            bool versionFound = false;
+            int albumFound = pCode;
+
+            if (!GetKeyWord("Album")) return false;
+
+            while (NextSeparator() == cKeywordSeparator)
+            {
+                GetSeparator(cKeywordSeparator);
+
+                string nextKeyWord = NextKeyWord();
+
+                switch (nextKeyWord)
+                {
+                    case "Pdf":
+                        if (!ParseString(nextKeyWord, true)) return false;
+                        pdfFound = true;
+                        break;
+                    case "Version":
+                        if (!ParseString(nextKeyWord, true)) return false;
+                        versionFound = true;
+                        break;
+                    default:
+                        return SetUnknownKeyword(nextKeyWord);
+                }
+            }
+
+            if (!pdfFound)
+            {
+                pCode = albumFound;
+                eCode = "Keyword 'Pdf' not found";
+
+                return false;
+            }
+            if (!versionFound)
+            {
+                pCode = albumFound;
+                eCode = "Keyword 'Version' not found";
+
+                return false;
+            }
+
+            return true;
+        }
+
+        /// <summary>
+        /// </summary>
         private bool ParseCountry()
         {
             if (!ParseString("Country", true)) return false;
@@ -240,20 +299,17 @@ namespace Escher
 
                 switch (nextKeyWord)
                 {
-
                     case "Picture":
                     case "Copyright":
-                    case "Pdf":
                     case "Value":
                     case "Settings":
-                    case "Version":
                         if (!ParseString(nextKeyWord, true)) return false;
                         break;
                     case "Catalogue":
                         if (!ParseCatalogue(nextKeyWord)) return false;
                         break;
                     default:
-                        return SetInvalidAttribute(nextKeyWord);
+                        return SetUnknownKeyword(nextKeyWord);
                 }
             }
 
@@ -466,21 +522,21 @@ namespace Escher
                         if (!ParseString(nextKeyWord, false)) return false;
                         break;
                     default:
-                        return SetInvalidAttribute(nextKeyWord);
+                        return SetUnknownKeyword(nextKeyWord);
                 }
             }
 
             if (!widthFound)
             {
                 pCode = designFound;
-                eCode = "Attribute 'width' not found";
+                eCode = "Keyword 'Width' not found";
 
                 return false;
             }
             if (!heightFound)
             {
                 pCode = designFound;
-                eCode = "Attribute 'height' not found";
+                eCode = "Keyword 'Height' not found";
 
                 return false;
             }
@@ -566,32 +622,32 @@ namespace Escher
                         if (!ParseString(nextKeyWord, false)) return false;
                         break;
                     default:
-                        return SetInvalidAttribute(nextKeyWord);
+                        return SetUnknownKeyword(nextKeyWord);
                 }
             }
 
             if (!valueFound) {
                 pCode = stampFound;
-                eCode = "Attribute 'value' not found";
+                eCode = "Keyword 'Value' not found";
                 return false;
             }
 
             if (!sizeFound && !widthFound && !heightFound)
             {
                 pCode = stampFound;
-                eCode = "Attribute 'size' or 'width' & 'height' not found";
+                eCode = "Keyword 'Size' or keywords 'Width' & 'Height' not found";
                 return false;
             }
             else if (!sizeFound && widthFound && !heightFound)
             {
                 pCode = stampFound;
-                eCode = "Attribute 'height' not found";
+                eCode = "Keyword 'Height' not found";
                 return false;
             }
             else if (!sizeFound && !widthFound && heightFound)
             {
                 pCode = stampFound;
-                eCode = "Attribute 'width' not found";
+                eCode = "Keyword  'Width' not found";
                 return false;
             }
 
@@ -622,7 +678,7 @@ namespace Escher
                         if (!ParseString(nextKeyWord, false)) return false;
                         break;
                     default:
-                        return SetInvalidAttribute(nextKeyWord);
+                        return SetUnknownKeyword(nextKeyWord);
                 }
             }
 
@@ -647,7 +703,7 @@ namespace Escher
                         if (!ParseString(nextKeyWord, true)) return false;
                         break;
                     default:
-                        return SetInvalidAttribute(nextKeyWord);
+                        return SetUnknownKeyword(nextKeyWord);
                 }
             }
 
@@ -765,7 +821,7 @@ namespace Escher
                         if (!ParseNumber(nextKeyWord, 0, true)) return false;
                         break;
                     default:
-                        return SetInvalidAttribute(nextKeyWord);
+                        return SetUnknownKeyword(nextKeyWord);
                 }
             }
 
@@ -873,7 +929,7 @@ namespace Escher
                         if (!ParseApplyToFrameStyle(nextKeyWord)) return false;
                         break;
                     default:
-                        return SetInvalidAttribute(nextKeyWord);
+                        return SetUnknownKeyword(nextKeyWord);
                 }
             }
 
@@ -882,19 +938,19 @@ namespace Escher
             if (!sizeFound && !widthFound && !heightFound)
             {
                 pCode = varietyFound;
-                eCode = "Attribute 'size' || 'width' & 'height' not found";
+                eCode = "Keyword 'Size' or keywords 'Width' & 'Height' not found";
                 return false;
             }
             else if (!sizeFound && widthFound && !heightFound)
             {
                 pCode = varietyFound;
-                eCode = "Attribute 'height' not found";
+                eCode = "Keyword 'Height' not found";
                 return false;
             }
             else if (!sizeFound && !widthFound && heightFound)
             {
                 pCode = varietyFound;
-                eCode = "Attribute 'width' not found";
+                eCode = "Keyword 'Width' not found";
                 return false;
             }
 
@@ -919,7 +975,7 @@ namespace Escher
                         if (!ParseAlignment(nextKeyWord)) return false;
                         break;
                     default:
-                        return SetInvalidAttribute(nextKeyWord);
+                        return SetUnknownKeyword(nextKeyWord);
                 }
             }       
 
@@ -977,7 +1033,7 @@ namespace Escher
                         if (!ParseBoolean(nextKeyWord)) return false;
                         break;
                     default:
-                        return SetInvalidAttribute(nextKeyWord);
+                        return SetUnknownKeyword(nextKeyWord);
                 }
             }
 
@@ -996,7 +1052,7 @@ namespace Escher
 
                 string nextKeyWord = NextKeyWord();
 
-                return SetInvalidAttribute(nextKeyWord);
+                return SetUnknownKeyword(nextKeyWord);
             }
 
             return true;
@@ -1014,7 +1070,7 @@ namespace Escher
 
                 string nextKeyWord = NextKeyWord();
 
-                return SetInvalidAttribute(nextKeyWord);
+                return SetUnknownKeyword(nextKeyWord);
             }
 
             return true;
@@ -1038,7 +1094,7 @@ namespace Escher
                         if (!ParseString(nextKeyWord, true)) return false;
                         break;
                     default:
-                        return SetInvalidAttribute(nextKeyWord);
+                        return SetUnknownKeyword(nextKeyWord);
                 }
             }
 
