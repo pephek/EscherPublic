@@ -23,6 +23,7 @@ namespace Escher
         private readonly TextStyle feedStyle = new TextStyle(Brushes.Maroon, null, FontStyle.Bold);
         private readonly TextStyle importantStyle = new TextStyle(Brushes.Red, null, FontStyle.Regular);
         private readonly TextStyle enumStyle = new TextStyle(Brushes.SteelBlue, null, FontStyle.Regular);
+        private readonly TextStyle htmlStyle = new TextStyle(Brushes.Magenta, null, FontStyle.Regular);
 
         private Dictionary<string, string> specials = new Dictionary<string, string>();
 
@@ -247,11 +248,13 @@ namespace Escher
 
             e.ChangedRange.SetStyle(separatorStyle, @"=|\|");
 
+            e.ChangedRange.SetStyle(htmlStyle, @"!|<br>|%|&nbsp;|&#8470;|<b>|</b>|<i>|</i>|<s>|</s>");
+
             //e.ChangedRange.SetStyle(CommentStyle, @"//.*$", RegexOptions.Multiline);
 
             e.ChangedRange.SetStyle(commentStyle, @"'.*$", RegexOptions.Multiline);
 
-            e.ChangedRange.SetStyle(keywordStyle, @"\b(Alignment|Appearance|Catalogue|Color|Combine|Comment|Copyright|Description|Design|FontOfDescription|FontOfType|FrameColor|Height|Html|Horizontal|Issued|LineFeed|Menu|Overprint|PageNumber|Pdf|Perforation|Perfs|Picture|Positions|Printed|Private|Sample|Separate|Series|Settings|Size|Skip|Stamp|Type|Unlisted|Value|Varieties|Variety|Version|Vertical|Width)\b");
+            e.ChangedRange.SetStyle(keywordStyle, @"\b(Alignment|Appearance|Catalogue|Color|Combine|Comment|Copyright|Description|Design|FontOfDescription|FontOfType|FrameColor|Height|Html|Horizontal|Issued|LineFeed|Menu|Overprint|PageNumber|PageTitle|PageSubTitle|Pdf|Perforation|Perfs|Picture|Positions|Printed|Private|Sample|Separate|Series|Settings|Size|Skip|Stamp|Type|Unlisted|Value|Varieties|Variety|Version|Vertical|Width)\b");
 
             e.ChangedRange.SetStyle(enumStyle, @"\b(Black|Centered|False|HexagonVertical|Left|Rectangle|RectangleRotated|Right|Rotated|Triangle45|Triangle45Inverted|Triangle60|Triangle60Inverted|True|White)\b");
 
@@ -314,7 +317,8 @@ namespace Escher
 
                 preview.Show();
                 preview.ShowPreview(d, pageNumber: pageNumber, printMode: PrintMode.ToScreen, screenMode: ScreenMode.MatchScreenHeight);
-                preview.Activate();
+
+                this.Focus();
             }
         }
 

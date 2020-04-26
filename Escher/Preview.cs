@@ -677,15 +677,8 @@ namespace Escher
             // Country
             if (page.Title != "" && page.AlbumNumber == "") // Must be the front page
             {
-                if (page.Title.Contains("<br>"))
-                {
-                    y += artifacts.AddText(format.Free.Left, format.Free.Top, format.Free.Width, page.Title.Split("<br>")[0], "Darleston", 50, alignment: Alignment.Centered).Height;
-                    y += artifacts.AddText(format.Free.Left, artifacts.Last().Bottom(), format.Free.Width, page.Title.Split("<br>")[1], "Darleston", 25, alignment: Alignment.Centered).Height;
-                }
-                else
-                {
-                    artifacts.AddText(format.Free.Left, format.Free.Top, format.Free.Width, page.Title, "Darleston", 50, alignment: Alignment.Centered);
-                }
+                y += artifacts.AddText(format.Free.Left, format.Free.Top, format.Free.Width, page.Title, "Darleston", 50, alignment: Alignment.Centered).Height;
+                y += artifacts.AddText(format.Free.Left, artifacts.Last().Bottom(), format.Free.Width, page.SubTitle, "Darleston", 25, alignment: Alignment.Centered).Height;
             }
             else
             {
@@ -706,7 +699,7 @@ namespace Escher
                         {
                             if (page.Title != "")
                             {
-                                artifacts.AddText(format.Border.Left, format.Border.Top - artifacts.GetTextHeight("Darleston", 20) - 1F, format.Border.Width, page.Title.Split("<br>")[0].Replace("!" + HtmlHelper.cBreak, "").Replace(HtmlHelper.cBreak, ""), "Darleston", 20, alignment: Alignment.Right);
+                                artifacts.AddText(format.Border.Left, format.Border.Top - artifacts.GetTextHeight("Darleston", 20) - 1F, format.Border.Width, page.Title.Replace("!" + HtmlHelper.cBreak, "").Replace(HtmlHelper.cBreak, ""), "Darleston", 20, alignment: Alignment.Right);
                             }
                             else
                             {

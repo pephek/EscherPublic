@@ -16,6 +16,7 @@ namespace Escher
         public string Section = "";
         public string Copyright = "";
         public string Title = "";
+        public string SubTitle = "";
         public string Series = "";
         public string MainType = "";
         public float OffsetVertical;

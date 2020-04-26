@@ -289,6 +289,10 @@ namespace Escher
         /// </summary>
         private bool ParseCountry()
         {
+            bool pageTitleFound = false;
+            bool pageSubTitleFound = false;
+            int countryFound = pCode;
+
             if (!ParseString("Country", true)) return false;
 
             while (NextSeparator() == cKeywordSeparator)
@@ -301,16 +305,38 @@ namespace Escher
                 {
                     case "Picture":
                     case "Copyright":
-                    case "Value":
                     case "Settings":
                         if (!ParseString(nextKeyWord, true)) return false;
                         break;
                     case "Catalogue":
                         if (!ParseCatalogue(nextKeyWord)) return false;
                         break;
+                    case "PageTitle":
+                        if (!ParseString(nextKeyWord, true)) return false;
+                        pageTitleFound = true;
+                        break;
+                    case "PageSubTitle":
+                        if (!ParseString(nextKeyWord, true)) return false;
+                        pageSubTitleFound = true;
+                        break;
                     default:
                         return SetUnknownKeyword(nextKeyWord);
                 }
+            }
+
+            if (!pageTitleFound)
+            {
+                pCode = countryFound;
+                eCode = "Keyword 'PageTitle' not found";
+
+                return false;
+            }
+            if (!pageSubTitleFound)
+            {
+                pCode = countryFound;
+                eCode = "Keyword 'PageSubTitle' not found";
+
+                return false;
             }
 
             return true;

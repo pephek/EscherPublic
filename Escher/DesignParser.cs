@@ -239,6 +239,14 @@ namespace Escher
                     entry.SetClass(Class.Design, val);
                     break;
 
+                case "pagetitle":
+                    entry.PageTitle = val;
+                    break;
+
+                case "pagesubtitle":
+                    entry.PageSubTitle = val;
+                    break;
+
                 case "value": // Eg. Vlue:=5 ct.
                     entry.Value = val;
                     break;

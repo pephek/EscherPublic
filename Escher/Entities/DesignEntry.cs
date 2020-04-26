@@ -11,6 +11,8 @@ namespace Escher
     {
         public Class Class;
         public string Text = "";
+        public string PageTitle = "";
+        public string PageSubTitle = "";
         public string Value = "";
         public string Number = "";
         public string Color = "";
