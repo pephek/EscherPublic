@@ -438,6 +438,8 @@ namespace Escher
             webBrowser.DocumentText = HtmlHelper.GetDesignInHtml(design);
 
             SetMenus(enabled: true);
+
+            webBrowser.Visible = true;
         }
 
         private void OpenDesign(string designName)

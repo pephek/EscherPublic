@@ -61,7 +61,7 @@
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackgroundImage = global::Escher.Properties.Resources.Escher;
-            this.ClientSize = new System.Drawing.Size(1022, 765);
+            this.ClientSize = new System.Drawing.Size(1020, 770);
             this.Controls.Add(this.buttonClose);
             this.Controls.Add(this.labelVersion);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;

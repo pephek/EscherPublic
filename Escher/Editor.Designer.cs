@@ -41,6 +41,16 @@
             this.status = new System.Windows.Forms.Label();
             this.panelInfo = new System.Windows.Forms.Panel();
             this.panelDesign = new System.Windows.Forms.Panel();
+            this.menuBeautify = new System.Windows.Forms.ToolStripMenuItem();
+            this.menuFind = new System.Windows.Forms.ToolStripMenuItem();
+            this.menuReplace = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripMenuItem1 = new System.Windows.Forms.ToolStripSeparator();
+            this.toolStripMenuItem2 = new System.Windows.Forms.ToolStripSeparator();
+            this.toolStripMenuItem3 = new System.Windows.Forms.ToolStripSeparator();
+            this.toolStripMenuItem4 = new System.Windows.Forms.ToolStripSeparator();
+            this.toolStripMenuItem5 = new System.Windows.Forms.ToolStripSeparator();
+            this.upgradeToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.menuKeywordAssignment = new System.Windows.Forms.ToolStripMenuItem();
             ((System.ComponentModel.ISupportInitialize)(this.design)).BeginInit();
             this.menuStrip.SuspendLayout();
             this.panelInfo.SuspendLayout();
@@ -85,7 +95,8 @@
             this.menuStrip.ImageScalingSize = new System.Drawing.Size(20, 20);
             this.menuStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.menuEdit,
-            this.menuInsert});
+            this.menuInsert,
+            this.upgradeToolStripMenuItem});
             this.menuStrip.Location = new System.Drawing.Point(0, 0);
             this.menuStrip.Name = "menuStrip";
             this.menuStrip.Size = new System.Drawing.Size(823, 28);
@@ -95,18 +106,28 @@
             // menuEdit
             // 
             this.menuEdit.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.menuFind,
+            this.menuReplace,
+            this.toolStripMenuItem1,
             this.menuPreview,
+            this.toolStripMenuItem2,
+            this.menuBeautify,
+            this.toolStripMenuItem3,
             this.menuValidate,
+            this.toolStripMenuItem4,
             this.menuSave,
+            this.toolStripMenuItem5,
             this.menuExit});
             this.menuEdit.Name = "menuEdit";
+            this.menuEdit.ShortcutKeyDisplayString = "";
+            this.menuEdit.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Alt | System.Windows.Forms.Keys.B)));
             this.menuEdit.Size = new System.Drawing.Size(49, 24);
             this.menuEdit.Text = "Edit";
             // 
             // menuPreview
             // 
             this.menuPreview.Name = "menuPreview";
-            this.menuPreview.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Alt | System.Windows.Forms.Keys.P)));
+            this.menuPreview.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Alt | System.Windows.Forms.Keys.Space)));
             this.menuPreview.Size = new System.Drawing.Size(224, 26);
             this.menuPreview.Text = "Preview";
             // 
@@ -168,6 +189,66 @@
             this.panelDesign.Size = new System.Drawing.Size(823, 776);
             this.panelDesign.TabIndex = 6;
             // 
+            // menuBeautify
+            // 
+            this.menuBeautify.Name = "menuBeautify";
+            this.menuBeautify.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Alt | System.Windows.Forms.Keys.B)));
+            this.menuBeautify.Size = new System.Drawing.Size(224, 26);
+            this.menuBeautify.Text = "Beautify";
+            // 
+            // menuFind
+            // 
+            this.menuFind.Name = "menuFind";
+            this.menuFind.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Alt | System.Windows.Forms.Keys.F)));
+            this.menuFind.Size = new System.Drawing.Size(224, 26);
+            this.menuFind.Text = "Find";
+            // 
+            // menuReplace
+            // 
+            this.menuReplace.Name = "menuReplace";
+            this.menuReplace.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Alt | System.Windows.Forms.Keys.H)));
+            this.menuReplace.Size = new System.Drawing.Size(224, 26);
+            this.menuReplace.Text = "Replace";
+            // 
+            // toolStripMenuItem1
+            // 
+            this.toolStripMenuItem1.Name = "toolStripMenuItem1";
+            this.toolStripMenuItem1.Size = new System.Drawing.Size(221, 6);
+            // 
+            // toolStripMenuItem2
+            // 
+            this.toolStripMenuItem2.Name = "toolStripMenuItem2";
+            this.toolStripMenuItem2.Size = new System.Drawing.Size(221, 6);
+            // 
+            // toolStripMenuItem3
+            // 
+            this.toolStripMenuItem3.Name = "toolStripMenuItem3";
+            this.toolStripMenuItem3.Size = new System.Drawing.Size(221, 6);
+            // 
+            // toolStripMenuItem4
+            // 
+            this.toolStripMenuItem4.Name = "toolStripMenuItem4";
+            this.toolStripMenuItem4.Size = new System.Drawing.Size(221, 6);
+            // 
+            // toolStripMenuItem5
+            // 
+            this.toolStripMenuItem5.Name = "toolStripMenuItem5";
+            this.toolStripMenuItem5.Size = new System.Drawing.Size(221, 6);
+            // 
+            // upgradeToolStripMenuItem
+            // 
+            this.upgradeToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.menuKeywordAssignment});
+            this.upgradeToolStripMenuItem.Name = "upgradeToolStripMenuItem";
+            this.upgradeToolStripMenuItem.Size = new System.Drawing.Size(81, 24);
+            this.upgradeToolStripMenuItem.Text = "Upgrade";
+            // 
+            // menuKeywordAssignment
+            // 
+            this.menuKeywordAssignment.Name = "menuKeywordAssignment";
+            this.menuKeywordAssignment.Size = new System.Drawing.Size(224, 26);
+            this.menuKeywordAssignment.Text = "Replace \':=\' by \'=\'";
+            // 
             // Editor
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
@@ -203,5 +284,15 @@
         private System.Windows.Forms.Panel panelInfo;
         private System.Windows.Forms.Panel panelDesign;
         private System.Windows.Forms.ToolStripMenuItem menuInsert;
+        private System.Windows.Forms.ToolStripMenuItem menuBeautify;
+        private System.Windows.Forms.ToolStripMenuItem menuFind;
+        private System.Windows.Forms.ToolStripMenuItem menuReplace;
+        private System.Windows.Forms.ToolStripSeparator toolStripMenuItem1;
+        private System.Windows.Forms.ToolStripSeparator toolStripMenuItem2;
+        private System.Windows.Forms.ToolStripSeparator toolStripMenuItem3;
+        private System.Windows.Forms.ToolStripSeparator toolStripMenuItem4;
+        private System.Windows.Forms.ToolStripSeparator toolStripMenuItem5;
+        private System.Windows.Forms.ToolStripMenuItem upgradeToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem menuKeywordAssignment;
     }
 }

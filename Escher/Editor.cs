@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
+using System.Diagnostics;
 using System.Drawing;
 using System.IO;
 using System.Linq;
@@ -40,10 +41,14 @@ namespace Escher
 
             this.Load += new EventHandler((sender, e) => Initialize());
 
+            this.menuFind.Click += new EventHandler((sender, e) => design.ShowFindDialog());
+            this.menuReplace.Click += new EventHandler((sender, e) => design.ShowReplaceDialog());
             this.menuPreview.Click += new EventHandler((sender, e) => App.TryRun(PreviewDesign));
+            this.menuBeautify.Click += new EventHandler((sender, e) => App.TryRun(BeautifyDesign));
             this.menuValidate.Click += new EventHandler((sender, e) => App.TryRun(ValidateDesign));
             this.menuSave.Click += new EventHandler((sender, e) => App.TryRun(SaveDesign));
             this.menuExit.Click += new EventHandler((sender, e) => App.TryRun(ExitDesign));
+            this.menuKeywordAssignment.Click += new EventHandler((sender, e) => App.TryRun(KeywordAssignment));
 
             this.validator = validator;
             this.preview = preview;
@@ -279,6 +284,8 @@ namespace Escher
             if (!string.IsNullOrEmpty(error))
             {
                 SetStatus(error, failure: true);
+
+                preview.Hide();
             }    
             else
             {
@@ -309,6 +316,86 @@ namespace Escher
                 preview.ShowPreview(d, pageNumber: pageNumber, printMode: PrintMode.ToScreen, screenMode: ScreenMode.MatchScreenHeight);
                 preview.Activate();
             }
+        }
+
+        private void BeautifyDesign()
+        {
+            if (!design.SelectedText.Contains("\r\n"))
+            {
+                return;
+            }
+
+            Dictionary<int, int> maxima = new Dictionary<int, int>();
+
+            string selectedText = design.SelectedText.Replace(" " + Validator.cKeywordSeparator + " Separate=False", "");
+
+            if (design.SelectedText.EndsWith("\r\n"))
+            {
+                selectedText = selectedText.Substring(0, selectedText.Length - 2);
+            }
+
+            string[] lines = selectedText.Split("\r\n");
+
+            for (int line = 0; line < lines.Length; line++)
+            {
+                string trim = lines[line].Trim();
+
+                if (trim.StartsWith("Variety=") || trim.StartsWith("Stamp="))
+                {
+                    string[] pairs = trim.Split(Validator.cKeywordSeparator);
+
+                    for (int pair = 0; pair < pairs.Length; pair++)
+                    {
+                        if (!maxima.ContainsKey(pair))
+                        {
+                            maxima.Add(pair, 0);
+                        }
+
+                        maxima[pair] = Math.Max(maxima[pair], pairs[pair].Trim().Length);
+                    }
+                }
+            }
+
+            StringBuilder replacement = new StringBuilder();
+
+            for (int line = 0; line < lines.Length; line++)
+            {
+                string trim = lines[line].Trim();
+
+                if (trim.StartsWith("Variety=") || trim.StartsWith("Stamp="))
+                {
+                    replacement.Append("    ");
+
+                    string[] pairs = trim.Split(Validator.cKeywordSeparator);
+
+                    for (int pair = 0; pair < pairs.Length; pair++)
+                    {
+                        replacement.Append(pairs[pair].Trim()).Append(new string(' ', maxima[pair] - pairs[pair].Trim().Length));
+
+                        if (pair < pairs.Length - 1)
+                        {
+                            replacement.Append(' ').Append(Validator.cKeywordSeparator).Append(' ');
+                        }
+                    }
+
+                }
+                else
+                {
+                    replacement.Append(lines[line]);
+                }
+
+                if (line < lines.Length - 1)
+                {
+                    replacement.Append("\r\n");
+                }
+            }
+
+            if (design.SelectedText.EndsWith("\r\n"))
+            {
+                replacement.Append("\r\n");
+            }
+
+            design.SelectedText = replacement.ToString();
         }
 
         private void ValidateDesign()
@@ -381,6 +468,8 @@ namespace Escher
 
             SetDesign(this.designName, null);
 
+            preview.Hide();
+
             #region Save Window State
             Properties.Settings.Default.EditorState = this.WindowState;
             if (this.WindowState == FormWindowState.Normal)
@@ -397,6 +486,11 @@ namespace Escher
             #endregion
 
             this.Hide();
+        }
+
+        private void KeywordAssignment()
+        {
+            design.Text = design.Text.Replace(":=", Validator.cKeywordAssignment.ToString());
         }
     }
 }
