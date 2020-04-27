@@ -501,6 +501,8 @@ namespace Escher
             }
             else if (e.Url.AbsolutePath.StartsWith("stamp("))
             {
+                string id = e.Url.AbsolutePath;
+
                 int index = Int32.Parse(e.Url.AbsolutePath.Replace("stamp(", "").Replace(")", ""));
 
                 DesignEntry stamp = design[index];
@@ -520,6 +522,17 @@ namespace Escher
                 if (imaging.ShowDialog() == DialogResult.OK)
                 {
                     webBrowser.Refresh();
+
+                    while (webBrowser.ReadyState != WebBrowserReadyState.Complete)
+                    {
+                        Application.DoEvents();
+                    }
+
+                    DesignEntry entry = design.FindPageNumber(stamp.PageNumber);
+
+                    HtmlElement element = webBrowser.Document.GetElementById(string.Format("page({0},{1})", entry.PageNumber, entry.AlbumNumber));
+
+                    element.ScrollIntoView(true);
                 }
 
                 e.Cancel = true;

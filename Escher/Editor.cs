@@ -331,7 +331,9 @@ namespace Escher
 
             Dictionary<int, int> maxima = new Dictionary<int, int>();
 
-            string selectedText = design.SelectedText.Replace(" " + Validator.cKeywordSeparator + " Separate=False", "");
+            string selectedText = design.SelectedText
+                .Replace(" " + Validator.cKeywordSeparator + " Separate=False", "")
+                .Replace(" " + Validator.cKeywordSeparator + " Alignment=Centered", "");
 
             if (design.SelectedText.EndsWith("\r\n"))
             {
@@ -374,11 +376,11 @@ namespace Escher
 
                     for (int pair = 0; pair < pairs.Length; pair++)
                     {
-                        replacement.Append(pairs[pair].Trim()).Append(new string(' ', maxima[pair] - pairs[pair].Trim().Length));
+                        replacement.Append(pairs[pair].Trim());
 
                         if (pair < pairs.Length - 1)
                         {
-                            replacement.Append(' ').Append(Validator.cKeywordSeparator).Append(' ');
+                            replacement.Append(new string(' ', maxima[pair] - pairs[pair].Trim().Length)).Append(' ').Append(Validator.cKeywordSeparator).Append(' ');
                         }
                     }
 
