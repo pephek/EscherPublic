@@ -36,6 +36,8 @@ namespace Escher
         {
             InitializeComponent();
 
+            this.DoubleBuffered = true;
+
             this.Load += new EventHandler((sender, e) => this.Location = new Point(0, 0));
             this.Paint += new PaintEventHandler((sender, e) => RefreshPreview(e.Graphics));
             this.KeyDown += new KeyEventHandler((sender, e) => HandleKeyDown(e.KeyCode, e.Modifiers));

@@ -218,6 +218,12 @@ namespace Escher
 
                 case "description": // Eg. Description:=Getand.
                     entry.SetClass(Class.Description, val);
+                    if (entry.Text.Contains("Comment:"))
+                    {
+                        string comment = entry.Text.Split("Comment:")[1];
+                        string text = GetTextByComment(design, comment);
+                        entry.Text = entry.Text.Substring(0, entry.Text.IndexOf("Comment:")) + text;
+                    }
                     entry.Alignment = Alignment.Centered;
                     break;
 
