@@ -20,7 +20,7 @@ namespace Escher
         private readonly TextStyle keywordStyle = new TextStyle(Brushes.Blue, null, FontStyle.Regular);
         private readonly TextStyle separatorStyle = new TextStyle(Brushes.Silver, null, FontStyle.Regular);
         private readonly TextStyle commentStyle = new TextStyle(Brushes.Green, null, FontStyle.Italic);
-        private readonly TextStyle feedStyle = new TextStyle(Brushes.Maroon, null, FontStyle.Bold);
+        private readonly TextStyle feedStyle = new TextStyle(Brushes.Maroon, null, FontStyle.Regular);
         private readonly TextStyle importantStyle = new TextStyle(Brushes.Red, null, FontStyle.Regular);
         private readonly TextStyle enumStyle = new TextStyle(Brushes.SteelBlue, null, FontStyle.Regular);
         private readonly TextStyle htmlStyle = new TextStyle(Brushes.Magenta, null, FontStyle.Regular);
@@ -254,11 +254,11 @@ namespace Escher
 
             e.ChangedRange.SetStyle(commentStyle, @"'.*$", RegexOptions.Multiline);
 
-            e.ChangedRange.SetStyle(keywordStyle, @"\b(Alignment|Appearance|Catalogue|Color|Combine|Comment|Copyright|Description|Design|FontOfDescription|FontOfType|FrameColor|Height|Html|Horizontal|Issued|LineFeed|Menu|Overprint|PageNumber|PageTitle|PageSubTitle|Pdf|Perforation|Perfs|Picture|Positions|Printed|Private|Sample|Separate|Series|Settings|Size|Skip|Stamp|Type|Unlisted|Value|Varieties|Variety|Version|Vertical|Width)\b");
+            e.ChangedRange.SetStyle(keywordStyle, @"\b(Alignment|Appearance|Catalogue|Color|Combine|Comment|Copyright|Description|Design|FontOfDescription|FontOfType|FrameColor|Height|Html|Horizontal|Issued|Menu|Overprint|PageNumber|PageTitle|PageSubTitle|Pdf|Perforation|Perfs|Picture|Positions|Printed|Private|Sample|Separate|Series|Settings|Size|Skip|Stamp|Type|Unlisted|Value|Varieties|Variety|Version|Vertical|Width)\b");
 
             e.ChangedRange.SetStyle(enumStyle, @"\b(Black|Centered|False|HexagonVertical|Left|Rectangle|RectangleRotated|Right|Rotated|Triangle45|Triangle45Inverted|Triangle60|Triangle60Inverted|True|White)\b");
 
-            e.ChangedRange.SetStyle(feedStyle, @"\b(Album|Country|Part|PageFeed|End)\b");
+            e.ChangedRange.SetStyle(feedStyle, @"\b(Album|Country|LineFeed|Part|PageFeed|End)\b");
 
             e.ChangedRange.SetStyle(importantStyle, @"\b(ApplyTo|ApplyToFrameStyle|Thin|Thick)\b");
             e.ChangedRange.SetStyle(importantStyle, @"=VB|=C#");
@@ -271,6 +271,8 @@ namespace Escher
             {
                 this.Text += "*";
             }
+
+            // PreviewDesign();
         }
 
         private void PreviewDesign()

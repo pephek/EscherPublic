@@ -17,12 +17,16 @@ namespace Escher
 
         private List<Artifact> artifacts;
 
+        private Dictionary<string, Image> images;
+
         public Artifacts(Graphics graphics, float scale)
         {
             this.graphics = graphics;
             this.scale = scale;
 
             this.artifacts = new List<Artifact>();
+
+            this.images = new Dictionary<string, Image>();
         }
 
         public List<Artifact> Get()
@@ -135,7 +139,7 @@ namespace Escher
             }
         }
 
-        private void AddImage(float x, float y, float width, float height, string number, Image image, RotateFlipType? rotateFlipType, Appearance appearance)
+        private void AddImage(float x, float y, float width, float height, string number, string image, RotateFlipType? rotateFlipType, Appearance appearance)
         {
             Artifact artifact = new Artifact(ArtifactType.Image);
 
@@ -144,7 +148,11 @@ namespace Escher
             artifact.Width = width;
             artifact.Height = height;
             artifact.Number = number;
-            artifact.Image = image;
+            if (!this.images.ContainsKey(image))
+            {
+                this.images.Add(image, ImageHelper.LoadImageAndUnlock(image));
+            }
+            artifact.Image = this.images[image];
             artifact.RotateFlipType = rotateFlipType ?? RotateFlipType.RotateNoneFlipNone;
             artifact.Appearance = appearance;
 
@@ -160,13 +168,13 @@ namespace Escher
                 number = number.Substring(0, number.IndexOf('(') - 1).Trim();
             }
 
-            Image image = null;
+            string image = null;
 
             string n = number;
 
             while (image == null && n != "")
             {
-                image = ImageHelper.GetDisplayImage(path, n, colorStyle);
+                image = ImageHelper.GetDisplayImagePath(path, n, colorStyle);
 
                 if (image == null)
                 {
@@ -442,7 +450,7 @@ namespace Escher
                                     }
                                     else
                                     {
-                                        AddImage(x, y, w, h, n, ImageHelper.GetDisplayImage(path, n + sheetPosition.Type, colorStyle), rotateFlipType, appearance);
+                                        AddImage(x, y, w, h, n, ImageHelper.GetDisplayImagePath(path, n + sheetPosition.Type, colorStyle), rotateFlipType, appearance);
                                     }
 
                                     AddText(x + 0.5F, y + 0.5F, w - 1, sheetPosition.Position, "Times New Roman", 7, fontBold: true, alignment: Alignment.Left);

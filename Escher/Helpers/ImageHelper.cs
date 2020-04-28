@@ -90,7 +90,7 @@ namespace Escher
         {
             Bitmap bitmap = null;
 
-            if (File.Exists(imagePath))
+            if (imagePath != null && File.Exists(imagePath))
             {
                 using (Image image = Image.FromFile(imagePath))
                 {
@@ -112,6 +112,15 @@ namespace Escher
             number = number.Replace(" ", "");
 
             return number;
+        }
+
+        public static string GetDisplayImagePath(string path, string number, ColorStyle colorStyle)
+        {
+            number = NormalizeNumber(number);
+
+            path = string.Format("{0}\\{1}\\{2}.jpg", path, colorStyle == ColorStyle.Color ? "xlcolor" : "xlprint", number);
+
+            return (File.Exists(path) ? path : null);
         }
 
         public static Image GetDisplayImage(string path, string number, ColorStyle colorStyle)
