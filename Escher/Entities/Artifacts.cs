@@ -562,7 +562,7 @@ namespace Escher
 
                         if (!screenOnly)
                         {
-                            Debug.WriteLine(string.Format("\t'{0}',x={1},y={2},[{3},{4},{5}] w={6} h={7}", text, Math.Round(artifact.X, 2), Math.Round(artifact.Y, 2), fontName, fontSize, fontBold, Math.Round(artifact.Width, 2), Math.Round(artifact.Height, 2)));
+                            //Debug.WriteLine(string.Format("\t'{0}',x={1},y={2},[{3},{4},{5}] w={6} h={7}", text, Math.Round(artifact.X, 2), Math.Round(artifact.Y, 2), fontName, fontSize, fontBold, Math.Round(artifact.Width, 2), Math.Round(artifact.Height, 2)));
                         }
 
                         return new SizeF(artifact.Width, artifact.Height);

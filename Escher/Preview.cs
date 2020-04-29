@@ -326,17 +326,24 @@ namespace Escher
 
         private void RefreshPreview(Graphics graphics)
         {
-            graphics.Clear(Color.White);
+            try
+            {
+                graphics.Clear(Color.White);
 
-            GraphicsUnit pageUnit = graphics.PageUnit;
+                GraphicsUnit pageUnit = graphics.PageUnit;
 
-            graphics.PageUnit = GraphicsUnit.Millimeter;
+                graphics.PageUnit = GraphicsUnit.Millimeter;
 
-            AssemblePreview(graphics, this.page, this.pageNumber, this.printMode, this.screenMode);
+                AssemblePreview(graphics, this.page, this.pageNumber, this.printMode, this.screenMode);
 
-            graphics.PageUnit = pageUnit;
+                graphics.PageUnit = pageUnit;
 
-            DrawPreview(graphics, this.artifacts, this.pageScale, this.transformScale, this.printMode, this.screenMode);
+                DrawPreview(graphics, this.artifacts, this.pageScale, this.transformScale, this.printMode, this.screenMode);
+            }
+            catch (Exception e)
+            {
+                MessageBox.Show(string.Format("Exception: {0}\n\n{1}", e.Message, e.StackTrace.ToString()));
+            }
         }
 
         private void PrintTest(Graphics g)
@@ -725,27 +732,27 @@ namespace Escher
             }
             else
             {
-                Debug.WriteLine("+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++");
+                //Debug.WriteLine("+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++");
 
-                Debug.WriteLine(string.Format("y at start = {0}", Math.Round(y, 2)));
+                //Debug.WriteLine(string.Format("y at start = {0}", Math.Round(y, 2)));
 
                 // Eg. 1867-1869. Koning Willem III.
                 y += artifacts.AddText(format.Free.Left, y, format.Free.Width, page.Series == "" ? "·" : page.Series, format.TitleFont, 7, foreColor: page.Series == "" ? Color.White : Color.Black, alignment: Alignment.Centered).Height;
 
-                Debug.WriteLine(string.Format("y after series = {0}", Math.Round(y, 2)));
+                //Debug.WriteLine(string.Format("y after series = {0}", Math.Round(y, 2)));
 
                 // Eg. Type I.
                 y += artifacts.AddText(format.Free.Left, y, format.Free.Width, page.MainType, format.TitleFont, 7, alignment: Alignment.Centered).Height;
 
                 y += artifacts.AddText(format.Free.Left, y, format.Free.Width, "", format.TitleFont, 7, alignment: Alignment.Centered).Height;
 
-                Debug.WriteLine(string.Format("y after main type = {0}", Math.Round(y, 2)));
+                //Debug.WriteLine(string.Format("y after main type = {0}", Math.Round(y, 2)));
 
                 float yCombine;
 
                 y += page.OffsetVertical;
 
-                Debug.WriteLine(string.Format("Iterating {0} varieties", page.Varieties.Count()));
+                //Debug.WriteLine(string.Format("Iterating {0} varieties", page.Varieties.Count()));
 
                 for (int v = 0; v < page.Varieties.Count(); v++)
                 {
@@ -766,13 +773,13 @@ namespace Escher
                         //y += artifacts.GetTextHeight(format.TitleFont, 9 - 1); // -1 to compensate difference with VB6
                         y += 1.6F;
 
-                        Debug.WriteLine(string.Format("y after adding free space = {0}", Math.Round(y, 2)));
+                        //Debug.WriteLine(string.Format("y after adding free space = {0}", Math.Round(y, 2)));
 
                         y += artifacts.AddText(format.Free.Left, y, format.Free.Width, varieties.SubType, format.TitleFont, 7, alignment: Alignment.Centered).Height;
 
                         y += artifacts.GetTextHeight(format.TitleFont, 7);
 
-                        Debug.WriteLine(string.Format("y after sub type = {0}", Math.Round(y, 2)));
+                        //Debug.WriteLine(string.Format("y after sub type = {0}", Math.Round(y, 2)));
 
                         yCombine = y; // There is a new y position when varieties are combined
                     }
@@ -807,9 +814,9 @@ namespace Escher
                         float rowWidth = page.RowWidth(v, 0);
                         float rowLeft = page.RowLeft(v, 0, format.Free.Left, format.Free.Width);
 
-                        Debug.WriteLine(string.Format("Text width = {0}", Math.Round(textWidth, 2)));
-                        Debug.WriteLine(string.Format("Row width = {0}", Math.Round(rowWidth, 2)));
-                        Debug.WriteLine(string.Format("Row left = {0}", Math.Round(rowLeft, 2)));
+                        //Debug.WriteLine(string.Format("Text width = {0}", Math.Round(textWidth, 2)));
+                        //Debug.WriteLine(string.Format("Row width = {0}", Math.Round(rowWidth, 2)));
+                        //Debug.WriteLine(string.Format("Row left = {0}", Math.Round(rowLeft, 2)));
 
                         if (textWidth <= rowWidth)
                         {
@@ -823,15 +830,15 @@ namespace Escher
                         y += 1; // - varieties.Vertical;
                     }
 
-                    Debug.WriteLine(string.Format("y after varieties = {0}", Math.Round(y, 2)));
+                    //Debug.WriteLine(string.Format("y after varieties = {0}", Math.Round(y, 2)));
 
-                    Debug.WriteLine(string.Format("Iterating {0} rows", varieties.Rows.Count()));
+                    //Debug.WriteLine(string.Format("Iterating {0} rows", varieties.Rows.Count()));
 
                     for (int r = 0; r < varieties.Rows.Count(); r++)
                     {
                         List<Variety> row = varieties.Rows[r];
 
-                        Debug.WriteLine(string.Format("Iterating {0} stamps", row.Count()));
+                        //Debug.WriteLine(string.Format("Iterating {0} stamps", row.Count()));
 
                         for (int s = 0; s < row.Count(); s++)
                         {
@@ -841,12 +848,12 @@ namespace Escher
                             stamp.FrameOffset = page.FrameOffset(v, r, s);
                             stamp.FrameWidth = page.FrameWidth(v, r, s);
 
-                            Debug.WriteLine(string.Format("Frame[{0}]: left {1}, offset {2}, width {3}", s, stamp.FrameLeft, stamp.FrameOffset, stamp.FrameWidth));
+                            //Debug.WriteLine(string.Format("Frame[{0}]: left {1}, offset {2}, width {3}", s, stamp.FrameLeft, stamp.FrameOffset, stamp.FrameWidth));
                         }
 
                         bool hasDescriptions = false; // No stamps have a description yet
 
-                        Debug.WriteLine(string.Format("Iterating again {0} stamps", row.Count()));
+                        //Debug.WriteLine(string.Format("Iterating again {0} stamps", row.Count()));
 
                         float maxHeight = 0;
 
@@ -861,7 +868,7 @@ namespace Escher
                                     // As soon as we found a description then move the y-position 1 millimeter up
                                     y -= 1;
 
-                                    Debug.WriteLine(string.Format("y after moving 1 mm. up = {0}", Math.Round(y, 2)));
+                                    //Debug.WriteLine(string.Format("y after moving 1 mm. up = {0}", Math.Round(y, 2)));
                                 }
 
                                 // Eg. Zonder punt in linker onderhoek.
@@ -880,13 +887,13 @@ namespace Escher
                             y += maxHeight + 1; // - row[0].Vertical;
                         }
 
-                        Debug.WriteLine(string.Format("y after descriptions = {0}", Math.Round(y, 2)));
+                        //Debug.WriteLine(string.Format("y after descriptions = {0}", Math.Round(y, 2)));
 
-                        Debug.WriteLine(string.Format("Iterating again {0} stamps", row.Count()));
+                        //Debug.WriteLine(string.Format("Iterating again {0} stamps", row.Count()));
 
                         float rowHeight = page.RowHeight(v, r);
 
-                        Debug.WriteLine(string.Format("Row height = {0}", Math.Round(rowHeight, 2)));
+                        //Debug.WriteLine(string.Format("Row height = {0}", Math.Round(rowHeight, 2)));
 
                         for (int s = 0; s < row.Count(); s++)
                         {
@@ -895,7 +902,7 @@ namespace Escher
                             float x1 = stamp.FrameLeft;
                             float y1 = y + stamp.FrameOffset + (rowHeight - stamp.Height) / 2;
 
-                            Debug.Print(string.Format("Location[{0}]: x {1}, y {2}", s, Math.Round(x1, 2), Math.Round(y1, 2)));
+                            //Debug.Print(string.Format("Location[{0}]: x {1}, y {2}", s, Math.Round(x1, 2), Math.Round(y1, 2)));
 
                             // Stamp/sheet
 
@@ -964,13 +971,13 @@ namespace Escher
 
                         y += rowHeight + 1;
 
-                        Debug.WriteLine(string.Format("y after frames & images = {0}", Math.Round(y, 2)));
+                        //Debug.WriteLine(string.Format("y after frames & images = {0}", Math.Round(y, 2)));
 
                         // Number
 
                         if (setup.IncludeNumber)
                         {
-                            Debug.WriteLine(string.Format("Iterating again {0} stamps for number", row.Count()));
+                            //Debug.WriteLine(string.Format("Iterating again {0} stamps for number", row.Count()));
 
                             maxHeight = 0;
 
@@ -990,7 +997,7 @@ namespace Escher
                             y += maxHeight;
                         }
 
-                        Debug.WriteLine(string.Format("y after numbers = {0}", Math.Round(y, 2)));
+                        //Debug.WriteLine(string.Format("y after numbers = {0}", Math.Round(y, 2)));
 
                         if (!varieties.Combine)
                         {
@@ -1001,7 +1008,7 @@ namespace Escher
 
                         if (setup.IncludeValueAndColor)
                         {
-                            Debug.WriteLine(string.Format("Iterating again {0} stamps for value & color", row.Count()));
+                            //Debug.WriteLine(string.Format("Iterating again {0} stamps for value & color", row.Count()));
 
                             maxHeight = 0;
 
@@ -1023,17 +1030,17 @@ namespace Escher
                                 {
                                     yMax = y + height;
 
-                                    Debug.WriteLine(string.Format("A new maximum y is found: yMax = {0}", Math.Round(yMax, 2)));
+                                    //Debug.WriteLine(string.Format("A new maximum y is found: yMax = {0}", Math.Round(yMax, 2)));
                                 }
                             } // for (int s = 0; s < row.Count(); s++)
                         }
 
-                        Debug.WriteLine(string.Format("Using maximum yMax = {0}", Math.Round(yMax, 2)));
+                        //Debug.WriteLine(string.Format("Using maximum yMax = {0}", Math.Round(yMax, 2)));
 
                         // Set y to the maximum found
                         y = yMax + 2;
 
-                        Debug.WriteLine(string.Format("y after values & colors = {0}", Math.Round(y, 2)));
+                        //Debug.WriteLine(string.Format("y after values & colors = {0}", Math.Round(y, 2)));
 
                     } // for (int r = 0; r < varieties.Rows.Count(); r++)
 

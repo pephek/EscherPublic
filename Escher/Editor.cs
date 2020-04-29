@@ -239,6 +239,11 @@ namespace Escher
             else
             {
                 SetStatus();
+
+                if (e == null)
+                {
+                    //ImmediatePreviewDesign();
+                }
             }
         }
 
@@ -272,7 +277,162 @@ namespace Escher
                 this.Text += "*";
             }
 
-            // PreviewDesign();
+            ImmediatePreviewDesign();
+        }
+
+        private void ImmediatePreviewDesign()
+        {
+            try
+            {
+                TryImmediatePreviewDesign();
+            }
+            catch (Exception e)
+            {
+                SetError(e.Message);
+            }
+        }
+
+        private void TryImmediatePreviewDesign()
+        {
+            int lineNumber = design.PositionToPlace(design.SelectionStart).iLine;
+
+            if (lineNumber == design.LinesCount - 1)
+            {
+                return;
+            }
+
+            string album = null;
+            string country = null;
+            string series = null;
+            string section = null;
+
+            int linePageFeedThis = -1;
+            int linePageFeedNext = -1;
+
+            List<string> designs = new List<string>();
+            List<string> comments = new List<string>();
+
+            int i = lineNumber;
+
+            while (i >= 0 && album == null)
+            {
+                string line = design.GetLineText(i);
+
+                if (line.Contains("End") && !line.Trim().StartsWith("'"))
+                {
+                    return;
+                }
+                else if (album == null && line.Contains("Album") && !line.Trim().StartsWith("'"))
+                {
+                    album = line;
+                }
+                else if (country == null & line.Contains("Country=") && !line.Trim().StartsWith("'"))
+                {
+                    country = line;
+                }
+                else if (section == null && line.Contains("Part=") && !line.Trim().StartsWith("'"))
+                {
+                    section = line;
+                }
+                else if (series == null && line.Contains("Series=") && !line.Trim().StartsWith("'"))
+                {
+                    series = line;
+                }
+                else if (line.Contains("Design=") && !line.Trim().StartsWith("'"))
+                {
+                    designs.Add(line);
+                }
+                else if (linePageFeedThis == -1 && line.Contains("PageFeed") && !line.Trim().StartsWith("'"))
+                {
+                    linePageFeedThis = i;
+                }
+
+                i--;
+            }
+
+            i = lineNumber;
+
+            while (i < design.LinesCount && linePageFeedNext == -1)
+            {
+                string line = design.GetLineText(i);
+
+                if (line.Contains("PageFeed") && !line.Trim().StartsWith("'"))
+                {
+                    linePageFeedNext = i;
+                }
+                else if (line.Contains("End") && !line.Trim().StartsWith("'"))
+                {
+                    linePageFeedNext = i;
+                }
+
+                i++;
+            }
+
+            if (album != null && country != null && section != null && series != null && linePageFeedThis != -1 && linePageFeedNext != -1)
+            {
+                StringBuilder lines = new StringBuilder();
+
+                lines.Append(album).Append("\r\n");
+                lines.Append(country).Append("\r\n");
+                lines.Append(section).Append("\r\n");
+                lines.Append(series).Append("\r\n");
+
+                foreach (string d in designs)
+                {
+                    lines.Append(d).Append("\r\n");
+                }
+
+                for (int line = linePageFeedThis; line < linePageFeedNext; line++)
+                {
+                    string lineText = design.GetLineText(line);
+
+                    if (lineText.Contains("Comment:"))
+                    {
+                        string comment = lineText.Split("Comment:")[1].Split('|')[0].Replace("!", "").Replace("%", "");
+
+                        int commentIndex = design.Text.LastIndexOf("Comment=" + comment, design.SelectionStart);
+
+                        if (commentIndex >= 0)
+                        {
+                            int newLineIndex = design.Text.LastIndexOf("\r\n", commentIndex);
+
+                            if (newLineIndex >= 0)
+                            {
+                                string commentLine = design.GetLineText(design.PositionToPlace(newLineIndex).iLine + 1);
+
+                                string commentContents = commentLine.Split('=')[1].Split('|')[0].Trim();
+
+                                while (commentContents.StartsWith("!") || commentContents.StartsWith("%"))
+                                {
+                                    commentContents = commentContents.Substring(1);
+                                }
+
+                                lineText = lineText.Replace("Comment:" + comment, commentContents);
+                            }
+                        }
+                    }
+
+                    lines.Append(lineText).Append("\r\n");
+                }
+
+                lines.Append("End\r\n");
+
+                string text = lines.ToString();
+
+                //if (validator.Parse(text, null, out string error))
+                //{
+                    Design page = (new DesignParser()).Parse(text, null, out string error);
+
+                    if (string.IsNullOrEmpty(error))
+                    {
+                        preview.ShowPreview(page, pageNumber: 1, printMode: PrintMode.ToScreen, screenMode: ScreenMode.MatchScreenHeight);
+                        preview.Show();
+                        preview.Activate();
+
+                        this.Focus();
+                    }
+                //}
+            }
         }
 
         private void PreviewDesign()
@@ -289,8 +449,6 @@ namespace Escher
             if (!string.IsNullOrEmpty(error))
             {
                 SetStatus(error, failure: true);
-
-                preview.Hide();
             }    
             else
             {
@@ -317,8 +475,8 @@ namespace Escher
                     }
                 }
 
-                preview.Show();
                 preview.ShowPreview(d, pageNumber: pageNumber, printMode: PrintMode.ToScreen, screenMode: ScreenMode.MatchScreenHeight);
+                preview.Show();
 
                 this.Focus();
             }
