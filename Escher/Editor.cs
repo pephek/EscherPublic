@@ -288,13 +288,13 @@ namespace Escher
             ImmediatePreviewDesign();
         }
 
-        private string FindLineBefore(string text, int startIndex, out int index)
+        private string FindLineBefore(string text, ref int index)
         {
             string line = null;
 
             do
             {
-                index = design.Text.LastIndexOf(text, startIndex, StringComparison.Ordinal);
+                index = design.Text.LastIndexOf(text, index, StringComparison.Ordinal);
 
                 if (index >= 0)
                 {
@@ -351,8 +351,6 @@ namespace Escher
                     return;
                 }
 
-                StopwatchHelper.Start("Assembling and parsing page design");
-
                 string end;
                 string country = null;
                 string series = null;
@@ -363,32 +361,48 @@ namespace Escher
 
                 int index;
 
-                if (!string.IsNullOrEmpty(end = FindLineBefore("End", design.SelectionStart, out index)))
+                //StopwatchHelper.Start("Looking for End");
+                index = design.SelectionStart;
+                if (!string.IsNullOrEmpty(end = FindLineBefore("End", ref index)))
                 {
                     return;
                 }
+                //StopwatchHelper.Stop();
 
-                if (string.IsNullOrEmpty(FindLineBefore("PageFeed", design.SelectionStart, out index)))
+                //StopwatchHelper.Start("Looking for PageFeed");
+                index = design.SelectionStart;
+                if (string.IsNullOrEmpty(FindLineBefore("PageFeed", ref index)))
                 {
                     return;
                 }
+                //StopwatchHelper.Stop();
 
                 lineNumberPageFeedThis = design.PositionToPlace(index).iLine;
 
-                if (string.IsNullOrEmpty(series = FindLineBefore("Series=", index, out index)))
+                //StopwatchHelper.Start("Looking for Series");
+                if (string.IsNullOrEmpty(series = FindLineBefore("Series=", ref index)))
                 {
                     return;
                 }
-                if (string.IsNullOrEmpty(section = FindLineBefore("Part=", index, out index)))
-                {
-                    return;
-                }
-                if (string.IsNullOrEmpty(country = FindLineBefore("Country=", index, out index)))
-                {
-                    return;
-                }
+                //StopwatchHelper.Stop();
 
+                //StopwatchHelper.Start("Looking for Part");
+                if (string.IsNullOrEmpty(section = FindLineBefore("Part=", ref index)))
+                {
+                    return;
+                }
+                //StopwatchHelper.Stop();
+
+                //StopwatchHelper.Start("Looking for Country");
+                if (string.IsNullOrEmpty(country = FindLineBefore("Country=", ref index)))
+                {
+                    return;
+                }
+                //StopwatchHelper.Stop();
+
+                //StopwatchHelper.Start("Looking for End or PageFeed");
                 index = Math.Min(FindLineAfter("PageFeed", design.SelectionStart), FindLineAfter("End", design.SelectionStart));
+                //StopwatchHelper.Stop();
 
                 lineNumberPageFeedNext = design.PositionToPlace(index).iLine;
 
@@ -399,6 +413,7 @@ namespace Escher
                 pageLines.Append(section).Append("\r\n");
                 pageLines.Append(series).Append("\r\n");
 
+                //StopwatchHelper.Start("Looking for Comments and Sizes");
                 for (int line = lineNumberPageFeedThis; line < lineNumberPageFeedNext; line++)
                 {
                     string lineText = design.GetLineText(line).Trim();
@@ -415,7 +430,8 @@ namespace Escher
                             }
                             else
                             {
-                                string commentOrigin = FindLineBefore("Comment=" + commentValue, design.SelectionStart, out index);
+                                index = design.SelectionStart;
+                                string commentOrigin = FindLineBefore("Comment=" + commentValue, ref index);
 
                                 if (commentOrigin != null)
                                 {
@@ -445,7 +461,8 @@ namespace Escher
                                 }
                                 else
                                 {
-                                    string sizeOrigin = FindLineBefore("Design=" + sizeValue, design.SelectionStart, out index);
+                                    index = design.SelectionStart;
+                                    string sizeOrigin = FindLineBefore("Design=" + sizeValue, ref index);
 
                                     if (sizeOrigin == null)
                                     {
@@ -466,14 +483,15 @@ namespace Escher
 
                     pageLines.Append(lineText).Append("\r\n");
                 }
+                //StopwatchHelper.Stop();
 
                 pageLines.Append("End\r\n");
 
                 string pageText = pageLines.ToString();
 
+                //StopwatchHelper.Start("Parsing design");
                 Design pageDesign = (new DesignParser()).Parse(pageText, null, out string error);
-
-                StopwatchHelper.Stop();
+                //StopwatchHelper.Stop();
 
                 if (string.IsNullOrEmpty(error))
                 {
