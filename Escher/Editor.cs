@@ -288,31 +288,21 @@ namespace Escher
             ImmediatePreviewDesign();
         }
 
-        private string FindLineBefore(string text, int start)
-        {
-            return FindLineBefore(text, start, out int lineNumber);
-        }
-
-        private string FindLineBefore(string text, int start, out int lineNumber)
+        private string FindLineBefore(string text, int startIndex, out int index)
         {
             string line = null;
-            lineNumber = -1;
-            int index;
 
             do
             {
-                index = design.Text.LastIndexOf(text, design.SelectionStart);
+                index = design.Text.LastIndexOf(text, startIndex, StringComparison.Ordinal);
 
                 if (index >= 0)
                 {
-                    lineNumber = design.PositionToPlace(index).iLine;
-
-                    line = design.GetLineText(lineNumber);
+                    line = design.GetLineText(design.PositionToPlace(index).iLine);
 
                     if (line.Trim().StartsWith("'"))
                     {
                         line = null;
-                        lineNumber = -1;
                     }
                 }
 
@@ -321,32 +311,33 @@ namespace Escher
             return line;
         }
 
-        private int FindLineAfter(string text, int start)
+        private int FindLineAfter(string text, int startIndex)
         {
             string line = null;
-            int lineNumber = design.LinesCount - 1;
             int index;
 
             do
             {
-                index = design.Text.IndexOf(text, start);
+                index = design.Text.IndexOf(text, startIndex, StringComparison.Ordinal);
 
                 if (index >= 0)
                 {
-                    lineNumber = design.PositionToPlace(index).iLine;
-
-                    line = design.GetLineText(lineNumber);
+                    line = design.GetLineText(design.PositionToPlace(index).iLine);
 
                     if (line.Trim().StartsWith("'"))
                     {
                         line = null;
-                        lineNumber = design.LinesCount - 1;
                     }
                 }
 
             } while (line == null && index >= 0);
 
-            return lineNumber;
+            if (index == -1)
+            {
+                index = design.Text.Length - 1;
+            }
+
+            return index;
         }
 
         private void ImmediatePreviewDesign()
@@ -371,28 +362,36 @@ namespace Escher
                 List<string> designs_obsolete = new List<string>();
                 List<string> comments_obsolete = new List<string>();
 
-                if (!string.IsNullOrEmpty(end = FindLineBefore("End", design.SelectionStart)))
-                {
-                    return;
-                }
-                if (string.IsNullOrEmpty(country = FindLineBefore("Country=", design.SelectionStart)))
-                {
-                    return;
-                }
-                if (string.IsNullOrEmpty(section = FindLineBefore("Part=", design.SelectionStart)))
-                {
-                    return;
-                }
-                if (string.IsNullOrEmpty(series = FindLineBefore("Series=", design.SelectionStart)))
-                {
-                    return;
-                }
-                if (string.IsNullOrEmpty(FindLineBefore("PageFeed", design.SelectionStart, out lineNumberPageFeedThis)))
+                int index;
+
+                if (!string.IsNullOrEmpty(end = FindLineBefore("End", design.SelectionStart, out index)))
                 {
                     return;
                 }
 
-                lineNumberPageFeedNext = Math.Min(FindLineAfter("PageFeed", design.SelectionStart), FindLineAfter("End", design.SelectionStart));
+                if (string.IsNullOrEmpty(FindLineBefore("PageFeed", design.SelectionStart, out index)))
+                {
+                    return;
+                }
+
+                lineNumberPageFeedThis = design.PositionToPlace(index).iLine;
+
+                if (string.IsNullOrEmpty(series = FindLineBefore("Series=", index, out index)))
+                {
+                    return;
+                }
+                if (string.IsNullOrEmpty(section = FindLineBefore("Part=", index, out index)))
+                {
+                    return;
+                }
+                if (string.IsNullOrEmpty(country = FindLineBefore("Country=", index, out index)))
+                {
+                    return;
+                }
+
+                index = Math.Min(FindLineAfter("PageFeed", design.SelectionStart), FindLineAfter("End", design.SelectionStart));
+
+                lineNumberPageFeedNext = design.PositionToPlace(index).iLine;
 
                 StringBuilder pageLines = new StringBuilder();
 
@@ -417,7 +416,7 @@ namespace Escher
                             }
                             else
                             {
-                                string commentOrigin = FindLineBefore("Comment=" + commentValue, design.SelectionStart);
+                                string commentOrigin = FindLineBefore("Comment=" + commentValue, design.SelectionStart, out index);
 
                                 if (commentOrigin != null)
                                 {
@@ -447,7 +446,7 @@ namespace Escher
                                 }
                                 else
                                 {
-                                    string sizeOrigin = FindLineBefore("Design=" + sizeValue, design.SelectionStart);
+                                    string sizeOrigin = FindLineBefore("Design=" + sizeValue, design.SelectionStart, out index);
 
                                     if (sizeOrigin == null)
                                     {
