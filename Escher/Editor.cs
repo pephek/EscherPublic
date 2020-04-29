@@ -351,6 +351,8 @@ namespace Escher
                     return;
                 }
 
+                StopwatchHelper.Start("Assembling and parsing page design");
+
                 string end;
                 string country = null;
                 string series = null;
@@ -358,9 +360,6 @@ namespace Escher
 
                 int lineNumberPageFeedThis;
                 int lineNumberPageFeedNext;
-
-                List<string> designs_obsolete = new List<string>();
-                List<string> comments_obsolete = new List<string>();
 
                 int index;
 
@@ -473,6 +472,8 @@ namespace Escher
                 string pageText = pageLines.ToString();
 
                 Design pageDesign = (new DesignParser()).Parse(pageText, null, out string error);
+
+                StopwatchHelper.Stop();
 
                 if (string.IsNullOrEmpty(error))
                 {

@@ -49,6 +49,20 @@ namespace Escher
 
             vScrollBar.KeyDown += new KeyEventHandler((sender, e) => HandleKeyDown(e.KeyCode, e.Modifiers));
             vScrollBar.ValueChanged += new EventHandler((sender, e) => Refresh());
+
+            using (Graphics graphics = this.CreateGraphics())
+            {
+                this.dpiX = graphics.DpiX;
+                this.dpiY = graphics.DpiY;
+            }
+
+            this.setup = PageSetup.Load();
+
+            this.screenMode = ScreenMode.MatchScreenHeight;
+
+            this.artifacts = new Artifacts();
+
+            ResizePreview(out this.pageScale, out this.transformScale);
         }
 
         public void PrintDocument(string printerName, float paperWidth, float paperHeight, Design design, Action<int> setProgress)
@@ -151,20 +165,17 @@ namespace Escher
 
         public void ShowPreview(Design design, int pageNumber, PrintMode printMode, ScreenMode screenMode)
         {
+            if (this.pageNumber == 0 || screenMode != this.screenMode)
+            {
+                ResizePreview(out this.pageScale, out this.transformScale);
+            }
+
             this.pageNumber = pageNumber;
             this.printMode = printMode;
             this.screenMode = screenMode;
             this.design = design;
             this.setup = PageSetup.Get();
             this.page = PageHelper.Get(this.design, this.pageNumber, this.setup.FrameStyle);
-
-            using (Graphics graphics = this.CreateGraphics())
-            {
-                this.dpiX = graphics.DpiX;
-                this.dpiY = graphics.DpiY;
-            }
-
-            ResizePreview(this.screenMode, out this.pageScale, out this.transformScale);
 
             Refresh();
         }
@@ -230,7 +241,7 @@ namespace Escher
                         case Keys.Shift:
                             this.screenMode = this.screenMode.Next();
                             this.Location = new Point(0, 0);
-                            ResizePreview(this.screenMode, out this.pageScale, out this.transformScale);
+                            ResizePreview(out this.pageScale, out this.transformScale);
                             Refresh();
                             break;
                         case Keys.None:
@@ -241,7 +252,7 @@ namespace Escher
                 case Keys.OemMinus:
                     this.screenMode = this.screenMode.Prev();
                     this.Location = new Point(0, 0);
-                    ResizePreview(this.screenMode, out this.pageScale, out this.transformScale);
+                    ResizePreview(out this.pageScale, out this.transformScale);
                     Refresh();
                     break;
             }
@@ -317,7 +328,7 @@ namespace Escher
 
                 if (paper != this.setup.PageFormat.FormatName)
                 {
-                    ResizePreview(this.screenMode, out this.pageScale, out this.transformScale);
+                    ResizePreview(out this.pageScale, out this.transformScale);
                 }
 
                 Refresh();
@@ -334,11 +345,19 @@ namespace Escher
 
                 graphics.PageUnit = GraphicsUnit.Millimeter;
 
+                StopwatchHelper.Start("Assembling preview");
+
                 AssemblePreview(graphics, this.page, this.pageNumber, this.printMode, this.screenMode);
+
+                StopwatchHelper.Stop();
 
                 graphics.PageUnit = pageUnit;
 
+                StopwatchHelper.Start("Drawing preview");
+
                 DrawPreview(graphics, this.artifacts, this.pageScale, this.transformScale, this.printMode, this.screenMode);
+
+                StopwatchHelper.Stop();
             }
             catch (Exception e)
             {
@@ -541,14 +560,14 @@ namespace Escher
             }
         }
 
-        public void ResizePreview(ScreenMode screenMode, out float pageScale, out float transformScale)
+        public void ResizePreview(out float pageScale, out float transformScale)
         {
             if (this.screenMode == ScreenMode.MatchScreenWidth)
             {
                 vScrollBar.Value = 0;
             }
 
-            vScrollBar.Visible = screenMode == ScreenMode.MatchScreenWidth;
+            vScrollBar.Visible = this.screenMode == ScreenMode.MatchScreenWidth;
 
             int screenWidthInPixels = Screen.FromControl(this).WorkingArea.Width;
             int screenHeightInPixels = Screen.FromControl(this).WorkingArea.Height;
@@ -559,7 +578,7 @@ namespace Escher
             int width = 0;
             int height = 0;
 
-            switch (screenMode)
+            switch (this.screenMode)
             {
                 case ScreenMode.MatchPaper:
                     width = pageWidthInPixels;
@@ -585,7 +604,7 @@ namespace Escher
                     break;
             }
 
-            switch (screenMode)
+            switch (this.screenMode)
             {
                 case ScreenMode.MatchPaper:
                     transformScale = 1;
@@ -630,7 +649,7 @@ namespace Escher
 
             float y = format.Free.Top;
 
-            artifacts = new Artifacts(g, this.pageScale);
+            artifacts.Clear(g, this.pageScale, pageNumber);
 
             // Form caption
             artifacts.AddText(1, 1, 0, string.Format("Escher · Preview · Paper:<b>{0}</b> · Page Number:<b>{1}</b>", format.FormatName, pageNumber), "Microsoft Sans Serif", 7, foreColor: Color.Gray, screenOnly: true);

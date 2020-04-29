@@ -17,9 +17,9 @@ namespace Escher
 {
     public partial class Main : Form
     {
-        private readonly static Validator validator = new Validator();
-        private readonly static Preview preview = new Preview();
-        private readonly Editor editor = new Editor(validator, preview);
+        private Validator validator;
+        private Preview preview;
+        private Editor editor;
 
         private Design design;
 
@@ -114,6 +114,10 @@ namespace Escher
             webBrowser.AllowWebBrowserDrop = false;
 
             PageSetup.Load();
+
+            this.validator = new Validator();
+            this.preview = new Preview();
+            this.editor = new Editor(validator, preview);
 
             OpenDesign("_ Test");
         }

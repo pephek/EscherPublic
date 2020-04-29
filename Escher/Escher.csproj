@@ -134,6 +134,7 @@
     <Compile Include="Helpers\PageHelper.cs" />
     <Compile Include="Helpers\PDF995Helper.cs" />
     <Compile Include="Helpers\SizeHelper.cs" />
+    <Compile Include="Helpers\StopwatchHelper.cs" />
     <Compile Include="Imaging.cs">
       <SubType>Form</SubType>
     </Compile>
