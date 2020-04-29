@@ -34,6 +34,10 @@ namespace Escher
 
         private string designName;
 
+        private Dictionary<string, string> comments = new Dictionary<string, string>();
+        private Dictionary<string, string> sizes = new Dictionary<string, string>();
+        private HashSet<string> sizesToSkip = new HashSet<string>();
+
         public bool IsDirty;
 
         public Editor(Validator validator, Preview preview)
@@ -156,6 +160,10 @@ namespace Escher
             menuSave.Enabled = false;
 
             this.Text = string.Format("Escher ̣̤̤· Editing {0}", designName);
+
+            this.comments.Clear();
+            this.sizes.Clear();
+            this.sizesToSkip.Clear();
         }
 
         public void SetError(string error = null)
@@ -280,158 +288,205 @@ namespace Escher
             ImmediatePreviewDesign();
         }
 
+        private string FindLineBefore(string text, int start)
+        {
+            return FindLineBefore(text, start, out int lineNumber);
+        }
+
+        private string FindLineBefore(string text, int start, out int lineNumber)
+        {
+            string line = null;
+            lineNumber = -1;
+            int index;
+
+            do
+            {
+                index = design.Text.LastIndexOf(text, design.SelectionStart);
+
+                if (index >= 0)
+                {
+                    lineNumber = design.PositionToPlace(index).iLine;
+
+                    line = design.GetLineText(lineNumber);
+
+                    if (line.Trim().StartsWith("'"))
+                    {
+                        line = null;
+                        lineNumber = -1;
+                    }
+                }
+
+            } while (line == null && index >= 0);
+
+            return line;
+        }
+
+        private int FindLineAfter(string text, int start)
+        {
+            string line = null;
+            int lineNumber = design.LinesCount - 1;
+            int index;
+
+            do
+            {
+                index = design.Text.IndexOf(text, start);
+
+                if (index >= 0)
+                {
+                    lineNumber = design.PositionToPlace(index).iLine;
+
+                    line = design.GetLineText(lineNumber);
+
+                    if (line.Trim().StartsWith("'"))
+                    {
+                        line = null;
+                        lineNumber = design.LinesCount - 1;
+                    }
+                }
+
+            } while (line == null && index >= 0);
+
+            return lineNumber;
+        }
+
         private void ImmediatePreviewDesign()
         {
             try
             {
-                TryImmediatePreviewDesign();
-            }
-            catch (Exception e)
-            {
-                SetError(e.Message);
-            }
-        }
+                int lineNumber = design.PositionToPlace(design.SelectionStart).iLine;
 
-        private void TryImmediatePreviewDesign()
-        {
-            int lineNumber = design.PositionToPlace(design.SelectionStart).iLine;
-
-            if (lineNumber == design.LinesCount - 1)
-            {
-                return;
-            }
-
-            string album = null;
-            string country = null;
-            string series = null;
-            string section = null;
-
-            int linePageFeedThis = -1;
-            int linePageFeedNext = -1;
-
-            List<string> designs = new List<string>();
-            List<string> comments = new List<string>();
-
-            int i = lineNumber;
-
-            while (i >= 0 && album == null)
-            {
-                string line = design.GetLineText(i);
-
-                if (line.Contains("End") && !line.Trim().StartsWith("'"))
+                if (lineNumber == design.LinesCount - 1)
                 {
                     return;
                 }
-                else if (album == null && line.Contains("Album") && !line.Trim().StartsWith("'"))
-                {
-                    album = line;
-                }
-                else if (country == null & line.Contains("Country=") && !line.Trim().StartsWith("'"))
-                {
-                    country = line;
-                }
-                else if (section == null && line.Contains("Part=") && !line.Trim().StartsWith("'"))
-                {
-                    section = line;
-                }
-                else if (series == null && line.Contains("Series=") && !line.Trim().StartsWith("'"))
-                {
-                    series = line;
-                }
-                else if (line.Contains("Design=") && !line.Trim().StartsWith("'"))
-                {
-                    designs.Add(line);
-                }
-                else if (linePageFeedThis == -1 && line.Contains("PageFeed") && !line.Trim().StartsWith("'"))
-                {
-                    linePageFeedThis = i;
-                }
 
-                i--;
-            }
+                string end;
+                string country = null;
+                string series = null;
+                string section = null;
 
-            i = lineNumber;
+                int lineNumberPageFeedThis;
+                int lineNumberPageFeedNext;
 
-            while (i < design.LinesCount && linePageFeedNext == -1)
-            {
-                string line = design.GetLineText(i);
+                List<string> designs_obsolete = new List<string>();
+                List<string> comments_obsolete = new List<string>();
 
-                if (line.Contains("PageFeed") && !line.Trim().StartsWith("'"))
+                if (!string.IsNullOrEmpty(end = FindLineBefore("End", design.SelectionStart)))
                 {
-                    linePageFeedNext = i;
+                    return;
                 }
-                else if (line.Contains("End") && !line.Trim().StartsWith("'"))
+                if (string.IsNullOrEmpty(country = FindLineBefore("Country=", design.SelectionStart)))
                 {
-                    linePageFeedNext = i;
+                    return;
+                }
+                if (string.IsNullOrEmpty(section = FindLineBefore("Part=", design.SelectionStart)))
+                {
+                    return;
+                }
+                if (string.IsNullOrEmpty(series = FindLineBefore("Series=", design.SelectionStart)))
+                {
+                    return;
+                }
+                if (string.IsNullOrEmpty(FindLineBefore("PageFeed", design.SelectionStart, out lineNumberPageFeedThis)))
+                {
+                    return;
                 }
 
-                i++;
-            }
+                lineNumberPageFeedNext = Math.Min(FindLineAfter("PageFeed", design.SelectionStart), FindLineAfter("End", design.SelectionStart));
 
-            if (album != null && country != null && section != null && series != null && linePageFeedThis != -1 && linePageFeedNext != -1)
-            {
-                StringBuilder lines = new StringBuilder();
+                StringBuilder pageLines = new StringBuilder();
 
-                lines.Append(album).Append("\r\n");
-                lines.Append(country).Append("\r\n");
-                lines.Append(section).Append("\r\n");
-                lines.Append(series).Append("\r\n");
+                pageLines.Append("Album | Pdf=Pdf | Version=Version\r\n");
+                pageLines.Append(country).Append("\r\n");
+                pageLines.Append(section).Append("\r\n");
+                pageLines.Append(series).Append("\r\n");
 
-                foreach (string d in designs)
+                for (int line = lineNumberPageFeedThis; line < lineNumberPageFeedNext; line++)
                 {
-                    lines.Append(d).Append("\r\n");
-                }
+                    string lineText = design.GetLineText(line).Trim();
 
-                for (int line = linePageFeedThis; line < linePageFeedNext; line++)
-                {
-                    string lineText = design.GetLineText(line);
-
-                    if (lineText.Contains("Comment:"))
+                    if (!lineText.StartsWith("'"))
                     {
-                        string comment = lineText.Split("Comment:")[1].Split('|')[0].Replace("!", "").Replace("%", "");
-
-                        int commentIndex = design.Text.LastIndexOf("Comment=" + comment, design.SelectionStart);
-
-                        if (commentIndex >= 0)
+                        if (lineText.Contains("Comment:"))
                         {
-                            int newLineIndex = design.Text.LastIndexOf("\r\n", commentIndex);
+                            string commentValue = lineText.Split("Comment:")[1].Split('|')[0].Replace("!", "").Replace("%", "");
 
-                            if (newLineIndex >= 0)
+                            if (this.comments.ContainsKey(commentValue))
                             {
-                                string commentLine = design.GetLineText(design.PositionToPlace(newLineIndex).iLine + 1);
+                                lineText = lineText.Replace("Comment:" + commentValue, this.comments[commentValue]);
+                            }
+                            else
+                            {
+                                string commentOrigin = FindLineBefore("Comment=" + commentValue, design.SelectionStart);
 
-                                string commentContents = commentLine.Split('=')[1].Split('|')[0].Trim();
-
-                                while (commentContents.StartsWith("!") || commentContents.StartsWith("%"))
+                                if (commentOrigin != null)
                                 {
-                                    commentContents = commentContents.Substring(1);
-                                }
+                                    string commentContents = commentOrigin.Split("=")[1].Split('|')[0].Trim();
 
-                                lineText = lineText.Replace("Comment:" + comment, commentContents);
+                                    while (commentContents.StartsWith("!") || commentContents.StartsWith("%"))
+                                    {
+                                        commentContents = commentContents.Substring(1);
+                                    }
+
+                                    this.comments.Add(commentValue, commentContents);
+
+                                    lineText = lineText.Replace("Comment:" + commentValue, commentContents);
+                                }
+                            }
+                        }
+
+                        if (lineText.Contains("Size="))
+                        {
+                            string sizeValue = lineText.Split("Size=")[1].Split('|')[0].Trim();
+
+                            if (!sizesToSkip.Contains(sizeValue))
+                            {
+                                if (this.sizes.ContainsKey(sizeValue))
+                                {
+                                    lineText = lineText.Replace("Size=" + sizeValue, this.sizes[sizeValue]);
+                                }
+                                else
+                                {
+                                    string sizeOrigin = FindLineBefore("Design=" + sizeValue, design.SelectionStart);
+
+                                    if (sizeOrigin == null)
+                                    {
+                                        this.sizesToSkip.Add(sizeValue);
+                                    }
+                                    else
+                                    {
+                                        string sizeContents = sizeOrigin.Split("|", joinAgainExceptFirstOne: true)[1].Trim();
+
+                                        this.sizes.Add(sizeValue, sizeContents + " | Width=+4 | Height=+4");
+
+                                        lineText = lineText.Replace("Size=" + sizeValue, this.sizes[sizeValue]);
+                                    }
+                                }
                             }
                         }
                     }
 
-                    lines.Append(lineText).Append("\r\n");
+                    pageLines.Append(lineText).Append("\r\n");
                 }
 
-                lines.Append("End\r\n");
+                pageLines.Append("End\r\n");
 
-                string text = lines.ToString();
+                string pageText = pageLines.ToString();
 
-                //if (validator.Parse(text, null, out string error))
-                //{
-                    Design page = (new DesignParser()).Parse(text, null, out string error);
+                Design pageDesign = (new DesignParser()).Parse(pageText, null, out string error);
 
-                    if (string.IsNullOrEmpty(error))
-                    {
-                        preview.ShowPreview(page, pageNumber: 1, printMode: PrintMode.ToScreen, screenMode: ScreenMode.MatchScreenHeight);
-                        preview.Show();
-                        preview.Activate();
+                if (string.IsNullOrEmpty(error))
+                {
+                    preview.ShowPreview(pageDesign, pageNumber: 1, printMode: PrintMode.ToScreen, screenMode: ScreenMode.MatchScreenHeight);
+                    preview.Show();
+                    preview.Activate();
 
-                        this.Focus();
-                    }
-                //}
+                    this.Focus();
+                }
+            }
+            catch (Exception e)
+            {
+                SetError(e.Message);
             }
         }
 
