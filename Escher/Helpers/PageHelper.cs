@@ -27,8 +27,9 @@ namespace Escher
 
             page.Country = country.Text;
             page.Copyright = country.Copyright;
-            page.Title = country.PageTitle;
-            page.SubTitle = country.PageSubTitle;
+            page.FrontPageTitle = country.FrontPageTitle;
+            page.FrontPageSubTitle = country.FrontPageSubTitle;
+            page.PageTitle = country.PageTitle;
 
             // Loop up the folder
             // a) Frankeerzegels

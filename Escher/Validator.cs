@@ -289,6 +289,11 @@ namespace Escher
         /// </summary>
         private bool ParseCountry()
         {
+            bool frontPageTitleFound = false;
+            bool frontPageSubTitleFound = false;
+            bool pageTitleFound = false;
+            int countryFound = pCode;
+
             if (!ParseString("Country", true)) return false;
 
             while (NextSeparator() == cKeywordSeparator)
@@ -302,16 +307,48 @@ namespace Escher
                     case "Picture":
                     case "Copyright":
                     case "Settings":
-                    case "PageTitle":
-                    case "PageSubTitle":
                         if (!ParseString(nextKeyWord, true)) return false;
                         break;
                     case "Catalogue":
                         if (!ParseCatalogue(nextKeyWord)) return false;
                         break;
+                    case "FrontPageTitle":
+                        if (!ParseString(nextKeyWord, true)) return false;
+                        frontPageTitleFound = true;
+                        break;
+                    case "FrontPageSubTitle":
+                        if (!ParseString(nextKeyWord, true)) return false;
+                        frontPageSubTitleFound = true;
+                        break;
+                    case "PageTitle":
+                        if (!ParseString(nextKeyWord, true)) return false;
+                        pageTitleFound = true;
+                        break;
                     default:
                         return SetUnknownKeyword(nextKeyWord);
                 }
+            }
+
+            if (!frontPageTitleFound)
+            {
+                pCode = countryFound;
+                eCode = "Keyword 'FrontPageTitle' not found";
+
+                return false;
+            }
+            if (!frontPageSubTitleFound)
+            {
+                pCode = countryFound;
+                eCode = "Keyword 'FrontPageSubTitle' not found";
+
+                return false;
+            }
+            if (!pageTitleFound)
+            {
+                pCode = countryFound;
+                eCode = "Keyword 'PageTitle' not found";
+
+                return false;
             }
 
             return true;
