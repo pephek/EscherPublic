@@ -250,7 +250,7 @@ namespace Escher
 
                 if (e == null)
                 {
-                    //ImmediatePreviewDesign();
+                    ImmediatePreviewDesign();
                 }
             }
         }
@@ -292,6 +292,8 @@ namespace Escher
         {
             string line = null;
 
+            index--;
+
             do
             {
                 index = design.Text.LastIndexOf(text, index, StringComparison.Ordinal);
@@ -303,6 +305,8 @@ namespace Escher
                     if (line.Trim().StartsWith("'"))
                     {
                         line = null;
+
+                        index--;
                     }
                 }
 
@@ -314,11 +318,12 @@ namespace Escher
         private int FindLineAfter(string text, int startIndex)
         {
             string line = null;
-            int index;
+
+            int index = startIndex;
 
             do
             {
-                index = design.Text.IndexOf(text, startIndex, StringComparison.Ordinal);
+                index = design.Text.IndexOf(text, index, StringComparison.Ordinal);
 
                 if (index >= 0)
                 {
@@ -327,6 +332,8 @@ namespace Escher
                     if (line.Trim().StartsWith("'"))
                     {
                         line = null;
+
+                        index++;
                     }
                 }
 

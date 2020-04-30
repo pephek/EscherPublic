@@ -118,8 +118,6 @@ namespace Escher
             this.validator = new Validator();
             this.preview = new Preview();
             this.editor = new Editor(validator, preview);
-
-            OpenDesign("_ Test");
         }
 
         private void EditDesign()
