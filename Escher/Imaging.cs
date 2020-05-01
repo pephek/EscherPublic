@@ -57,6 +57,7 @@ namespace Escher
             buttonRotate.Click += new EventHandler((sender, e) => SetMode(ImagingMode.Rotate));
             buttonCrop.Click += new EventHandler((sender, e) => SetMode(ImagingMode.Crop));
             buttonRecolor.Click += new EventHandler((sender, e) => SetMode(ImagingMode.Recolor));
+            buttonSharpen.Click += new EventHandler((sender, e) => SetMode(ImagingMode.Sharpen));
             buttonBrighten.Click += new EventHandler((sender, e) => SetMode(ImagingMode.Brighten));
             buttonBlacken.Click += new EventHandler((sender, e) => SetMode(ImagingMode.Blacken));
             buttonMeasure.Click += new EventHandler((sender, e) => SetMode(ImagingMode.Measure));
@@ -72,7 +73,8 @@ namespace Escher
             buttonReject.Click += new EventHandler((sender, e) => AcceptOrReject(accepted: false));
 
             angle.ValueChanged += new EventHandler((sender, e) => Rotate((float)angle.Value));
-            brightness.ValueChanged += new EventHandler((sender, e) => Brightness((float)brightness.Value));
+            sharpness.ValueChanged += new EventHandler((sender, e) => Sharpen((float)sharpness.Value));
+            brightness.ValueChanged += new EventHandler((sender, e) => Brighten((float)brightness.Value));
             blacken.ValueChanged += new EventHandler((sender, e) => Blacken((byte)blacken.Value));
             measure.ValueChanged += new EventHandler((sender, e) => Measure((byte)measure.Value, this.stamp.Perforation));
             resize.ValueChanged += new EventHandler((sender, e) => Resice((float)resize.Value));
@@ -421,6 +423,7 @@ namespace Escher
             pTrial.Cursor = Cursors.Default;
 
             angle.Visible = false;
+            sharpness.Visible = false;
             brightness.Visible = false;
             blacken.Visible = false;
             measure.Visible = false;
@@ -433,6 +436,10 @@ namespace Escher
                 case ImagingMode.Rotate:
                     angle.Value = 0.0M;
                     angle.Visible = true;
+                    break;
+                case ImagingMode.Sharpen:
+                    sharpness.Value = 0;
+                    sharpness.Visible = true;
                     break;
                 case ImagingMode.Brighten:
                     brightness.Value = 0;
@@ -534,6 +541,29 @@ namespace Escher
 
                         break;
 
+                    case ImagingMode.Sharpen:
+
+                        pImage.Image.Dispose();
+                        pImage.Image = new Bitmap(pTrial.Image);
+                        pImage.Image.SaveAsJpeg(cImage, 100);
+
+                        ImageHelper.CreateThumbnail(cImage, cThumb, stamp.Width, stamp.Height);
+                        pThumb.LoadImageAndUnlock(cThumb);
+
+                        if (File.Exists(this.color))
+                        {
+                            pColor.Image = pColor.Image.Sharpen((float)sharpness.Value / 100);
+                            pColor.Image.SaveAsJpeg(cColor, 100);
+                        }
+
+                        if (File.Exists(this.print))
+                        {
+                            pPrint.Image = pPrint.Image.Sharpen((float)sharpness.Value / 100);
+                            pPrint.Image.SaveAsJpeg(cPrint, 100);
+                        }
+
+                        break;
+
                     case ImagingMode.Brighten:
 
                         pImage.Image.Dispose();
@@ -632,7 +662,19 @@ namespace Escher
             }
         }
 
-        private void Brightness(float value)
+        private void Sharpen(float value)
+        {
+            if (mode == ImagingMode.Sharpen)
+            {
+                pTrial.Image.Dispose();
+
+                pTrial.Image = pImage.Image.Sharpen(value / 100);
+
+                buttonAccept.Enabled = (value != 0);
+            }
+        }
+
+        private void Brighten(float value)
         {
             if (mode == ImagingMode.Brighten)
             {

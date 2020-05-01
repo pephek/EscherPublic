@@ -301,5 +301,8 @@
   <ItemGroup>
     <Folder Include="References\" />
   </ItemGroup>
+  <ItemGroup>
+    <None Include="Images\Highlighter_16x.png" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

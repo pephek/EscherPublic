@@ -20,6 +20,9 @@ namespace Escher
         Description,
         PageFeed,
         LineFeed,
-        Design
+        Design,
+        Images,
+        ListBegin,
+        ListEnd
     }
 }

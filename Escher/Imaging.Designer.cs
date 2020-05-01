@@ -47,14 +47,16 @@
             this.toolTipRecolor = new System.Windows.Forms.ToolTip(this.components);
             this.panelRecolor = new System.Windows.Forms.Panel();
             this.labelRecolor = new System.Windows.Forms.Label();
-            this.toolTipRerunRecolor = new System.Windows.Forms.ToolTip(this.components);
-            this.toolTipBlacken = new System.Windows.Forms.ToolTip(this.components);
-            this.toolTipMeasure = new System.Windows.Forms.ToolTip(this.components);
             this.b = new ColorSlider.ColorSlider();
             this.g = new ColorSlider.ColorSlider();
             this.r = new ColorSlider.ColorSlider();
+            this.toolTipRerunRecolor = new System.Windows.Forms.ToolTip(this.components);
+            this.toolTipBlacken = new System.Windows.Forms.ToolTip(this.components);
+            this.toolTipMeasure = new System.Windows.Forms.ToolTip(this.components);
+            this.toolTipSharpen = new System.Windows.Forms.ToolTip(this.components);
             this.buttonRerunRecolor = new System.Windows.Forms.Button();
             this.pTrial = new System.Windows.Forms.PictureBox();
+            this.buttonSharpen = new System.Windows.Forms.Button();
             this.buttonMeasure = new System.Windows.Forms.Button();
             this.buttonBlacken = new System.Windows.Forms.Button();
             this.buttonRecolor = new System.Windows.Forms.Button();
@@ -77,6 +79,7 @@
             this.pColor = new System.Windows.Forms.PictureBox();
             this.pThumb = new System.Windows.Forms.PictureBox();
             this.pImage = new System.Windows.Forms.PictureBox();
+            this.sharpness = new System.Windows.Forms.NumericUpDown();
             this.panelImaging.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.measure)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.blacken)).BeginInit();
@@ -90,11 +93,13 @@
             ((System.ComponentModel.ISupportInitialize)(this.pColor)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pThumb)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pImage)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.sharpness)).BeginInit();
             this.SuspendLayout();
             // 
             // panelImaging
             // 
             this.panelImaging.BackColor = System.Drawing.Color.Black;
+            this.panelImaging.Controls.Add(this.sharpness);
             this.panelImaging.Controls.Add(this.measure);
             this.panelImaging.Controls.Add(this.blacken);
             this.panelImaging.Controls.Add(this.resize);
@@ -186,6 +191,7 @@
             // panelButtons
             // 
             this.panelButtons.BackColor = System.Drawing.Color.Black;
+            this.panelButtons.Controls.Add(this.buttonSharpen);
             this.panelButtons.Controls.Add(this.buttonMeasure);
             this.panelButtons.Controls.Add(this.buttonBlacken);
             this.panelButtons.Controls.Add(this.buttonRecolor);
@@ -204,7 +210,7 @@
             this.panelButtons.Controls.Add(this.buttonNext);
             this.panelButtons.Location = new System.Drawing.Point(240, 44);
             this.panelButtons.Name = "panelButtons";
-            this.panelButtons.Size = new System.Drawing.Size(555, 39);
+            this.panelButtons.Size = new System.Drawing.Size(587, 39);
             this.panelButtons.TabIndex = 11;
             // 
             // labelMode
@@ -283,24 +289,6 @@
             this.labelRecolor.Size = new System.Drawing.Size(176, 17);
             this.labelRecolor.TabIndex = 20;
             this.labelRecolor.Text = "R = R% · G = G% · B = B%";
-            // 
-            // toolTipRerunRecolor
-            // 
-            this.toolTipRerunRecolor.IsBalloon = true;
-            this.toolTipRerunRecolor.ToolTipIcon = System.Windows.Forms.ToolTipIcon.Info;
-            this.toolTipRerunRecolor.ToolTipTitle = "Reset";
-            // 
-            // toolTipBlacken
-            // 
-            this.toolTipBlacken.IsBalloon = true;
-            this.toolTipBlacken.ToolTipIcon = System.Windows.Forms.ToolTipIcon.Info;
-            this.toolTipBlacken.ToolTipTitle = "Blacken";
-            // 
-            // toolTipMeasure
-            // 
-            this.toolTipMeasure.IsBalloon = true;
-            this.toolTipMeasure.ToolTipIcon = System.Windows.Forms.ToolTipIcon.Info;
-            this.toolTipMeasure.ToolTipTitle = "Measure";
             // 
             // b
             // 
@@ -491,6 +479,30 @@
             0,
             0});
             // 
+            // toolTipRerunRecolor
+            // 
+            this.toolTipRerunRecolor.IsBalloon = true;
+            this.toolTipRerunRecolor.ToolTipIcon = System.Windows.Forms.ToolTipIcon.Info;
+            this.toolTipRerunRecolor.ToolTipTitle = "Reset";
+            // 
+            // toolTipBlacken
+            // 
+            this.toolTipBlacken.IsBalloon = true;
+            this.toolTipBlacken.ToolTipIcon = System.Windows.Forms.ToolTipIcon.Info;
+            this.toolTipBlacken.ToolTipTitle = "Blacken";
+            // 
+            // toolTipMeasure
+            // 
+            this.toolTipMeasure.IsBalloon = true;
+            this.toolTipMeasure.ToolTipIcon = System.Windows.Forms.ToolTipIcon.Info;
+            this.toolTipMeasure.ToolTipTitle = "Measure";
+            // 
+            // toolTipSharpen
+            // 
+            this.toolTipSharpen.IsBalloon = true;
+            this.toolTipSharpen.ToolTipIcon = System.Windows.Forms.ToolTipIcon.Info;
+            this.toolTipSharpen.ToolTipTitle = "Sharpen";
+            // 
             // buttonRerunRecolor
             // 
             this.buttonRerunRecolor.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
@@ -514,11 +526,23 @@
             this.pTrial.TabStop = false;
             this.pTrial.Visible = false;
             // 
+            // buttonSharpen
+            // 
+            this.buttonSharpen.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.buttonSharpen.Image = global::Escher.Properties.Resources.Highlighter_16x;
+            this.buttonSharpen.Location = new System.Drawing.Point(248, 3);
+            this.buttonSharpen.Name = "buttonSharpen";
+            this.buttonSharpen.Size = new System.Drawing.Size(32, 32);
+            this.buttonSharpen.TabIndex = 21;
+            this.buttonSharpen.TabStop = false;
+            this.toolTipSharpen.SetToolTip(this.buttonSharpen, "Sharpen the image between 0 and 100");
+            this.buttonSharpen.UseVisualStyleBackColor = true;
+            // 
             // buttonMeasure
             // 
             this.buttonMeasure.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.buttonMeasure.Image = global::Escher.Properties.Resources.RulerMeasure_16x;
-            this.buttonMeasure.Location = new System.Drawing.Point(314, 3);
+            this.buttonMeasure.Location = new System.Drawing.Point(347, 3);
             this.buttonMeasure.Name = "buttonMeasure";
             this.buttonMeasure.Size = new System.Drawing.Size(32, 32);
             this.buttonMeasure.TabIndex = 20;
@@ -530,7 +554,7 @@
             // 
             this.buttonBlacken.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.buttonBlacken.Image = global::Escher.Properties.Resources.Airbrush_16x;
-            this.buttonBlacken.Location = new System.Drawing.Point(281, 3);
+            this.buttonBlacken.Location = new System.Drawing.Point(314, 3);
             this.buttonBlacken.Name = "buttonBlacken";
             this.buttonBlacken.Size = new System.Drawing.Size(32, 32);
             this.buttonBlacken.TabIndex = 19;
@@ -554,7 +578,7 @@
             // 
             this.buttonResize.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.buttonResize.Image = global::Escher.Properties.Resources.Resize_16x;
-            this.buttonResize.Location = new System.Drawing.Point(347, 3);
+            this.buttonResize.Location = new System.Drawing.Point(380, 3);
             this.buttonResize.Name = "buttonResize";
             this.buttonResize.Size = new System.Drawing.Size(32, 32);
             this.buttonResize.TabIndex = 17;
@@ -566,7 +590,7 @@
             // 
             this.buttonThumbnail.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.buttonThumbnail.Image = global::Escher.Properties.Resources.IconFile_16x;
-            this.buttonThumbnail.Location = new System.Drawing.Point(413, 3);
+            this.buttonThumbnail.Location = new System.Drawing.Point(446, 3);
             this.buttonThumbnail.Name = "buttonThumbnail";
             this.buttonThumbnail.Size = new System.Drawing.Size(32, 32);
             this.buttonThumbnail.TabIndex = 16;
@@ -577,7 +601,7 @@
             // buttonUndo
             // 
             this.buttonUndo.Image = global::Escher.Properties.Resources.Undo_16x;
-            this.buttonUndo.Location = new System.Drawing.Point(486, 3);
+            this.buttonUndo.Location = new System.Drawing.Point(519, 3);
             this.buttonUndo.Name = "buttonUndo";
             this.buttonUndo.Size = new System.Drawing.Size(32, 32);
             this.buttonUndo.TabIndex = 15;
@@ -620,7 +644,7 @@
             // 
             this.buttonBrighten.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.buttonBrighten.Image = global::Escher.Properties.Resources.Brightness_16x;
-            this.buttonBrighten.Location = new System.Drawing.Point(248, 3);
+            this.buttonBrighten.Location = new System.Drawing.Point(281, 3);
             this.buttonBrighten.Name = "buttonBrighten";
             this.buttonBrighten.Size = new System.Drawing.Size(32, 32);
             this.buttonBrighten.TabIndex = 11;
@@ -644,7 +668,7 @@
             // 
             this.buttonSelect.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.buttonSelect.Image = global::Escher.Properties.Resources.RectangularSelection_16x;
-            this.buttonSelect.Location = new System.Drawing.Point(380, 3);
+            this.buttonSelect.Location = new System.Drawing.Point(413, 3);
             this.buttonSelect.Name = "buttonSelect";
             this.buttonSelect.Size = new System.Drawing.Size(32, 32);
             this.buttonSelect.TabIndex = 8;
@@ -656,7 +680,7 @@
             // 
             this.buttonClose.DialogResult = System.Windows.Forms.DialogResult.Cancel;
             this.buttonClose.Image = global::Escher.Properties.Resources.Close_red_16x;
-            this.buttonClose.Location = new System.Drawing.Point(519, 3);
+            this.buttonClose.Location = new System.Drawing.Point(552, 3);
             this.buttonClose.Name = "buttonClose";
             this.buttonClose.Size = new System.Drawing.Size(32, 32);
             this.buttonClose.TabIndex = 7;
@@ -666,7 +690,7 @@
             // buttonSave
             // 
             this.buttonSave.Image = global::Escher.Properties.Resources.Save_16x;
-            this.buttonSave.Location = new System.Drawing.Point(453, 3);
+            this.buttonSave.Location = new System.Drawing.Point(486, 3);
             this.buttonSave.Name = "buttonSave";
             this.buttonSave.Size = new System.Drawing.Size(32, 32);
             this.buttonSave.TabIndex = 6;
@@ -753,6 +777,14 @@
             this.pImage.TabIndex = 6;
             this.pImage.TabStop = false;
             // 
+            // sharpness
+            // 
+            this.sharpness.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.sharpness.Location = new System.Drawing.Point(73, 4);
+            this.sharpness.Name = "sharpness";
+            this.sharpness.Size = new System.Drawing.Size(74, 30);
+            this.sharpness.TabIndex = 7;
+            // 
             // Imaging
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
@@ -787,6 +819,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.pColor)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.pThumb)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.pImage)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.sharpness)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -841,5 +874,8 @@
         private System.Windows.Forms.Button buttonMeasure;
         private System.Windows.Forms.ToolTip toolTipMeasure;
         private System.Windows.Forms.NumericUpDown measure;
+        private System.Windows.Forms.Button buttonSharpen;
+        private System.Windows.Forms.ToolTip toolTipSharpen;
+        private System.Windows.Forms.NumericUpDown sharpness;
     }
 }

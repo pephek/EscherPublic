@@ -534,7 +534,10 @@ namespace Escher
 
                     HtmlElement element = webBrowser.Document.GetElementById(string.Format("page({0},{1})", entry.PageNumber, entry.AlbumNumber));
 
-                    element.ScrollIntoView(true);
+                    if (element != null)
+                    {
+                        element.ScrollIntoView(true);
+                    }
                 }
 
                 e.Cancel = true;

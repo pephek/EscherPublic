@@ -13,6 +13,7 @@ namespace Escher
         Rotate,
         Crop,
         Recolor,
+        Sharpen,
         Brighten,
         Blacken,
         Measure,
@@ -42,6 +43,8 @@ namespace Escher
                     return "Crop Image";
                 case ImagingMode.Recolor:
                     return "Adjust Image Color";
+                case ImagingMode.Sharpen:
+                    return "Sharpen Image";
                 case ImagingMode.Brighten:
                     return "Brighten Image";
                 case ImagingMode.Blacken:
