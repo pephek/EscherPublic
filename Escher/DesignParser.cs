@@ -43,21 +43,9 @@ namespace Escher
                     {
                         if (lastEntry != null)
                         {
-                            if (entry.Class == Class.Stamp || entry.Class == Class.Variety || entry.Class == Class.Description || entry.Class == Class.LineFeed)
+                            if (entry.Class == Class.Varieties && lastEntry.Class == Class.Varieties)
                             {
-                                if (lastEntry.Class != Class.Stamp && lastEntry.Class != Class.Variety && lastEntry.Class != Class.Description && lastEntry.Class != Class.LineFeed)
-                                {
-                                    design.Add(new DesignEntry(Class.Images, p));
-                                    design.Add(new DesignEntry(Class.ListBegin, p));
-                                }
-                            }
-
-                            if (lastEntry.Class == Class.Stamp || lastEntry.Class == Class.Variety || lastEntry.Class == Class.Description || lastEntry.Class == Class.LineFeed)
-                            {
-                                if (entry.Class != Class.Stamp && entry.Class != Class.Variety && entry.Class != Class.Description && entry.Class != Class.LineFeed)
-                                {
-                                    design.Add(new DesignEntry(Class.ListEnd, p));
-                                }
+                                throw new Exception(string.Format("Found '{0}', expected '{1}' or '{2}'", entry.Class.ToString(), Class.Variety, Class.Description));
                             }
                         }
 

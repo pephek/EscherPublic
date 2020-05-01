@@ -508,6 +508,10 @@ namespace Escher
 
                     this.Focus();
                 }
+                else
+                {
+                    //SetError(error);
+                }
             }
             catch (Exception e)
             {

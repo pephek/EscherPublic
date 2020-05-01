@@ -17,6 +17,8 @@ namespace Escher
         public const string cItalicEnd = "</i>";
         public const string cSuperscript = "<s>";
         public const string cSuperscriptEnd = "</s>";
+        public const string cFont = "<f>";
+        public const string cFontEnd = "</f>";
 
         private static string GetTableOfContents(Design design, int i)
         {

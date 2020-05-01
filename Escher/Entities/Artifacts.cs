@@ -539,12 +539,12 @@ namespace Escher
                             break;
                     }
 
-                    List<string> texts = GraphicsHelper.SplitText(text, fontSize, out float newFontSize, fontBold, out bool newFontBold, fontItalic, out bool newFontItalic);
+                    List<string> texts = GraphicsHelper.SplitText(text, fontName, out string newFontName, fontSize, out float newFontSize, fontBold, out bool newFontBold, fontItalic, out bool newFontItalic, out float verticalShift);
 
                     if (texts != null)
                     {
                         SizeF _1st = AddText(xNew, y, width, texts[0], fontName, fontSize, fontBold, fontItalic, foreColor, Alignment.Left, screenOnly);
-                        SizeF _2nd = AddText(xNew + _1st.Width, y, width, texts[1], fontName, newFontSize, newFontBold, newFontItalic, foreColor, Alignment.Left, screenOnly);
+                        SizeF _2nd = AddText(xNew + _1st.Width, y + verticalShift, width, texts[1], newFontName, newFontSize, newFontBold, newFontItalic, foreColor, Alignment.Left, screenOnly);
 
                         SizeF size = new SizeF(_1st.Width + _2nd.Width, _1st.Height);
 

@@ -17,10 +17,7 @@ namespace Escher
         Varieties,
         Stamp,
         Variety,
-        Images,
         Description,
-        ListBegin,
-        ListEnd,
         PageFeed,
         LineFeed,
         Design
