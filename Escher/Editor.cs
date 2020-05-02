@@ -1,4 +1,5 @@
 ﻿using FastColoredTextBoxNS;
+using Microsoft.VisualBasic;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -20,10 +21,11 @@ namespace Escher
         private readonly TextStyle keywordStyle = new TextStyle(Brushes.Blue, null, FontStyle.Regular);
         private readonly TextStyle separatorStyle = new TextStyle(Brushes.Silver, null, FontStyle.Regular);
         private readonly TextStyle commentStyle = new TextStyle(Brushes.Green, null, FontStyle.Italic);
-        private readonly TextStyle feedStyle = new TextStyle(Brushes.Maroon, null, FontStyle.Regular);
+        private readonly TextStyle feedStyle = new TextStyle(Brushes.Maroon, null, FontStyle.Bold);
         private readonly TextStyle importantStyle = new TextStyle(Brushes.Red, null, FontStyle.Regular);
         private readonly TextStyle enumStyle = new TextStyle(Brushes.SteelBlue, null, FontStyle.Regular);
         private readonly TextStyle htmlStyle = new TextStyle(Brushes.Magenta, null, FontStyle.Regular);
+        private readonly TextStyle pageStyle = new TextStyle(Brushes.Black, null, FontStyle.Bold);
 
         private Dictionary<string, string> specials = new Dictionary<string, string>();
 
@@ -46,10 +48,12 @@ namespace Escher
 
             this.Load += new EventHandler((sender, e) => Initialize());
 
-            this.menuFind.Click += new EventHandler((sender, e) => designMaster.ShowFindDialog());
+            this.menuFindStampNumber.Click += new EventHandler((sender, e) => App.TryRun(FindStampNumber));
+            this.menuFindAlbumNumber.Click += new EventHandler((sender, e) => App.TryRun(FindAlbumNumber));
             this.menuReplace.Click += new EventHandler((sender, e) => designMaster.ShowReplaceDialog());
             this.menuPreview.Click += new EventHandler((sender, e) => App.TryRun(PreviewDesign));
             this.menuBeautify.Click += new EventHandler((sender, e) => App.TryRun(BeautifyDesign));
+            this.menuSplit.Click += new EventHandler((sender, e) => App.TryRun(SplitDesign));
             this.menuValidate.Click += new EventHandler((sender, e) => App.TryRun(ValidateDesign));
             this.menuSave.Click += new EventHandler((sender, e) => App.TryRun(SaveDesign));
             this.menuExit.Click += new EventHandler((sender, e) => App.TryRun(ExitDesign));
@@ -261,17 +265,19 @@ namespace Escher
 
             e.ChangedRange.SetStyle(separatorStyle, @"=|\|");
 
-            e.ChangedRange.SetStyle(htmlStyle, @"!|<br>|%|&nbsp;|&#8470;|<b>|</b>|<i>|</i>|<s>|</s>");
+            e.ChangedRange.SetStyle(htmlStyle, @"!|<br>|%|&nbsp;|&#8470;|<b>|</b>|<i>|</i>|<s>|</s>|<f>|</f>");
 
             //e.ChangedRange.SetStyle(CommentStyle, @"//.*$", RegexOptions.Multiline);
 
             e.ChangedRange.SetStyle(commentStyle, @"'.*$", RegexOptions.Multiline);
 
-            e.ChangedRange.SetStyle(keywordStyle, @"\b(Alignment|Appearance|Catalogue|Color|Combine|Comment|Copyright|Description|Design|FontOfDescription|FontOfType|FrameColor|Height|Html|Horizontal|Issued|Menu|Overprint|PageNumber|PageTitle|PageSubTitle|Pdf|Perforation|Perfs|Picture|Positions|Printed|Private|Sample|Separate|Series|Settings|Size|Skip|Stamp|Type|Unlisted|Value|Varieties|Variety|Version|Vertical|Width)\b");
+            e.ChangedRange.SetStyle(pageStyle, @"PageFeed.*$", RegexOptions.Multiline);
+
+            e.ChangedRange.SetStyle(keywordStyle, @"\b(Alignment|Appearance|Catalogue|Color|Combine|Comment|Copyright|Description|Design|FontOfDescription|FontOfType|FrameColor|Height|Html|Horizontal|Issued|LineFeed|Menu|Overprint|PageNumber|PageTitle|PageSubTitle|Pdf|Perforation|Perfs|Picture|Positions|Printed|Private|Sample|Separate|Series|Settings|Size|Skip|Stamp|Type|Unlisted|Value|Varieties|Variety|Version|Vertical|Width)\b");
 
             e.ChangedRange.SetStyle(enumStyle, @"\b(Black|Centered|False|HexagonVertical|Left|Rectangle|RectangleRotated|Right|Rotated|Triangle45|Triangle45Inverted|Triangle60|Triangle60Inverted|True|White)\b");
 
-            e.ChangedRange.SetStyle(feedStyle, @"\b(Album|Country|LineFeed|Part|PageFeed|End)\b");
+            e.ChangedRange.SetStyle(feedStyle, @"\b(Album|Country|Part|End)\b");
 
             e.ChangedRange.SetStyle(importantStyle, @"\b(ApplyTo|ApplyToFrameStyle|Thin|Thick)\b");
             e.ChangedRange.SetStyle(importantStyle, @"=VB|=C#");
@@ -566,6 +572,52 @@ namespace Escher
             }
         }
 
+        private void FindStampNumber()
+        {
+            const string cKeyword = "Variety=";
+
+            string input = Interaction.InputBox("Stamp number:", App.GetName() + " · Find stamp number");
+
+            if (input != "")
+            {
+                int index = designMaster.Text.IndexOf(cKeyword + input + " ");
+
+                if (index < 0)
+                {
+                    MessageBox.Show(string.Format("Stamp number '{0}' does not exist.", input), App.GetName() + " · Find stamp number", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                }
+                else
+                {
+                    designMaster.SelectionStart = index + cKeyword.Length;
+                    designMaster.SelectionLength = input.Length;
+                    designMaster.DoSelectionVisible();
+                }
+            }
+        }
+
+        private void FindAlbumNumber()
+        {
+            const string cKeyword = "PageNumber=";
+
+            string input = Interaction.InputBox("Album number:", App.GetName() + " · Find album number");
+
+            if (input != "")
+            {
+                int index = designMaster.Text.IndexOf(cKeyword + input);
+
+                if (index < 0)
+                {
+                    MessageBox.Show(string.Format("Album number '{0}' does not exist.", input), App.GetName() + " · Find album number", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                }
+                else
+                {
+                    designMaster.SelectionStart = index + cKeyword.Length;
+                    designMaster.SelectionLength = input.Length;
+                    designMaster.DoSelectionVisible();
+                }
+            }
+        }
+
         private void BeautifyDesign()
         {
             if (!designMaster.SelectedText.Contains("\r\n"))
@@ -614,8 +666,6 @@ namespace Escher
 
                 if (trim.StartsWith("Variety=") || trim.StartsWith("Stamp="))
                 {
-                    replacement.Append("    ");
-
                     string[] pairs = trim.Split(Validator.cKeywordSeparator);
 
                     for (int pair = 0; pair < pairs.Length; pair++)
@@ -646,6 +696,12 @@ namespace Escher
             }
 
             designMaster.SelectedText = replacement.ToString();
+        }
+
+        private void SplitDesign()
+        {
+            splitter.Visible = !splitter.Visible;
+            designSlave.Visible = !designSlave.Visible;
         }
 
         private void ValidateDesign()
