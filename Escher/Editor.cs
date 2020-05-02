@@ -46,8 +46,8 @@ namespace Escher
 
             this.Load += new EventHandler((sender, e) => Initialize());
 
-            this.menuFind.Click += new EventHandler((sender, e) => design.ShowFindDialog());
-            this.menuReplace.Click += new EventHandler((sender, e) => design.ShowReplaceDialog());
+            this.menuFind.Click += new EventHandler((sender, e) => designMaster.ShowFindDialog());
+            this.menuReplace.Click += new EventHandler((sender, e) => designMaster.ShowReplaceDialog());
             this.menuPreview.Click += new EventHandler((sender, e) => App.TryRun(PreviewDesign));
             this.menuBeautify.Click += new EventHandler((sender, e) => App.TryRun(BeautifyDesign));
             this.menuValidate.Click += new EventHandler((sender, e) => App.TryRun(ValidateDesign));
@@ -58,10 +58,10 @@ namespace Escher
             this.validator = validator;
             this.preview = preview;
 
-            design.TextChanged += new EventHandler<TextChangedEventArgs>((sender, e) => Recolor(e));
-            design.KeyUp += new KeyEventHandler((sender, e) => Parse(e));
-            design.MouseUp += new MouseEventHandler((sender, e) => Parse(null));
-            design.KeyPressed += new KeyPressEventHandler((sender, e) => Replace(e));
+            designMaster.TextChanged += new EventHandler<TextChangedEventArgs>((sender, e) => Recolor(e));
+            designMaster.KeyUp += new KeyEventHandler((sender, e) => Parse(e));
+            designMaster.MouseUp += new MouseEventHandler((sender, e) => Parse(null));
+            designMaster.KeyPressed += new KeyPressEventHandler((sender, e) => Replace(e));
         }
 
         private void Initialize()
@@ -153,7 +153,7 @@ namespace Escher
 
             string designPath = string.Format("{0}\\{1}.album", App.GetSetting("AlbumsFolder"), this.designName);
 
-            design.Text = File.ReadAllText(designPath, Encoding.GetEncoding("iso-8859-1"));
+            designMaster.Text = File.ReadAllText(designPath, Encoding.GetEncoding("iso-8859-1"));
 
             this.IsDirty = false;
 
@@ -170,9 +170,9 @@ namespace Escher
         {
             if (!string.IsNullOrEmpty(error))
             {
-                design.SelectionStart = validator.SelectionStart();
-                design.SelectionLength = validator.SelectionLength();
-                design.DoSelectionVisible();
+                designMaster.SelectionStart = validator.SelectionStart();
+                designMaster.SelectionLength = validator.SelectionLength();
+                designMaster.DoSelectionVisible();
                 SetStatus(error, failure: true);
             }
             else
@@ -188,7 +188,7 @@ namespace Escher
 
         public string GetDesignText()
         {
-            return design.Text;
+            return designMaster.Text;
         }
 
         private void SetStatus(string text = "", bool success = false, bool failure = false)
@@ -200,22 +200,22 @@ namespace Escher
 
         private void Insert(string special)
         {
-            design.InsertText(special);
+            designMaster.InsertText(special);
         }
 
         private void Replace(KeyPressEventArgs e)
         {
-            if (design.SelectionStart > 1)
+            if (designMaster.SelectionStart > 1)
             {
-                string one = design.Text[design.SelectionStart - 2].ToString();
+                string one = designMaster.Text[designMaster.SelectionStart - 2].ToString();
                 string two = e.KeyChar.ToString();
 
                 if (this.specials.TryGetValue(one + two, out string special))
                 {
-                    design.SelectionStart -= 2;
-                    design.SelectionLength = 2;
-                    design.ClearSelected();
-                    design.InsertText(special);
+                    designMaster.SelectionStart -= 2;
+                    designMaster.SelectionLength = 2;
+                    designMaster.ClearSelected();
+                    designMaster.InsertText(special);
                 }
             }
         }
@@ -233,12 +233,12 @@ namespace Escher
                 }
             }
 
-            if (design.SelectionStart <= 0)
+            if (designMaster.SelectionStart <= 0)
             {
                 return;
             }
 
-            string line = design.GetLineText(design.PositionToPlace(design.SelectionStart).iLine);
+            string line = designMaster.GetLineText(designMaster.PositionToPlace(designMaster.SelectionStart).iLine);
 
             if (!validator.Parse(line, out string error))
             {
@@ -296,11 +296,11 @@ namespace Escher
 
             do
             {
-                index = design.Text.LastIndexOf(text, index, StringComparison.Ordinal);
+                index = designMaster.Text.LastIndexOf(text, index, StringComparison.Ordinal);
 
                 if (index >= 0)
                 {
-                    line = design.GetLineText(design.PositionToPlace(index).iLine);
+                    line = designMaster.GetLineText(designMaster.PositionToPlace(index).iLine);
 
                     if (line.Trim().StartsWith("'"))
                     {
@@ -323,11 +323,11 @@ namespace Escher
 
             do
             {
-                index = design.Text.IndexOf(text, index, StringComparison.Ordinal);
+                index = designMaster.Text.IndexOf(text, index, StringComparison.Ordinal);
 
                 if (index >= 0)
                 {
-                    line = design.GetLineText(design.PositionToPlace(index).iLine);
+                    line = designMaster.GetLineText(designMaster.PositionToPlace(index).iLine);
 
                     if (line.Trim().StartsWith("'"))
                     {
@@ -341,7 +341,7 @@ namespace Escher
 
             if (index == -1)
             {
-                index = design.Text.Length - 1;
+                index = designMaster.Text.Length - 1;
             }
 
             return index;
@@ -351,9 +351,9 @@ namespace Escher
         {
             try
             {
-                int lineNumber = design.PositionToPlace(design.SelectionStart).iLine;
+                int lineNumber = designMaster.PositionToPlace(designMaster.SelectionStart).iLine;
 
-                if (lineNumber == design.LinesCount - 1)
+                if (lineNumber == designMaster.LinesCount - 1)
                 {
                     return;
                 }
@@ -369,7 +369,7 @@ namespace Escher
                 int index;
 
                 //StopwatchHelper.Start("Looking for End");
-                index = design.SelectionStart;
+                index = designMaster.SelectionStart;
                 if (!string.IsNullOrEmpty(end = FindLineBefore("End", ref index)))
                 {
                     return;
@@ -377,14 +377,14 @@ namespace Escher
                 //StopwatchHelper.Stop();
 
                 //StopwatchHelper.Start("Looking for PageFeed");
-                index = design.SelectionStart;
+                index = designMaster.SelectionStart;
                 if (string.IsNullOrEmpty(FindLineBefore("PageFeed", ref index)))
                 {
                     return;
                 }
                 //StopwatchHelper.Stop();
 
-                lineNumberPageFeedThis = design.PositionToPlace(index).iLine;
+                lineNumberPageFeedThis = designMaster.PositionToPlace(index).iLine;
 
                 //StopwatchHelper.Start("Looking for Series");
                 if (string.IsNullOrEmpty(series = FindLineBefore("Series=", ref index)))
@@ -408,10 +408,10 @@ namespace Escher
                 //StopwatchHelper.Stop();
 
                 //StopwatchHelper.Start("Looking for End or PageFeed");
-                index = Math.Min(FindLineAfter("PageFeed", design.SelectionStart), FindLineAfter("End", design.SelectionStart));
+                index = Math.Min(FindLineAfter("PageFeed", designMaster.SelectionStart), FindLineAfter("End", designMaster.SelectionStart));
                 //StopwatchHelper.Stop();
 
-                lineNumberPageFeedNext = design.PositionToPlace(index).iLine;
+                lineNumberPageFeedNext = designMaster.PositionToPlace(index).iLine;
 
                 StringBuilder pageLines = new StringBuilder();
 
@@ -423,7 +423,7 @@ namespace Escher
                 //StopwatchHelper.Start("Looking for Comments and Sizes");
                 for (int line = lineNumberPageFeedThis; line < lineNumberPageFeedNext; line++)
                 {
-                    string lineText = design.GetLineText(line).Trim();
+                    string lineText = designMaster.GetLineText(line).Trim();
 
                     if (!lineText.StartsWith("'"))
                     {
@@ -437,7 +437,7 @@ namespace Escher
                             }
                             else
                             {
-                                index = design.SelectionStart;
+                                index = designMaster.SelectionStart;
                                 string commentOrigin = FindLineBefore("Comment=" + commentValue, ref index);
 
                                 if (commentOrigin != null)
@@ -468,7 +468,7 @@ namespace Escher
                                 }
                                 else
                                 {
-                                    index = design.SelectionStart;
+                                    index = designMaster.SelectionStart;
                                     string sizeOrigin = FindLineBefore("Design=" + sizeValue, ref index);
 
                                     if (sizeOrigin == null)
@@ -521,14 +521,14 @@ namespace Escher
 
         private void PreviewDesign()
         {
-            if (design.SelectionStart <= 0)
+            if (designMaster.SelectionStart <= 0)
             {
                 return;
             }
 
             DesignParser designParser = new DesignParser();
 
-            Design d = designParser.Parse(design.Text, null, out string error);
+            Design d = designParser.Parse(designMaster.Text, null, out string error);
 
             if (!string.IsNullOrEmpty(error))
             {
@@ -538,11 +538,11 @@ namespace Escher
             {
                 int pageNumber = 1;
 
-                int pageFeedIndex = design.Text.LastIndexOf("PageFeed", design.SelectionStart);
+                int pageFeedIndex = designMaster.Text.LastIndexOf("PageFeed", designMaster.SelectionStart);
 
                 if (pageFeedIndex >= 0)
                 {
-                    string pageFeed = design.GetLineText(design.PositionToPlace(pageFeedIndex).iLine);
+                    string pageFeed = designMaster.GetLineText(designMaster.PositionToPlace(pageFeedIndex).iLine);
 
                     string[] split = pageFeed.Split("PageNumber=");
 
@@ -568,18 +568,18 @@ namespace Escher
 
         private void BeautifyDesign()
         {
-            if (!design.SelectedText.Contains("\r\n"))
+            if (!designMaster.SelectedText.Contains("\r\n"))
             {
                 return;
             }
 
             Dictionary<int, int> maxima = new Dictionary<int, int>();
 
-            string selectedText = design.SelectedText
+            string selectedText = designMaster.SelectedText
                 .Replace(" " + Validator.cKeywordSeparator + " Separate=False", "")
                 .Replace(" " + Validator.cKeywordSeparator + " Alignment=Centered", "");
 
-            if (design.SelectedText.EndsWith("\r\n"))
+            if (designMaster.SelectedText.EndsWith("\r\n"))
             {
                 selectedText = selectedText.Substring(0, selectedText.Length - 2);
             }
@@ -640,12 +640,12 @@ namespace Escher
                 }
             }
 
-            if (design.SelectedText.EndsWith("\r\n"))
+            if (designMaster.SelectedText.EndsWith("\r\n"))
             {
                 replacement.Append("\r\n");
             }
 
-            design.SelectedText = replacement.ToString();
+            designMaster.SelectedText = replacement.ToString();
         }
 
         private void ValidateDesign()
@@ -654,7 +654,7 @@ namespace Escher
 
             Thread.Sleep(100);
 
-            if (!validator.Parse(design.Text, null, out string error))
+            if (!validator.Parse(designMaster.Text, null, out string error))
             {
                 SetError(error);
             }
@@ -670,7 +670,7 @@ namespace Escher
 
             Thread.Sleep(100);
 
-            if (!validator.Parse(design.Text, null, out string error))
+            if (!validator.Parse(designMaster.Text, null, out string error))
             {
                 SetError(error);
             }
@@ -694,7 +694,7 @@ namespace Escher
                     File.Copy(designPath, archivePath + ".0", overwrite: true);
                 }
 
-                File.WriteAllText(designPath, design.Text, Encoding.GetEncoding("iso-8859-1"));
+                File.WriteAllText(designPath, designMaster.Text, Encoding.GetEncoding("iso-8859-1"));
 
                 this.IsDirty = false;
 
@@ -740,7 +740,7 @@ namespace Escher
 
         private void KeywordAssignment()
         {
-            design.Text = design.Text.Replace(":=", Validator.cKeywordAssignment.ToString());
+            designMaster.Text = designMaster.Text.Replace(":=", Validator.cKeywordAssignment.ToString());
         }
     }
 }

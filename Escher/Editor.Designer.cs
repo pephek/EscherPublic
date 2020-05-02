@@ -30,36 +30,39 @@
         {
             this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Editor));
-            this.design = new FastColoredTextBoxNS.FastColoredTextBox();
+            this.designMaster = new FastColoredTextBoxNS.FastColoredTextBox();
             this.menuStrip = new System.Windows.Forms.MenuStrip();
             this.menuEdit = new System.Windows.Forms.ToolStripMenuItem();
-            this.menuPreview = new System.Windows.Forms.ToolStripMenuItem();
-            this.menuValidate = new System.Windows.Forms.ToolStripMenuItem();
-            this.menuSave = new System.Windows.Forms.ToolStripMenuItem();
-            this.menuExit = new System.Windows.Forms.ToolStripMenuItem();
-            this.menuInsert = new System.Windows.Forms.ToolStripMenuItem();
-            this.status = new System.Windows.Forms.Label();
-            this.panelInfo = new System.Windows.Forms.Panel();
-            this.panelDesign = new System.Windows.Forms.Panel();
-            this.menuBeautify = new System.Windows.Forms.ToolStripMenuItem();
             this.menuFind = new System.Windows.Forms.ToolStripMenuItem();
             this.menuReplace = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripMenuItem1 = new System.Windows.Forms.ToolStripSeparator();
+            this.menuPreview = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripMenuItem2 = new System.Windows.Forms.ToolStripSeparator();
+            this.menuBeautify = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripMenuItem3 = new System.Windows.Forms.ToolStripSeparator();
+            this.menuValidate = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripMenuItem4 = new System.Windows.Forms.ToolStripSeparator();
+            this.menuSave = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripMenuItem5 = new System.Windows.Forms.ToolStripSeparator();
+            this.menuExit = new System.Windows.Forms.ToolStripMenuItem();
+            this.menuInsert = new System.Windows.Forms.ToolStripMenuItem();
             this.upgradeToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.menuKeywordAssignment = new System.Windows.Forms.ToolStripMenuItem();
-            ((System.ComponentModel.ISupportInitialize)(this.design)).BeginInit();
+            this.status = new System.Windows.Forms.Label();
+            this.panelInfo = new System.Windows.Forms.Panel();
+            this.panelDesign = new System.Windows.Forms.Panel();
+            this.designSlave = new FastColoredTextBoxNS.FastColoredTextBox();
+            this.splitter = new System.Windows.Forms.Splitter();
+            ((System.ComponentModel.ISupportInitialize)(this.designMaster)).BeginInit();
             this.menuStrip.SuspendLayout();
             this.panelInfo.SuspendLayout();
             this.panelDesign.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.designSlave)).BeginInit();
             this.SuspendLayout();
             // 
-            // design
+            // designMaster
             // 
-            this.design.AutoCompleteBracketsList = new char[] {
+            this.designMaster.AutoCompleteBracketsList = new char[] {
         '(',
         ')',
         '{',
@@ -70,24 +73,24 @@
         '\"',
         '\'',
         '\''};
-            this.design.AutoScrollMinSize = new System.Drawing.Size(2, 17);
-            this.design.BackBrush = null;
-            this.design.CharHeight = 17;
-            this.design.CharWidth = 8;
-            this.design.Cursor = System.Windows.Forms.Cursors.IBeam;
-            this.design.DisabledColor = System.Drawing.Color.FromArgb(((int)(((byte)(100)))), ((int)(((byte)(180)))), ((int)(((byte)(180)))), ((int)(((byte)(180)))));
-            this.design.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.design.Font = new System.Drawing.Font("Consolas", 9F);
-            this.design.IsReplaceMode = false;
-            this.design.Location = new System.Drawing.Point(0, 0);
-            this.design.Name = "design";
-            this.design.Paddings = new System.Windows.Forms.Padding(0);
-            this.design.SelectionColor = System.Drawing.Color.FromArgb(((int)(((byte)(60)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(255)))));
-            this.design.ServiceColors = ((FastColoredTextBoxNS.ServiceColors)(resources.GetObject("design.ServiceColors")));
-            this.design.ShowLineNumbers = false;
-            this.design.Size = new System.Drawing.Size(821, 774);
-            this.design.TabIndex = 2;
-            this.design.Zoom = 100;
+            this.designMaster.AutoScrollMinSize = new System.Drawing.Size(2, 17);
+            this.designMaster.BackBrush = null;
+            this.designMaster.CharHeight = 17;
+            this.designMaster.CharWidth = 8;
+            this.designMaster.Cursor = System.Windows.Forms.Cursors.IBeam;
+            this.designMaster.DisabledColor = System.Drawing.Color.FromArgb(((int)(((byte)(100)))), ((int)(((byte)(180)))), ((int)(((byte)(180)))), ((int)(((byte)(180)))));
+            this.designMaster.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.designMaster.Font = new System.Drawing.Font("Consolas", 9F);
+            this.designMaster.IsReplaceMode = false;
+            this.designMaster.Location = new System.Drawing.Point(0, 0);
+            this.designMaster.Name = "designMaster";
+            this.designMaster.Paddings = new System.Windows.Forms.Padding(0);
+            this.designMaster.SelectionColor = System.Drawing.Color.FromArgb(((int)(((byte)(60)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(255)))));
+            this.designMaster.ServiceColors = ((FastColoredTextBoxNS.ServiceColors)(resources.GetObject("designMaster.ServiceColors")));
+            this.designMaster.ShowLineNumbers = false;
+            this.designMaster.Size = new System.Drawing.Size(821, 772);
+            this.designMaster.TabIndex = 2;
+            this.designMaster.Zoom = 100;
             // 
             // menuStrip
             // 
@@ -99,7 +102,7 @@
             this.upgradeToolStripMenuItem});
             this.menuStrip.Location = new System.Drawing.Point(0, 0);
             this.menuStrip.Name = "menuStrip";
-            this.menuStrip.Size = new System.Drawing.Size(823, 28);
+            this.menuStrip.Size = new System.Drawing.Size(823, 30);
             this.menuStrip.TabIndex = 3;
             this.menuStrip.Text = "menuStrip1";
             // 
@@ -121,42 +124,102 @@
             this.menuEdit.Name = "menuEdit";
             this.menuEdit.ShortcutKeyDisplayString = "";
             this.menuEdit.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Alt | System.Windows.Forms.Keys.B)));
-            this.menuEdit.Size = new System.Drawing.Size(49, 24);
+            this.menuEdit.Size = new System.Drawing.Size(49, 26);
             this.menuEdit.Text = "Edit";
+            // 
+            // menuFind
+            // 
+            this.menuFind.Name = "menuFind";
+            this.menuFind.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Alt | System.Windows.Forms.Keys.F)));
+            this.menuFind.Size = new System.Drawing.Size(221, 26);
+            this.menuFind.Text = "Find";
+            // 
+            // menuReplace
+            // 
+            this.menuReplace.Name = "menuReplace";
+            this.menuReplace.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Alt | System.Windows.Forms.Keys.H)));
+            this.menuReplace.Size = new System.Drawing.Size(221, 26);
+            this.menuReplace.Text = "Replace";
+            // 
+            // toolStripMenuItem1
+            // 
+            this.toolStripMenuItem1.Name = "toolStripMenuItem1";
+            this.toolStripMenuItem1.Size = new System.Drawing.Size(218, 6);
             // 
             // menuPreview
             // 
             this.menuPreview.Name = "menuPreview";
             this.menuPreview.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Alt | System.Windows.Forms.Keys.Space)));
-            this.menuPreview.Size = new System.Drawing.Size(224, 26);
+            this.menuPreview.Size = new System.Drawing.Size(221, 26);
             this.menuPreview.Text = "Preview";
+            // 
+            // toolStripMenuItem2
+            // 
+            this.toolStripMenuItem2.Name = "toolStripMenuItem2";
+            this.toolStripMenuItem2.Size = new System.Drawing.Size(218, 6);
+            // 
+            // menuBeautify
+            // 
+            this.menuBeautify.Name = "menuBeautify";
+            this.menuBeautify.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Alt | System.Windows.Forms.Keys.B)));
+            this.menuBeautify.Size = new System.Drawing.Size(221, 26);
+            this.menuBeautify.Text = "Beautify";
+            // 
+            // toolStripMenuItem3
+            // 
+            this.toolStripMenuItem3.Name = "toolStripMenuItem3";
+            this.toolStripMenuItem3.Size = new System.Drawing.Size(218, 6);
             // 
             // menuValidate
             // 
             this.menuValidate.Name = "menuValidate";
             this.menuValidate.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Alt | System.Windows.Forms.Keys.V)));
-            this.menuValidate.Size = new System.Drawing.Size(224, 26);
+            this.menuValidate.Size = new System.Drawing.Size(221, 26);
             this.menuValidate.Text = "Validate";
+            // 
+            // toolStripMenuItem4
+            // 
+            this.toolStripMenuItem4.Name = "toolStripMenuItem4";
+            this.toolStripMenuItem4.Size = new System.Drawing.Size(218, 6);
             // 
             // menuSave
             // 
             this.menuSave.Name = "menuSave";
             this.menuSave.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Alt | System.Windows.Forms.Keys.S)));
-            this.menuSave.Size = new System.Drawing.Size(224, 26);
+            this.menuSave.Size = new System.Drawing.Size(221, 26);
             this.menuSave.Text = "Save";
+            // 
+            // toolStripMenuItem5
+            // 
+            this.toolStripMenuItem5.Name = "toolStripMenuItem5";
+            this.toolStripMenuItem5.Size = new System.Drawing.Size(218, 6);
             // 
             // menuExit
             // 
             this.menuExit.Name = "menuExit";
             this.menuExit.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Alt | System.Windows.Forms.Keys.X)));
-            this.menuExit.Size = new System.Drawing.Size(224, 26);
+            this.menuExit.Size = new System.Drawing.Size(221, 26);
             this.menuExit.Text = "Exit";
             // 
             // menuInsert
             // 
             this.menuInsert.Name = "menuInsert";
-            this.menuInsert.Size = new System.Drawing.Size(59, 24);
+            this.menuInsert.Size = new System.Drawing.Size(59, 26);
             this.menuInsert.Text = "Insert";
+            // 
+            // upgradeToolStripMenuItem
+            // 
+            this.upgradeToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.menuKeywordAssignment});
+            this.upgradeToolStripMenuItem.Name = "upgradeToolStripMenuItem";
+            this.upgradeToolStripMenuItem.Size = new System.Drawing.Size(81, 26);
+            this.upgradeToolStripMenuItem.Text = "Upgrade";
+            // 
+            // menuKeywordAssignment
+            // 
+            this.menuKeywordAssignment.Name = "menuKeywordAssignment";
+            this.menuKeywordAssignment.Size = new System.Drawing.Size(208, 26);
+            this.menuKeywordAssignment.Text = "Replace \':=\' by \'=\'";
             // 
             // status
             // 
@@ -174,7 +237,7 @@
             this.panelInfo.BackColor = System.Drawing.Color.White;
             this.panelInfo.Controls.Add(this.status);
             this.panelInfo.Dock = System.Windows.Forms.DockStyle.Top;
-            this.panelInfo.Location = new System.Drawing.Point(0, 28);
+            this.panelInfo.Location = new System.Drawing.Point(0, 30);
             this.panelInfo.Name = "panelInfo";
             this.panelInfo.Size = new System.Drawing.Size(823, 35);
             this.panelInfo.TabIndex = 5;
@@ -182,72 +245,61 @@
             // panelDesign
             // 
             this.panelDesign.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.panelDesign.Controls.Add(this.design);
+            this.panelDesign.Controls.Add(this.splitter);
+            this.panelDesign.Controls.Add(this.designSlave);
+            this.panelDesign.Controls.Add(this.designMaster);
             this.panelDesign.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.panelDesign.Location = new System.Drawing.Point(0, 63);
+            this.panelDesign.Location = new System.Drawing.Point(0, 65);
             this.panelDesign.Name = "panelDesign";
-            this.panelDesign.Size = new System.Drawing.Size(823, 776);
+            this.panelDesign.Size = new System.Drawing.Size(823, 774);
             this.panelDesign.TabIndex = 6;
             // 
-            // menuBeautify
+            // designSlave
             // 
-            this.menuBeautify.Name = "menuBeautify";
-            this.menuBeautify.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Alt | System.Windows.Forms.Keys.B)));
-            this.menuBeautify.Size = new System.Drawing.Size(224, 26);
-            this.menuBeautify.Text = "Beautify";
+            this.designSlave.AutoCompleteBracketsList = new char[] {
+        '(',
+        ')',
+        '{',
+        '}',
+        '[',
+        ']',
+        '\"',
+        '\"',
+        '\'',
+        '\''};
+            this.designSlave.AutoScrollMinSize = new System.Drawing.Size(2, 17);
+            this.designSlave.BackBrush = null;
+            this.designSlave.BackColor = System.Drawing.Color.WhiteSmoke;
+            this.designSlave.CharHeight = 17;
+            this.designSlave.CharWidth = 8;
+            this.designSlave.Cursor = System.Windows.Forms.Cursors.IBeam;
+            this.designSlave.DisabledColor = System.Drawing.Color.FromArgb(((int)(((byte)(100)))), ((int)(((byte)(180)))), ((int)(((byte)(180)))), ((int)(((byte)(180)))));
+            this.designSlave.Dock = System.Windows.Forms.DockStyle.Bottom;
+            this.designSlave.Font = new System.Drawing.Font("Consolas", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.designSlave.IsReplaceMode = false;
+            this.designSlave.Location = new System.Drawing.Point(0, 580);
+            this.designSlave.Name = "designSlave";
+            this.designSlave.Paddings = new System.Windows.Forms.Padding(0);
+            this.designSlave.ReadOnly = true;
+            this.designSlave.SelectionColor = System.Drawing.Color.FromArgb(((int)(((byte)(60)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(255)))));
+            this.designSlave.ServiceColors = ((FastColoredTextBoxNS.ServiceColors)(resources.GetObject("designSlave.ServiceColors")));
+            this.designSlave.ShowLineNumbers = false;
+            this.designSlave.Size = new System.Drawing.Size(821, 192);
+            this.designSlave.SourceTextBox = this.designMaster;
+            this.designSlave.TabIndex = 3;
+            this.designSlave.Zoom = 100;
             // 
-            // menuFind
+            // splitter
             // 
-            this.menuFind.Name = "menuFind";
-            this.menuFind.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Alt | System.Windows.Forms.Keys.F)));
-            this.menuFind.Size = new System.Drawing.Size(224, 26);
-            this.menuFind.Text = "Find";
-            // 
-            // menuReplace
-            // 
-            this.menuReplace.Name = "menuReplace";
-            this.menuReplace.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Alt | System.Windows.Forms.Keys.H)));
-            this.menuReplace.Size = new System.Drawing.Size(224, 26);
-            this.menuReplace.Text = "Replace";
-            // 
-            // toolStripMenuItem1
-            // 
-            this.toolStripMenuItem1.Name = "toolStripMenuItem1";
-            this.toolStripMenuItem1.Size = new System.Drawing.Size(221, 6);
-            // 
-            // toolStripMenuItem2
-            // 
-            this.toolStripMenuItem2.Name = "toolStripMenuItem2";
-            this.toolStripMenuItem2.Size = new System.Drawing.Size(221, 6);
-            // 
-            // toolStripMenuItem3
-            // 
-            this.toolStripMenuItem3.Name = "toolStripMenuItem3";
-            this.toolStripMenuItem3.Size = new System.Drawing.Size(221, 6);
-            // 
-            // toolStripMenuItem4
-            // 
-            this.toolStripMenuItem4.Name = "toolStripMenuItem4";
-            this.toolStripMenuItem4.Size = new System.Drawing.Size(221, 6);
-            // 
-            // toolStripMenuItem5
-            // 
-            this.toolStripMenuItem5.Name = "toolStripMenuItem5";
-            this.toolStripMenuItem5.Size = new System.Drawing.Size(221, 6);
-            // 
-            // upgradeToolStripMenuItem
-            // 
-            this.upgradeToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.menuKeywordAssignment});
-            this.upgradeToolStripMenuItem.Name = "upgradeToolStripMenuItem";
-            this.upgradeToolStripMenuItem.Size = new System.Drawing.Size(81, 24);
-            this.upgradeToolStripMenuItem.Text = "Upgrade";
-            // 
-            // menuKeywordAssignment
-            // 
-            this.menuKeywordAssignment.Name = "menuKeywordAssignment";
-            this.menuKeywordAssignment.Size = new System.Drawing.Size(224, 26);
-            this.menuKeywordAssignment.Text = "Replace \':=\' by \'=\'";
+            this.splitter.BackColor = System.Drawing.SystemColors.Control;
+            this.splitter.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.splitter.Cursor = System.Windows.Forms.Cursors.HSplit;
+            this.splitter.Dock = System.Windows.Forms.DockStyle.Bottom;
+            this.splitter.Location = new System.Drawing.Point(0, 573);
+            this.splitter.Name = "splitter";
+            this.splitter.Size = new System.Drawing.Size(821, 7);
+            this.splitter.TabIndex = 4;
+            this.splitter.TabStop = false;
             // 
             // Editor
             // 
@@ -261,19 +313,20 @@
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "Editor";
             this.Text = "Editor";
-            ((System.ComponentModel.ISupportInitialize)(this.design)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.designMaster)).EndInit();
             this.menuStrip.ResumeLayout(false);
             this.menuStrip.PerformLayout();
             this.panelInfo.ResumeLayout(false);
             this.panelInfo.PerformLayout();
             this.panelDesign.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.designSlave)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
         }
 
         #endregion
-        private FastColoredTextBoxNS.FastColoredTextBox design;
+        private FastColoredTextBoxNS.FastColoredTextBox designMaster;
         private System.Windows.Forms.MenuStrip menuStrip;
         private System.Windows.Forms.ToolStripMenuItem menuEdit;
         private System.Windows.Forms.ToolStripMenuItem menuPreview;
@@ -294,5 +347,7 @@
         private System.Windows.Forms.ToolStripSeparator toolStripMenuItem5;
         private System.Windows.Forms.ToolStripMenuItem upgradeToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem menuKeywordAssignment;
+        private FastColoredTextBoxNS.FastColoredTextBox designSlave;
+        private System.Windows.Forms.Splitter splitter;
     }
 }
