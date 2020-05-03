@@ -503,12 +503,12 @@ namespace Escher
                 string pageText = pageLines.ToString();
 
                 //StopwatchHelper.Start("Parsing design");
-                Design pageDesign = (new DesignParser()).Parse(pageText, null, out string error);
+                Design design = (new DesignParser()).Parse(pageText, null, out string error);
                 //StopwatchHelper.Stop();
 
                 if (string.IsNullOrEmpty(error))
                 {
-                    preview.ShowPreview(pageDesign, pageNumber: 1, printMode: PrintMode.ToScreen, screenMode: ScreenMode.MatchScreenHeight);
+                    preview.ShowPreview(design, pageNumber: 1, albumNumber: design.GetPagefeed(1).AlbumNumber, printMode: PrintMode.ToScreen, screenMode: ScreenMode.MatchScreenHeight);
                     preview.Show();
                     preview.Activate();
 
@@ -534,7 +534,7 @@ namespace Escher
 
             DesignParser designParser = new DesignParser();
 
-            Design d = designParser.Parse(designMaster.Text, null, out string error);
+            Design design = designParser.Parse(designMaster.Text, null, out string error);
 
             if (!string.IsNullOrEmpty(error))
             {
@@ -556,7 +556,7 @@ namespace Escher
                     {
                         string albumNumber = split[1].Split(' ')[0];
 
-                        DesignEntry entry = d.FindAlbumNumber(albumNumber);
+                        DesignEntry entry = design.FindAlbumNumber(albumNumber);
 
                         if (entry != null)
                         {
@@ -565,7 +565,7 @@ namespace Escher
                     }
                 }
 
-                preview.ShowPreview(d, pageNumber: pageNumber, printMode: PrintMode.ToScreen, screenMode: ScreenMode.MatchScreenHeight);
+                preview.ShowPreview(design, pageNumber: pageNumber, albumNumber: design.GetPagefeed(pageNumber).AlbumNumber, printMode: PrintMode.ToScreen, screenMode: ScreenMode.MatchScreenHeight);
                 preview.Show();
 
                 this.Focus();

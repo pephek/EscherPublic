@@ -23,6 +23,7 @@ namespace Escher
         private PrintMode printMode;
         private ScreenMode screenMode;
         private int pageNumber;
+        private string albumNumber;
         private float pageScale;
         private float transformScale;
         private Artifacts artifacts;
@@ -111,7 +112,7 @@ namespace Escher
 
                 e.Graphics.PageUnit = GraphicsUnit.Millimeter;
 
-                AssemblePreview(e.Graphics, this.page, this.pageNumber, this.printMode, this.screenMode);
+                AssemblePreview(e.Graphics, this.page, this.pageNumber, this.albumNumber, this.printMode, this.screenMode);
 
                 //e.Graphics.PageUnit = pageUnit;
 
@@ -163,7 +164,7 @@ namespace Escher
             bitmap.SaveAsJpeg(file, 100);
         }
 
-        public void ShowPreview(Design design, int pageNumber, PrintMode printMode, ScreenMode screenMode)
+        public void ShowPreview(Design design, int pageNumber, string albumNumber, PrintMode printMode, ScreenMode screenMode)
         {
             if (this.pageNumber == 0 || screenMode != this.screenMode)
             {
@@ -171,6 +172,7 @@ namespace Escher
             }
 
             this.pageNumber = pageNumber;
+            this.albumNumber = albumNumber;
             this.printMode = printMode;
             this.screenMode = screenMode;
             this.design = design;
@@ -191,6 +193,7 @@ namespace Escher
                     if (this.pageNumber > 1)
                     {
                         this.pageNumber--;
+                        this.albumNumber = design.GetPagefeed(this.pageNumber).AlbumNumber;
                         this.page = PageHelper.Get(design, pageNumber, setup.FrameStyle);
                         Refresh();
                     }
@@ -199,6 +202,7 @@ namespace Escher
                     if (this.pageNumber < this.design.NumberOfPages())
                     {
                         this.pageNumber++;
+                        this.albumNumber = design.GetPagefeed(this.pageNumber).AlbumNumber;
                         this.page = PageHelper.Get(design, pageNumber, setup.FrameStyle);
                         Refresh();
                     }
@@ -347,7 +351,7 @@ namespace Escher
 
                 StopwatchHelper.Start("Assembling preview");
 
-                AssemblePreview(graphics, this.page, this.pageNumber, this.printMode, this.screenMode);
+                AssemblePreview(graphics, this.page, this.pageNumber, this.albumNumber, this.printMode, this.screenMode);
 
                 StopwatchHelper.Stop();
 
@@ -631,7 +635,7 @@ namespace Escher
             this.Size = new Size(width, height);
         }
 
-        private void AssemblePreview(Graphics g, Page page, int pageNumber, PrintMode printMode, ScreenMode screenMode)
+        private void AssemblePreview(Graphics g, Page page, int pageNumber, string albumNumber, PrintMode printMode, ScreenMode screenMode)
         {
             // Determines smoothness for text
             g.TextRenderingHint = TextRenderingHint.AntiAlias;
@@ -649,10 +653,10 @@ namespace Escher
 
             float y = format.Free.Top;
 
-            artifacts.Clear(g, this.pageScale, pageNumber);
+            artifacts.Clear(g, this.pageScale, pageNumber, albumNumber);
 
             // Form caption
-            artifacts.AddText(1, 1, 0, string.Format("Escher · Preview · Paper:<b>{0}</b> · Page Number:<b>{1}</b>", format.FormatName, pageNumber), "Microsoft Sans Serif", 7, foreColor: Color.Gray, screenOnly: true);
+            artifacts.AddText(1, 1, 0, string.Format("Escher · Preview · Paper:<b>{0}</b> · Page Number:<b>{1}</b> · Album Number:<b>{2}</b>", format.FormatName, pageNumber, albumNumber), "Microsoft Sans Serif", 7, foreColor: Color.Gray, screenOnly: true);
 
             // Legenda
             artifacts.AddText(1, artifacts.Last().Bottom(1), 0, "c: ± color · n: ± number · v: ± value · f: ± frame · t: ± title · s: ± font · i: ± image", "Microsoft Sans Serif", 7, foreColor: Color.Gray, screenOnly: true);

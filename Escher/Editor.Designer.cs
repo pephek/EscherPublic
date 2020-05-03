@@ -288,7 +288,6 @@
             this.designSlave.Location = new System.Drawing.Point(0, 582);
             this.designSlave.Name = "designSlave";
             this.designSlave.Paddings = new System.Windows.Forms.Padding(10, 0, 0, 0);
-            this.designSlave.ReadOnly = true;
             this.designSlave.SelectionColor = System.Drawing.Color.FromArgb(((int)(((byte)(60)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(255)))));
             this.designSlave.ServiceColors = ((FastColoredTextBoxNS.ServiceColors)(resources.GetObject("designSlave.ServiceColors")));
             this.designSlave.ShowLineNumbers = false;

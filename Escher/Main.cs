@@ -199,7 +199,7 @@ namespace Escher
                     {
                         progress.SetCreatingProgress(pageNumber);
 
-                        preview.ShowPreview(this.design, pageNumber, PrintMode.ToDocument, ScreenMode.MatchPaper);
+                        preview.ShowPreview(this.design, pageNumber, this.design.GetPagefeed(pageNumber).AlbumNumber, PrintMode.ToDocument, ScreenMode.MatchPaper);
 
                         preview.CreateImage(string.Format("{0}\\{1}-large.jpg", App.GetSetting("PDFImagesFolder"), pageNumber), 0.75F);
                         preview.CreateImage(string.Format("{0}\\{1}-small.jpg", App.GetSetting("PDFImagesFolder"), pageNumber), 0.25F);
@@ -498,7 +498,7 @@ namespace Escher
                 int pageNumber = Int32.Parse(e.Url.AbsolutePath.Replace("page(", "").Replace(")", ""));
 
                 preview.Show();
-                preview.ShowPreview(design, pageNumber, PrintMode.ToScreen, ScreenMode.MatchScreenHeight);
+                preview.ShowPreview(design, pageNumber, design.GetPagefeed(pageNumber).AlbumNumber, PrintMode.ToScreen, ScreenMode.MatchScreenHeight);
                 preview.Activate();
             }
             else if (e.Url.AbsolutePath.StartsWith("stamp("))

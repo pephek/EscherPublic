@@ -15,24 +15,26 @@ namespace Escher
         private Graphics graphics;
         private float scale;
         private int pageNumber;
+        private string albumNumber;
 
         private List<Artifact> artifacts = new List<Artifact>();
 
         private Dictionary<string, Image> images = new Dictionary<string, Image>();
 
-        public void Clear(Graphics graphics, float scale, int pageNumber)
+        public void Clear(Graphics graphics, float scale, int pageNumber, string albumNumber)
         {
             this.graphics = graphics;
             this.scale = scale;
 
             this.artifacts.Clear();
 
-            if (pageNumber != this.pageNumber)
+            if (pageNumber != this.pageNumber || albumNumber != this.albumNumber)
             {
                 this.images.Clear();
             }
 
             this.pageNumber = pageNumber;
+            this.albumNumber = albumNumber;
         }
 
         public List<Artifact> Get()
