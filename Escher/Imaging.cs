@@ -706,7 +706,7 @@ namespace Escher
 
                 pTrial.Image.Dispose();
 
-                pTrial.Image = pImage.Image.Measure(value, perforation, out string size).Resize(2.0F); Repaint();
+                pTrial.Image = pImage.Image.Measure(value, perforation, out string size).Resize(this.scale * 2.0F); Repaint();
 
                 buttonAccept.Enabled = true;
 

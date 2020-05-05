@@ -155,7 +155,9 @@ namespace Escher
                 Replace("<i>", "").
                 Replace("</i>", "").
                 Replace("<s>", "").
-                Replace("</s>", "");
+                Replace("</s>", "").
+                Replace("<f>", "").
+                Replace("</f>", "");
 
             bookmarksInXml = doc.ToString();
 

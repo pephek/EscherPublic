@@ -847,7 +847,14 @@ namespace Escher
                         }
                         else
                         {
-                            y += artifacts.AddText(rowLeft + varieties.Horizontal - textWidth, y + varieties.Vertical, rowWidth + 2 * textWidth, text, format.TitleFont, fontSize, alignment: alignment).Height;
+                            if (textWidth >= format.Free.Width)
+                            {
+                                y += artifacts.AddText(format.Free.Left, y + varieties.Vertical, format.Free.Width, text, format.TitleFont, fontSize, alignment: alignment).Height;
+                            }
+                            else
+                            {
+                                y += artifacts.AddText(rowLeft + varieties.Horizontal - textWidth, y + varieties.Vertical, rowWidth + 2 * textWidth, text, format.TitleFont, fontSize, alignment: alignment).Height;
+                            }
                         }
 
                         y += 1; // - varieties.Vertical;
