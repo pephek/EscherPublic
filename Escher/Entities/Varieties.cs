@@ -14,6 +14,7 @@ namespace Escher
         public readonly bool Combine;
         public readonly float Horizontal;
         public readonly float Vertical;
+        public readonly float VerticalMove;
         public readonly Alignment Alignment;
         public readonly bool FontOfType;
         public readonly bool FontOfDescription;
@@ -28,6 +29,7 @@ namespace Escher
             bool combine,
             float horizontal,
             float vertical,
+            float verticalMove,
             Alignment alignment,
             bool fontOfType,
             bool fontOfDescription,
@@ -40,6 +42,7 @@ namespace Escher
             Combine = combine;
             Horizontal = horizontal;
             Vertical = vertical;
+            VerticalMove = verticalMove;
             Alignment = alignment;
             FontOfType = fontOfType;
             FontOfDescription = fontOfDescription;

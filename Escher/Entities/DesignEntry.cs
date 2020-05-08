@@ -22,6 +22,7 @@ namespace Escher
         public float Height;
         public float OffsetHorizontal;
         public float OffsetVertical;
+        public float VerticalMove;
         public int PageNumber;
         public bool Skip;
         public bool Separate;

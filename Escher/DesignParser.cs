@@ -47,7 +47,7 @@ namespace Escher
                             {
                                 if (lastEntry.Class != Class.Stamp && lastEntry.Class != Class.Variety && lastEntry.Class != Class.Description && lastEntry.Class != Class.LineFeed)
                                 {
-                                    // It looks like it has no use Class.Images & Class.ListBegin, but leave i, otherwuse the HtmlHelper fails
+                                    // It looks like it has no use Class.Images & Class.ListBegin, but leave it, otherwise the HtmlHelper fails
                                     design.Add(new DesignEntry(Class.Images, p));
                                     design.Add(new DesignEntry(Class.ListBegin, p));
                                 }
@@ -56,7 +56,7 @@ namespace Escher
                             {
                                 if (entry.Class != Class.Stamp && entry.Class != Class.Variety && entry.Class != Class.Description && entry.Class != Class.LineFeed)
                                 {
-                                    // It looks like it has no use Class.ListEnd, but leave i, otherwuse the HtmlHelper fails
+                                    // It looks like it has no use Class.ListEnd, but leave it, otherwise the HtmlHelper fails
                                     design.Add(new DesignEntry(Class.ListEnd, p));
                                 }
                             }
@@ -289,6 +289,10 @@ namespace Escher
 
                 case "vertical":
                     entry.OffsetVertical = Convert.ToSingle(val);
+                    break;
+
+                case "verticalmove":
+                    entry.VerticalMove = Convert.ToSingle(val);
                     break;
 
                 case "skip":

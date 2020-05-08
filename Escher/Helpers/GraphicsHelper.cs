@@ -91,15 +91,15 @@ namespace Escher
                     else if (minimum == font)
                     {
                         texts = text.Split(HtmlHelper.cFont, joinAgainExceptFirstOne: true).ToList();
-                        newFontName = "Times New Roman";
-                        newFontSize -= 10;
-                        verticalShift = 3;
+                        newFontName = "Microsoft Himalaya";
+                        newFontSize -= 8;
+                        verticalShift = (fontSize == 20 ? 3.75F : 4.25F);
                     }
                     else if (minimum == fontEnd)
                     {
                         texts = text.Split(HtmlHelper.cFontEnd, joinAgainExceptFirstOne: true).ToList();
                         newFontName = "Darleston";
-                        newFontSize += 10;
+                        newFontSize += 8;
                     }
                     else
                     {

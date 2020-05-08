@@ -839,6 +839,7 @@ namespace Escher
                 {
                     case "Vertical":
                     case "Horizontal":
+                    case "VerticalMove":
                         if (!ParseNumber(nextKeyWord, Int32.MinValue, false)) return false;
                         break;
                     case "Combine":

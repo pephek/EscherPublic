@@ -58,14 +58,14 @@ namespace Escher
             return pageTitle.Replace("&#8470;", char.ConvertFromUtf32(0x2116));
         }
 
-        public void AddVarieties(string publicDescription, string privateDescription, string subType, float horizontal, float vertical, bool combine, Alignment alignment, bool fontOfType, bool fontOfDescritpion, float margin)
+        public void AddVarieties(string publicDescription, string privateDescription, string subType, float horizontal, float vertical, float verticalMove, bool combine, Alignment alignment, bool fontOfType, bool fontOfDescritpion, float margin)
         {
             if (Varieties.Count() == 0) // The first varieties can never be combined
             {
                 combine = false;
             }
 
-            Varieties varieties = new Varieties(subType, publicDescription, privateDescription, combine, horizontal, vertical, alignment, fontOfType, fontOfDescritpion, margin);
+            Varieties varieties = new Varieties(subType, publicDescription, privateDescription, combine, horizontal, vertical, verticalMove, alignment, fontOfType, fontOfDescritpion, margin);
 
             Varieties.Add(varieties);
         }

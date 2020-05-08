@@ -108,6 +108,7 @@ namespace Escher
                             subTypeToPass,
                             entry.OffsetHorizontal,
                             entry.OffsetVertical,
+                            entry.VerticalMove,
                             entry.Combine,
                             entry.Alignment,
                             entry.FontOfType,

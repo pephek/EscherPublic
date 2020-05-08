@@ -781,6 +781,11 @@ namespace Escher
                 {
                     Varieties varieties = page.Varieties[v];
 
+                    if (varieties.VerticalMove != 0)
+                    {
+                        y += varieties.VerticalMove;
+                    }
+
                     // When spacing is not set at the varieties level then take over the page wide spacing
                     if (varieties.Margin == 0)
                     {
