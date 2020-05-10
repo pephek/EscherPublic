@@ -10,6 +10,12 @@ namespace Escher
     public enum Appearance
     {
         Singular,
+        Rotated,
+        WatermarkInverted,
+        WatermarkReversed,
+        WatermarkInvertedAndReversed,
+        WatermarkSideways,
+        WatermarkSidewaysInverted,
         PairHorizontal,
         PairVertical,
         Block,
@@ -24,7 +30,6 @@ namespace Escher
         HorizontalStrip4,
         HorizontalStrip5,
         HorizontalStrip6,
-        Rotated,
         TeteBecheHorizontalGutter,
         TeteBecheVerticalGutter,
         HorizontalGutterPair,
@@ -51,6 +56,11 @@ namespace Escher
                 case Appearance.Singular:
                 case Appearance.Proof:
                 case Appearance.Rotated:
+                case Appearance.WatermarkInverted:
+                case Appearance.WatermarkReversed:
+                case Appearance.WatermarkInvertedAndReversed:
+                case Appearance.WatermarkSideways:
+                case Appearance.WatermarkSidewaysInverted:
                     return 1;
 
                 case Appearance.ImperfRight:
@@ -119,6 +129,11 @@ namespace Escher
                 case Appearance.Singular:
                 case Appearance.Proof:
                 case Appearance.Rotated:
+                case Appearance.WatermarkInverted:
+                case Appearance.WatermarkReversed:
+                case Appearance.WatermarkInvertedAndReversed:
+                case Appearance.WatermarkSideways:
+                case Appearance.WatermarkSidewaysInverted:
                 case Appearance.ImperfRight:
                 case Appearance.ImperfLeft:
                 case Appearance.ImperfTop:

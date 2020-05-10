@@ -238,15 +238,35 @@ namespace Escher
                         {
                             case Appearance.Singular:
                             case Appearance.Rotated:
+                            case Appearance.WatermarkInverted:
+                            case Appearance.WatermarkReversed:
+                            case Appearance.WatermarkInvertedAndReversed:
+                            case Appearance.WatermarkSideways:
+                            case Appearance.WatermarkSidewaysInverted:
                                 if (frameColor != Color.White)
                                 {
                                     x = left + 4;
                                     y = top + 4;
                                     w = width - 8;
                                     h = height - 8;
-                                    if (appearance == Appearance.Rotated)
+                                    switch (appearance)
                                     {
-                                        rotateFlipType = RotateFlipType.Rotate180FlipNone;
+                                        case Appearance.Rotated:
+                                        case Appearance.WatermarkInverted:
+                                            rotateFlipType = RotateFlipType.Rotate180FlipNone;
+                                            break;
+                                        case Appearance.WatermarkReversed:
+                                            rotateFlipType = RotateFlipType.RotateNoneFlipX;
+                                            break;
+                                        case Appearance.WatermarkInvertedAndReversed:
+                                            rotateFlipType = RotateFlipType.Rotate180FlipX;
+                                            break;
+                                        case Appearance.WatermarkSideways:
+                                            rotateFlipType = RotateFlipType.Rotate270FlipNone;
+                                            break;
+                                        case Appearance.WatermarkSidewaysInverted:
+                                            rotateFlipType = RotateFlipType.Rotate90FlipNone;
+                                            break;
                                     }
                                 }
                                 break;

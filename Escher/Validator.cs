@@ -445,7 +445,7 @@ namespace Escher
             if (!ReadKeyWordValue(keyWord, true)) return false;
 
             string[] values = new string[] {
-                "single", "singular", "rotated",
+                "single", "singular", "rotated", "watermarkinverted", "watermarkreversed", "watermarkinvertedandreversed", "watermarksideways", "watermarksidewaysinverted",
                 "pairhorizontal", "horizontalpair",
                 "pairvertical", "verticalpair",
                 "tetebechehorizontal", "horizontaltetebeche",

@@ -641,6 +641,27 @@ namespace Escher
                         case "rotated":
                             entry.Appearance = Appearance.Rotated;
                             break;
+                        case "watermarkinverted":
+                            entry.Appearance = Appearance.WatermarkInverted;
+                            break;
+                        case "watermarkreversed":
+                            entry.Appearance = Appearance.WatermarkReversed;
+                            break;
+                        case "watermarkinvertedandreversed":
+                            entry.Appearance = Appearance.WatermarkInvertedAndReversed;
+                            break;
+                        case "watermarksideways":
+                            entry.Appearance = Appearance.WatermarkSideways;
+                            SizeF sizeWatermarkSideways = new SizeF(entry.Width, entry.Height);
+                            entry.Width = sizeWatermarkSideways.Height;
+                            entry.Height = sizeWatermarkSideways.Width;
+                            break;
+                        case "watermarksidewaysinverted":
+                            entry.Appearance = Appearance.WatermarkSidewaysInverted;
+                            SizeF sizeWatermarkSidewaysInverted = new SizeF(entry.Width, entry.Height);
+                            entry.Width = sizeWatermarkSidewaysInverted.Height;
+                            entry.Height = sizeWatermarkSidewaysInverted.Width;
+                            break;
                         case "pairhorizontal":
                         case "horizontalpair":
                             entry.Appearance = Appearance.PairHorizontal;
