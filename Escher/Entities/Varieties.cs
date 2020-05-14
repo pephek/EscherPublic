@@ -18,7 +18,10 @@ namespace Escher
         public readonly Alignment Alignment;
         public readonly bool FontOfType;
         public readonly bool FontOfDescription;
-        public float Margin;
+        public float Spacing;
+        public readonly float WatermarkHeight;
+        public readonly string WatermarkImage;
+        public readonly Appearance Appearance;
 
         public List<List<Variety>> Rows;
 
@@ -33,7 +36,10 @@ namespace Escher
             Alignment alignment,
             bool fontOfType,
             bool fontOfDescription,
-            float margin
+            float spacing,
+            float watermarkHeight,
+            string watermarkImage,
+            Appearance appearance
         )
         {
             SubType = subType;
@@ -46,7 +52,10 @@ namespace Escher
             Alignment = alignment;
             FontOfType = fontOfType;
             FontOfDescription = fontOfDescription;
-            Margin = margin;
+            Spacing = spacing;
+            WatermarkHeight = watermarkHeight;
+            WatermarkImage = watermarkImage;
+            Appearance = appearance;
 
             Rows = new List<List<Variety>>();
         }

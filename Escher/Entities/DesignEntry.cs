@@ -33,6 +33,7 @@ namespace Escher
         public string Picture = "";
         public string Overprint = "";
         public string Comment = "";
+        public string Watermark = "";
         public Shape Shape;
         public bool Variant;
         public bool SkipVariant;

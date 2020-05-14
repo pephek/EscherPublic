@@ -787,9 +787,9 @@ namespace Escher
                     }
 
                     // When spacing is not set at the varieties level then take over the page wide spacing
-                    if (varieties.Margin == 0)
+                    if (varieties.Spacing == 0)
                     {
-                        varieties.Margin = page.Margin;
+                        varieties.Spacing = page.Spacing;
                     }
 
                     // When varieties are combined then remember this y position
@@ -930,12 +930,28 @@ namespace Escher
 
                         //Debug.WriteLine(string.Format("Row height = {0}", Math.Round(rowHeight, 2)));
 
+
                         for (int s = 0; s < row.Count(); s++)
                         {
                             Variety stamp = row[s];
 
                             float x1 = stamp.FrameLeft;
                             float y1 = y + stamp.FrameOffset + (rowHeight - stamp.Height) / 2;
+
+                            // Add optionally the watermark image if the first stamp in the first row
+                            if (s == 0 && r == 0 && varieties.WatermarkImage != "")
+                            {
+                                float watermarkWidth = 10;
+                                float watermarkHeight = varieties.WatermarkHeight;
+
+                                if (watermarkHeight < watermarkWidth)
+                                {
+                                    watermarkHeight = watermarkWidth / 2;
+                                    watermarkWidth = (10 / varieties.WatermarkHeight) * 10 / 2;
+                                }
+
+                                artifacts.AddImage(page.ImagesPath, varieties.WatermarkImage, "", x1 - watermarkWidth - 2.5F, y1 + (stamp.Height - watermarkHeight) / 2, watermarkWidth, watermarkHeight, Shape.Rectangle, varieties.Appearance, "", Color.White, ColorStyle.Greyscale, FrameStyle.ThinSolid);
+                            }
 
                             //Debug.Print(string.Format("Location[{0}]: x {1}, y {2}", s, Math.Round(x1, 2), Math.Round(y1, 2)));
 

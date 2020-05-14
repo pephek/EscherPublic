@@ -77,7 +77,7 @@ namespace Escher
                         page.IsSample = entry.Sample;
                         if (entry.Width != 0)
                         {
-                            page.Margin = entry.Width;
+                            page.Spacing = entry.Width;
                         }
 
                         break;
@@ -113,7 +113,10 @@ namespace Escher
                             entry.Alignment,
                             entry.FontOfType,
                             entry.FontOfDescription,
-                            entry.Width
+                            entry.Width,
+                            entry.Height,
+                            entry.Watermark,
+                            entry.Appearance
                         );
 
                         subType = "";

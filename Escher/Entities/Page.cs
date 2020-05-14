@@ -23,7 +23,7 @@ namespace Escher
         public float OffsetVertical;
         public string AlbumNumber = "";
         public bool IsSample;
-        public float Margin;
+        public float Spacing;
 
         public List<Varieties> Varieties = new List<Varieties>();
 
@@ -32,7 +32,7 @@ namespace Escher
             this.Html = html;
             this.Comment = comment;
 
-            this.Margin = 2.5F;
+            this.Spacing = 2.5F;
         }
 
         public string GetPageTitle()
@@ -58,14 +58,14 @@ namespace Escher
             return pageTitle.Replace("&#8470;", char.ConvertFromUtf32(0x2116));
         }
 
-        public void AddVarieties(string publicDescription, string privateDescription, string subType, float horizontal, float vertical, float verticalMove, bool combine, Alignment alignment, bool fontOfType, bool fontOfDescritpion, float margin)
+        public void AddVarieties(string publicDescription, string privateDescription, string subType, float horizontal, float vertical, float verticalMove, bool combine, Alignment alignment, bool fontOfType, bool fontOfDescritpion, float spacing, float watermarkHeight, string watermarkImage, Appearance appearance)
         {
             if (Varieties.Count() == 0) // The first varieties can never be combined
             {
                 combine = false;
             }
 
-            Varieties varieties = new Varieties(subType, publicDescription, privateDescription, combine, horizontal, vertical, verticalMove, alignment, fontOfType, fontOfDescritpion, margin);
+            Varieties varieties = new Varieties(subType, publicDescription, privateDescription, combine, horizontal, vertical, verticalMove, alignment, fontOfType, fontOfDescritpion, spacing, watermarkHeight, watermarkImage, appearance);
 
             Varieties.Add(varieties);
         }
@@ -103,7 +103,7 @@ namespace Escher
 
                 if (i < row.Count() - 1)
                 {
-                    width += Margin;
+                    width += Spacing;
                 }
             }
 
@@ -152,7 +152,7 @@ namespace Escher
         {
             float center;
 
-            float spacing = Varieties[v].Margin;
+            float spacing = Varieties[v].Spacing;
 
             float width = 0;
 
@@ -245,7 +245,7 @@ namespace Escher
             for (int i = 0; i < s; i++)
             {
                 frameLeft += Varieties[v].Rows[r][i].Width;
-                frameLeft += Varieties[v].Margin;
+                frameLeft += Varieties[v].Spacing;
             }
 
             frameLeft += Varieties[v].Rows[r][s].Horizontal;
@@ -271,10 +271,10 @@ namespace Escher
                     break;
                 }
 
-                frameWidth += Varieties[v].Rows[r][s].Width + Varieties[v].Margin;
+                frameWidth += Varieties[v].Rows[r][s].Width + Varieties[v].Spacing;
             }
 
-            frameWidth -= Varieties[v].Margin;
+            frameWidth -= Varieties[v].Spacing;
 
             return frameWidth;
         }

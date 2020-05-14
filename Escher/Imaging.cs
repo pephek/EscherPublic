@@ -168,7 +168,7 @@ namespace Escher
 
                 if (this.scale != 1)
                 {
-                    this.scale = (float)Math.Floor(100 * this.scale) / 100;
+                    this.scale = (float)Math.Floor(100 * this.scale) / 125;
                 }
 
                 this.baseSizePortrait = new Size((int)(this.scale * this.baseSizePortrait.Width), (int)(this.scale * this.baseSizePortrait.Height));

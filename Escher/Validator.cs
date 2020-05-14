@@ -854,9 +854,11 @@ namespace Escher
                         break;
                     case "Comment":
                     case "Private":
+                    case "Watermark":
                         if (!ParseString(nextKeyWord, true)) return false;
                         break;
                     case "Width":
+                    case "WatermarkHeight":
                         if (!ParseNumber(nextKeyWord, 0, true)) return false;
                         break;
                     default:

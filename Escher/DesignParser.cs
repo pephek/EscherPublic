@@ -280,6 +280,7 @@ namespace Escher
                     break;
 
                 case "height":
+                case "watermarkheight":
                     entry.Height = GetSize(entry.Height, val);
                     break;
 
@@ -400,6 +401,10 @@ namespace Escher
                 case "comment":
                 case "private":
                     entry.Comment = val;
+                    break;
+
+                case "watermark":
+                    entry.Watermark = val;
                     break;
 
                 case "shape":
