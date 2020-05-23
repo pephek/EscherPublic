@@ -161,6 +161,15 @@ namespace Escher
                 {
                     this.scale *= (float)maxWidth / this.baseSizeLandscape.Width;
                 }
+                if (this.scale * this.baseSizeLandscape.Height >= maxHeight)
+                {
+                    this.scale *= (float)maxHeight / this.baseSizeLandscape.Height;
+                }
+
+                if (this.scale * this.baseSizePortrait.Width >= maxWidth)
+                {
+                    this.scale *= (float)maxWidth / this.baseSizePortrait.Width;
+                }
                 if (this.scale * this.baseSizePortrait.Height >= maxHeight)
                 {
                     this.scale *= (float)maxHeight / this.baseSizePortrait.Height;
@@ -168,7 +177,7 @@ namespace Escher
 
                 if (this.scale != 1)
                 {
-                    this.scale = (float)Math.Floor(100 * this.scale) / 125;
+                    this.scale = (float)Math.Floor(100 * this.scale) / 100;
                 }
 
                 this.baseSizePortrait = new Size((int)(this.scale * this.baseSizePortrait.Width), (int)(this.scale * this.baseSizePortrait.Height));

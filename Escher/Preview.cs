@@ -939,7 +939,7 @@ namespace Escher
                             float y1 = y + stamp.FrameOffset + (rowHeight - stamp.Height) / 2;
 
                             // Add optionally the watermark image if the first stamp in the first row
-                            if (s == 0 && r == 0 && varieties.WatermarkImage != "")
+                            if (s == 0 && r == 0 && varieties.WatermarkImage != "" && varieties.WatermarkHeight != 0)
                             {
                                 float watermarkWidth = 10;
                                 float watermarkHeight = varieties.WatermarkHeight;

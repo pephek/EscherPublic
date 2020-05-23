@@ -73,8 +73,8 @@ namespace Escher
 
                             if (entry.Comment != "&nbsp;")
                             {
-                                main.Text += "   (" + entry.Comment + ")";
-                                main.PageText += "   (" + entry.Comment + ")";
+                                main.Text += " (" + entry.Comment + ")";
+                                main.PageText += " (" + entry.Comment + ")";
                             }
 
                             if (entry.AlbumNumber != "")
