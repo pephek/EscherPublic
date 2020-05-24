@@ -58,6 +58,7 @@ namespace Escher
             this.menuSave.Click += new EventHandler((sender, e) => App.TryRun(SaveDesign));
             this.menuExit.Click += new EventHandler((sender, e) => App.TryRun(ExitDesign));
             this.menuKeywordAssignment.Click += new EventHandler((sender, e) => App.TryRun(KeywordAssignment));
+            this.menuRefresh.Click += new EventHandler((sender, e) => menuRefresh.Checked = !menuRefresh.Checked);
 
             this.validator = validator;
             this.preview = preview;
@@ -355,6 +356,11 @@ namespace Escher
 
         private void ImmediatePreviewDesign()
         {
+            if (!menuRefresh.Checked)
+            {
+                return;
+            }
+
             try
             {
                 int lineNumber = designMaster.PositionToPlace(designMaster.SelectionStart).iLine;

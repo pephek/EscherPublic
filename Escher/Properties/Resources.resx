@@ -118,82 +118,94 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <assembly alias="System.Windows.Forms" name="System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
-  <data name="RectangularSelection_16x" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Images\RectangularSelection_16x.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="ZoomOut_16x" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Images\ZoomOut_16x.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  <data name="AdRotator_16x" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Images\AdRotator_16x.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="Reverse_16x" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Images\Reverse_16x.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="Previous_16x" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Images\Previous_16x.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  <data name="ImageNotFound" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Images\ImageNotFound.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="TwoX_16x" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Images\TwoX_16x.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="Rerun_16x" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Images\Rerun_16x.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  <data name="ZoomIn_16x1" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Images\ZoomIn_16x.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="RulerMeasure_16x" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Images\RulerMeasure_16x.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="OneX_16x" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Images\OneX_16x.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  <data name="Rerun_16x" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Images\Rerun_16x.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="ColorPalette_16x" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Images\ColorPalette_16x.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="Resize_16x" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Images\Resize_16x.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="ZoomIn_16x1" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Images\ZoomIn_16x.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="Close_red_16x" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Images\Close_red_16x.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="Airbrush_16x" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Images\Airbrush_16x.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="Frame" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Images\Frame.jpg;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  <data name="ZoomOut_16x" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Images\ZoomOut_16x.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="Checkmark_16x" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Images\Checkmark_16x.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="ZoomIn_16x" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Images\ZoomIn_16x.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="ImageCrop_16x" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Images\ImageCrop_16x.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="Save_16x" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Images\Save_16x.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="Next_16x" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Images\Next_16x.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="ImageNotFound" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Images\ImageNotFound.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  <data name="OneX_16x" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Images\OneX_16x.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="IconFile_16x" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Images\IconFile_16x.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="AdRotator_16x" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Images\AdRotator_16x.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  <data name="Resize_16x" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Images\Resize_16x.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="Close_red_16x" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Images\Close_red_16x.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="ZoomIn_16x" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Images\ZoomIn_16x.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="Save_16x" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Images\Save_16x.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="RectangularSelection_16x" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Images\RectangularSelection_16x.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="AustraliaOSPerfinLarge" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Images\AustraliaOSPerfinLarge.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="Previous_16x" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Images\Previous_16x.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="Next_16x" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Images\Next_16x.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="Escher" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Images\Escher.jpg;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
+  <data name="ColorPalette_16x" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Images\ColorPalette_16x.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="AustraliaOSPerfinMedium" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Images\AustraliaOSPerfinMedium.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
   <data name="Brightness_16x" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Images\Brightness_16x.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="ImageCrop_16x" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Images\ImageCrop_16x.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="Highlighter_16x" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Images\Highlighter_16x.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="AustraliaOSPerfinSmall" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Images\AustraliaOSPerfinSmall.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="Undo_16x" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Images\Undo_16x.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="Highlighter_16x" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Images\Highlighter_16x.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  <data name="Frame" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Images\Frame.jpg;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="Airbrush_16x" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Images\Airbrush_16x.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="AustraliaOSOverprint" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Images\AustraliaOSOverprint.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
 </root>

@@ -19,6 +19,7 @@ namespace Escher
         public SolidBrush TextColor;
         public string Text;
         public Image Image;
+        public string Overprint;
         public Font Font;
         public Appearance Appearance;
         public string Number;

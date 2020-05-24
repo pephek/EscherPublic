@@ -385,13 +385,25 @@ namespace Escher
                         case "RISDjakarta":
                             entry.Overprint = "Aparajita|10|False|True|R I S%Djakarta|0|0|0";
                             break;
+                        case "AustraliaOSPerfinLarge":
+                            entry.Overprint = "AustraliaOSPerfinLarge|15|14";
+                            break;
+                        case "AustraliaOSPerfinMedium":
+                            entry.Overprint = "AustraliaOSPerfinMedium|13|9";
+                            break;
+                        case "AustraliaOSPerfinSmall":
+                            entry.Overprint = "AustraliaOSPerfinSmall|15.6|8.5";
+                            break;
+                        case "AustraliaOSOverprint":
+                            entry.Overprint = "AustraliaOSOverprint|13.2|6.5";
+                            break;
                         default:
                             if (entry.Overprint.StartsWith("#")) // For the numeral cancels of Iceland
                             {
                                 entry.Overprint = "Baskerville Old Face|18|True|False|" + entry.Overprint.Substring(1) + "|100|100|100";
                             }
                             else
-                            { 
+                            {
                                 entry.Overprint = "";
                             }
                             break;

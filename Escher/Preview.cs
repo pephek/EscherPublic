@@ -546,7 +546,38 @@ namespace Escher
                         break;
 
                     case ArtifactType.Image:
+
                         Bitmap bitmap = new Bitmap(artifact.Image);
+
+                        if (artifact.Overprint != "")
+                        {
+                            Bitmap overlayBitmap = (Bitmap)Properties.Resources.ResourceManager.GetObject(artifact.Overprint.Split('|')[0]);
+
+                            overlayBitmap.MakeTransparent(Color.White);
+
+                            float overlayWidth = float.Parse(artifact.Overprint.Split('|')[1]) * pageScale;
+                            float overlayHeight = float.Parse(artifact.Overprint.Split('|')[2]) * pageScale;
+
+                            int width = (int)(overlayWidth / artifact.Width * bitmap.Width);
+                            int height = (int)(overlayHeight / artifact.Height * bitmap.Height);
+
+                            int x = (bitmap.Width - width) / 2;
+                            int y = (bitmap.Height - height) / 2;
+
+                            using (Graphics graphics = Graphics.FromImage(bitmap))
+                            {
+                                graphics.DrawImage(
+                                    overlayBitmap,
+                                    // target
+                                    new Rectangle(x, y, width, height),
+                                    // source
+                                    0, 0, overlayBitmap.Width, overlayBitmap.Height,
+                                    GraphicsUnit.Pixel);
+                            }
+
+                            overlayBitmap.Dispose();
+                        }
+
                         bitmap.RotateFlip(artifact.RotateFlipType);
                         artifact.Image = bitmap;
                         g.DrawImage(artifact.Image, artifact.X, artifact.Y, artifact.Width, artifact.Height);
@@ -950,7 +981,7 @@ namespace Escher
                                     watermarkWidth = (10 / varieties.WatermarkHeight) * 10 / 2;
                                 }
 
-                                artifacts.AddImage(page.ImagesPath, varieties.WatermarkImage, "", x1 - watermarkWidth - 2.5F, y1 + (stamp.Height - watermarkHeight) / 2, watermarkWidth, watermarkHeight, Shape.Rectangle, varieties.Appearance, "", Color.White, ColorStyle.Greyscale, FrameStyle.ThinSolid);
+                                artifacts.AddImage(page.ImagesPath, varieties.WatermarkImage, "", x1 - watermarkWidth - 2.5F, y1 + (stamp.Height - watermarkHeight) / 2, watermarkWidth, watermarkHeight, Shape.Rectangle, varieties.Appearance, "", "", Color.White, ColorStyle.Greyscale, FrameStyle.ThinSolid);
                             }
 
                             //Debug.Print(string.Format("Location[{0}]: x {1}, y {2}", s, Math.Round(x1, 2), Math.Round(y1, 2)));
@@ -962,7 +993,7 @@ namespace Escher
                                 // A page without album number is a title page, so do show the coat of arms
                                 if (setup.IncludeImage || page.AlbumNumber == "")
                                 {
-                                    artifacts.AddImage(page.ImagesPath, stamp.Number, stamp.Positions, x1, y1, stamp.Width, stamp.Height, stamp.Shape, stamp.Appearance, stamp.Picture, stamp.FrameColor, setup.ColorStyle, setup.FrameStyle);
+                                    artifacts.AddImage(page.ImagesPath, stamp.Number, stamp.Positions, x1, y1, stamp.Width, stamp.Height, stamp.Shape, stamp.Appearance, stamp.Picture, stamp.Overprint, stamp.FrameColor, setup.ColorStyle, setup.FrameStyle);
                                 }
                             }
 

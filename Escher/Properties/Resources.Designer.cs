@@ -83,6 +83,46 @@ namespace Escher.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap AustraliaOSOverprint {
+            get {
+                object obj = ResourceManager.GetObject("AustraliaOSOverprint", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap AustraliaOSPerfinLarge {
+            get {
+                object obj = ResourceManager.GetObject("AustraliaOSPerfinLarge", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap AustraliaOSPerfinMedium {
+            get {
+                object obj = ResourceManager.GetObject("AustraliaOSPerfinMedium", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap AustraliaOSPerfinSmall {
+            get {
+                object obj = ResourceManager.GetObject("AustraliaOSPerfinSmall", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap Brightness_16x {
             get {
                 object obj = ResourceManager.GetObject("Brightness_16x", resourceCulture);

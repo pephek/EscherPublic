@@ -304,5 +304,17 @@
   <ItemGroup>
     <None Include="Images\Highlighter_16x.png" />
   </ItemGroup>
+  <ItemGroup>
+    <None Include="Images\AustraliaOSPerfinLarge.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Images\AustraliaOSPerfinSmall.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Images\AustraliaOSPerfinMedium.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Images\AustraliaOSOverprint.png" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

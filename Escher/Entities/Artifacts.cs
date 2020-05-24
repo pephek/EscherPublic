@@ -147,7 +147,7 @@ namespace Escher
             }
         }
 
-        private void AddImage(float x, float y, float width, float height, string number, string image, RotateFlipType? rotateFlipType, Appearance appearance)
+        private void AddImage(float x, float y, float width, float height, string number, string image, string overprint, RotateFlipType? rotateFlipType, Appearance appearance)
         {
             Artifact artifact = new Artifact(ArtifactType.Image);
 
@@ -161,13 +161,14 @@ namespace Escher
                 this.images.Add(image, ImageHelper.LoadImageAndUnlock(image));
             }
             artifact.Image = this.images[image];
+            artifact.Overprint = overprint;
             artifact.RotateFlipType = rotateFlipType ?? RotateFlipType.RotateNoneFlipNone;
             artifact.Appearance = appearance;
 
             artifacts.Add(artifact);
         }
 
-        public void AddImage(string path, string number, string positions, float left, float top, float width, float height, Shape shape, Appearance appearance, string picture, Color frameColor, ColorStyle colorStyle, FrameStyle frameStyle)
+        public void AddImage(string path, string number, string positions, float left, float top, float width, float height, Shape shape, Appearance appearance, string picture, string overprint, Color frameColor, ColorStyle colorStyle, FrameStyle frameStyle)
         {
             number = !string.IsNullOrEmpty(picture) ? picture.Trim() : number.Trim();
 
@@ -214,16 +215,16 @@ namespace Escher
             switch (shape)
             {
                 case Shape.Triangle45:
-                    AddImage(left + 3 * 5 / (float) Math.Sqrt(2), top + 2 * 5 / (float) Math.Sqrt(2), width - 2 * 3 * 5 / (float) Math.Sqrt(2), height - 5 - 2 * 5 / (float) Math.Sqrt(2), n, image, RotateFlipType.RotateNoneFlipNone, appearance);
+                    AddImage(left + 3 * 5 / (float) Math.Sqrt(2), top + 2 * 5 / (float) Math.Sqrt(2), width - 2 * 3 * 5 / (float) Math.Sqrt(2), height - 5 - 2 * 5 / (float) Math.Sqrt(2), n, image, overprint, RotateFlipType.RotateNoneFlipNone, appearance);
                     break;
                 case Shape.Triangle60Inverted:
-                    AddImage(left + 5 + 5 / (float)Math.Sqrt(3), top + 5, width - 2 * (5 + 5 / (float)Math.Sqrt(3)), height - 2 * (5 + 5 / (float)Math.Sqrt(3)), n, image, RotateFlipType.RotateNoneFlipNone, appearance);
+                    AddImage(left + 5 + 5 / (float)Math.Sqrt(3), top + 5, width - 2 * (5 + 5 / (float)Math.Sqrt(3)), height - 2 * (5 + 5 / (float)Math.Sqrt(3)), n, image, overprint, RotateFlipType.RotateNoneFlipNone, appearance);
                     break;
                 case Shape.Triangle60:
-                    AddImage(left + 5 + 5 / (float)Math.Sqrt(3), top + 2 * 5, width - 2 * (5 + 5 / (float)Math.Sqrt(3)), height - 2 * (5 + 5 / (float)Math.Sqrt(3)), n, image, RotateFlipType.RotateNoneFlipNone, appearance);
+                    AddImage(left + 5 + 5 / (float)Math.Sqrt(3), top + 2 * 5, width - 2 * (5 + 5 / (float)Math.Sqrt(3)), height - 2 * (5 + 5 / (float)Math.Sqrt(3)), n, image, overprint, RotateFlipType.RotateNoneFlipNone, appearance);
                     break;
                 case Shape.RectangleRotated:
-                    AddImage(left + 5 * (float)Math.Sqrt(2), top + 5 * (float)Math.Sqrt(2), width - 2 * 5 * (float)Math.Sqrt(2), height - 2 * 5 * (float)Math.Sqrt(2), n, image, RotateFlipType.RotateNoneFlipNone, appearance);
+                    AddImage(left + 5 * (float)Math.Sqrt(2), top + 5 * (float)Math.Sqrt(2), width - 2 * 5 * (float)Math.Sqrt(2), height - 2 * 5 * (float)Math.Sqrt(2), n, image, overprint, RotateFlipType.RotateNoneFlipNone, appearance);
                     break;
 
                 default:
@@ -464,7 +465,7 @@ namespace Escher
 
                             if (positions == "")
                             {
-                                AddImage(x, y, w, h, n, image, rotateFlipType, appearance);
+                                AddImage(x, y, w, h, n, image, overprint, rotateFlipType, appearance);
                             }
                             else
                             {
@@ -474,11 +475,11 @@ namespace Escher
                                 {
                                     if (sheetPosition.Type == "")
                                     {
-                                        AddImage(x, y, w, h, n, image, rotateFlipType, appearance);
+                                        AddImage(x, y, w, h, n, image, overprint, rotateFlipType, appearance);
                                     }
                                     else
                                     {
-                                        AddImage(x, y, w, h, n, ImageHelper.GetDisplayImagePath(path, n + sheetPosition.Type, colorStyle), rotateFlipType, appearance);
+                                        AddImage(x, y, w, h, n, ImageHelper.GetDisplayImagePath(path, n + sheetPosition.Type, colorStyle), overprint, rotateFlipType, appearance);
                                     }
 
                                     AddText(x + 0.5F, y + 0.5F, w - 1, sheetPosition.Position, "Times New Roman", 7, fontBold: true, alignment: Alignment.Left);
@@ -487,7 +488,7 @@ namespace Escher
                                 }
                                 else
                                 {
-                                    AddImage(x, y, w, h, n, image, rotateFlipType, appearance);
+                                    AddImage(x, y, w, h, n, image, overprint, rotateFlipType, appearance);
                                 }
                             }
                         }
