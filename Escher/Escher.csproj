@@ -316,5 +316,14 @@
   <ItemGroup>
     <None Include="Images\AustraliaOSOverprint.png" />
   </ItemGroup>
+  <ItemGroup>
+    <None Include="Images\AustraliaOSOverprintInverted.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Images\HongKongSpecimenOverprint.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Images\HongKongSpecimenPerfin.png" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

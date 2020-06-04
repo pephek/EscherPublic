@@ -554,7 +554,7 @@ namespace Escher
                 {
                     case "Width":
                     case "Height":
-                        if (!ParseNumber(nextKeyWord, 1, false)) return false;
+                        if (!ParseNumber(nextKeyWord, 1, true)) return false;
                         break;
                     case "Comment":
                         if (!ParseString(nextKeyWord, false)) return false;

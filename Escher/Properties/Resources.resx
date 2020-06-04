@@ -148,14 +148,14 @@
   <data name="OneX_16x" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Images\OneX_16x.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="IconFile_16x" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Images\IconFile_16x.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
   <data name="Resize_16x" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Images\Resize_16x.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="Close_red_16x" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Images\Close_red_16x.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="AustraliaOSOverprintInverted" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Images\AustraliaOSOverprintInverted.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="ZoomIn_16x" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Images\ZoomIn_16x.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
@@ -166,14 +166,17 @@
   <data name="RectangularSelection_16x" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Images\RectangularSelection_16x.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="AustraliaOSPerfinLarge" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Images\AustraliaOSPerfinLarge.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  <data name="IconFile_16x" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Images\IconFile_16x.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="Previous_16x" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Images\Previous_16x.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="Next_16x" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Images\Next_16x.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="AustraliaOSOverprint" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Images\AustraliaOSOverprint.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="Escher" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Images\Escher.jpg;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
@@ -196,16 +199,22 @@
   <data name="AustraliaOSPerfinSmall" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Images\AustraliaOSPerfinSmall.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="Undo_16x" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Images\Undo_16x.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  <data name="AustraliaOSPerfinLarge" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Images\AustraliaOSPerfinLarge.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="Frame" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Images\Frame.jpg;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
+  <data name="HongKongSpecimentOverprint" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Images\HongKongSpecimenOverprint.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
   <data name="Airbrush_16x" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Images\Airbrush_16x.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="AustraliaOSOverprint" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Images\AustraliaOSOverprint.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  <data name="Undo_16x" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Images\Undo_16x.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="HongKongSpecimenPerfin" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Images\HongKongSpecimenPerfin.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
 </root>

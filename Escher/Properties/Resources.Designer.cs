@@ -93,6 +93,16 @@ namespace Escher.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap AustraliaOSOverprintInverted {
+            get {
+                object obj = ResourceManager.GetObject("AustraliaOSOverprintInverted", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap AustraliaOSPerfinLarge {
             get {
                 object obj = ResourceManager.GetObject("AustraliaOSPerfinLarge", resourceCulture);
@@ -186,6 +196,26 @@ namespace Escher.Properties {
         internal static System.Drawing.Bitmap Highlighter_16x {
             get {
                 object obj = ResourceManager.GetObject("Highlighter_16x", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap HongKongSpecimenPerfin {
+            get {
+                object obj = ResourceManager.GetObject("HongKongSpecimenPerfin", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap HongKongSpecimentOverprint {
+            get {
+                object obj = ResourceManager.GetObject("HongKongSpecimentOverprint", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }

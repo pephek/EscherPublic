@@ -397,6 +397,15 @@ namespace Escher
                         case "AustraliaOSOverprint":
                             entry.Overprint = "AustraliaOSOverprint|13.2|6.5";
                             break;
+                        case "AustraliaOSOverprintInverted":
+                            entry.Overprint = "AustraliaOSOverprintInverted|13.2|6.5";
+                            break;
+                        case "HongKongSpecimenOverprint":
+                            entry.Overprint = "HongKongSpecimentOverprint|13|2.57";
+                            break;
+                        case "HongKongSpecimenPerfin":
+                            entry.Overprint = "HongKongSpecimenPerfin|15|9.11";
+                            break;
                         default:
                             if (entry.Overprint.StartsWith("#")) // For the numeral cancels of Iceland
                             {
