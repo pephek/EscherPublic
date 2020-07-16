@@ -187,6 +187,9 @@
   <data name="AustraliaOSPerfinMedium" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Images\AustraliaOSPerfinMedium.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
+  <data name="HongKongSpecimenPerfin" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Images\HongKongSpecimenPerfin.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
   <data name="Brightness_16x" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Images\Brightness_16x.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
@@ -213,8 +216,5 @@
   </data>
   <data name="Undo_16x" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Images\Undo_16x.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="HongKongSpecimenPerfin" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Images\HongKongSpecimenPerfin.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
 </root>

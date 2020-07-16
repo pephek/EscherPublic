@@ -166,6 +166,9 @@ namespace Escher
                     case "Stamp":
                         parsed = ParseStamp();
                         break;
+                    case "Image":
+                        parsed = ParseImage();
+                        break;
                     default:
                         parsed = SetUnknownKeyword(NextKeyWord());
                         break;
@@ -317,7 +320,7 @@ namespace Escher
                         frontPageTitleFound = true;
                         break;
                     case "FrontPageSubTitle":
-                        if (!ParseString(nextKeyWord, true)) return false;
+                        if (!ParseString(nextKeyWord, false)) return false;
                         frontPageSubTitleFound = true;
                         break;
                     case "PageTitle":
@@ -554,7 +557,7 @@ namespace Escher
                 {
                     case "Width":
                     case "Height":
-                        if (!ParseNumber(nextKeyWord, 1, true)) return false;
+                        if (!ParseNumber(nextKeyWord, 1, false)) return false;
                         break;
                     case "Comment":
                         if (!ParseString(nextKeyWord, false)) return false;
@@ -773,6 +776,8 @@ namespace Escher
 
             if (NextKeyWord() == "Part" && !ParsePart()) return false;
 
+            if (NextKeyWord() == "Image" && !ParseImageList()) return false;
+
             if (NextKeyWord() == "Series" && !ParseSeries()) return false;
 
             if (NextKeyWord() == "Type" && !ParseType()) return false;
@@ -781,6 +786,19 @@ namespace Escher
 
             return true;
          }
+
+        /// <summary>
+        /// </summary>
+        private bool ParseImageList()
+        {
+            do
+            {
+                if (!ParseImage()) return false;
+
+            } while (NextKeyWord() == "Image");
+
+            return true;
+        }
 
         /// <summary>
         /// </summary>
@@ -840,6 +858,8 @@ namespace Escher
                     case "Vertical":
                     case "Horizontal":
                     case "VerticalMove":
+                    case "VerticalMoveRelative":
+                    case "VerticalMoveAbsolute":
                         if (!ParseNumber(nextKeyWord, Int32.MinValue, false)) return false;
                         break;
                     case "Combine":
@@ -861,9 +881,62 @@ namespace Escher
                     case "WatermarkHeight":
                         if (!ParseNumber(nextKeyWord, 0, true)) return false;
                         break;
+                    case "MaxWidth":
+                        if (!ParseNumber(nextKeyWord, 50, false)) return false;
+                        break;
                     default:
                         return SetUnknownKeyword(nextKeyWord);
                 }
+            }
+
+            return true;
+        }
+
+        private bool ParseImage()
+        {
+            bool heightFound;
+            int imageFound;
+
+            heightFound = false;
+
+            if (!ParseString("Image", true)) return false;
+
+            imageFound = pCode;
+
+            while (NextSeparator() == cKeywordSeparator)
+            {
+                GetSeparator(cKeywordSeparator);
+
+                string nextKeyWord = NextKeyWord();
+
+                switch (nextKeyWord)
+                {
+                    case "Height":
+                        heightFound = true;
+                        break;
+                }
+
+                switch (nextKeyWord)
+                {
+                    case "Horizontal":
+                    case "Vertical":
+                        if (!ParseNumber(nextKeyWord, Int32.MinValue, false)) return false;
+                        break;
+                    case "Height":
+                    case "Width":
+                        if (!ParseNumber(nextKeyWord, 1, true)) return false;
+                        break;
+                    case "RoundedCorners":
+                        if (!ParseBoolean(nextKeyWord)) return false;
+                        break;
+                }
+            }
+
+            if (!heightFound)
+            {
+                pCode = imageFound;
+                eCode = "Keyword 'Height' not found";
+                return false;
             }
 
             return true;
@@ -1181,7 +1254,7 @@ namespace Escher
                 {
                     return SetInvalidValue(eCode, keyWord);
                 }
-                if (!(number >= minimum))
+                if (!(number > 0))
                 {
                     return SetInvalidValue(eCode, keyWord);
                 }

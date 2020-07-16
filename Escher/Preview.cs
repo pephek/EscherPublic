@@ -580,6 +580,12 @@ namespace Escher
 
                         bitmap.RotateFlip(artifact.RotateFlipType);
                         artifact.Image = bitmap;
+
+                        if (artifact.RoundedCorners)
+                        {
+                            artifact.Image = artifact.Image.RoundCorners(25, Color.White);
+                        }
+
                         g.DrawImage(artifact.Image, artifact.X, artifact.Y, artifact.Width, artifact.Height);
                         artifact.Image.Dispose();
                         bitmap.Dispose();
@@ -725,6 +731,12 @@ namespace Escher
                 artifacts.AddHorizontalLine(format.Border.Left, format.Border.Bottom, format.Border.Width);
             }
 
+            // Background images
+            foreach (BackgroundImage image in page.BackgroundImages)
+            {
+                artifacts.AddImage(page.ImagesPath, image.Number, "", format.Free.Left + image.Horizontal, format.Free.Top + image.Vertical, image.Width == 0 ? format.Free.Width : image.Width, image.Height == 0 ? format.Free.Height : image.Height, Shape.Rectangle, Appearance.Singular, "", "", Color.White, ColorStyle.Color, FrameStyle.Thick, image.RoundedCorners);
+            }
+
             // Copyright statement
             if (page.Copyright != "")
             {
@@ -812,9 +824,13 @@ namespace Escher
                 {
                     Varieties varieties = page.Varieties[v];
 
-                    if (varieties.VerticalMove != 0)
+                    if (varieties.VerticalMoveRelative != 0)
                     {
-                        y += varieties.VerticalMove;
+                        y += varieties.VerticalMoveRelative;
+                    }
+                    else if (varieties.VerticalMoveAbsolute != 0)
+                    {
+                        y = format.Free.Top + varieties.VerticalMoveAbsolute;
                     }
 
                     // When spacing is not set at the varieties level then take over the page wide spacing
@@ -883,13 +899,20 @@ namespace Escher
                         }
                         else
                         {
-                            if (textWidth >= format.Free.Width)
+                            if (varieties.MaxWidth > 0 && textWidth > varieties.MaxWidth)
                             {
-                                y += artifacts.AddText(format.Free.Left, y + varieties.Vertical, format.Free.Width, text, format.TitleFont, fontSize, alignment: alignment).Height;
+                                y += artifacts.AddText(format.Free.Left + format.Free.Width / 2 - varieties.MaxWidth / 2 + varieties.Horizontal, y + varieties.Vertical, varieties.MaxWidth, text, format.TitleFont, fontSize, alignment: alignment).Height;
                             }
                             else
                             {
-                                y += artifacts.AddText(rowLeft + varieties.Horizontal - textWidth, y + varieties.Vertical, rowWidth + 2 * textWidth, text, format.TitleFont, fontSize, alignment: alignment).Height;
+                                if (textWidth >= format.Free.Width)
+                                {
+                                    y += artifacts.AddText(format.Free.Left, y + varieties.Vertical, format.Free.Width, text, format.TitleFont, fontSize, alignment: alignment).Height;
+                                }
+                                else
+                                {
+                                    y += artifacts.AddText(rowLeft + varieties.Horizontal - textWidth, y + varieties.Vertical, rowWidth + 2 * textWidth, text, format.TitleFont, fontSize, alignment: alignment).Height;
+                                }
                             }
                         }
 
@@ -981,7 +1004,7 @@ namespace Escher
                                     watermarkWidth = (10 / varieties.WatermarkHeight) * 10 / 2;
                                 }
 
-                                artifacts.AddImage(page.ImagesPath, varieties.WatermarkImage, "", x1 - watermarkWidth - 2.5F, y1 + (stamp.Height - watermarkHeight) / 2, watermarkWidth, watermarkHeight, Shape.Rectangle, varieties.Appearance, "", "", Color.White, ColorStyle.Greyscale, FrameStyle.ThinSolid);
+                                artifacts.AddImage(page.ImagesPath, varieties.WatermarkImage, "", x1 - watermarkWidth - 2.5F, y1 + (stamp.Height - watermarkHeight) / 2, watermarkWidth, watermarkHeight, Shape.Rectangle, varieties.Appearance, "", "", Color.White, ColorStyle.Greyscale, FrameStyle.ThinSolid, roundedCorners: false);
                             }
 
                             //Debug.Print(string.Format("Location[{0}]: x {1}, y {2}", s, Math.Round(x1, 2), Math.Round(y1, 2)));
@@ -993,7 +1016,7 @@ namespace Escher
                                 // A page without album number is a title page, so do show the coat of arms
                                 if (setup.IncludeImage || page.AlbumNumber == "")
                                 {
-                                    artifacts.AddImage(page.ImagesPath, stamp.Number, stamp.Positions, x1, y1, stamp.Width, stamp.Height, stamp.Shape, stamp.Appearance, stamp.Picture, stamp.Overprint, stamp.FrameColor, setup.ColorStyle, setup.FrameStyle);
+                                    artifacts.AddImage(page.ImagesPath, stamp.Number, stamp.Positions, x1, y1, stamp.Width, stamp.Height, stamp.Shape, stamp.Appearance, stamp.Picture, stamp.Overprint, stamp.FrameColor, setup.ColorStyle, setup.FrameStyle, roundedCorners: false);
                                 }
                             }
 

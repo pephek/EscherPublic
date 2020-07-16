@@ -22,9 +22,12 @@ namespace Escher
         public float Height;
         public float OffsetHorizontal;
         public float OffsetVertical;
-        public float VerticalMove;
+        public float VerticalMoveRelative;
+        public float VerticalMoveAbsolute;
+        public float MaxWidth;
         public int PageNumber;
         public bool Skip;
+        public bool RoundedCorners;
         public bool Separate;
         public bool Combine;
         public string Perforation = "";

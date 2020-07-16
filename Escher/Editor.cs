@@ -113,6 +113,7 @@ namespace Escher
             this.specials.Add("'o", "ó");
             this.specials.Add("^o", "ô");
             this.specials.Add("\"o", "ö");
+            this.specials.Add("\"O", "Ö");
             this.specials.Add("`u", "ù");
             this.specials.Add("'u", "ú");
             this.specials.Add("^u", "û");
@@ -274,7 +275,7 @@ namespace Escher
 
             e.ChangedRange.SetStyle(pageStyle, @"PageFeed.*$", RegexOptions.Multiline);
 
-            e.ChangedRange.SetStyle(keywordStyle, @"\b(Alignment|Appearance|Catalogue|Color|Combine|Comment|Copyright|Description|Design|FontOfDescription|FontOfType|FrameColor|Height|Html|Horizontal|Issued|LineFeed|Menu|Overprint|PageNumber|PageTitle|PageSubTitle|Pdf|Perforation|Perfs|Picture|Positions|Printed|Private|Sample|Separate|Series|Settings|Size|Skip|Stamp|Type|Unlisted|Value|Varieties|Variety|Version|Vertical|Width)\b");
+            e.ChangedRange.SetStyle(keywordStyle, @"\b(Alignment|Appearance|Catalogue|Color|Combine|Comment|Copyright|Description|Design|FontOfDescription|FontOfType|FrameColor|Height|Html|Horizontal|Image|Issued|LineFeed|Menu|Overprint|PageNumber|PageTitle|PageSubTitle|Pdf|Perforation|Perfs|Picture|Positions|Printed|Private|RoundedCorners|Sample|Separate|Series|Settings|Size|Skip|Stamp|Type|Unlisted|Value|Varieties|Variety|Version|Vertical|Width)\b");
 
             e.ChangedRange.SetStyle(enumStyle, @"\b(Black|Centered|False|HexagonVertical|Left|Rectangle|RectangleRotated|Right|Rotated|Triangle45|Triangle45Inverted|Triangle60|Triangle60Inverted|True|White)\b");
 

@@ -105,6 +105,7 @@
     <Compile Include="Entities\Bookmark.cs" />
     <Compile Include="Entities\Design.cs" />
     <Compile Include="Entities\DesignEntry.cs" />
+    <Compile Include="Entities\BackgroundImage.cs" />
     <Compile Include="Entities\Page.cs" />
     <Compile Include="Entities\PageFormat.cs" />
     <Compile Include="Entities\PageSetup.cs" />

@@ -251,6 +251,11 @@ namespace Escher
                     }
                     break;
 
+                case "image":
+                    entry.Class = Class.Image;
+                    entry.Number = val;
+                    break;
+
                 case "design": // Eg. Design:=A30
                     entry.SetClass(Class.Design, val);
                     break;
@@ -275,6 +280,10 @@ namespace Escher
                     entry.Color = val;
                     break;
 
+                case "maxwidth":
+                    entry.MaxWidth = Convert.ToSingle(val);
+                    break;
+
                 case "width":
                     entry.Width = GetSize(entry.Width, val);
                     break;
@@ -293,11 +302,20 @@ namespace Escher
                     break;
 
                 case "verticalmove":
-                    entry.VerticalMove = Convert.ToSingle(val);
+                case "verticalmoverelative":
+                    entry.VerticalMoveRelative = Convert.ToSingle(val);
+                    break;
+
+                case "verticalmoveabsolute":
+                    entry.VerticalMoveAbsolute = Convert.ToSingle(val);
                     break;
 
                 case "skip":
                     entry.Skip = Convert.ToBoolean(val);
+                    break;
+
+                case "roundedcorners":
+                    entry.RoundedCorners = Convert.ToBoolean(val);
                     break;
 
                 case "menu":
@@ -1150,7 +1168,7 @@ namespace Escher
                     break;
 
                 default:
-                    throw new Exception(string.Format("Unknown keyword '{0}'", key));
+                    throw new Exception(string.Format("Parser found an unknown keyword '{0}'", key));
             }
         }
 

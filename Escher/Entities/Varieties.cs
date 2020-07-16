@@ -14,7 +14,8 @@ namespace Escher
         public readonly bool Combine;
         public readonly float Horizontal;
         public readonly float Vertical;
-        public readonly float VerticalMove;
+        public readonly float VerticalMoveRelative;
+        public readonly float VerticalMoveAbsolute;
         public readonly Alignment Alignment;
         public readonly bool FontOfType;
         public readonly bool FontOfDescription;
@@ -22,6 +23,7 @@ namespace Escher
         public readonly float WatermarkHeight;
         public readonly string WatermarkImage;
         public readonly Appearance Appearance;
+        public float MaxWidth;
 
         public List<List<Variety>> Rows;
 
@@ -32,14 +34,16 @@ namespace Escher
             bool combine,
             float horizontal,
             float vertical,
-            float verticalMove,
+            float verticalMoveRelative,
+            float verticalMoveAbsolute,
             Alignment alignment,
             bool fontOfType,
             bool fontOfDescription,
             float spacing,
             float watermarkHeight,
             string watermarkImage,
-            Appearance appearance
+            Appearance appearance,
+            float maxWidth
         )
         {
             SubType = subType;
@@ -48,7 +52,8 @@ namespace Escher
             Combine = combine;
             Horizontal = horizontal;
             Vertical = vertical;
-            VerticalMove = verticalMove;
+            VerticalMoveRelative = verticalMoveRelative;
+            VerticalMoveAbsolute = verticalMoveAbsolute;
             Alignment = alignment;
             FontOfType = fontOfType;
             FontOfDescription = fontOfDescription;
@@ -56,6 +61,7 @@ namespace Escher
             WatermarkHeight = watermarkHeight;
             WatermarkImage = watermarkImage;
             Appearance = appearance;
+            MaxWidth = maxWidth;
 
             Rows = new List<List<Variety>>();
         }

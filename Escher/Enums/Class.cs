@@ -23,6 +23,7 @@ namespace Escher
         Design,
         Images,
         ListBegin,
-        ListEnd
+        ListEnd,
+        Image
     }
 }

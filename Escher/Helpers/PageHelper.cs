@@ -82,6 +82,10 @@ namespace Escher
 
                         break;
 
+                    case Class.Image:
+                        page.AddImage(entry.Number, entry.Width, entry.Height, entry.OffsetHorizontal, entry.OffsetVertical, entry.RoundedCorners);
+                        break;
+
                     case Class.Type:
                         subType = entry.Text;
                         break;
@@ -108,7 +112,8 @@ namespace Escher
                             subTypeToPass,
                             entry.OffsetHorizontal,
                             entry.OffsetVertical,
-                            entry.VerticalMove,
+                            entry.VerticalMoveRelative,
+                            entry.VerticalMoveAbsolute,
                             entry.Combine,
                             entry.Alignment,
                             entry.FontOfType,
@@ -116,7 +121,8 @@ namespace Escher
                             entry.Width,
                             entry.Height,
                             entry.Watermark,
-                            entry.Appearance
+                            entry.Appearance,
+                            entry.MaxWidth
                         );
 
                         subType = "";

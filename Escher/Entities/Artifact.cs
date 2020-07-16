@@ -22,6 +22,7 @@ namespace Escher
         public string Overprint;
         public Font Font;
         public Appearance Appearance;
+        public bool RoundedCorners;
         public string Number;
         public RotateFlipType RotateFlipType;
         public bool screenOnly;
